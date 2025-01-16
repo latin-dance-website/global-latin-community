@@ -1,0 +1,1 @@
+export const VideoImg = require('./video.png')

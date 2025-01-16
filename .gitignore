@@ -1,0 +1,9 @@
+# npm
+node_modules
+yarn.lock
+# next.js build files
+.next
+# environment variables
+.env
+.env.*
+!.env.example

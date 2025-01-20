@@ -7,9 +7,8 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCards,Navigation, Pagination } from "swiper/modules";
 import Image from "next/image";
-
+import { Box, Text, Avatar } from "@chakra-ui/react"
 import { useRouter } from "next/router";
-import { Box, Typography, Avatar, Card, CardContent } from "@mui/material";
 import VideoUpload from "@components/videoUpload";
 
 import Qt from '../../../public/assets/qt.png'
@@ -48,26 +47,24 @@ const HireCard = ({
     <>
     
     <Box
-      sx={{
-        background: backgroundColor,
-        display: "flex",
-        flexDirection: 'column',
-        justifyContent: "space-between",
-        alignItems: "center",
-        textAlign: 'center',
-        color: '#fff',
-        height: '100%',
-        maxHeight: '498px',
-        p: '46px'
-      }}
+      background= {backgroundColor}
+      display= "flex"
+      flexDirection= 'column'
+      justifyContent= "space-between"
+      alignItems= "center"
+      textAlign= 'center'
+      color= '#fff'
+      height= '100%'
+      width="100%"
+      p= '46px'
     >
       
       {/* Title */}
-      <Typography
-        sx={{ fontFamily: "Montserrat", fontSize: "40px", fontWeight: "600", mb: '24px' }}
+      <Text
+        fontFamily= "Montserrat" fontSize= "40px" fontWeight= "600" mb= '24px'
       >
         {title}
-      </Typography>
+      </Text>
 
       {/* Image/Icon */}
         <Image
@@ -79,11 +76,11 @@ const HireCard = ({
         />
 
       {/* Description */}
-      <Typography
-        sx={{ fontFamily: "Montserrat", fontSize: "24px", fontWeight: "500", mt: '24px' }}
+      <Text
+        fontFamily= "Montserrat" fontSize= "24px" fontWeight= "500" mt= '24px'
       >
         {description}
-      </Typography>
+      </Text>
     </Box></>
   );
 };
@@ -122,15 +119,15 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
   ];
 
   return (
-    <><Typography sx={{fontFamily: 'Montserrat', fontSize: '40px', fontWeight: '600',marginLeft:'20px'}}>Take your first step now!</Typography>
-    <Box sx={{ px: '220px', display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center', py: '24px', }}>
-      <Box sx={{ ml: '80px'}}>
+    <><Text textAlign="center" fontFamily= 'Montserrat' fontSize= '40px' fontWeight= '600' marginLeft='20px'>Take your first step now!</Text>
+    <Box display= 'flex' width= '100vw' flexWrap="wrap" justifyContent= 'center' alignItems= 'center' gap="3rem" p="4rem" paddingRight="0rem">
+      <Box display="flex" width="100%" maxWidth="500px" justifyContent="center" marginRight="3rem">
         <Swiper
           effect={"cards"}
           grabCursor={true}
           modules={[EffectCards, Autoplay]}
           className="select-none"
-          style={{ maxWidth: `${maxWidth}px`, }}
+          style={{ width:"100%", maxWidth:"500px" }}
           loop={true}
           autoplay={{ delay: 1200, pauseOnMouseEnter: true }}
         >
@@ -146,111 +143,111 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
           ))}
         </Swiper>
       </Box>
-      <Box sx={{ mr: '80px'}}>
+      <Box width="100%" maxWidth="400px" justifyContent="center" display="flex">
         <VideoUpload />
       </Box>
     </Box>
-    <hr style={{border:'1px solid gray',width:'100%',marginLeft:'100px'}}></hr>
+    <hr style={{border:'1px solid gray', width:'100vw'}}></hr>
     <Box
-      sx={{
-        maxWidth: "1200px",
-        margin: "0 auto",
-        py: 5,
-      
-      }}
+        margin= "0 auto"
+        py= "5"
+        width="100vw"
     >
-      <Typography
-        variant="h4"
-        align="center"
+      <Text
+        as="h4"
+        textAlign="center"
         fontWeight="bold"
-        
-        gutterBottom
-        sx={{ mb: 4 ,fontFamily: 'Montserrat',fontSize:'40px',marginBottom:'50px'}}
+        fontFamily= 'Montserrat' 
+        fontSize='40px' 
+        marginBottom='50px'
       >
         Testimonials
-      </Typography>
-      <Swiper
-        modules={[Navigation, Pagination]}
-        navigation
-        pagination={{ clickable: true }}
-        spaceBetween={20}
-        slidesPerView={3}
-        breakpoints={{
-          0: {
-            slidesPerView: 1,
-          },
-          768: {
-            slidesPerView: 2,
-          },
-          1024: {
-            slidesPerView: 3,
-          },
-        }}
+      </Text>
+      <Box
+        // modules={[Navigation, Pagination]}
+        // navigation
+        // pagination={{ clickable: true }}
+        // spaceBetween={20}
+        // slidesPerView={3}
+        // breakpoints={{
+        //   0: {
+        //     slidesPerView: 1,
+        //   },
+        //   768: {
+        //     slidesPerView: 2,
+        //   },
+        //   1024: {
+        //     slidesPerView: 3,
+        //   },
+        // }}
+        width="100vw"
+        display="flex"
+        flexWrap="wrap"
+        justifyContent="center"
+        alignItems="center"
+        gap="1rem"
       >
         {testimonials.map((testimonial, index) => (
-          <SwiperSlide key={index}>
-            <Card
-              sx={{
-                borderRadius: 2,
-                boxShadow: 3,
-                display: "flex",
-                flexDirection: "column",
-                height: "420px",
-                width:'350px',
-                border:'2px solid black'
-              }}
+          <Box key={index}>
+            <Box
+                borderRadius= "md"
+                boxShadow= "md"
+                display= "flex"
+                flexDirection= "column"
+                alignItems="center"
+                height= "auto"
+                width='350px'
+                border='2px solid black'
+                position="relative"
             >
               {/* Testimonial Content */}
 
 
-              <CardContent sx={{ p: 3, flexGrow: 1 }}>
+              <Box p={6} flexGrow={1}>
 
              {/* <img src='../../../public/assets/qt.png' style={{width:'30px'}} /> */}
-             <Typography sx={{fontSize:'30px',margin:'0px',padding:'0px',fontStyle:'italic'}}>"</Typography>
-                <Typography
-                  variant="body1"
-                  color="text.secondary"
-                  sx={{ mb: 2,color:'black', textAlign: 'center', }}
+             <Text fontSize='30px' margin='0px' padding='0px' fontStyle='italic'>"</Text>
+                <Text
+                  fontSize="md"
+                  // color={text.secondary}
+                  mb= {2} color='black' textAlign= 'center'
                 >
                   {testimonial.text}
-                </Typography>
-              </CardContent>
+                </Text>
+              </Box>
               <Avatar
-                  sx={{
-                    width: 90,
-                    height: 90,
-                    
-                    left:'130px',
-                    top:'240px',
-                    position:'absolute',
-                    border:'4px solid white',
-                    zIndex:1,
-                    mb: 2,
-
-                  }}
+                  width= "90px"
+                  height= "90px"
+                  name="Name"
+                  
+                  // left='130px'
+                  // top='240px'
+                  // position='absolute'
+                  border='4px solid white'
+                  zIndex={1}
+                  mb={2}
                 />
               {/* Footer Section */}
               <Box
-                sx={{
-                  backgroundColor: testimonial.bgColor,
-                  color: "white",
-                  textAlign: "center",
-                  py: 3,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  height:'80px'
-                }}
+                  bgColor= {testimonial.bgColor}
+                  color= "white"
+                  textAlign= "center"
+                  py= {3}
+                  display= "flex"
+                  flexDirection= "column"
+                  alignItems= "center"
+                  height='80px'
+                  width="100%"
               >
                
-                <Typography variant="h6" fontWeight="bold" sx={{marginTop:'50px'}}>
+                <Text as="h6" fontWeight="bold" >
                   {testimonial.name}
-                </Typography>
+                </Text>
               </Box>
-            </Card>
-          </SwiperSlide>
+            </Box>
+          </Box>
         ))}
-      </Swiper>
+      </Box>
     </Box>
     <Box>
 

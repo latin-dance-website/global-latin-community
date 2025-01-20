@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Text, Button } from "@chakra-ui/react"
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -9,109 +9,96 @@ import "swiper/css/pagination";
 const SurveyBox = () => {
     return (
         <Box
-            sx={{
-                flex: 1,
-                display: "flex",
-                flexDirection: { xs: "column", sm: "row" }, // Stacks vertically on small screens
-                justifyContent: "space-between",
-                gap: 4, // Adds spacing between the boxes
-                py: 3,
-                bgcolor: "#fff",
-                width: '100%',
+            flex="1"
+            display= "flex"
+            flexDirection= {{ xs: "column", sm: "row" }} // Stacks vertically on small screens
+            justifyContent= "space-between"
+            gap= "1rem" // Adds spacing between the boxes
+            py= "3"
+            bgColor= "#fff"
+            width= '100%'
                // maxWidth: '1280px',
-            }}
         >
             {/* Left Swiper Section */}
             <Box
-                sx={{
-                    flex: "1 1 50%", // Takes 50% of the width
-                    bgcolor: "#F63C80", // Updated Left Section Color
-                    p: 3,
-                    borderRadius: 2,
-                    color: "white",
-                    position: "relative",
-                }}
+                flex= "1 1 50%" // Takes 50% of the width
+                bgColor= "#F63C80" // Updated Left Section Color
+                p="1rem"
+                borderRadius= {"1rem"}
+                color= "white"
+                position= "relative"
+                width="50%"
             >
-                <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                <Text as="h6" fontWeight= "bold" mb= "2" >
                     Key Findings
-                </Typography>
+                </Text>
                 <Swiper
                     modules={[Navigation, Pagination]}
-                    spaceBetween={30}
+                    spaceBetween={20}
                     slidesPerView={1}
                     navigation
                     pagination={{ clickable: true }}
                     style={{ width: "100%", height: "120px", maxWidth: '540px' }}
                 >
                     <SwiperSlide>
-                        <Typography
-                            variant="h5"
-                            sx={{
-                                fontStyle: "italic",
-                                textAlign: "center",
-                                fontWeight: "bold",
-                            }}
+                        <Text
+                            fontSize={"1.5rem"}
+                            fontStyle= "italic"
+                            textAlign= "center"
+                            fontWeight= "bold"
+                            marginBottom="1rem"
                         >
                             "80% ppl feel shy"
-                        </Typography>
+                        </Text>
                     </SwiperSlide>
                     <SwiperSlide>
-                        <Typography
-                            variant="h5"
-                            sx={{
-                                fontStyle: "italic",
-                                textAlign: "center",
-                                fontWeight: "bold",
-                            }}
+                        <Text
+                            fontSize={"1.5rem"}
+                            fontStyle= "italic"
+                            textAlign= "center"
+                            fontWeight= "bold"
                         >
                             "70% prefer online events"
-                        </Typography>
+                        </Text>
                     </SwiperSlide>
                     <SwiperSlide>
-                        <Typography
-                            sx={{
-                                fontStyle: "italic",
-                                textAlign: "center",
-                                fontWeight: "bold",
-                                fontFamily: 'Montserrat',
-                            }}
+                        <Text
+                            fontSize={"1.5rem"}
+                            fontStyle= "italic"
+                            textAlign= "center"
+                            fontWeight= "bold"
+                            fontFamily= 'Montserrat'
                         >
                             "60% enjoy group activities"
-                        </Typography>
+                        </Text>
                     </SwiperSlide>
                 </Swiper>
             </Box>
 
             {/* Right Static Section */}
             <Box
-                sx={{
-                    flex: "1 1 50%",
-                    bgcolor: "#FF4649", // Updated Right Section Color
-                    p: 3,
-                    borderRadius: 2,
-                    color: "white",
-                }}
+                flex= "1 1 50%"
+                bgColor= "#FF4649" // Updated Right Section Color
+                p= {"1rem"}
+                borderRadius= {"1rem"}
+                color= "white"
             >
-                <Typography
-                    variant="body2"
-                    sx={{ fontSize: "1rem", mb: 1, color: "#FDD" }}
+                <Text
+                    fontSize= "1rem" mb= "1" color= "#FDD" 
                 >
                     Help Us To Know You Better
-                </Typography>
-                <Typography
-                    variant="h5"
-                    sx={{ fontWeight: "bold", mb: 2, color: "#FFF" }}
+                </Text>
+                <Text
+                    as="h5"
+                    fontWeight= "bold" mb= "2" color= "#FFF"
                 >
                     Fill The Form Now!
-                </Typography>
+                </Text>
                 <Button
-                    variant="contained"
-                    sx={{
-                        backgroundColor: "#fff",
-                        color: "#FF4649",
-                        fontWeight: "bold",
-                        "&:hover": { backgroundColor: "#FDD" },
-                    }}
+                    bg="#fff"
+                    color="#FF4649"
+                    fontWeight="bold"
+                    _hover={{ bg: "#FDD" }}
                 >
                     Fill Now
                 </Button>

@@ -1,14 +1,6 @@
 import React, { useState } from "react";
-import {
-    Box,
-    Button,
-    InputAdornment,
-    TextField,
-    Typography,
-} from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import InstagramIcon from "@mui/icons-material/Instagram";
+import { Box, Button, Text, Input, FormControl, FormLabel, InputGroup, InputRightElement } from "@chakra-ui/react";
+import { FaCloudUploadAlt, FaYoutube, FaInstagram } from "react-icons/fa";
 
 type FileUploadProps = {
     videoFile: File | null;
@@ -17,35 +9,29 @@ type FileUploadProps = {
 
 const FileUpload: React.FC<FileUploadProps> = ({ videoFile, handleVideoUpload }) => {
     return (
-        <Box sx={{ display: "flex", alignItems: "center", width: "100%", border: "1px solid #ccc", borderRadius: "8px", overflow: "hidden" }}>
-            <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="Upload a file"
+        <Box display= "flex" alignItems= "center" width= "100%" border= "1px solid #ccc" borderRadius= "8px" overflow= "hidden">
+            <Input
+                isReadOnly
                 value={videoFile ? videoFile.name : ""}
-                InputProps={{
-                    readOnly: true,
-                    sx: {
-                        borderRadius: "8px 0 0 8px",
-                        overflow: "hidden",
-                        background: "#fff"
-                    }
+                placeholder="Upload a file"
+                variant="outline"
+                borderRadius="8px 0 0 8px"
+                background="white"
+                _readOnly={{
+                cursor: "not-allowed", 
                 }}
             />
             <Button
-                component="label"
-                sx={{
-                    background: "#9747FF",
-                    color: "white",
-                    textTransform: "none",
-                    fontWeight: "bold",
-                    borderRadius: "0 8px 8px 0",
-                    padding: "12px 20px",
-                    "&:hover": {
-                        background: "#843CE5",
-                    },
-                }}
-                startIcon={<CloudUploadIcon />}
+                as="label"
+                bg= "#9747FF"
+                color= "white"
+                textTransform= "none"
+                fontWeight= "bold"
+                borderRadius= "0 8px 8px 0"
+                px="20px"
+                py="12px"
+                _hover={{ bg: "#843CE5" }}
+                leftIcon={<FaCloudUploadAlt />} 
             >
                 Browse
                 <input
@@ -83,23 +69,23 @@ const VideoUpload = () => {
     };
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" sx={{ width: "400px", p: 4 }}>
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width= "400px" pr="5rem" pl="1rem" boxShadow="sm">
             {/* Upload Box */}
             {!showThankYou ? (
                 <Box
-                    bgcolor="white"
+                    bgColor="white"
                     p={4}
                     borderRadius={3}
                     boxShadow={3}
                     width="100%"
                     textAlign="center"
                 >
-                    <Typography variant="h6" fontWeight="bold">
+                    <Text as="h6" fontWeight="bold" mb={2}>
                         Upload Your Video
-                    </Typography>
+                    </Text>
 
                     {/* Video Link Input */}
-                    <TextField
+                    {/* <TextField
                         fullWidth
                         variant="outlined"
                         margin="normal"
@@ -109,37 +95,52 @@ const VideoUpload = () => {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <InstagramIcon color="secondary" sx={{ mx: 0.5 }} />
-                                    <YouTubeIcon color="error" />
+                                    <Icon as={FaInstagram} color="secondary" mx="0.5rem"/>
+                                    <Icon as={FaYoutube} color="error" />
                                 </InputAdornment>
                             ),
                         }}
-                    />
+                    /> */}
+                    <FormControl mb={4}>
+                        {/* <FormLabel htmlFor="videoLink">Video Link</FormLabel> */}
+                        <InputGroup>
+                            <Input
+                            id="videoLink"
+                            value={videoLink}
+                            onChange={(e) => setVideoLink(e.target.value)}
+                            placeholder="Paste your video link here"
+                            variant="outline"
+                            />
+                            <InputRightElement>
+                            <FaInstagram color="#962fbf" />
+                            <FaYoutube color="red" style={{ marginLeft: '0.5rem', marginRight: "0.5rem" }}/>
+                            </InputRightElement>
+                        </InputGroup>
+                        </FormControl>
 
-                    <Typography variant="body2" color="textSecondary" my={1}>
+                    <Text fontSize="sm" color="textSecondary" my={1}>
                         or
-                    </Typography>
+                    </Text>
 
                     {/* File Upload Button */}
                     <FileUpload videoFile={videoFile} handleVideoUpload={handleVideoUpload} />
 
                     {/* Submit Button with Gradient */}
                     <Button
-                        fullWidth
-                        sx={{
-                            textTransform: "none",
-                            background: "linear-gradient(180deg, #A6C8FF 0%, #6587FF 100%)",
-                            color: "white",
-                            fontWeight: "bold",
-                            borderRadius: "16px",
-                            padding: "12px 20px",
-                            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)",
-                            "&:hover": {
-                                background: "linear-gradient(180deg, #8DB9FF 0%, #5175FF 100%)",
-                                boxShadow: "0px 5px 12px rgba(0, 0, 0, 0.2)",
-                            },
-                            mt :'24px'
+                        width="100%"
+                        textTransform="none"
+                        bgGradient="linear(180deg, #A6C8FF 0%, #6587FF 100%)"
+                        color="white"
+                        fontWeight="bold"
+                        borderRadius="16px"
+                        px="20px"
+                        py="12px"
+                        boxShadow="0px 4px 10px rgba(0, 0, 0, 0.15)"
+                        _hover={{
+                        bgGradient: "linear(180deg, #8DB9FF 0%, #5175FF 100%)",
+                        boxShadow: "0px 5px 12px rgba(0, 0, 0, 0.2)",
                         }}
+                        mt="24px" 
                         onClick={handleSubmit}
                     >
                         Submit Video for Analysis
@@ -148,44 +149,53 @@ const VideoUpload = () => {
             ) : (
                 // Thank You Box (Replaces Upload Box)
                 <Box
-                    bgcolor="white"
+                    bgColor="white"
                     p={4}
                     borderRadius={3}
                     boxShadow={3}
                     width="100%"
                     textAlign="center"
                 >
-                    <Typography variant="h5" fontWeight="bold">
+                    <Text as="h5" fontWeight="bold">
                         Thank you!
-                    </Typography>
-                    <Typography variant="body1" sx={{ mb: 2 }}>
+                    </Text>
+                    <Text fontSize="md" mb="2rem">
                         Please enter your email to receive the report.
-                    </Typography>
-                    <TextField
+                    </Text>
+                    {/* <TextField
                         fullWidth
                         variant="outlined"
                         margin="normal"
                         placeholder="Enter your email here..."
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                    />
+                    /> */}
+                    <FormControl mb={4}>
+                        <FormLabel htmlFor="email">Email</FormLabel>
+                        <Input
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Enter your email here..."
+                            variant="outline"
+                        />
+                    </FormControl>
                     {/* Submit Email Button (Same Gradient) */}
                     <Button
-                        fullWidth
-                        sx={{
-                            textTransform: "none",
-                            background: "linear-gradient(180deg, #A6C8FF 0%, #6587FF 100%)",
-                            color: "white",
-                            fontWeight: "bold",
-                            borderRadius: "16px",
-                            padding: "12px 20px",
-                            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)",
-                            "&:hover": {
-                                background: "linear-gradient(180deg, #8DB9FF 0%, #5175FF 100%)",
-                                boxShadow: "0px 5px 12px rgba(0, 0, 0, 0.2)",
-                            },
-                            mt: '24px'
+                        width="100%"
+                        textTransform="none"
+                        bgGradient="linear(180deg, #A6C8FF 0%, #6587FF 100%)"
+                        color="white"
+                        fontWeight="bold"
+                        borderRadius="16px"
+                        px="20px"
+                        py="12px"
+                        boxShadow= "0px 4px 10px rgba(0, 0, 0, 0.15)"
+                        _hover={{
+                            bgGradient: "linear(180deg, #8DB9FF 0%, #5175FF 100%)",
+                            boxShadow: "0px 5px 12px rgba(0, 0, 0, 0.2)",
                         }}
+                        mt="24px"
                         onClick={() => setShowThankYou(false)}
                     >
                         Submit

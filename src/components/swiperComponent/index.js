@@ -202,6 +202,7 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
         justifyContent="center"
         alignItems="center"
         gap="1rem"
+        padding="3rem"
       >
         {testimonials.map((testimonial, index) => (
           <Box key={index}>
@@ -213,20 +214,21 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
                 alignItems="center"
                 height= "auto"
                 width='350px'
-                border='2px solid black'
                 position="relative"
+                bgImage="linear-gradient(135deg, rgba(30, 64, 175, 1) 0%, rgba(58, 102, 242, 1) 50%, rgba(140, 166, 250, 1) 100%)"
+                color="white"
             >
               {/* Testimonial Content */}
 
 
-              <Box p={6} flexGrow={1}>
+              <Box p={6} flexGrow={1} >
 
              {/* <img src='../../../public/assets/qt.png' style={{width:'30px'}} /> */}
              <Text fontSize='30px' margin='0px' padding='0px' fontStyle='italic'>"</Text>
                 <Text
                   fontSize="md"
                   // color={text.secondary}
-                  mb= {2} color='black' textAlign= 'center'
+                  mb= {2} color='white' textAlign= 'center'
                 >
                   {testimonial.text}
                 </Text>
@@ -235,17 +237,17 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
                   width= "90px"
                   height= "90px"
                   name="Name"
-                  
+                  bgColor="rgb(29 78 216 / var(--tw-bg-opacity, 1))"
                   // left='130px'
                   // top='240px'
                   // position='absolute'
-                  border='4px solid white'
                   zIndex={1}
-                  mb={2}
+                  mb={-10}
+                  color="white"
                 />
               {/* Footer Section */}
               <Box
-                  bgColor= {testimonial.bgColor}
+                  bgColor="rgb(30 58 138 / var(--tw-bg-opacity, 1))"
                   color= "white"
                   textAlign= "center"
                   py= {3}
@@ -254,6 +256,8 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
                   alignItems= "center"
                   height='80px'
                   width="100%"
+                  borderBottomRightRadius={"10px"}
+                  borderBottomLeftRadius={"10px"}
               >
                
                 <Text as="h6" fontWeight="bold" >

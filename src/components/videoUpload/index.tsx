@@ -77,10 +77,10 @@ const VideoUpload = () => {
                     borderRadius={"10px"}
                     width="500px"
                     textAlign="center"
-                    bg="#c5a1f7"
+                    bg="#b98ef5"
                     boxShadow="20px 20px 10px rgba(0, 0, 0, 0.1)"
                     marginLeft={"1rem"}
-                    border="2px solid white"
+                    // border="2px solid white"
                 >
                     <Text fontWeight="800" fontFamily="Montserrat" fontSize="1.5rem" color="white" mb={2}>
                         Upload Your Video

@@ -1,6 +1,6 @@
 import React from "react";
 import { Logo } from "@components/css";
-import { Box, Text, Link } from "@chakra-ui/react";
+import { Box, Text, Link, Hide } from "@chakra-ui/react";
 import { FaWhatsapp, FaYoutube, FaInstagram } from "react-icons/fa";
 
 const styles = {
@@ -40,8 +40,11 @@ export const Header: React.FC = () => {
           <Text {...styles.subHeader} fontWeight={"600"}>DANCE COMMUNITY</Text>
         </Box>
       </Box>
+      <Hide below="sm">
       <Box bg="white" display="flex" padding="0.5rem 2rem"  borderRadius={"15px"} alignItems={"center"}>
-        <Text marginRight={"1rem"} fontSize={"1rem"} fontWeight={800} fontFamily={'Mulish'}>Reach Out To Us: </Text>
+        <Hide below="md">
+          <Text marginRight={"1rem"} fontSize={"1rem"} fontWeight={800} fontFamily={'Mulish'}>Reach Out To Us: </Text>
+        </Hide>
         <Link href="https://wa.me/your_number" isExternal marginRight={"1rem"}>
           <FaWhatsapp size={30} color="#25D366"/>
         </Link>
@@ -52,6 +55,7 @@ export const Header: React.FC = () => {
           <FaInstagram size={30} color="#E1306C" />
         </Link>
       </Box>
+      </Hide>
     </Box>
   );
 };

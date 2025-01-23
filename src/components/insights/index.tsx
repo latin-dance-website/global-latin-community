@@ -11,7 +11,8 @@ const SurveyBox = () => {
         <Box
             flex="1"
             display= "flex"
-            flexDirection= {{ xs: "column", sm: "row" }} // Stacks vertically on small screens
+            flexDirection= {{base: "row" }}
+            flexWrap={"wrap"} // Stacks vertically on small screens
             justifyContent= "space-between"
             gap= "1rem" // Adds spacing between the boxes
             py= "3"
@@ -27,7 +28,7 @@ const SurveyBox = () => {
                 borderRadius= {"1rem"}
                 color= "white"
                 position= "relative"
-                width="auto"
+                width={{base:"300px", sm:"400px", md:"auto"}}
             >
                 <Text fontSize={"1.5rem"} fontWeight= "bold" fontFamily={"Montserrat"} >
                     Key Findings From The Survey
@@ -42,7 +43,7 @@ const SurveyBox = () => {
                 >
                     <SwiperSlide>
                         <Text
-                            fontSize={"1.5rem"}
+                            fontSize={{base:"1rem",sm:"1.5rem"}}
                             textAlign= "center"
                             fontWeight= "bold"
                             fontFamily={"Montserrat"}
@@ -80,6 +81,7 @@ const SurveyBox = () => {
                 p= {"1rem"}
                 borderRadius= {"1rem"}
                 color= "white"
+                width={{base:"300px", sm:"400px", md:"auto"}}
             >
                 <Text
                     fontSize= "1rem" mb= "1" color= "#FDD"

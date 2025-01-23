@@ -23,7 +23,7 @@ const HeroSection = () => {
     return (
         <Box
             width= "100vw"
-            minHeight= "360px"
+            // minHeight= "360px"
             mt= "16px"
             p= "16px"
             // Updated background with linear gradient
@@ -32,22 +32,22 @@ const HeroSection = () => {
         >
 
             {/* Title Section */}
-            <Box display= "flex" width="100%" height="100%" justifyContent= "space-between" alignItems= "center" px={{ base: '60px', md: '120px', lg: '132px' }} >
-                <Box display= 'flex' flexDirection= 'column'>
-                    <Text fontSize= "4rem" fontWeight= "600" flexWrap= "wrap"  fontFamily= 'Montserrat' marginBottom="-2rem">
+            <Box display= "flex" width="100%" height="100%" justifyContent= {{base: "center", md:"space-between"}} gap={{base:"2rem", md:"0rem"}} flexWrap={{base:"wrap", md:"nowrap"}} alignItems= "center" px={{ base: '0px', md: '120px', lg: '132px' }} >
+                <Box display= 'flex' flexDirection= 'column' alignItems={{base:"center", md:"start"}}>
+                    <Text fontSize= {{base:"2rem", lg:"3rem", xl:"4rem"}} fontWeight= "600" flexWrap= "wrap"  fontFamily= 'Montserrat'>
                         The Latin Dance 
                     </Text>
-                    <Text fontSize= "7rem" fontWeight= "800" flexWrap= "wrap" fontFamily= 'Montserrat' marginBottom="-2rem">
+                    <Text fontSize= {{base:"3rem", lg:"5rem", xl:"7rem"}} fontWeight= "800" flexWrap= "wrap" fontFamily= 'Montserrat'>
                         Revolution
                     </Text>
-                    <Text fontSize= "4rem" fontWeight= "800" flexWrap= "wrap" fontFamily= 'Montserrat'>
+                    <Text fontSize= {{base:"2rem", lg:"3rem", xl:"4rem"}} fontWeight= "800" flexWrap= "wrap" fontFamily= 'Montserrat'>
                         Begins Here
                     </Text>
                     <Divider bgColor= '#07037C' height= '10px' width= '240px' marginBottom="2rem"/>
-                    <Text fontSize= "1.5rem" fontWeight= "600" flexWrap= "wrap"  fontFamily= 'Montserrat' opacity={"0.7"}>
+                    <Text fontSize= {{base:"1rem", md:"1.5rem"}} fontWeight= "600" flexWrap= "wrap"  fontFamily= 'Montserrat' opacity={"0.7"}>
                         Get a 360 degree view of your dance
                     </Text>
-                    <Text fontSize= "1.5rem" fontWeight= "600" flexWrap= "wrap"  fontFamily= 'Montserrat' opacity={"0.7"}>
+                    <Text fontSize=  {{base:"1rem", md:"1.5rem"}} fontWeight= "600" flexWrap= "wrap"  fontFamily= 'Montserrat' opacity={"0.7"}>
                         journey with personalised insights & tools
                     </Text>
                     <Link href="/videoUpload">
@@ -57,7 +57,7 @@ const HeroSection = () => {
                     </Link>
                 </Box>
                 <Box position="relative">
-                    <Box display= 'flex' justifyContent= 'space-between' alignItems= 'center' marginLeft="1rem" border="5px solid white" borderRadius={"25px"}>
+                    <Box display= 'flex' justifyContent= 'space-between' alignItems= 'center' marginLeft={{base:"0rem", md:"1rem"}} border="5px solid white" borderRadius={"25px"} width={{base:"200px", md:"300px"}}>
                         <Image src={"/assets/video.png"} width={'380px'} height={'520px'}  
                         style={{
                             border: "5px solid white", 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Text } from "@chakra-ui/react";
+import { Box, Button, Hide, Text } from "@chakra-ui/react";
 
 const CommunitySection = () => {
     return (
@@ -70,11 +70,11 @@ const CommunitySection = () => {
             <Box
                 display= "flex"
                 gap= "12px"
-                flexWrap= "wrap"
                 justifyContent= "center"
                 alignItems="center"
             >
-                <Box display="flex" flexDirection={"column"} justifyContent={"center"} alignItems={"center"}>
+                <Hide below="md">
+                <Box display="flex" flexDirection={"column"} justifyContent={"center"} alignItems={"center"} marginRight={"0.5rem"}>
                     <Box
                         as="img"
                         src="/assets/Dancer1.png" // Replace with actual image
@@ -96,6 +96,8 @@ const CommunitySection = () => {
                         border="3px solid white"
                     />
                 </Box>
+                </Hide>
+                <Hide below="md">
                 <Box
                     as="img"
                     src="/assets/Dancer2.png"
@@ -106,6 +108,7 @@ const CommunitySection = () => {
                     marginRight={"4"}
                     border="3px solid white"
                 />
+                </Hide>
             </Box>
 
             {/* Gold Star Decoration */}

@@ -75,11 +75,10 @@ const VideoUpload = () => {
                 <Box
                     p={4}
                     borderRadius={"10px"}
-                    width="500px"
+                    width={{base:"300px", sm:"400px", md:"500px"}}
                     textAlign="center"
                     bg="#b98ef5"
                     boxShadow="20px 20px 10px rgba(0, 0, 0, 0.1)"
-                    marginLeft={"1rem"}
                     // border="2px solid white"
                 >
                     <Text fontWeight="800" fontFamily="Montserrat" fontSize="1.5rem" color="white" mb={2}>

@@ -61,7 +61,7 @@ const HireCard = ({
       
       {/* Title */}
       <Text
-        fontFamily= "Montserrat" fontSize= "40px" fontWeight= "600" mb= '24px'
+        fontFamily= "Montserrat" fontSize= {{base:"30px", sm: "40px" }} fontWeight= "600" mb= '24px'
       >
         {title}
       </Text>
@@ -129,7 +129,7 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
       alignSelf= "center"
     />
     <Box display= 'flex' width= '100vw' flexWrap="wrap" justifyContent= 'space-evenly' alignItems= 'center' gap="3rem" p="4rem" paddingRight="0rem">
-      <Box display="flex" width="100%" maxWidth="500px" justifyContent="center" marginRight="3rem">
+      <Box display="flex" width="100%" maxWidth="500px" justifyContent="center" marginRight="3rem" paddingRight={"3rem"}>
         <Swiper
           effect={"cards"}
           grabCursor={true}
@@ -167,7 +167,7 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
         textAlign="center"
         fontWeight="800"
         fontFamily= 'Montserrat' 
-        fontSize='3rem' 
+        fontSize={{base:"2rem", sm:'3rem'}} 
       >
         Testimonials
       </Text>
@@ -213,7 +213,7 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
                 flexDirection= "column"
                 alignItems="center"
                 height= "auto"
-                width='350px'
+                width={{base: "300px", sm:'350px'}}
                 position="relative"
                 bgImage="linear-gradient(135deg, rgba(30, 64, 175, 1) 0%, rgba(58, 102, 242, 1) 50%, rgba(140, 166, 250, 1) 100%)"
                 color="white"

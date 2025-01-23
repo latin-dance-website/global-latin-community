@@ -43,7 +43,7 @@ const obj = [
 
 const styles = {
     cardStyles: {
-        background: "linear-gradient(180deg, #EDEDED 0%, #3C71FF 100%)",
+        background: "linear-gradient(to right bottom, rgb(142, 163, 244), rgb(60, 113, 255))",
         borderRadius: "8px",
         minHeight: "200px",
         maxWidth: "300px",
@@ -52,6 +52,7 @@ const styles = {
         flexDirection: "column",
         justifyContent: "space-between",
         mb: "24px",
+        boxShadow:"10px 10px 2px rgba(0, 0, 0, 0.1)"
     },
     container: {
         //background: "linear-gradient(180deg, #FFD1E3, #FCEBF4)",
@@ -74,7 +75,7 @@ const Card = ({ item, callback }) => {
     return (
         <Box {...styles.cardStyles} onMouseEnter={() => callback(item.desc)}>
             <Box>
-                <Icon as={IconComponent} boxSize="24px" color="#1d5ee0" mb="8px" />
+                <Icon as={IconComponent} boxSize="24px" color="#fff" mb="8px" />
                 <Text
                     fontSize= "20px"
                     fontWeight= "600"
@@ -126,9 +127,9 @@ const EcosystemBox = () => {
     return (
         <Box {...styles.container}>
             <Text
-                fontSize= "40px"
+                fontSize= "3rem"
                 textAlign= "center"
-                fontWeight= "600"
+                fontWeight= "800"
                 mt= "48px"
                 fontFamily= "Montserrat"
             >
@@ -137,14 +138,15 @@ const EcosystemBox = () => {
             <Divider
                 bgColor= "#07037C"
                 my= "8px"
-                height= "2px"
-                width= "260px"
+                height= "5px"
+                width= "300px"
                 alignSelf= "center"
             />
 
             {/* Description Box */}
             <Box
                 display= "flex"
+                flexDirection={"column"}
                 alignItems= "center"
                 justifyContent= "center" // Center align horizontally
                 mb= "32px"

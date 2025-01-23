@@ -16,21 +16,21 @@ const SurveyBox = () => {
             gap= "1rem" // Adds spacing between the boxes
             py= "3"
             bgColor= "#fff"
-            width= '100%'
+            width= 'auto'
                // maxWidth: '1280px',
         >
             {/* Left Swiper Section */}
             <Box
                 flex= "1 1 50%" // Takes 50% of the width
                 bgColor= "#F63C80" // Updated Left Section Color
-                p="1rem"
+                p="1rem 1.5rem"
                 borderRadius= {"1rem"}
                 color= "white"
                 position= "relative"
-                width="50%"
+                width="auto"
             >
-                <Text as="h6" fontWeight= "bold" mb= "2" >
-                    Key Findings
+                <Text fontSize={"1.5rem"} fontWeight= "bold" fontFamily={"Montserrat"} >
+                    Key Findings From The Survey
                 </Text>
                 <Swiper
                     modules={[Navigation, Pagination]}
@@ -38,15 +38,14 @@ const SurveyBox = () => {
                     slidesPerView={1}
                     navigation
                     pagination={{ clickable: true }}
-                    style={{ width: "100%", height: "120px", maxWidth: '540px' }}
+                    style={{ width: "100%", height: "70px", maxWidth: '540px' }}
                 >
                     <SwiperSlide>
                         <Text
                             fontSize={"1.5rem"}
-                            fontStyle= "italic"
                             textAlign= "center"
                             fontWeight= "bold"
-                            marginBottom="1rem"
+                            fontFamily={"Montserrat"}
                         >
                             "80% ppl feel shy"
                         </Text>
@@ -54,9 +53,9 @@ const SurveyBox = () => {
                     <SwiperSlide>
                         <Text
                             fontSize={"1.5rem"}
-                            fontStyle= "italic"
                             textAlign= "center"
                             fontWeight= "bold"
+                            fontFamily={"Montserrat"}
                         >
                             "70% prefer online events"
                         </Text>
@@ -64,7 +63,6 @@ const SurveyBox = () => {
                     <SwiperSlide>
                         <Text
                             fontSize={"1.5rem"}
-                            fontStyle= "italic"
                             textAlign= "center"
                             fontWeight= "bold"
                             fontFamily= 'Montserrat'
@@ -84,20 +82,23 @@ const SurveyBox = () => {
                 color= "white"
             >
                 <Text
-                    fontSize= "1rem" mb= "1" color= "#FDD" 
+                    fontSize= "1rem" mb= "1" color= "#FDD"
+                    fontFamily= 'Montserrat' 
                 >
                     Help Us To Know You Better
                 </Text>
                 <Text
-                    as="h5"
+                    fontSize={"1.2rem"}
                     fontWeight= "bold" mb= "2" color= "#FFF"
+                    fontFamily= 'Montserrat'
                 >
-                    Fill The Form Now!
+                    Share your journey now!
                 </Text>
                 <Button
                     bg="#fff"
                     color="#FF4649"
                     fontWeight="bold"
+                    fontFamily= 'Montserrat'
                     _hover={{ bg: "#FDD" }}
                 >
                     Fill Now

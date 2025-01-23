@@ -69,18 +69,20 @@ const VideoUpload = () => {
     };
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width= "400px" pr="5rem" pl="1rem" boxShadow="sm">
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" width= "700px" pr="5rem" pl="1rem" boxShadow="sm">
             {/* Upload Box */}
             {!showThankYou ? (
                 <Box
-                    bgColor="white"
                     p={4}
-                    borderRadius={3}
-                    boxShadow={3}
-                    width="100%"
+                    borderRadius={"10px"}
+                    width="500px"
                     textAlign="center"
+                    bg="#c5a1f7"
+                    boxShadow="20px 20px 10px rgba(0, 0, 0, 0.1)"
+                    marginLeft={"1rem"}
+                    border="2px solid white"
                 >
-                    <Text as="h6" fontWeight="bold" mb={2}>
+                    <Text fontWeight="800" fontFamily="Montserrat" fontSize="1.5rem" color="white" mb={2}>
                         Upload Your Video
                     </Text>
 
@@ -110,10 +112,12 @@ const VideoUpload = () => {
                             onChange={(e) => setVideoLink(e.target.value)}
                             placeholder="Paste your video link here"
                             variant="outline"
+                            color="white"
+                            _placeholder={{ color: 'white' }} 
                             />
                             <InputRightElement>
-                            <FaInstagram color="#962fbf" />
-                            <FaYoutube color="red" style={{ marginLeft: '0.5rem', marginRight: "0.5rem" }}/>
+                            <FaInstagram color="#fff" size="40px"/>
+                            <FaYoutube color="#fff" size="40px" style={{ marginLeft: '0.5rem', marginRight: "0.5rem" }}/>
                             </InputRightElement>
                         </InputGroup>
                         </FormControl>
@@ -129,15 +133,16 @@ const VideoUpload = () => {
                     <Button
                         width="100%"
                         textTransform="none"
-                        bgGradient="linear(180deg, #A6C8FF 0%, #6587FF 100%)"
+                        // bgGradient="linear(180deg, #A6C8FF 0%, #6587FF 100%)"
                         color="white"
                         fontWeight="bold"
                         borderRadius="16px"
                         px="20px"
                         py="12px"
+                        bg="#843CE5"
                         boxShadow="0px 4px 10px rgba(0, 0, 0, 0.15)"
                         _hover={{
-                        bgGradient: "linear(180deg, #8DB9FF 0%, #5175FF 100%)",
+                        // bgGradient: "linear(180deg, #8DB9FF 0%, #5175FF 100%)",
                         boxShadow: "0px 5px 12px rgba(0, 0, 0, 0.2)",
                         }}
                         mt="24px" 
@@ -184,7 +189,7 @@ const VideoUpload = () => {
                     <Button
                         width="100%"
                         textTransform="none"
-                        bgGradient="linear(180deg, #A6C8FF 0%, #6587FF 100%)"
+                        // bgGradient="linear(180deg, #A6C8FF 0%, #6587FF 100%)"
                         color="white"
                         fontWeight="bold"
                         borderRadius="16px"
@@ -192,7 +197,7 @@ const VideoUpload = () => {
                         py="12px"
                         boxShadow= "0px 4px 10px rgba(0, 0, 0, 0.15)"
                         _hover={{
-                            bgGradient: "linear(180deg, #8DB9FF 0%, #5175FF 100%)",
+                            // bgGradient: "linear(180deg, #8DB9FF 0%, #5175FF 100%)",
                             boxShadow: "0px 5px 12px rgba(0, 0, 0, 0.2)",
                         }}
                         mt="24px"

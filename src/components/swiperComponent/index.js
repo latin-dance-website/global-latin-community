@@ -7,11 +7,11 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCards,Navigation, Pagination } from "swiper/modules";
 import Image from "next/image";
-import { Box, Text, Avatar } from "@chakra-ui/react"
+import { Box, Text, Avatar, Divider } from "@chakra-ui/react"
 import { useRouter } from "next/router";
 import VideoUpload from "@components/videoUpload";
 
-import Qt from '../../../public/assets/qt.png'
+// import Qt from '../../../public/assets/qt.png'
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -92,14 +92,14 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
       description: "Share a video link or file of your dance.",
       imageSrc: "/assets/Subtract.png",
       imageSize: "234px",
-      backgroundColor: "linear-gradient(90deg, #FF512F 0%, #DD2476 100%)",
+      backgroundColor: "rgb(147 51 234 / var(--tw-bg-opacity, 1))",
     },
     {
       title: "Expert Analysis",
       description: "Reviewed by a trusted Subject Matter Expert.",
       imageSrc: "/assets/Group14.png",
       imageSize: "206px",
-      backgroundColor: "linear-gradient(90deg, #36D1DC 0%, #5B86E5 100%)",
+      backgroundColor: "rgb(88 28 135 / var(--tw-bg-opacity, 1))",
     },
     {
       title: "Structured Feedback",
@@ -107,20 +107,28 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
         "Receive a dance report card.",
       imageSrc: "/assets/Group16.png",
       imageSize: "150px",
-      backgroundColor: "linear-gradient(90deg, #205072 0%, #329D9C 100%)",
+      backgroundColor: "rgb(107 33 168 / var(--tw-bg-opacity, 1))",
     },
     {
       title: "Customised Road map",
       description: "Discover your tailored next steps.",
       imageSrc: "/assets/Group17.png",
       imageSize: "206px",
-      backgroundColor: "linear-gradient(90deg, #AA076B 0%, #61045F 100%)",
+      backgroundColor: "rgb(126 34 206 / var(--tw-bg-opacity, 1))",
     },
   ];
 
   return (
-    <><Text textAlign="center" fontFamily= 'Montserrat' fontSize= '40px' fontWeight= '600' marginLeft='20px'>Take your first step now!</Text>
-    <Box display= 'flex' width= '100vw' flexWrap="wrap" justifyContent= 'center' alignItems= 'center' gap="3rem" p="4rem" paddingRight="0rem">
+    <>
+    <Text textAlign="center" fontFamily= 'Montserrat' fontSize= '3rem' fontWeight= '800' marginLeft='20px' marginTop="7rem">Take your first step now!</Text>
+    <Divider
+      bgColor= "#07037C"
+      my= "8px"
+      height= "5px"
+      width= "300px"
+      alignSelf= "center"
+    />
+    <Box display= 'flex' width= '100vw' flexWrap="wrap" justifyContent= 'space-evenly' alignItems= 'center' gap="3rem" p="4rem" paddingRight="0rem">
       <Box display="flex" width="100%" maxWidth="500px" justifyContent="center" marginRight="3rem">
         <Swiper
           effect={"cards"}
@@ -147,22 +155,30 @@ const HiringCarousel = ({ maxWidth = 650 }) => {
         <VideoUpload />
       </Box>
     </Box>
-    <hr style={{border:'1px solid gray', width:'100vw'}}></hr>
     <Box
-        margin= "0 auto"
-        py= "5"
         width="100vw"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
     >
       <Text
         as="h4"
         textAlign="center"
-        fontWeight="bold"
+        fontWeight="800"
         fontFamily= 'Montserrat' 
-        fontSize='40px' 
-        marginBottom='50px'
+        fontSize='3rem' 
       >
         Testimonials
       </Text>
+      <Divider
+      bgColor= "#07037C"
+      my= "1rem"
+      height= "5px"
+      width= "300px"
+      alignSelf= "center"
+      marginBottom="3rem"
+    />
       <Box
         // modules={[Navigation, Pagination]}
         // navigation

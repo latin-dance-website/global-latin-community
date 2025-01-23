@@ -5,7 +5,7 @@ import HeroSection from "@components/heroSection";
 import EcosystemBox from "@components/ecosystem";
 import BottomSection from "@components/bottomSection";
 import LayerBlur from "@components/css/layerBlur";
-import HiringCarousel from "@components/swiperComponent"
+
 
 const Home: React.FC = () => {
   return (
@@ -26,7 +26,7 @@ const Home: React.FC = () => {
         <EcosystemBox />
         {/* <SurveyBox />
         <CommunitySection /> */}
-        <HiringCarousel />
+        {/* <HiringCarousel /> */}
         <BottomSection />
       </Box>
     </ChakraProvider>

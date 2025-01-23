@@ -8,7 +8,7 @@ const blobAnimation = keyframes`
     transform: translate(0) scale(2);
   }
   50% {
-    transform: translate(30vw, 30vw) scale(2);
+    transform: translate(30px, 30px) scale(2);
   }
   100% {
     transform: translate(0px, 0px) scale(2);
@@ -27,7 +27,7 @@ const blob2Animation = keyframes`
   }
 `;
 
-const LayerBlur = () => {
+const LayerBlur2 = () => {
     return (
         <>
             {/* First Blur Layer */}
@@ -35,16 +35,14 @@ const LayerBlur = () => {
                 position= "absolute" // Positioned relative to the screen
                 top= "0px" // Y position
                 left= "15vw" // X position
-                width= "857px" // Exact width
-                height= "1099px" // Exact height
+                width= "100vw" // Exact width
+                height= "50vh" // Exact height
                 zIndex= "-1" // Send to background
                 overflow= "hidden"
                 filter= "blur(30px) brightness(1)"
                 // Increased blur for smooth blending
                 opacity= "1" // Reduced opacity for miscibility
                 animation={`${blobAnimation} 5s infinite`}
-                transform="rotate(180deg)"
-                // transform="scaleX(-1)"
             >
                 <Image
                     src="/assets/blurLayer.png" // Path to your first blur layer
@@ -75,12 +73,12 @@ const LayerBlur = () => {
                 top= "368px" // Adjusted for vertical alignment
                 left= "50%" // Center horizontally
                 transform= "translate(-50%, 0) rotate(45.8deg)" // Center and rotate
-                width= "840.81px" // Exact width
-                height= "1039.18px" // Exact height
+                width= "100vw" // Exact width
+                height= "50vh" // Exact height
                 zIndex= "-1" // Send to background
                 overflow= "hidden"
                 filter= "blur(55px)" // Higher blur for miscibility
-                animation={`${blob2Animation} 5s infinite`}
+                // animation={`${blob2Animation} 5s infinite`}
                 opacity= "0.7" // Reduced opacity for smooth blending
             >
                 <Box
@@ -102,4 +100,4 @@ const LayerBlur = () => {
     );
 };
 
-export default LayerBlur;
+export default LayerBlur2;

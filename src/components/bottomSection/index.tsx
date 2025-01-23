@@ -10,12 +10,18 @@ const BottomSection = () => {
             <Box position= 'absolute' left= '24px' top= '48px' opacity="0.3">
                 <Image src={'/assets/star.png'} height={'160px'} width={'160px'}/>
             </Box>
-            <Text fontFamily= 'Montserrat' fontSize= '40px' fontWeight= '600' textAlign="center">
-                Share Your Dance Journey Here!
+            <Text fontFamily= 'Montserrat' fontSize= '3rem' fontWeight= '800' textAlign="center">
+                Share Your Dance Journey With Us!
             </Text>
-            <Divider background= '#9560E9' width= '240px' my= '16px'/>
-            <Text fontFamily= 'Montserrat' fontSize= '14px' fontWeight= '500' mb= '40px'>
-                500 user surveys...
+            <Divider
+                bgColor= "#07037C"
+                my= "8px"
+                height= "5px"
+                width= "300px"
+                alignSelf= "center"
+            />
+            <Text fontFamily= 'Montserrat' fontSize= '1.2rem' fontWeight= '500' mb= '40px' opacity={0.6}>
+                500+ International Dancers Surveyed | 300+ Interviewed | Now its your time...
             </Text>
             <SurveyBox />
             <CommunitySection />

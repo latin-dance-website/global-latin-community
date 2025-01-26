@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,46 +15,28 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@components": [
-        "src/components"
-      ],
-      "@styles/*": [
-        "src/styles/*"
-      ],
-      "@styles": [
-        "src/styles"
-      ],
-      "@public/*": [
-        "public/*"
-      ],
-      "@public": [
-        "public"
-      ],
-      "@services/*": [
-        "src/services/*"
-      ],
-      "@services": [
-        "src/services"
-      ],
-      "@graphqlTypes/*": [
-        "__generated__/*"
-      ],
-      "@graphqlTypes": [
-        "__generated__"
-      ]
+      "@components/*": ["src/components/*"],
+      "@components": ["src/components"],
+      "@styles/*": ["src/styles/*"],
+      "@styles": ["src/styles"],
+      "@public/*": ["public/*"],
+      "@public": ["public"],
+      "@services/*": ["src/services/*"],
+      "@services": ["src/services"],
+      "@graphqlTypes/*": ["__generated__/*"],
+      "@graphqlTypes": ["__generated__"]
     },
     "incremental": true
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/components/ecosystem/index.jsx"  ],
-  "exclude": [
-    "node_modules",
-    "__generated__/globalTypes.ts"
-  ]
+    "**/*.tsx",
+    "src/components/ecosystem/index.jsx",
+    "pages/vide-upload/index.jsx",
+    "src/components/video_upload/LayerBlur.jsx",
+    "src/components/video_upload/index.jsx",
+    "pages/index.jsx"
+  ],
+  "exclude": ["node_modules", "__generated__/globalTypes.ts"]
 }

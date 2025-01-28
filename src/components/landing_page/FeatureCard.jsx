@@ -6,6 +6,7 @@ function FeatureCard({
   title,
   description,
   link,
+  href,
   setCurrentlySelectedCard,
 }) {
   return (
@@ -41,7 +42,7 @@ function FeatureCard({
         {description}
       </Text>
       <Link
-        href="#"
+        href={`${href}`}
         fontWeight="bold"
         display="flex"
         alignItems="center"

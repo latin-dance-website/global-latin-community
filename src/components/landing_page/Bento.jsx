@@ -12,6 +12,7 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 // import image_1 from "../../assets/image_1.png";
@@ -34,13 +35,15 @@ const Bento = () => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          "https://api.example.com/newsletter/subscribe",
+          "https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ email }),
+            body: JSON.stringify({ 
+              metadata: { email: email, event: "emailUpload"}
+             }),
           }
         );
 
@@ -259,6 +262,7 @@ const Bento = () => {
             >
               Share your journey below!
             </Text>
+            <Link href="https://docs.google.com/forms/d/1mQ4eEwHwjWzSqsTOWzKhq9jI-y0vE-qiWAPwx2lFROQ/edit#responses">
             <Button
               bg="white"
               color="red.400"
@@ -268,6 +272,7 @@ const Bento = () => {
             >
               Fill Now
             </Button>
+            </Link>
           </VStack>
         </Stack>
 

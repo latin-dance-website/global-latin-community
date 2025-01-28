@@ -33,6 +33,7 @@ const Features = () => {
         description:
           "Dive into the rhythm, instruments, and stories that define the soul of Latin music and dance culture.",
         link: "Explore",
+        href:"/music-culture"
       },
       {
         icon: FiPlay,
@@ -40,6 +41,7 @@ const Features = () => {
         description:
           "Access beginner to advanced tutorials and structured courses designed for your growth, wherever you are.",
         link: "Start Learning",
+        href:"/tutorial-courses"
       },
       {
         icon: FiTrendingUp,
@@ -47,6 +49,7 @@ const Features = () => {
         description:
           "Attend exclusive workshops, bootcamps, and live events hosted by top Latin dance experts.",
         link: "See Events",
+        href:"/events"
       },
       {
         icon: FiUser,
@@ -54,6 +57,7 @@ const Features = () => {
         description:
           "Create your professional profile, showcase your achievements, and grow your influence as a dancer or instructor.",
         link: "Start Building",
+        href:"/brand"
       },
       {
         icon: FiGlobe,
@@ -61,6 +65,7 @@ const Features = () => {
         description:
           "Join a vibrant global network of dancers. Share your journey, collaborate, and celebrate together.",
         link: "Join The Community",
+        href:"/global-community"
       },
       {
         icon: FiShoppingBag,
@@ -68,6 +73,7 @@ const Features = () => {
         description:
           "Discover premium dancewear, accessories, and lifestyle products that elevate your practice and performances.",
         link: "Shop Now",
+        href:"/ecommerce"
       },
     ],
     []
@@ -180,6 +186,7 @@ const Features = () => {
               title={card.title}
               description={card.description}
               link={card.link}
+              href={card.href}
               setCurrentlySelectedCard={setCurrentlySelectedCard}
             />
           </GridItem>

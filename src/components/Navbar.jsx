@@ -87,18 +87,23 @@ const Navbar = () => {
           >
             Reach Out To Us:{" "}
           </Text>
-          <Icon
-            as={RiInstagramFill}
-            href="https://instagram.com"
-            fontSize={{
-              base: "1.2rem",
-              md: "1.5rem",
-              lg: "1.8rem",
-              xl: "1.8rem",
-              "2xl": "2rem",
-            }}
-            color="brand.pink"
-          />
+          <Link href="https://www.instagram.com/bangalore_latin_events?igsh=ZTh6cTdoeXVrYW96">
+            <Icon
+              as={RiInstagramFill}
+              href="https://www.instagram.com/bangalore_latin_events?igsh=ZTh6cTdoeXVrYW96"
+              fontSize={{
+                base: "1.2rem",
+                md: "1.5rem",
+                lg: "1.8rem",
+                xl: "1.8rem",
+                "2xl": "2rem",
+              }}
+              _hover={{
+                cursor:"pointer"
+              }}
+              color="brand.pink"
+            />
+          </Link>
           <Icon
             as={RiYoutubeFill}
             href="https://instagram.com"
@@ -111,18 +116,23 @@ const Navbar = () => {
             }}
             color="red"
           />
-          <Icon
-            as={RiWhatsappFill}
-            href="https://instagram.com"
-            fontSize={{
-              base: "1.2rem",
-              md: "1.5rem",
-              lg: "1.8rem",
-              xl: "1.8rem",
-              "2xl": "2rem",
-            }}
-            color="#25d366"
-          />
+          <Link href="https://chat.whatsapp.com/Lr08jfHbN3o1wI4pGAkNxY">
+            <Icon
+              as={RiWhatsappFill}
+              href="https://chat.whatsapp.com/Lr08jfHbN3o1wI4pGAkNxY"
+              fontSize={{
+                base: "1.2rem",
+                md: "1.5rem",
+                lg: "1.8rem",
+                xl: "1.8rem",
+                "2xl": "2rem",
+              }}
+              color="#25d366"
+              _hover={{
+                cursor:"pointer"
+              }}
+            />
+          </Link>
         </HStack>
       </HStack>
     </HStack>

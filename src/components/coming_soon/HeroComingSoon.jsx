@@ -10,7 +10,7 @@ import { Autoplay, EffectCards, Navigation, Pagination } from "swiper/modules";
 import { useRouter } from "next/router";
 import React from "react";
 import { useState } from "react";
-import Upload from "@components/video_upload/Upload";
+import Link from "next/link";
 import SlideshowCard from "@components/video_upload/SlideshowCard";
 
 import "swiper/css";
@@ -63,7 +63,7 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  metadata: { email: email, event: "emailUpload"}
+                  metadata: { email: email, event: "emailUpload", purpose:"emailSend"}
                  }),
               }
             );
@@ -139,21 +139,21 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
       description: "Reviewed by a trusted Subject Matter Expert.",
       imageSrc: "/assets/Group14.png",
       imageSize: "206px",
-      backgroundColor: "rgb(88 28 135 / var(--tw-bg-opacity, 1))",
+      backgroundColor: "brand.pink",
     },
     {
       title: "Structured Feedback",
       description: "Receive a dance report card.",
       imageSrc: "/assets/Group16.png",
       imageSize: "150px",
-      backgroundColor: "rgb(107 33 168 / var(--tw-bg-opacity, 1))",
+      backgroundColor: "rgb(147 51 234 / var(--tw-bg-opacity, 1))",
     },
     {
       title: "Customised Road map",
       description: "Discover your tailored next steps.",
       imageSrc: "/assets/Group17.png",
       imageSize: "206px",
-      backgroundColor: "rgb(126 34 206 / var(--tw-bg-opacity, 1))",
+      backgroundColor: "brand.pink",
     },
   ];
 
@@ -171,25 +171,27 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
             <Box
              display="flex"
              flexDirection={"column"}
-             alignItems={{base:"center", md:"center"}}
+             alignItems={{base:"center", md:"start"}}
              padding="20px"
+             paddingBottom="0px"
              paddingRight={{base:"20px", md:"0px"}}
              paddingTop="0px"
+             width={{ lg:"40vw", md: "40vw", base:"100vw" }}
             >
-                <Text fontFamily={"montserrat"} fontSize={{lg:"2rem", base:"1rem"}} fontWeight={"600"}>-coming soon</Text>
-                <Text lineHeight="1" fontFamily={"montserrat"} fontSize={{lg:"3rem", base:"2rem"}} fontWeight={"700"}>Get Notified</Text>
-                <Text lineHeight={"1.2"} fontFamily={"montserrat"} fontSize={{lg:"3rem", base:"2rem"}} textAlign={{base:"center", md:""}} fontWeight={"700"}>When we Launch</Text>
-                <Box spacing="1rem" marginTop="0.5rem" marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", sm:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", sm:"row"}}>
+                <Text fontFamily={"montserrat"} fontSize={{xl:"2rem", lg:"1.5rem", base:"1rem"}} fontWeight={"600"}>-Coming Soon</Text>
+                <Text lineHeight="1" fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.5rem"}} fontWeight={"700"}>Get Notified</Text>
+                <Text lineHeight={"1.2"} fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.5rem"}} textAlign={{base:"center", md:"start"}} fontWeight={"700"}>When we Launch</Text>
+                <Box spacing="1rem" marginTop="0.5rem" marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
                 <Input
                   placeholder="Enter your email here.."
-                  height="3rem"
+                  height="2.5rem"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   bg="white"
                   border={"3px solid #cccac7"}
                   focusBorderColor="blue.400"
-                  borderRadius="20px"
+                  borderRadius="15px"
                 />
                 <Button
                   bg="black"
@@ -202,17 +204,34 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                   _hover={{ bg: "#1f1f1f" }}
                   onClick={handleSubmit}
                   isLoading={isLoading}
+                  marginTop={{base:"-0.5rem", md:"0rem"}}
+                  marginBottom={{base:"0.5rem", md:"0rem"}}
                   // width="10rem"
                 >
                   Notify me
                 </Button>
               </Box>
-              <Box
-                display="flex"
-                width={{ base: "90vw", md: "50vw" }}
+            </Box>
+            <Box
+                width={{ lg:"60vw", md: "60vw", base:"100vw" }}
                 justifyContent="center"
-                marginRight={{ base: "0rem", md: "2rem", lg: "2rem", "2xl": "3rem" }}
-                paddingX="5%"
+                display="flex"
+                alignItems={"center"}
+                flexDirection={"column"}
+                marginLeft="0rem"
+                boxSizing="border-box"
+                borderLeft={{md:"5px dotted #1f1f1f"}}
+              >
+                <Box display="flex" flexDirection={"column"} alignItems="center" width="100%" marginBottom={{base:"0.5rem", md:"1rem"}}>
+                  <Text fontFamily={"montserrat"} fontSize={{lg:"2rem", sm:"1.5rem", base:"1rem"}} fontWeight={"600"} textAlign={"center"}>While you wait, <Text as="span" fontWeight="700">Get a personalised feedback right now!</Text></Text>
+                </Box>
+                <Box
+                display="flex"
+                width={{base:"120%", md:"100%"}}
+                justifyContent="center"
+                // marginRight={{ base: "0rem", md: "2rem", lg: "2rem", "2xl": "3rem" }}
+                paddingX="0%"
+                // paddingRight={{base: "3rem", md:"0rem"}}
                 id="hello"
               >
                 <Swiper
@@ -220,7 +239,7 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                   grabCursor={true}
                   modules={[EffectCards, Autoplay]}
                   className="select-none"
-                  style={{ width: "100%" }}
+                  style={{ width: "65%" }}
                   loop={true}
                   autoplay={{ delay: 1200, pauseOnMouseEnter: true }}
                 >
@@ -236,14 +255,23 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                   ))}
                 </Swiper>
               </Box>
-            </Box>
-            <Box
-                width={{ lg:"50vw", md: "40vw", base:"90vw" }}
-                justifyContent="center"
-                display="flex"
-                boxSizing="border-box"
-              >
-              <Upload />
+              <Link href="/video-upload">
+                    <Button
+                      bgGradient="linear(to-br, #8EA3F4, #3C71FF)"
+                      textColor="white"
+                      size={{ base: "lg", md: "lg", lg: "xl" }}
+                      alignSelf={{ base: "center", md: "center" }}
+                      fontFamily="montserrat"
+                      _hover={{
+                        opacity: "70%",
+                      }}
+                      borderRadius="20px"
+                      marginTop={{base:"0.5rem", md:"1.5rem"}}
+                    >
+                      Start Here
+                  </Button>
+              </Link>
+              {/* <Upload /> */}
             </Box>
       </Box>
     </>

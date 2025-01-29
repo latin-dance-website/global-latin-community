@@ -53,7 +53,7 @@ function Testimonials() {
         fontFamily={"montserrat"}
         textAlign="center"
       >
-        What Our Customers Say?
+        What Our Dancers Say?
       </Heading>
       <Box
         height="0.2rem"

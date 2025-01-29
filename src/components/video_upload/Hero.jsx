@@ -30,21 +30,21 @@ const Hero = ({ maxWidth = 650 }) => {
       description: "Reviewed by a trusted Subject Matter Expert.",
       imageSrc: "/assets/Group14.png",
       imageSize: "206px",
-      backgroundColor: "rgb(88 28 135 / var(--tw-bg-opacity, 1))",
+      backgroundColor: "brand.pink",
     },
     {
       title: "Structured Feedback",
       description: "Receive a dance report card.",
       imageSrc: "/assets/Group16.png",
       imageSize: "150px",
-      backgroundColor: "rgb(107 33 168 / var(--tw-bg-opacity, 1))",
+      backgroundColor: "rgb(147 51 234 / var(--tw-bg-opacity, 1))",
     },
     {
       title: "Customised Road map",
       description: "Discover your tailored next steps.",
       imageSrc: "/assets/Group17.png",
       imageSize: "206px",
-      backgroundColor: "rgb(126 34 206 / var(--tw-bg-opacity, 1))",
+      backgroundColor: "brand.pink",
     },
   ];
 

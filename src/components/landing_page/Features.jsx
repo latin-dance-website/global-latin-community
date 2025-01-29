@@ -5,6 +5,7 @@ import {
   GridItem,
   Heading,
   Text,
+  useBreakpoint,
   VStack,
 } from "@chakra-ui/react";
 import {
@@ -33,7 +34,7 @@ const Features = () => {
         description:
           "Dive into the rhythm, instruments, and stories that define the soul of Latin music and dance culture.",
         link: "Explore",
-        href:"/music-culture"
+        href: "/music-culture",
       },
       {
         icon: FiPlay,
@@ -41,7 +42,7 @@ const Features = () => {
         description:
           "Access beginner to advanced tutorials and structured courses designed for your growth, wherever you are.",
         link: "Start Learning",
-        href:"/tutorial-courses"
+        href: "/tutorial-courses",
       },
       {
         icon: FiTrendingUp,
@@ -49,7 +50,7 @@ const Features = () => {
         description:
           "Attend exclusive workshops, bootcamps, and live events hosted by top Latin dance experts.",
         link: "See Events",
-        href:"/events"
+        href: "/events",
       },
       {
         icon: FiUser,
@@ -57,7 +58,7 @@ const Features = () => {
         description:
           "Create your professional profile, showcase your achievements, and grow your influence as a dancer or instructor.",
         link: "Start Building",
-        href:"/brand"
+        href: "/brand",
       },
       {
         icon: FiGlobe,
@@ -65,7 +66,7 @@ const Features = () => {
         description:
           "Join a vibrant global network of dancers. Share your journey, collaborate, and celebrate together.",
         link: "Join The Community",
-        href:"/global-community"
+        href: "/global-community",
       },
       {
         icon: FiShoppingBag,
@@ -73,7 +74,7 @@ const Features = () => {
         description:
           "Discover premium dancewear, accessories, and lifestyle products that elevate your practice and performances.",
         link: "Shop Now",
-        href:"/ecommerce"
+        href: "/ecommerce",
       },
     ],
     []
@@ -99,12 +100,14 @@ const Features = () => {
     };
   }, [cardData, currentlySelectedCard]);
 
+  let currentBreakpoint = useBreakpoint();
+
   return (
     <VStack
       px={{ base: "1rem", md: "4rem", lg: "4rem", xl: "7rem", "2xl": "10rem" }}
       paddingBottom={{ md: "3rem", lg: "3rem", xl: "5rem", "2xl": "8rem" }}
       bgColor="transparent"
-      marginTop={{ base: "3rem", md: "2rem" }}
+      marginTop={{ base: "3rem", md: "2rem", xl: "0rem", "2xl": "0rem" }}
     >
       {/* Header */}
       <VStack
@@ -138,28 +141,37 @@ const Features = () => {
           backgroundColor={"brand.purple"}
           alignSelf="center"
         />
-        <Text
-          fontSize={{ base: "1rem", md: "1rem", lg: "1rem", xl: "1.2rem" }}
-          fontStyle="italic"
-          marginTop="1rem"
-          fontFamily={"montserrat"}
-        >
-          Here you can,{" "}
-        </Text>
-        <Fade
-          transition={{ exit: { duration: 0.3 }, enter: { duration: 0.3 } }}
-          in={isTransitioning}
-        >
-          <Text
-            as="span"
-            fontWeight="bold"
-            fontSize={{ base: "0.8rem", md: "1rem", lg: "1rem", xl: "1.2rem" }}
-            fontStyle="italic"
-            fontFamily={"montserrat"}
-          >
-            {dynamicText}
-          </Text>
-        </Fade>
+        {currentBreakpoint !== "base" && (
+          <>
+            <Text
+              fontSize={{ base: "1rem", md: "1rem", lg: "1rem", xl: "1.2rem" }}
+              fontStyle="italic"
+              marginTop="1rem"
+              fontFamily={"montserrat"}
+            >
+              Here you can,{" "}
+            </Text>
+            <Fade
+              transition={{ exit: { duration: 0.3 }, enter: { duration: 0.3 } }}
+              in={isTransitioning}
+            >
+              <Text
+                as="span"
+                fontWeight="bold"
+                fontSize={{
+                  base: "0.8rem",
+                  md: "1rem",
+                  lg: "1rem",
+                  xl: "1.2rem",
+                }}
+                fontStyle="italic"
+                fontFamily={"montserrat"}
+              >
+                {dynamicText}
+              </Text>
+            </Fade>
+          </>
+        )}
       </VStack>
 
       {/* Grid */}

@@ -21,7 +21,7 @@ import {
   FiShoppingCart,
 } from "react-icons/fi";
 import { useEffect, useState } from "react";
-import heroImage from "../../../public/assets/images/hero.png";
+import heroImage from "../../../public/assets/images/hero.jpg";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -48,12 +48,12 @@ function Hero() {
         </linearGradient>
       </svg>
       <Stack
-        direction={{ base: "column-reverse", md: "row" }}
+        direction={{ base: "column", md: "row" }}
         alignItems="center"
         position="relative"
         bgColor={"transparent"}
         width="100%"
-        minHeight={{ base: "70vh", md: "50vh", lg: "50vh", xl: "84vh" }}
+        minHeight={{ base: "80vh", md: "50vh", lg: "50vh", xl: "84vh" }}
         paddingX={{
           base: "3rem",
           md: "3rem",
@@ -61,12 +61,12 @@ function Hero() {
           xl: "6rem",
           "2xl": "8rem",
         }}
-        justifyContent={"space-between"}
+        justifyContent={{ base: "center", md: "space-between" }}
         id="hello"
       >
         <VStack
           width={{ md: "50%", lg: "50%", xl: "40%" }}
-          gap={{ base: "1rem", md: "1rem", lg: "2rem", xl: "2rem" }}
+          gap={{ base: "2rem", md: "1rem", lg: "2rem", xl: "2rem" }}
           background={"transparent"}
         >
           <Heading
@@ -115,13 +115,13 @@ function Hero() {
             fontFamily="montserrat"
           >
             Get a 360 degree view of your dance journey with personalised
-            insights & tools
+            insights
           </Text>
           <Link href="/video-upload">
             <Button
               bgGradient="linear(to-br, #8EA3F4, #3C71FF)"
               textColor="white"
-              size={{ base: "lg", md: "lg", lg: "xl" }}
+              size={{ base: "xl", md: "lg", lg: "xl" }}
               alignSelf={{ base: "center", md: "start" }}
               fontFamily="montserrat"
               _hover={{
@@ -136,12 +136,12 @@ function Hero() {
           justifyContent="center"
           width={{ base: "100%", md: "50%", lg: "50%", xl: "50%" }}
           background={"transparent"}
-          paddingY={{ base: "3.5rem", sm: "0rem" }}
+          // paddingY={{ base: "0rem", sm: "0rem" }}
         >
           <chakra.svg
             position="absolute"
-            top="-10rem"
-            right="-10rem"
+            top={{ base: "-5rem", md: "-10rem" }}
+            right={{ base: "-5rem", md: "-10rem" }}
             width="60%"
             viewBox="0 0 857 1099"
             zIndex={"-1"}
@@ -150,7 +150,7 @@ function Hero() {
             borderRadius="full"
             blendMode="multiply"
             filter="auto"
-            blur="8rem"
+            blur={{ base: "6rem", md: "8rem" }}
             opacity="50%"
             xmlns="http://www.w3.org/2000/svg"
             className="blob1" // Add animation sptyling here
@@ -162,8 +162,8 @@ function Hero() {
           </chakra.svg>
           <chakra.svg
             position="absolute"
-            top={{ md: "10rem", lg: "30rem" }}
-            right={{ md: "5rem", lg: "10rem" }}
+            top={{ base: "15rem", md: "10rem", lg: "30rem" }}
+            right={{ base: "5rem", md: "5rem", lg: "10rem" }}
             width="50%"
             viewBox="0 0 1046 1014"
             zIndex={"-1"}
@@ -172,8 +172,8 @@ function Hero() {
             borderRadius="full"
             blendMode="multiply"
             filter="auto"
-            blur="10rem"
-            opacity="50%"
+            blur={{ base: "8rem", md: "10rem" }}
+            opacity={{ base: "100%", md: "50%" }}
             xmlns="http://www.w3.org/2000/svg"
             className="blob2" // Add animation styling here
           >
@@ -183,7 +183,7 @@ function Hero() {
             />
           </chakra.svg>
           <Box
-            display="flex"
+            display={{ base: "none", md: "flex" }}
             justifyContent="center"
             alignItems="center"
             width="100%"
@@ -200,6 +200,7 @@ function Hero() {
                 src={heroImage}
                 style={{
                   transition: "1s",
+                  opacity: "75%",
                 }}
                 onLoad={() => setIsLoaded(true)}
                 priority

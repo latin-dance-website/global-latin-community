@@ -41,9 +41,9 @@ const Bento = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ 
-              metadata: { email: email, event: "emailUpload"}
-             }),
+            body: JSON.stringify({
+              metadata: { email: email, event: "emailUpload" },
+            }),
           }
         );
 
@@ -143,22 +143,40 @@ const Bento = () => {
           fontSize={{ md: "1rem", lg: "1.15rem" }}
           color="gray.500"
           fontFamily={"montserratAlt"}
+          display={{ base: "none", md: "block" }}
           marginTop="1rem"
         >
-          500+ International Dancers Surveyed | 300+ Interviewed | Now its your
-          time...
+          500+ International Dancers Surveyed | 300+ Interviewed
+        </Text>
+        <Text
+          fontSize={{ md: "1rem", lg: "1.15rem" }}
+          color="gray.500"
+          fontFamily={"montserratAlt"}
+          display={{ base: "block", md: "none" }}
+          marginTop="1rem"
+        >
+          500+ International Dancers Surveyed <br /> 300+ Interviewed
+        </Text>
+
+        <Text
+          fontSize={{ base: "1.2rem", md: "1rem", lg: "1.15rem" }}
+          fontWeight={{ base: "semibold" }}
+          color="gray.700"
+          fontFamily={"montserrat"}
+        >
+          Now its your time to share!
         </Text>
       </VStack>
 
       {/* Content Section */}
-      <VStack spacing="2rem">
+      <VStack spacing={{ base: "1rem", md: "2rem" }}>
         <Stack
           alignItems="center"
           width="100%"
           height="fit-content"
           spacing={{ base: "1rem", md: "2rem", lg: "3rem" }}
           justifyContent={"space-between"}
-          direction={{ base: "column", md: "row" }}
+          direction={{ base: "column-reverse", md: "row" }}
           // alignItems="stretch"
         >
           <VStack
@@ -166,7 +184,7 @@ const Bento = () => {
             height="100%"
             bg="#F63C80"
             borderRadius="1rem"
-            gap="1rem"
+            gap={{ base: "1.5rem", md: "1rem" }}
             padding={{ base: "1rem", md: "1.4rem", lg: "1.5rem" }}
             color="white"
           >
@@ -175,7 +193,7 @@ const Bento = () => {
               fontFamily="montserrat"
               fontSize={{ md: "1rem", lg: "1.25rem" }}
               mb="4"
-              textAlign="left"
+              textAlign="center"
               width="100%"
               marginBottom={{ md: "1.5rem", lg: "1.8rem", xl: "0.6rem" }}
             >
@@ -208,15 +226,28 @@ const Bento = () => {
                   alignItems: "center",
                 }}
               >
-                <Box>
+                <Box
+                  display="flex"
+                  width="100%"
+                  justifyContent="center"
+                  alignItems="center"
+                >
                   <Text
-                    // fontWeight="bold"
+                    fontWeight="bold"
                     fontStyle="italic"
                     color="white"
-                    fontSize={{ md: "0.9rem", lg: "1.2rem", xl: "1.5rem" }}
+                    fontSize={{
+                      base: "0.85rem",
+                      md: "0.9rem",
+                      lg: "1.2rem",
+                      xl: "1.2rem",
+                    }}
                     fontFamily="montserratAlt"
+                    textAlign="center"
+                    opacity={"80%"}
                   >
-                    &quot;80% of the users are beginners.&quot;
+                    &quot; 70% of the users don't get
+                    <br /> personalised & structured feedback. &quot;
                   </Text>
                 </Box>
               </SwiperSlide>
@@ -225,17 +256,32 @@ const Bento = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  height: "100%",
                 }}
               >
-                <Box>
+                <Box
+                  display="flex"
+                  width="100%"
+                  height="100%"
+                  justifyContent="center"
+                  alignItems="center"
+                >
                   <Text
                     fontWeight="bold"
                     fontStyle="italic"
                     color="white"
-                    fontSize={{ md: "0.9rem", lg: "1.2rem", xl: "1.5rem" }}
+                    fontSize={{
+                      base: "0.85rem",
+                      md: "0.9rem",
+                      lg: "1.2rem",
+                      xl: "1.2rem",
+                    }}
                     fontFamily="montserratAlt"
+                    textAlign="center"
+                    opacity={"80%"}
                   >
-                    &quot;80% of the users are beginners.&quot;
+                    &quot; 85% say it’s hard to find <br /> consistent practice
+                    partners. &quot;
                   </Text>
                 </Box>
               </SwiperSlide>
@@ -243,6 +289,7 @@ const Bento = () => {
           </VStack>
           <VStack
             width={{ base: "100%", md: "50%", lg: "40%" }}
+            gap={{ base: "0.7rem", md: "0.5rem" }}
             bgGradient="linear(to-br, #FF4649 , #F63C80)"
             borderRadius="1rem"
             padding={{ base: "1rem", md: "1.4rem", lg: "1.5rem" }}
@@ -250,28 +297,28 @@ const Bento = () => {
             alignItems="flex-start"
           >
             <Text
-              fontSize={{ md: "0.8rem", lg: "0.9rem" }}
+              fontSize={{ base: "0.85rem", md: "0.8rem", lg: "0.9rem" }}
               fontFamily={"montserrat"}
             >
               Help Us To Know You Better
             </Text>
             <Text
-              fontSize={{ md: "1rem", lg: "1.2rem" }}
+              fontSize={{ base: "1.15rem", md: "1rem", lg: "1.2rem" }}
               fontWeight="bold"
               fontFamily={"montserrat"}
             >
               Share your journey below!
             </Text>
             <Link href="https://docs.google.com/forms/d/1mQ4eEwHwjWzSqsTOWzKhq9jI-y0vE-qiWAPwx2lFROQ/edit#responses">
-            <Button
-              bg="white"
-              color="red.400"
-              _hover={{ opacity: "80%" }}
-              fontFamily={"montserrat"}
-              marginTop={{ md: "0.5rem", lg: "0.8rem", xl: "1rem" }}
-            >
-              Fill Now
-            </Button>
+              <Button
+                bg="white"
+                color="red.400"
+                _hover={{ opacity: "80%" }}
+                fontFamily={"montserrat"}
+                marginTop={{ md: "0.5rem", lg: "0.8rem", xl: "1rem" }}
+              >
+                Fill Now
+              </Button>
             </Link>
           </VStack>
         </Stack>
@@ -300,7 +347,10 @@ const Bento = () => {
               >
                 Join Our Global Community & Stay Updated
               </Heading>
-              <Text fontSize="md" fontFamily="montserrat">
+              <Text
+                fontSize={{ base: "0.9rem", md: "1rem" }}
+                fontFamily="montserrat"
+              >
                 Connect with Latin dancers around the globe who share their
                 knowledge, collaborate, and help each other grow.
               </Text>
@@ -318,7 +368,8 @@ const Bento = () => {
                   color="white"
                   _hover={{ opacity: "70%" }}
                   onClick={handleSubmit}
-                  padding="1.2rem"
+                  paddingY="1.2rem"
+                  paddingX={{ base: "1.6rem", md: "2rem" }}
                   isLoading={isLoading}
                   // width="10rem"
                 >

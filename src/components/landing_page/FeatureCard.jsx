@@ -10,6 +10,7 @@ function FeatureCard({
   setCurrentlySelectedCard,
 }) {
   return (
+    <Link href={`${href}`} _hover={{ textDecoration: "none" }}>
     <VStack
       onMouseOver={() => {
         setCurrentlySelectedCard(title);
@@ -41,16 +42,16 @@ function FeatureCard({
       >
         {description}
       </Text>
-      <Link
-        href={`${href}`}
+      <Text
         fontWeight="bold"
         display="flex"
         alignItems="center"
         _hover={{ textDecoration: "underline" }}
       >
         {link} <Icon as={FiArrowRight} ml="2" />
-      </Link>
+      </Text>
     </VStack>
+    </Link>
   );
 }
 

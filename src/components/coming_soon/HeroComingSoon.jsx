@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCards, Navigation, Pagination } from "swiper/modules";
 import { useRouter } from "next/router";
+import { keyframes } from "@emotion/react";
 import React from "react";
 import { useState } from "react";
 import Link from "next/link";
@@ -16,7 +17,23 @@ import SlideshowCard from "@components/video_upload/SlideshowCard";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Box, Text, Input,Button,useToast } from "@chakra-ui/react";
+import { Box, Text, Input,Button,useToast,useBreakpointValue } from "@chakra-ui/react";
+import { FaArrowRight } from "react-icons/fa";
+
+  const bounceAnimationX = keyframes`
+  0% { transform: translateX(0); }
+  25% { transform: translateX(10px); }
+  50% { transform: translateX(0px); }
+  75% { transform: translateX(0px); }
+  100% { transform: translateX(0); }
+`;
+const bounceAnimationY = keyframes`
+  0% { transform: translateY(0); }
+  25% { transform: translateY(0px); }
+  50% { transform: translateY(0px); }
+  75% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+`;
 
 const HeroComingSoon = ({ maxWidth = 650 }) => {
     const [email, setEmail] = useState("");
@@ -24,6 +41,9 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
     const toast = useToast();
 
     const location = useRouter();
+
+    const iconSize = useBreakpointValue({ base: "15px", md: "24px" });
+    const SwiperSize = useBreakpointValue({base:"60%", md:"90%", lg:"100%"})
 
     const getInitialSlideIndex = (path) => {
       switch(path){
@@ -173,14 +193,15 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
              flexDirection={"column"}
              alignItems={{base:"center", md:"start"}}
              padding="20px"
+             marginTop={{base:"-0.5rem", sm:""}}
              paddingBottom="0px"
              paddingRight={{base:"20px", md:"0px"}}
              paddingTop="0px"
              width={{ lg:"40vw", md: "40vw", base:"100vw" }}
             >
-                <Text fontFamily={"montserrat"} fontSize={{xl:"2rem", lg:"1.5rem", base:"1rem"}} fontWeight={"600"}>-Coming Soon</Text>
-                <Text lineHeight="1" fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.5rem"}} fontWeight={"700"}>Get Notified</Text>
-                <Text lineHeight={"1.2"} fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.5rem"}} textAlign={{base:"center", md:"start"}} fontWeight={"700"}>When we Launch</Text>
+                <Text fontFamily={"montserrat"} fontSize={{xl:"2rem", lg:"1.5rem", base:"1.2rem"}} fontWeight={"600"}>-Coming Soon</Text>
+                <Text lineHeight="1" fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.8rem"}} fontWeight={"700"}>Get Notified</Text>
+                <Text lineHeight={"1.2"} fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.8rem"}} textAlign={{base:"center", md:"start"}} fontWeight={"700"}>When we Launch</Text>
                 <Box spacing="1rem" marginTop="0.5rem" marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
                 <Input
                   placeholder="Enter your email here.."
@@ -205,11 +226,36 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                   onClick={handleSubmit}
                   isLoading={isLoading}
                   marginTop={{base:"-0.5rem", md:"0rem"}}
-                  marginBottom={{base:"0.5rem", md:"0rem"}}
+                  marginBottom={{base:"-0.5rem", md:"0rem"}}
                   // width="10rem"
                 >
                   Notify me
                 </Button>
+              </Box>
+            </Box>
+            <Box
+              bg="white"
+              borderRadius="50%"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              p={{base:"0.5rem", md:"0.5rem"}}
+              boxShadow="0 4px 12px rgba(160, 65, 112, 0.7)"
+              transform={{
+                base: "rotate(90deg)",  
+                xl: "rotate(0deg)",     
+              }}
+              marginBottom={{base:"0.5rem", md:"0rem"}}
+              animation={{md:`${bounceAnimationX} 1s infinite ease-out`, base:`${bounceAnimationY} 1s infinite ease-out`}}
+              opacity={{md:"0", lg:"1"}}
+            >
+              <Box
+              transform={{
+                base: "rotate(90deg)",
+                md: "rotate(0deg)", 
+              }}
+              >
+              <FaArrowRight size={iconSize} color="#eab2d9" />
               </Box>
             </Box>
             <Box
@@ -220,14 +266,14 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                 flexDirection={"column"}
                 marginLeft="0rem"
                 boxSizing="border-box"
-                borderLeft={{md:"5px dotted #1f1f1f"}}
+                // borderLeft={{md:"5px dotted #1f1f1f"}}
               >
-                <Box display="flex" flexDirection={"column"} alignItems="center" width="100%" marginBottom={{base:"0.5rem", md:"1rem"}}>
+                <Box display="flex" flexDirection={"column"} alignItems="center" width="100%" marginBottom={{base:"0rem", md:"0rem"}} paddingX={{base:"0.5rem", sm:""}}>
                   <Text fontFamily={"montserrat"} fontSize={{lg:"2rem", sm:"1.5rem", base:"1rem"}} fontWeight={"600"} textAlign={"center"}>While you wait, <Text as="span" fontWeight="700">Get a personalised feedback right now!</Text></Text>
                 </Box>
                 <Box
                 display="flex"
-                width={{base:"120%", md:"100%"}}
+                width={{base:"100%", md:"80%"}}
                 justifyContent="center"
                 // marginRight={{ base: "0rem", md: "2rem", lg: "2rem", "2xl": "3rem" }}
                 paddingX="0%"
@@ -239,7 +285,7 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                   grabCursor={true}
                   modules={[EffectCards, Autoplay]}
                   className="select-none"
-                  style={{ width: "65%" }}
+                  style={{ width: `${SwiperSize}`, scale:"0.8" }}
                   loop={true}
                   autoplay={{ delay: 1200, pauseOnMouseEnter: true }}
                 >
@@ -257,16 +303,19 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
               </Box>
               <Link href="/video-upload">
                     <Button
-                      bgGradient="linear(to-br, #8EA3F4, #3C71FF)"
+                      // bgGradient="linear(to-br, #8EA3F4, #3C71FF)"
+                      bg="black"
                       textColor="white"
-                      size={{ base: "lg", md: "lg", lg: "xl" }}
+                      size={{ base: "lg", md: "lg", lg: "lg" }}
                       alignSelf={{ base: "center", md: "center" }}
                       fontFamily="montserrat"
                       _hover={{
                         opacity: "70%",
                       }}
                       borderRadius="20px"
-                      marginTop={{base:"0.5rem", md:"1.5rem"}}
+                      fontSize={{lg:"1.5rem"}}
+                      padding={{lg:"1.8rem"}}
+                      marginTop={{base:"0rem", md:"0rem", lg:"0rem"}}
                     >
                       Start Here
                   </Button>

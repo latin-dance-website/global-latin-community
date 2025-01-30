@@ -44,6 +44,7 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
 
     const iconSize = useBreakpointValue({ base: "15px", md: "24px" });
     const SwiperSize = useBreakpointValue({base:"60%", md:"90%", lg:"100%"})
+    const cardScale = useBreakpointValue({base:"1", sm:"0.9", md:"0.8"})
 
     const getInitialSlideIndex = (path) => {
       switch(path){
@@ -268,7 +269,7 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                 boxSizing="border-box"
                 // borderLeft={{md:"5px dotted #1f1f1f"}}
               >
-                <Box display="flex" flexDirection={"column"} alignItems="center" width="100%" marginBottom={{base:"0rem", md:"0rem"}} paddingX={{base:"0.5rem", sm:""}}>
+                <Box display="flex" flexDirection={"column"} alignItems="center" width="100%" marginBottom={{base:"0.5rem", sm:"0rem", md:"0rem"}} paddingX={{base:"0.5rem", sm:""}}>
                   <Text fontFamily={"montserrat"} fontSize={{lg:"2rem", sm:"1.5rem", base:"1rem"}} fontWeight={"600"} textAlign={"center"}>While you wait, <Text as="span" fontWeight="700">Get a personalised feedback right now!</Text></Text>
                 </Box>
                 <Box
@@ -285,7 +286,7 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                   grabCursor={true}
                   modules={[EffectCards, Autoplay]}
                   className="select-none"
-                  style={{ width: `${SwiperSize}`, scale:"0.8" }}
+                  style={{ width: `${SwiperSize}`, scale:`${cardScale}` }}
                   loop={true}
                   autoplay={{ delay: 1200, pauseOnMouseEnter: true }}
                 >
@@ -315,7 +316,7 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                       borderRadius="20px"
                       fontSize={{lg:"1.5rem"}}
                       padding={{lg:"1.8rem"}}
-                      marginTop={{base:"0rem", md:"0rem", lg:"0rem"}}
+                      marginTop={{base:"1rem", sm:"0rem", md:"0rem", lg:"0rem"}}
                     >
                       Start Here
                   </Button>

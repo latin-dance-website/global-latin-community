@@ -203,7 +203,7 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                 <Text fontFamily={"montserrat"} fontSize={{xl:"2rem", lg:"1.5rem", base:"1.2rem"}} fontWeight={"600"}>-Coming Soon</Text>
                 <Text lineHeight="1" fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.8rem"}} fontWeight={"700"}>Get Notified</Text>
                 <Text lineHeight={"1.2"} fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.8rem"}} textAlign={{base:"center", md:"start"}} fontWeight={"700"}>When we Launch</Text>
-                <Box spacing="1rem" marginTop="0.5rem" marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
+                <Box position="relative" right={{base:"3rem", md:"0"}} spacing="1rem" marginTop="0.5rem" marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
                 <Input
                   placeholder="Enter your email here.."
                   height="2.5rem"
@@ -214,10 +214,14 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                   border={"3px solid #cccac7"}
                   focusBorderColor="blue.400"
                   borderRadius="15px"
+                  paddingRight="2rem"
                 />
                 <Button
                   bg="black"
-                  height="3rem"
+                  position="absolute"
+                  right="-7rem"
+                  bottom={{base:"", md:"-8%"}}
+                  height="2.8rem"
                   width="fit-content"
                   zIndex={"20"}
                   color="white"
@@ -248,7 +252,7 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
               }}
               marginBottom={{base:"0.5rem", md:"0rem"}}
               animation={{md:`${bounceAnimationX} 1s infinite ease-out`, base:`${bounceAnimationY} 1s infinite ease-out`}}
-              opacity={{md:"0", lg:"1"}}
+              opacity={{md:"0", '2xl':"1"}}
             >
               <Box
               transform={{
@@ -274,6 +278,7 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                 </Box>
                 <Box
                 display="flex"
+                marginY = {{base:"0", lg:"-2rem"}}
                 width={{base:"100%", md:"80%"}}
                 justifyContent="center"
                 // marginRight={{ base: "0rem", md: "2rem", lg: "2rem", "2xl": "3rem" }}

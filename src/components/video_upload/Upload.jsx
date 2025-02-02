@@ -81,7 +81,7 @@ const Upload = () => {
   // Handle file upload
   const handleVideoUpload = (event) => {
     const file = event.target.files?.[0];
-    const maxFileSize = 10 * 1024 * 1024;
+    const maxFileSize = 200 * 1024 * 1024;
     if (file && file.size <= maxFileSize) {
       setVideoFile(file);
       setVideoLink("");

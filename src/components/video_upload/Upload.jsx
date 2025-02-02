@@ -320,11 +320,11 @@ const Upload = () => {
           <Text as="h5" fontWeight="bold">
             Thank you!
           </Text>
-          <Text fontSize="md" mb="2rem">
+          <Text fontSize="lg" mb="2rem">
             Please enter your email to receive the report.
           </Text>
           <FormControl mb={4}>
-            <FormLabel htmlFor="email">Email</FormLabel>
+            <FormLabel htmlFor="email" fontSize={"xl"} pl={4}>Email</FormLabel>
             <Input
               id="email"
               value={email}

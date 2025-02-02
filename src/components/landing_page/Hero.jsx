@@ -105,7 +105,7 @@ function Hero() {
           />
           <Text
             fontSize={{
-              base: "0.8rem",
+              base: "0.9rem",
               md: "0.8rem",
               xl: "1.3rem",
               "2xl": "1.5rem",

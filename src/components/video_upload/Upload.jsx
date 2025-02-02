@@ -21,6 +21,7 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 import { RiCheckFill, RiInstagramFill, RiYoutubeFill } from "react-icons/ri";
+import { emailList } from "../../../public/assets/emailList";
 
 const FileUpload = ({ videoFile, handleVideoUpload }) => {
   return (
@@ -75,13 +76,24 @@ const Upload = () => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
+  const allowedEmailList= emailList;
+
   // Handle file upload
   const handleVideoUpload = (event) => {
     const file = event.target.files?.[0];
-    if (file) {
+    const maxFileSize = 10 * 1024 * 1024;
+    if (file && file.size <= maxFileSize) {
       setVideoFile(file);
       setVideoLink("");
       setShowThankYou(true);
+    }else if(file && file.size > maxFileSize){
+      toast({
+        title: 'File too large.',
+        description: 'The file size must be less than 200MB.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -93,23 +105,81 @@ const Upload = () => {
   };
 
   const handleFullSubmit = async() => {
-    setIsLoading(true);
-    try {
-      if(videoLink){
-        const response = await fetch(
-          "https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              metadata: { email: email, link:videoLink, event: "linkUpload"}
-             }),
-          }
-        );
+    if(allowedEmailList.includes(email)){
+      setIsLoading(true);
+      try {
+        if(videoLink){
+          const response = await fetch(
+            "https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                metadata: { email: email, link:videoLink, event: "linkUpload"}
+              }),
+            }
+          );
 
-        if (response.ok) {
+          if (response.ok) {
+            toast({
+              title: "Upload Successful!",
+              description: "You will get the report soon!!",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+              position: "bottom-right",
+            });
+            setVideoLink("");
+            setShowThankYou(false); 
+          } else {
+            const errorData = await response.json();
+            toast({
+              title: "Error",
+              description: errorData.message || "Something went wrong.",
+              status: "error",
+              duration: 3000,
+              isClosable: true,
+              position: "bottom-right",
+            });
+            setVideoLink("");
+            setShowThankYou(false); 
+          }
+        }else if(videoFile){
+          // First fetch: Get signed URL
+        const response = await fetch('https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            metadata: { email: email, event:"fileUpload" }
+          })
+        });
+    
+        const data = await response.json();
+        // console.log('Success:', data);
+    
+        // Prepare form data for the signed URL
+        const formData = new FormData();
+        Object.keys(data.signedURL.fields).forEach((key) => {
+          if (key !== 'acl') {
+            formData.append(key, data.signedURL.fields[key]);
+          }
+        });
+        formData.append('file', videoFile);
+    
+        // Second fetch: Upload the file using the signed URL
+        const uploadResponse = await fetch(data.signedURL.url, {
+          method: 'POST',
+          body: formData
+        });
+    
+        if (uploadResponse.ok) {
+          console.log('Upload successful', uploadResponse.status);
+          const publicAccessURL = data.signedURL.url + data.signedURL.fields.key;
+          console.log('Public-access-url:', publicAccessURL);
           toast({
             title: "Upload Successful!",
             description: "You will get the report soon!!",
@@ -118,98 +188,51 @@ const Upload = () => {
             isClosable: true,
             position: "bottom-right",
           });
-          setVideoLink("");
-          setShowThankYou(false); 
+          setVideoFile(null)
+          setShowThankYou(false);
         } else {
-          const errorData = await response.json();
+          console.error('Error in uploading file:', uploadResponse.status);
           toast({
-            title: "Error",
-            description: errorData.message || "Something went wrong.",
+            title: "Upload Issue",
+            description: "Above Max Storage/Server Issue",
             status: "error",
             duration: 3000,
             isClosable: true,
             position: "bottom-right",
           });
-          setVideoLink("");
-          setShowThankYou(false); 
+          setVideoFile(null)
+          setShowThankYou(false);
         }
-      }else if(videoFile){
-        // First fetch: Get signed URL
-      const response = await fetch('https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          metadata: { email: email, event:"fileUpload" }
-        })
-      });
-  
-      const data = await response.json();
-      // console.log('Success:', data);
-  
-      // Prepare form data for the signed URL
-      const formData = new FormData();
-      Object.keys(data.signedURL.fields).forEach((key) => {
-        if (key !== 'acl') {
-          formData.append(key, data.signedURL.fields[key]);
         }
-      });
-      formData.append('file', videoFile);
-  
-      // Second fetch: Upload the file using the signed URL
-      const uploadResponse = await fetch(data.signedURL.url, {
-        method: 'POST',
-        body: formData
-      });
-  
-      if (uploadResponse.ok) {
-        console.log('Upload successful', uploadResponse.status);
-        const publicAccessURL = data.signedURL.url + data.signedURL.fields.key;
-        console.log('Public-access-url:', publicAccessURL);
-        toast({
-          title: "Upload Successful!",
-          description: "You will get the report soon!!",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-          position: "bottom-right",
-        });
-        setVideoFile(null)
-        setShowThankYou(false);
-      } else {
-        console.error('Error in uploading file:', uploadResponse.status);
+      } catch (error) {
+        console.error('Error:', error);
         toast({
           title: "Error",
-          description: "Something went wrong.",
+          description: "Max Storage Exceeded/Server Problem",
           status: "error",
           duration: 3000,
           isClosable: true,
           position: "bottom-right",
         });
         setVideoFile(null)
+        setVideoLink("")
         setShowThankYou(false);
+        setEmail("");
+      }finally {
+        setIsLoading(false);
+        setVideoFile(null)
+        setVideoLink("")
+        setShowThankYou(false);
+        setEmail("");
       }
-      }
-    } catch (error) {
-      console.error('Error:', error);
+    }else{
       toast({
-        title: "Error",
-        description: "Something went wrong.",
+        title: "Email not allowed.",
+        description: "Please enter a valid email.",
         status: "error",
         duration: 3000,
         isClosable: true,
-        position: "bottom-right",
       });
-      setVideoFile(null)
-      setVideoLink("")
-      setShowThankYou(false);
-      setEmail("");
-    }finally {
-      setIsLoading(false);
-      setVideoFile(null)
-      setVideoLink("")
-      setShowThankYou(false);
       setEmail("");
     }
   }

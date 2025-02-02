@@ -346,7 +346,7 @@ const Upload = () => {
           <Text fontSize="lg" mb="2rem">
             Please enter your email to receive the report.
           </Text>
-          <FormControl mb={4}>
+          <FormControl mb={4} isRequired>
             {/* <FormLabel htmlFor="email" fontSize={"xl"} pl={4}>Email</FormLabel> */}
             <Input
               id="email"

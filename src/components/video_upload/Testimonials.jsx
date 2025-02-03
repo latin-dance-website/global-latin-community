@@ -13,20 +13,20 @@ import { RiStarFill } from "react-icons/ri";
 function Testimonials() {
   const testimonials = [
     {
-      text: "It was a great class, specially for first timers. Learned a lot. Helpful teacher. Great studio. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.",
-      name: "Ishaan Jalan",
+      text: "The report card was a game-changer for me! I always knew I had gaps in my dancing but never had a structured way to identify and improve them. The breakdown of musicality, technique, and body control helped me focus on specific areas rather than feeling lost. It's exactly what the dance community needs - clear, actionable feedback rather than just subjective opinions!",
+      name: "Ananya Sharma",
       bgColor: "#F9FFB5",
       stars: "5.0",
     },
     {
-      text: "It was a great class, specially for first timers. Learned a lot. Helpful teacher. Great studio. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.",
-      name: "Amrith K",
+      text: "For the longest time, I practiced without direction. The report card provided an objective, data-backed way to track my progress and compare my strengths and weaknesses. The personalized feedback made it feel like a real learning experience rather than just dancing blindly. Every serious dancer should use this—it's a must-have tool for structured improvement!",
+      name: "Rahul Verma",
       bgColor: "#B3F5BC",
       stars: "4.0",
     },
     {
-      text: "It was a great class, specially for first timers. Learned a lot. Helpful teacher. Great studio. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.",
-      name: "Sarthak Jain",
+      text: "Dancers receive applause but not always constructive feedback. This report card fills that gap by giving detailed insights into execution, posture, and expression. It helped me understand my weak points in a way no one had before. This system needs to be the standard across all dance platforms—it's long overdue!",
+      name: "The Need of the Hour",
       bgColor: "#FF9955",
       stars: "5.0",
     },

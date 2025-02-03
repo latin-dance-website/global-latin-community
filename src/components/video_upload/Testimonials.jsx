@@ -25,8 +25,8 @@ function Testimonials() {
       stars: "4.0",
     },
     {
-      text: "Dancers receive applause but don’t always get constructive feedback. This report card fills that gap by providing detailed insights into execution, posture, and expression. It has helped me understand my weak points in a way no one had before. This system needs to become the standard across all dance platforms—it's long overdue!",
-      name: "The Need of the Hour",
+      text: "Dancers often receive applause, but constructive feedback is rare. This report card changes that by offering detailed insights into execution, posture, and expression. It gave me a new level of understanding of my weak points that I hadn't realized before. This system is exactly what the dance world needs—it's a game-changer and should be the standard across all dance platforms!",
+      name: "Goutham",
       bgColor: "#FF9955",
       stars: "5.0",
     },

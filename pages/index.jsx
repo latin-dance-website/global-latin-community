@@ -8,6 +8,7 @@ import Bento from "@components/landing_page/Bento";
 import MarqueeComponent from "@components/landing_page/Marquee";
 
 const Home = () => {
+  
   return (
     <Box minH="100vh" maxWidth="100vw" position="relative" overflowX="clip">
       <Navbar />

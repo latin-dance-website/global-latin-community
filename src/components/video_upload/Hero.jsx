@@ -17,7 +17,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-const Hero = ({ maxWidth = 650 }) => {
+const Hero = ({isToastVisible, setIsToastVisible}) => {
   const cards = [
     {
       title: "Upload Your Dance",
@@ -158,7 +158,7 @@ const bounceAnimationY = keyframes`
           justifyContent="center"
           display="flex"
         >
-          <Upload />
+          <Upload isToastVisible={isToastVisible} setIsToastVisible={setIsToastVisible}/>
         </Box>
       </Stack>
     </>

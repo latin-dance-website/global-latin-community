@@ -68,7 +68,7 @@ const FileUpload = ({ videoFile, handleVideoUpload }) => {
   );
 };
 
-const Upload = () => {
+const Upload = ({isToastVisible, setIsToastVisible}) => {
   const [videoLink, setVideoLink] = useState("");
   const [videoFile, setVideoFile] = useState(null);
   const [showThankYou, setShowThankYou] = useState(false);
@@ -87,12 +87,15 @@ const Upload = () => {
       setVideoLink("");
       setShowThankYou(true);
     }else if(file && file.size > maxFileSize){
+      setIsToastVisible(true);
       toast({
         title: 'File too large.',
         description: 'The file size must be less than 200MB.',
         status: 'error',
         duration: 3000,
         isClosable: true,
+        position: "top",
+        onCloseComplete: () => setIsToastVisible(false)
       });
     }
   };
@@ -105,11 +108,13 @@ const Upload = () => {
   };
 
   const handleFullSubmit = async() => {
-    if(allowedEmailList.includes(email)){
+    // if(allowedEmailList.includes(email)){
       setIsLoading(true);
       try {
         if(videoLink){
-          const response = await fetch(
+          let response;
+          if(allowedEmailList.includes(email)){
+            response = await fetch(
             "https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/",
             {
               method: "POST",
@@ -117,46 +122,89 @@ const Upload = () => {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                metadata: { email: email, link:videoLink, event: "linkUpload"}
+                metadata: { email: email, link:videoLink, emailInList:true, event: "linkUpload"}
               }),
             }
           );
+        }else{
+            response = await fetch(
+              "https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  metadata: { email: email, link:videoLink, emailInList:false, event: "linkUpload"}
+                }),
+              }
+            );
+        }
 
           if (response.ok) {
-            toast({
-              title: "Upload Successful!",
-              description: "You will get the report soon!!",
-              status: "success",
-              duration: 3000,
-              isClosable: true,
-              position: "bottom-right",
-            });
+            setIsToastVisible(true)
+            if(allowedEmailList.includes(email)){
+              toast({
+                title: "Upload Successful!",
+                description: "You will get the report soon!!",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+                position: "top",
+                onCloseComplete: () => setIsToastVisible(false)
+              });
+            }else{
+              toast({
+                title: "Thank You for Sharing!",
+                description: "We’re granting access to our early bird registrants. You’ve been added to the waitlist, and your report card will be available soon.",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+                position:"top",
+                onCloseComplete: () => setIsToastVisible(false)
+              });
+            }
             setVideoLink("");
             setShowThankYou(false); 
           } else {
             const errorData = await response.json();
+            setIsToastVisible(true);
             toast({
               title: "Error",
               description: errorData.message || "Something went wrong.",
               status: "error",
               duration: 3000,
               isClosable: true,
-              position: "bottom-right",
+              position: "top",
+              onCloseComplete: () => setIsToastVisible(false)
             });
             setVideoLink("");
             setShowThankYou(false); 
           }
         }else if(videoFile){
           // First fetch: Get signed URL
-        const response = await fetch('https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            metadata: { email: email, event:"fileUpload" }
-          })
-        });
+          let response;
+          if(allowedEmailList.includes(email)){
+              response = await fetch('https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                metadata: { email: email, emailInList:true, event:"fileUpload" }
+              })
+            });
+          }else{
+            response = await fetch('https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                metadata: { email: email, emailInList:false, event:"fileUpload" }
+              })
+            });
+          }
     
         const data = await response.json();
         // console.log('Success:', data);
@@ -180,25 +228,41 @@ const Upload = () => {
           console.log('Upload successful', uploadResponse.status);
           const publicAccessURL = data.signedURL.url + data.signedURL.fields.key;
           console.log('Public-access-url:', publicAccessURL);
-          toast({
-            title: "Upload Successful!",
-            description: "You will get the report soon!!",
-            status: "success",
-            duration: 3000,
-            isClosable: true,
-            position: "bottom-right",
-          });
+          setIsToastVisible(true);
+          if(emailList.includes(email)){
+            toast({
+              title: "Upload Successful!",
+              description: "You will get the report soon!!",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+              position: "top",
+              onCloseComplete: () => setIsToastVisible(false)
+            });
+          }else{
+            toast({
+              title: "Thank You for Sharing!",
+              description: "We're granting access to our early bird registrants. You've been added to the waitlist, and your report card will be available soon.",
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+              position:"top",
+              onCloseComplete: () => setIsToastVisible(false)
+            });
+          }
           setVideoFile(null)
           setShowThankYou(false);
         } else {
           console.error('Error in uploading file:', uploadResponse.status);
+          setIsToastVisible(true);
           toast({
             title: "Upload Issue",
-            description: "Above Max Storage/Server Issue",
+            description: "Server Issue",
             status: "error",
             duration: 3000,
             isClosable: true,
-            position: "bottom-right",
+            position: "top",
+            onCloseComplete: () => setIsToastVisible(false)
           });
           setVideoFile(null)
           setShowThankYou(false);
@@ -206,13 +270,15 @@ const Upload = () => {
         }
       } catch (error) {
         console.error('Error:', error);
+        setIsToastVisible(true);
         toast({
           title: "Error",
-          description: "Max Storage Exceeded/Server Problem",
+          description: "Server Problem",
           status: "error",
           duration: 3000,
           isClosable: true,
-          position: "bottom-right",
+          position: "top",
+          onCloseComplete: () => setIsToastVisible(false)
         });
         setVideoFile(null)
         setVideoLink("")
@@ -225,16 +291,19 @@ const Upload = () => {
         setShowThankYou(false);
         setEmail("");
       }
-    }else{
-      toast({
-        title: "Email not allowed.",
-        description: "Please enter a valid email.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      setEmail("");
-    }
+    // }else{
+    //   setIsToastVisible(true);
+    //   toast({
+    //     title: "Thank You for Sharing!",
+    //     description: "We’re granting access to our early bird registrants. You’ve been added to the waitlist, and your report card will be available soon.",
+    //     status: "success",
+    //     duration: 5000,
+    //     isClosable: true,
+    //     position:"top",
+    //     onCloseComplete: () => setIsToastVisible(false)
+    //   });
+    //   setEmail("");
+    // }
   }
 
   return (
@@ -354,6 +423,7 @@ const Upload = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email here..."
               variant="outline"
+              type="email"
             />
           </FormControl>
           <Button

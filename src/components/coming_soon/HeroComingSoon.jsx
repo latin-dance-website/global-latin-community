@@ -35,7 +35,7 @@ const bounceAnimationY = keyframes`
   100% { transform: translateY(0); }
 `;
 
-const HeroComingSoon = ({ maxWidth = 650 }) => {
+const HeroComingSoon = ({isToastVisible, setIsToastVisible}) => {
     const [email, setEmail] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const toast = useToast();
@@ -84,53 +84,61 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  metadata: { email: email, event: "emailUpload", purpose:"emailSend"}
+                  metadata: { email: email, event: "emailUpload", purpose:"emailSendComingSoon"}
                  }),
               }
             );
     
             if (response.ok) {
+              setIsToastVisible(true);
               toast({
-                title: "Subscription Successful!",
-                description: "You have been added to our newsletter.",
+                title: "Thanks for your Time!",
+                description: "We will notify you soon when we launch.",
                 status: "success",
                 duration: 3000,
                 isClosable: true,
-                position: "bottom-right",
+                position: "top",
+                onCloseComplete: () => setIsToastVisible(false)
               });
               setEmail(""); // Clear the input field on success
             } else {
               const errorData = await response.json();
+              setIsToastVisible(true);
               toast({
                 title: "Error",
                 description: errorData.message || "Something went wrong.",
                 status: "error",
                 duration: 3000,
                 isClosable: true,
-                position: "bottom-right",
+                position: "top",
+                onCloseComplete: () => setIsToastVisible(false)
               });
             }
           } catch (error) {
+            setIsToastVisible(true);
             toast({
               title: "Network Error",
               description: error.message,
               status: "error",
               duration: 3000,
               isClosable: true,
-              position: "bottom-right",
+              position: "top",
+              onCloseComplete: () => setIsToastVisible(false)
             });
           } finally {
             setIsLoading(false);
           }
         } else {
           // Show an error toast
+          setIsToastVisible(true);
           toast({
             title: "Error",
             description: "Please enter a valid email address.",
             status: "error",
             duration: 3000,
             isClosable: true,
-            position: "bottom-right",
+            position: "top",
+            onCloseComplete: () => setIsToastVisible(false)
           });
         }
       };
@@ -188,6 +196,7 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
         flexDirection={{base:"column", md:"row"}}
         justifyContent={"space-evenly"}
         alignItems={"center"}
+        bg={isToastVisible ? "rgba(0, 0, 0, 0.5)" : ""}
         >
             <Box
              display="flex"
@@ -203,10 +212,10 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                 <Text fontFamily={"montserrat"} fontSize={{xl:"2rem", lg:"1.5rem", base:"1.2rem"}} fontWeight={"600"}>-Coming Soon</Text>
                 <Text lineHeight="1" fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.8rem"}} fontWeight={"700"}>Get Notified</Text>
                 <Text lineHeight={"1.2"} fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.8rem"}} textAlign={{base:"center", md:"start"}} fontWeight={"700"}>When we Launch</Text>
-                <Box position="relative" right={{base:"2.5rem", sm:"3rem", md:"0"}} spacing="1rem" marginTop="0.5rem" marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
+                <Box position="relative" right={{base:"2.5rem", sm:"3rem", md:"0"}} spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
                 <Input
                   placeholder="Enter your email here.."
-                  height="2.5rem"
+                  height="2.8rem"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
@@ -214,21 +223,22 @@ const HeroComingSoon = ({ maxWidth = 650 }) => {
                   border={"3px solid #cccac7"}
                   focusBorderColor="blue.400"
                   borderRadius="15px"
-                  paddingRight="2rem"
+                  paddingRight={{base:"1.8rem", sm:"2.7rem"}}
                   isRequired
                 />
                 <Button
                   bg="black"
                   position="absolute"
-                  right={{sm:"-7rem", base:"-5rem"}}
-                  bottom={{base:"", md:"-8%"}}
+                  right={{sm:"-4rem", base:"-5rem"}}
+                  // bottom={{base:"", md:"-8%"}}
                   height="2.8rem"
                   width="fit-content"
                   zIndex={"20"}
                   color="white"
-                  paddingX={{sm:"2rem", base:"1rem"}}
-                  borderRadius="20px"
+                  paddingX={{base:"1rem"}}
+                  borderRadius="15px"
                   _hover={{ bg: "black" }}
+                  _active={{bg: "black"}}
                   onClick={handleSubmit}
                   isLoading={isLoading}
                   marginTop={{base:"-0.5rem", md:"0rem"}}

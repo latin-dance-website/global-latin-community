@@ -42,7 +42,7 @@ const Bento = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              metadata: { email: email, event: "emailUpload", purpose:"emailSend" },
+              metadata: { email: email, event: "emailUpload", purpose:"emailSendJoin" },
             }),
           }
         );

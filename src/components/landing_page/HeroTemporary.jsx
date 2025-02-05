@@ -100,13 +100,15 @@ function HeroTemporary() {
             >
               <Text
                 fontSize={{
-                  base: "3rem",
+                  base: "2.6rem",
+                  sm:"3rem",
                   md: "3rem",
                   lg: "4.5rem",
                   xl: "4.5rem",
                   "2xl": "6rem",
                 }}
                 color={"black"}
+                fontWeight={{base:"bold", sm:"bold"}}
               >
                 {words[textIndex]}
               </Text>

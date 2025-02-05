@@ -4,7 +4,7 @@ import { RiWhatsappFill, RiInstagramFill, RiYoutubeFill } from "react-icons/ri";
 import logo from "../../public/assets/images/logo.png";
 import Link from "next/link";
 
-const Navbar = () => {
+const Navbar = ({isToastVisible}) => {
   return (
     <HStack
       mx="auto"
@@ -23,6 +23,7 @@ const Navbar = () => {
       justifyContent="space-between"
       bgColor="whiteAlpha.100"
       borderBottom="solid 0.1rem"
+      bg={isToastVisible ? "rgba(0, 0, 0, 0.5)" : ""}
     >
       <Box
         width={{ base: "40%", md: "40%", lg: "50%", xl: "50%", "2xl": "40%" }}
@@ -77,6 +78,7 @@ const Navbar = () => {
             xl: "0.4rem",
             "2xl": "0.5rem",
           }}
+          bg={isToastVisible ? "rgba(0, 0, 0, 0.5)" : ""}
         >
           <Text
             color="black"

@@ -380,6 +380,7 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
             videoFile={videoFile}
             handleVideoUpload={handleVideoUpload}
           />
+          <Text color="gray.500">Max File Size: 200MB</Text>
 
           {/* Submit Button with Gradient */}
           <Button
@@ -389,7 +390,7 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
             px="1.5rem"
             py="1.5rem"
             bg="brand.purple"
-            marginTop="2rem"
+            marginTop="0rem"
             onClick={handleSubmit}
             _hover={{
               opacity: "70%",

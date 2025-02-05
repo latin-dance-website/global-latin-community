@@ -25,7 +25,7 @@ import "swiper/css/navigation";
 import "swiper/css/autoplay";
 import { useState } from "react";
 
-const Bento = () => {
+const Bento = ({isToastVisible, setIsToastVisible}) => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -48,47 +48,55 @@ const Bento = () => {
         );
 
         if (response.ok) {
+          setIsToastVisible(true);
           toast({
             title: "Subscription Successful!",
             description: "You have been added to our newsletter.",
             status: "success",
             duration: 3000,
             isClosable: true,
-            position: "bottom-right",
+            position: "top",
+            onCloseComplete: () => setIsToastVisible(false)
           });
           setEmail(""); // Clear the input field on success
         } else {
           const errorData = await response.json();
+          setIsToastVisible(true);
           toast({
             title: "Error",
             description: errorData.message || "Something went wrong.",
             status: "error",
             duration: 3000,
             isClosable: true,
-            position: "bottom-right",
+            position: "top",
+            onCloseComplete: () => setIsToastVisible(false)
           });
         }
       } catch (error) {
+        setIsToastVisible(true);
         toast({
           title: "Network Error",
           description: error.message,
           status: "error",
           duration: 3000,
           isClosable: true,
-          position: "bottom-right",
+          position: "top",
+          onCloseComplete: () => setIsToastVisible(false)
         });
       } finally {
         setIsLoading(false);
       }
     } else {
       // Show an error toast
+      setIsToastVisible(true);
       toast({
         title: "Error",
         description: "Please enter a valid email address.",
         status: "error",
         duration: 3000,
         isClosable: true,
-        position: "bottom-right",
+        position: "top",
+        onCloseComplete: () => setIsToastVisible(false)
       });
     }
   };

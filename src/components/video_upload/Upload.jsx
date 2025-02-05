@@ -109,6 +109,18 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
 
   const handleFullSubmit = async() => {
     // if(allowedEmailList.includes(email)){
+    if (!email || !email.includes("@")) {
+      setIsToastVisible(true);
+          toast({
+            title: "Enter Email Address",
+            description: "Please enter valid email address.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+            position: "top",
+            onCloseComplete: () => setIsToastVisible(false)
+          });
+    }else{
       setIsLoading(true);
       try {
         if(videoLink){
@@ -291,19 +303,7 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
         setShowThankYou(false);
         setEmail("");
       }
-    // }else{
-    //   setIsToastVisible(true);
-    //   toast({
-    //     title: "Thank You for Sharing!",
-    //     description: "We’re granting access to our early bird registrants. You’ve been added to the waitlist, and your report card will be available soon.",
-    //     status: "success",
-    //     duration: 5000,
-    //     isClosable: true,
-    //     position:"top",
-    //     onCloseComplete: () => setIsToastVisible(false)
-    //   });
-    //   setEmail("");
-    // }
+    }
   }
 
   return (
@@ -418,12 +418,12 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
           <FormControl mb={4} isRequired>
             {/* <FormLabel htmlFor="email" fontSize={"xl"} pl={4}>Email</FormLabel> */}
             <Input
-              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email here..."
               variant="outline"
               type="email"
+              isRequired
             />
           </FormControl>
           <Button

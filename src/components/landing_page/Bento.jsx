@@ -57,7 +57,7 @@ const Bento = ({isToastVisible, setIsToastVisible}) => {
             isClosable: true,
             position: "top",
             onCloseComplete: () => setIsToastVisible(false)
-          });
+          }); 
           setEmail(""); // Clear the input field on success
         } else {
           const errorData = await response.json();

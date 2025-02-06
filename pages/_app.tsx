@@ -38,10 +38,10 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
         <meta
           property="og:image"
-          content="https://www.globallatindancecommunity.com/assets/images/ogLogo4.PNG"
+          content="https://www.globallatindancecommunity.com/assets/images/ogLogo4(200).png"
         />
-        <meta property="og:image:width" content="800" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:image:width" content="200" />
+        <meta property="og:image:height" content="200" />
         <meta property="og:image:type" content="image/png" />
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
@@ -56,7 +56,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         />
         <meta
           property="twitter:image"
-          content="https://www.globallatindancecommunity.com/assets/images/ogLogo4.PNG"
+          content="https://www.globallatindancecommunity.com/assets/images/ogLogo4(200).png"
         />
 
         {/* Favicon */}

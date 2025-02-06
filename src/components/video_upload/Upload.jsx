@@ -121,11 +121,12 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
             onCloseComplete: () => setIsToastVisible(false)
           });
     }else{
+      const tempEmail = email.toLowerCase();
       setIsLoading(true);
       try {
         if(videoLink){
           let response;
-          if(allowedEmailList.includes(email)){
+          if(allowedEmailList.includes(tempEmail)){
             response = await fetch(
             "https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/",
             {
@@ -134,7 +135,7 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                metadata: { email: email, link:videoLink, emailInList:true, event: "linkUpload"}
+                metadata: { email: tempEmail, link:videoLink, emailInList:true, event: "linkUpload"}
               }),
             }
           );
@@ -147,7 +148,7 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  metadata: { email: email, link:videoLink, emailInList:false, event: "linkUpload"}
+                  metadata: { email: tempEmail, link:videoLink, emailInList:false, event: "linkUpload"}
                 }),
               }
             );
@@ -155,7 +156,7 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
 
           if (response.ok) {
             setIsToastVisible(true)
-            if(allowedEmailList.includes(email)){
+            if(allowedEmailList.includes(tempEmail)){
               toast({
                 title: "Upload Successful!",
                 description: "You will get the report soon!!",
@@ -196,14 +197,14 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
         }else if(videoFile){
           // First fetch: Get signed URL
           let response;
-          if(allowedEmailList.includes(email)){
+          if(allowedEmailList.includes(tempEmail)){
               response = await fetch('https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                metadata: { email: email, emailInList:true, event:"fileUpload" }
+                metadata: { email: tempEmail, emailInList:true, event:"fileUpload" }
               })
             });
           }else{
@@ -213,7 +214,7 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                metadata: { email: email, emailInList:false, event:"fileUpload" }
+                metadata: { email: tempEmail, emailInList:false, event:"fileUpload" }
               })
             });
           }
@@ -241,7 +242,7 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
           const publicAccessURL = data.signedURL.url + data.signedURL.fields.key;
           console.log('Public-access-url:', publicAccessURL);
           setIsToastVisible(true);
-          if(emailList.includes(email)){
+          if(emailList.includes(tempEmail)){
             toast({
               title: "Upload Successful!",
               description: "You will get the report soon!!",

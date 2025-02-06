@@ -74,6 +74,7 @@ const HeroComingSoon = ({isToastVisible, setIsToastVisible}) => {
 
     const handleSubmit = async () => {
         if (validateEmail(email)) {
+          const tempEmail = email.toLowerCase();
           setIsLoading(true);
           try {
             const response = await fetch(
@@ -84,7 +85,7 @@ const HeroComingSoon = ({isToastVisible, setIsToastVisible}) => {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  metadata: { email: email, event: "emailUpload", purpose:"emailSendComingSoon"}
+                  metadata: { email: tempEmail, event: "emailUpload", purpose:"emailSendComingSoon"}
                  }),
               }
             );

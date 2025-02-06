@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
         <meta
           property="og:image"
-          content="https://www.globallatindancecommunity.com/assets/images/ogLogo3.png"
+          content="https://www.globallatindancecommunity.com/assets/images/ogLogo4.PNG"
         />
         <meta property="og:image:width" content="800" />
         <meta property="og:image:height" content="630" />
@@ -56,7 +56,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         />
         <meta
           property="twitter:image"
-          content="https://www.globallatindancecommunity.com/assets/images/ogLogo3.png"
+          content="https://www.globallatindancecommunity.com/assets/images/ogLogo4.PNG"
         />
 
         {/* Favicon */}

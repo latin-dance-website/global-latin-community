@@ -37,9 +37,9 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         />
         <meta
           property="og:image"
-          content="https://www.globallatindancecommunity.com/assets/logo.png"
+          content="https://www.globallatindancecommunity.com/assets/logo.jpeg"
         />
-        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:type" content="image/jpeg" />
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta

@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.globallatindance.com/" />
+        <meta property="og:url" content="https://www.globallatindancecommunity.com/" />
         <meta property="og:title" content="Global Latin Dance Community" />
         <meta
           property="og:description"
@@ -37,14 +37,14 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         />
         <meta
           property="og:image"
-          content="https://www.globallatindance.com/assets/og-image.jpg"
+          content="https://www.globallatindancecommunity.com/assets/logo.png"
         />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta
           property="twitter:url"
-          content="https://www.globallatindance.com/"
+          content="https://www.globallatindancecommunity.com/"
         />
         <meta property="twitter:title" content="Global Latin Dance Community" />
         <meta
@@ -53,7 +53,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         />
         <meta
           property="twitter:image"
-          content="https://www.globallatindance.com/assets/twitter-image.jpg"
+          content="https://www.globallatindancecommunity.com/assets/logo.png"
         />
 
         {/* Favicon */}

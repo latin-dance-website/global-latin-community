@@ -172,7 +172,7 @@ const HeroComingSoon = ({isToastVisible, setIsToastVisible}) => {
     },
     {
       title: "Structured Feedback",
-      description: "Receive a dance report card.",
+      description: "Receive a free dance report card.",
       imageSrc: "/assets/Group16.png",
       imageSize: "150px",
       backgroundColor: "rgb(147 51 234 / var(--tw-bg-opacity, 1))",
@@ -212,7 +212,7 @@ const HeroComingSoon = ({isToastVisible, setIsToastVisible}) => {
                 <Text fontFamily={"montserrat"} fontSize={{xl:"2rem", lg:"1.5rem", base:"1.2rem"}} fontWeight={"600"}>-Coming Soon</Text>
                 <Text lineHeight="1" fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.8rem"}} fontWeight={"700"}>Get Notified</Text>
                 <Text lineHeight={"1.2"} fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.8rem"}} textAlign={{base:"center", md:"start"}} fontWeight={"700"}>When we Launch</Text>
-                <Box position="relative" right={{base:"2.5rem", sm:"3rem", md:"0"}} spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
+                <Box position="relative" right={{base:"2.5rem", sm:"2.5rem", md:"0"}} spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
                 <Input
                   placeholder="Enter your email here.."
                   height="2.8rem"
@@ -284,8 +284,8 @@ const HeroComingSoon = ({isToastVisible, setIsToastVisible}) => {
                 boxSizing="border-box"
                 // borderLeft={{md:"5px dotted #1f1f1f"}}
               >
-                <Box display="flex" flexDirection={"column"} alignItems="center" width="100%" marginBottom={{base:"0.5rem", sm:"0rem", md:"0rem"}} paddingX={{base:"0.5rem", sm:""}}>
-                  <Text fontFamily={"montserrat"} fontSize={{lg:"2rem", sm:"1.5rem", base:"1rem"}} fontWeight={"600"} textAlign={"center"}>While you wait, <Text as="span" fontWeight="700">Get a personalised feedback right now!</Text></Text>
+                <Box display="flex" flexDirection={"column"} alignItems="center" width={{base:"70%", sm:"65%"}} marginBottom={{base:"0.5rem", sm:"0rem", md:"0rem"}} paddingX={{base:"0.5rem", sm:""}}>
+                  <Text fontFamily={"montserrat"} fontSize={{lg:"1.8rem", sm:"1.3rem", base:"1rem"}} fontWeight={"600"} textAlign={"center"}>While you wait, <Text as="span" fontWeight="700">Get a <Text as="span" fontWeight="800" textDecoration="underline" textUnderlineOffset="2px" textDecorationThickness="2px" textDecorationColor="#8547e6">free</Text> personalised feedback right now!</Text></Text>
                 </Box>
                 <Box
                 display="flex"

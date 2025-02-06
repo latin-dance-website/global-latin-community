@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         />
         <meta
           name="keywords"
-          content="Latin Dance, Salsa, Bachata, Kizomba, Dance Events, Global Dance Community"
+          content="Latin Dance, Salsa, Bachata, Kizomba, Dance Events, Global Dance Community, Global Latin Dance Community"
         />
         <meta name="robots" content="index, follow" />
         <meta name="author" content="Global Latin Dance Community" />

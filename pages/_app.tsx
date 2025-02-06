@@ -35,10 +35,13 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
           property="og:description"
           content="Join the vibrant Global Latin Dance Community. Discover events, connect with dancers, and celebrate Latin culture through dance!"
         />
+
         <meta
           property="og:image"
-          content="https://www.globallatindancecommunity.com/assets/images/ogLogo3.PNG"
+          content="https://www.globallatindancecommunity.com/assets/images/ogLogo3.png"
         />
+        <meta property="og:image:width" content="800" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/png" />
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
@@ -53,7 +56,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         />
         <meta
           property="twitter:image"
-          content="https://www.globallatindancecommunity.com/assets/logo.png"
+          content="https://www.globallatindancecommunity.com/assets/images/ogLogo3.png"
         />
 
         {/* Favicon */}

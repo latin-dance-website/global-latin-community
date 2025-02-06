@@ -134,7 +134,7 @@ function HeroTemporary() {
           fontFamily="montserrat"
           // marginTop={{ base: "2rem", md: "1rem" }}
         >
-          Get Personalised Feedback & Insights of your dancing journey!
+          Get 'Free' Personalised Feedback & Insights of your dancing journey!
         </Text>
         <Link href="/video-upload">
           <Button

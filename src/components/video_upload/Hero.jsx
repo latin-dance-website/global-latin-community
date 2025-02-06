@@ -35,7 +35,7 @@ const Hero = ({isToastVisible, setIsToastVisible}) => {
     },
     {
       title: "Structured Feedback",
-      description: "Receive a dance report card.",
+      description: "Receive a 'free' dance report card.",
       imageSrc: "/assets/Group16.png",
       imageSize: "150px",
       backgroundColor: "rgb(147 51 234 / var(--tw-bg-opacity, 1))",

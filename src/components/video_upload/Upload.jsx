@@ -399,6 +399,7 @@ const Upload = ({isToastVisible, setIsToastVisible}) => {
           >
             Submit Video For Analysis
           </Button>
+          <Text color="gray.500">*Your uploaded video files are securely stored in a protected environment, with encryption and access control measures in place to ensure privacy and security.</Text>
         </VStack>
       ) : (
         // Thank You Box (Replaces Upload Box)

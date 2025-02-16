@@ -28,7 +28,7 @@ export default function EventInfo({setIsToastVisible}) {
     }
     
     async function handleBooking () {
-      const amount = 1;
+      const amount = 500;
       const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
   
         if (!res){

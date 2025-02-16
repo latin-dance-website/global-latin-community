@@ -15,7 +15,7 @@ const Home = () => {
   const [ isSelectedTileEvent, setIsSelectedTileEvent ] = useState(false);
   const eventCards = [
     {
-      text: "Our Initiatives/Events",
+      text: "Our Initiatives / Events",
       href: "/events/our-events",
     }, 
     {

@@ -77,10 +77,10 @@ export default function EventCard() {
           marginBottom={"1rem"}
         />
       </Box>
-      <Box display="flex" gap="0.3rem" alignItems={"center"} flexWrap={"wrap"} justifyContent={"center"} paddingX="0.5rem">
+      <Box display="flex" gap="0.3rem" alignItems={"center"} flexWrap={"wrap"} justifyContent={"center"} paddingX="0rem">
         <Text fontSize="1.2rem" fontFamily="montserrat" fontWeight="600">Filters: </Text>
         <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={1}>
             Month
           </MenuButton>
           <MenuList>
@@ -88,7 +88,7 @@ export default function EventCard() {
           </MenuList>
         </Menu>
         <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} >
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={1} >
             Dance Style
           </MenuButton>
           <MenuList>
@@ -96,7 +96,7 @@ export default function EventCard() {
           </MenuList>
         </Menu>
         <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} >
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={1}>
             City
           </MenuButton>
           <MenuList>
@@ -135,36 +135,39 @@ export default function EventCard() {
           }}
           key={index}
           >
-            <Box
-              display="flex"
-              width="100%"
-              flexDirection={{md:"row", base:"column"}}
-              height={{md:"50vh", base:"auto"}}
-              justifyContent="space-between"
-              alignItems="center"
-              bg="white"
-              overflow="hidden"
-              borderRadius={"15px"}
-              marginTop="1rem"
-            >
-              <Image src="/assets/images/eventGlance1.png" width={{md:"50%", base:"100%"}} height={{md:"100%", base:"auto"}}></Image>
-              <Box display="flex" flexDirection={"column"} justifyContent={"space-between"} padding="0rem" width={{base:"100%", sm:""}} height="100%" overflow='hidden' >
-                <Text fontWeight={"400"} fontSize="1rem" fontFamily={"montserrat"} padding="1rem" paddingBottom="0px">{event.subtitle}</Text>
-                <Text fontWeight={"700"} fontSize="1rem" fontFamily={"montserrat"} paddingX="1rem">{event.title}</Text>
-                <Text fontWeight={"300"} display={{sm:"block", base:"none"}} fontSize="0.8rem" fontFamily={"montserrat"} paddingX="1rem">{event.description}</Text>
-                <VStack align="start" paddingX="1rem">
-                  <HStack><FaCalendar color='hotpink'/> <Text fontSize="1rem">{event.date}</Text></HStack>
-                  <HStack><FaClock color='hotpink'/> <Text fontSize="1rem">{event.time}</Text></HStack>
-                  <HStack><FaLocationDot color='hotpink'/> <Text fontSize="1rem">{event.location}</Text></HStack>
-                </VStack>
-                <Text bg="hotpink" width="100%" textAlign={"center"} color="white" marginTop="0.5rem" paddingY={"5px"}>Book Now!</Text>
+            <Link href="/events/our-events/salsa-dance">
+              <Box
+                display="flex"
+                width="100%"
+                flexDirection={{md:"row", base:"column"}}
+                height={{md:"50vh", base:"auto"}}
+                justifyContent="space-between"
+                alignItems="center"
+                bg="white"
+                overflow="hidden"
+                borderRadius={"15px"}
+                marginTop="1rem"
+                cursor="pointer"
+              >
+                <Image src="/assets/images/eventGlance1.png" width={{md:"50%", base:"100%"}} height={{md:"100%", base:"auto"}}></Image>
+                <Box display="flex" flexDirection={"column"} justifyContent={"space-between"} padding="0rem" width={{base:"100%", sm:""}} height="100%" overflow='hidden' >
+                  <Text fontWeight={"400"} fontSize="1rem" fontFamily={"montserrat"} padding="1rem" paddingBottom="0px">{event.subtitle}</Text>
+                  <Text fontWeight={"700"} fontSize="1rem" fontFamily={"montserrat"} paddingX="1rem">{event.title}</Text>
+                  <Text fontWeight={"300"} display={{sm:"block", base:"none"}} fontSize="0.8rem" fontFamily={"montserrat"} paddingX="1rem">{event.description}</Text>
+                  <VStack align="start" paddingX="1rem">
+                    <HStack><FaCalendar color='hotpink'/> <Text fontSize="1rem">{event.date}</Text></HStack>
+                    <HStack><FaClock color='hotpink'/> <Text fontSize="1rem">{event.time}</Text></HStack>
+                    <HStack><FaLocationDot color='hotpink'/> <Text fontSize="1rem">{event.location}</Text></HStack>
+                  </VStack>
+                  <Text bg="hotpink" width="100%" textAlign={"center"} color="white" marginTop="0.5rem" paddingY={"5px"}>Book Now!</Text>
+                </Box>
               </Box>
-            </Box>
+            </Link>
           </SwiperSlide>
           )
       })}
       </Swiper>
-      <Box display="flex" flexDirection={"column"} alignItems={"center"}>
+      {/* <Box display="flex" flexDirection={"column"} alignItems={"center"}>
         <Heading
           as="h1"
           fontSize={{
@@ -219,7 +222,7 @@ export default function EventCard() {
             </Menu>
           </Box>
         </Box> */}
-        <Box width="100%" borderRadius="20px" bg="white" padding="20px" border="2px solid #8547E6" display="Flex" flexDirection="column">
+        {/* <Box width="100%" borderRadius="20px" bg="white" padding="20px" border="2px solid #8547E6" display="Flex" flexDirection="column">
           <Text color="black" fontWeight={"600"} fontSize="2rem" alignSelf={"start"}>Events</Text>
           <Divider></Divider>
           <Link href="/events/our-events/salsa-dance">
@@ -232,7 +235,7 @@ export default function EventCard() {
             </Box>
           </Link>
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   )
 }

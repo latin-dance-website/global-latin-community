@@ -213,7 +213,7 @@ const HeroComingSoon = ({isToastVisible, setIsToastVisible}) => {
                 <Text fontFamily={"montserrat"} fontSize={{xl:"2rem", lg:"1.5rem", base:"1.2rem"}} fontWeight={"600"}>-Coming Soon</Text>
                 <Text lineHeight="1" fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.8rem"}} fontWeight={"700"}>Get Notified</Text>
                 <Text lineHeight={"1.2"} fontFamily={"montserrat"} fontSize={{xl:"3rem", lg:"2rem", base:"1.8rem"}} textAlign={{base:"center", md:"start"}} fontWeight={"700"}>When we Launch</Text>
-                <Box position="relative" right={{base:"2.5rem", sm:"2.5rem", md:"0"}} spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
+                <Box position="relative" right={{base:"0rem", md:"0"}} spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
                 <Input
                   placeholder="Enter your email here.."
                   height="2.8rem"
@@ -223,16 +223,17 @@ const HeroComingSoon = ({isToastVisible, setIsToastVisible}) => {
                   bg="white"
                   border={"3px solid #cccac7"}
                   focusBorderColor="blue.400"
-                  borderRadius="15px"
-                  paddingRight={{base:"1.8rem", sm:"2.7rem"}}
+                  borderRadius="18px"
+                  paddingRight={{base:"7rem", sm:"7rem"}}
                   isRequired
                 />
                 <Button
                   bg="black"
                   position="absolute"
-                  right={{sm:"-4rem", base:"-5rem"}}
+                  right={{sm:"3px", base:"3px"}}
                   // bottom={{base:"", md:"-8%"}}
-                  height="2.8rem"
+                  bottom={"3px"}
+                  height="38.8px"
                   width="fit-content"
                   zIndex={"20"}
                   color="white"
@@ -242,8 +243,8 @@ const HeroComingSoon = ({isToastVisible, setIsToastVisible}) => {
                   _active={{bg: "black"}}
                   onClick={handleSubmit}
                   isLoading={isLoading}
-                  marginTop={{base:"-0.5rem", md:"0rem"}}
-                  marginBottom={{base:"-0.5rem", md:"0rem"}}
+                  marginTop={{base:"0rem", md:"0rem"}}
+                  marginBottom={{base:"0rem", md:"0rem"}}
                   // width="10rem"
                 >
                   Notify me

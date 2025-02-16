@@ -1,5 +1,6 @@
-import { VStack, Icon, Heading, Text, Link } from "@chakra-ui/react";
+import { VStack, Icon, Heading, Text } from "@chakra-ui/react";
 import { FiArrowRight } from "react-icons/fi";
+import { useRouter } from "next/router";
 
 function FeatureCard({
   icon,
@@ -8,9 +9,10 @@ function FeatureCard({
   link,
   href,
   setCurrentlySelectedCard,
+  setIsSelectedTileEvent
 }) {
+  const router = useRouter();
   return (
-    <Link href={`${href}`} _hover={{ textDecoration: "none" }}>
     <VStack
       onMouseOver={() => {
         setCurrentlySelectedCard(title);
@@ -26,6 +28,14 @@ function FeatureCard({
         transform: "translateY(-5px)",
         shadow: "lg",
         transition: "0.3s",
+      }}
+      onClick={() => {
+        if(title === "Events"){
+          setIsSelectedTileEvent(true);
+        }else{
+          setIsSelectedTileEvent(false);
+          router.push(href);
+        }
       }}
     >
       <Icon as={icon} w={{ base: "10", md: "8" }} h={{ base: "10", md: "8" }} />
@@ -51,7 +61,6 @@ function FeatureCard({
         {link} <Icon as={FiArrowRight} ml="2" />
       </Text>
     </VStack>
-    </Link>
   );
 }
 

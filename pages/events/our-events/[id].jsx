@@ -2,8 +2,9 @@ import React, {useState} from "react";
 import { Box } from "@chakra-ui/react";
 import Navbar from "@components/Navbar";
 import MarqueeComponent from "@components/landing_page/Marquee";
-import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
-import HeroComingSoon from "../../src/components/coming_soon/HeroComingSoon";
+import LayerBlur2 from "../../../src/components/coming_soon/LayerBlur2";
+import EventCard from "../../../src/components/events/EventCard";
+import EventInfo from "../../../src/components/events/EventInfo";
 
 export default function EventsPage() {
   const [isToastVisible, setIsToastVisible ] = useState(false);
@@ -21,7 +22,7 @@ export default function EventsPage() {
     >
       <Navbar isToastVisible={isToastVisible}/>
       <LayerBlur2 />
-      <HeroComingSoon isToastVisible={isToastVisible} setIsToastVisible={setIsToastVisible}/>
+      <EventInfo setIsToastVisible={setIsToastVisible}/>
       <MarqueeComponent />
     </Box>
   );

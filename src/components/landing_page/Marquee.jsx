@@ -1,9 +1,9 @@
 import Marquee from "react-fast-marquee";
 import { Box, Text } from "@chakra-ui/react";
 
-const MarqueeComponent = () => {
+const MarqueeComponent = ({isSelectedTileEvent}) => {
   return (
-    <Box bg="purple.600" py="1rem">
+    <Box bg="purple.600" py="1rem" filter={isSelectedTileEvent ? "blur(100px)" : ""}>
       <Marquee gradient={false} speed={50}>
         <Text
           color="white"

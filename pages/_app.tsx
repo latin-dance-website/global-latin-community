@@ -1,7 +1,8 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import "@styles/global.css";
 import { AppProps } from "next/app";
-
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import theme from "../theme/theme.js";
 import Fonts from "../theme/Fonts.jsx";
 import { StrictMode } from "react";

@@ -25,7 +25,7 @@ import "swiper/css/navigation";
 import "swiper/css/autoplay";
 import { useState } from "react";
 
-const Bento = ({isToastVisible, setIsToastVisible}) => {
+const Bento = ({isSelectedTileEvent, isToastVisible, setIsToastVisible}) => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -115,6 +115,7 @@ const Bento = ({isToastVisible, setIsToastVisible}) => {
       bg="white"
       mx="auto"
       marginBottom={"5rem"}
+      filter={isSelectedTileEvent ? "blur(100px)" : ""}
       gap={{ base: "1rem", md: "2rem" }}
     >
       <VStack
@@ -221,10 +222,10 @@ const Bento = ({isToastVisible, setIsToastVisible}) => {
               slidesPerView="auto"
               sx={{
                 ".swiper-button-next, .swiper-button-prev": {
-                  color: "blue.500", // Chakra UI color
+                  color: "blue", // Chakra UI color
                 },
                 ".swiper-button-next:hover, .swiper-button-prev:hover": {
-                  color: "red.500",
+                  color: "red",
                 },
               }}
             >

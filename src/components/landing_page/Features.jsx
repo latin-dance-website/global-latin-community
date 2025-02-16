@@ -19,7 +19,7 @@ import {
 import FeatureCard from "./FeatureCard";
 import { useEffect, useMemo, useState } from "react";
 
-const Features = () => {
+const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
   const [currentlySelectedCard, setCurrentlySelectedCard] =
     useState("Music & Culture");
   const [isTransitioning, setIsTransitioning] = useState(true);
@@ -107,6 +107,7 @@ const Features = () => {
       px={{ base: "1rem", md: "4rem", lg: "4rem", xl: "7rem", "2xl": "10rem" }}
       paddingBottom={{ md: "3rem", lg: "3rem", xl: "5rem", "2xl": "8rem" }}
       bgColor="transparent"
+      filter={isSelectedTileEvent ? "blur(100px)" : ""}
       marginTop={{ base: "3rem", md: "2rem", xl: "0rem", "2xl": "0rem" }}
     >
       {/* Header */}
@@ -200,6 +201,7 @@ const Features = () => {
               link={card.link}
               href={card.href}
               setCurrentlySelectedCard={setCurrentlySelectedCard}
+              setIsSelectedTileEvent = {setIsSelectedTileEvent}
             />
           </GridItem>
         ))}

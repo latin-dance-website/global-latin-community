@@ -22,7 +22,7 @@ import heroImage from "../../../public/assets/images/hero.jpg";
 import Image from "next/image";
 import Link from "next/link";
 
-function HeroTemporary() {
+function HeroTemporary({isSelectedTileEvent}) {
   const [textIndex, setTextIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const words = ["Movement", "Community", "Revolution"];
@@ -46,6 +46,7 @@ function HeroTemporary() {
   return (
     <>
       <VStack
+        filter={isSelectedTileEvent ? "blur(100px)" : ""}
         alignItems="center"
         position="relative"
         width="100%"
@@ -143,6 +144,7 @@ function HeroTemporary() {
             size={{ base: "xl", md: "lg", lg: "xl" }}
             alignSelf={{ base: "center" }}
             fontFamily="montserrat"
+            // blur={"2xl"}
             _hover={{
               opacity: "70%",
             }}

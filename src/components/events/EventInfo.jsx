@@ -118,7 +118,7 @@ export default function EventInfo({setIsToastVisible}) {
 
   return (
     <Box width="100vw" minHeight="80vh" display="flex" flexDirection={"column"} paddingY="20px" paddingX={{lg:"10rem",base:"20px"}}>
-        <Image src={`/assets/images/eventImages/${id}.png`} width="100%" height="auto"></Image>
+        <Image src={`/assets/images/eventImages/${id}.png`} width="100%" height="auto" borderRadius={"15px"}></Image>
         <Box width="100%" display="flex" flexDirection={{md:"row", base:"column"}} justifyContent={{md:"space-between", base:"center"}} alignItems={{md:"center", base:"start"}}>
             <Box>
                 <Text fontSize={{md:"2rem", base:"1.5rem"}} marginTop="1rem" fontWeight={"600"} fontFamily={"montserrat"}>Salsa Dance by Aman Singh</Text>

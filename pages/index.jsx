@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from "react";
-import { Box, Button, ChakraProvider, Grid, GridItem, Heading, Link } from "@chakra-ui/react";
+import { Box, Button, ChakraProvider, Grid, GridItem, Heading, Link, Text } from "@chakra-ui/react";
 import Navbar from "@components/Navbar";
 // import Hero from "@components/landing_page/Hero";
 import HeroTemporary from "@components/landing_page/HeroTemporary";
 import Features from "@components/landing_page/Features";
 import Bento from "@components/landing_page/Bento";
 import MarqueeComponent from "@components/landing_page/Marquee";
+import LayerBlur2 from "@components/coming_soon/LayerBlur2";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 // import Link from "next/link";
 
 const Home = () => {
@@ -13,15 +15,15 @@ const Home = () => {
   const [ isSelectedTileEvent, setIsSelectedTileEvent ] = useState(false);
   const eventCards = [
     {
-      text: "Our Events",
+      text: "Our Initiatives/Events",
       href: "/events/our-events",
     }, 
     {
-      text: "Festivals",
+      text: "Global Dance Festivals",
       href: "/events/festivals"
     }, 
     {
-      text: "Socials",
+      text: "Global Social Nights",
       href: "/events/socials"
     }
   ]
@@ -38,8 +40,9 @@ const Home = () => {
       <MarqueeComponent isSelectedTileEvent={isSelectedTileEvent} />
       { isSelectedTileEvent &&
         <Box height="100vh" width="100vw" position="fixed" top="0" left="0" zIndex={"1000"} display="flex" justifyContent={"center"} alignItems={"center"}>
+          <LayerBlur2/>
           <Box position="absolute" top={{ base: "10vh", md: "7vh", lg: "7vh", xl: "10vh" }} left={"1rem"} marginTop={"1rem"}>
-              <Button bg="hotpink" color="white" onClick={() => {setIsSelectedTileEvent(false)}}>Go Back</Button>
+              <Button bg="hotpink" borderRadius="20px" color="white" onClick={() => {setIsSelectedTileEvent(false)}}><FaArrowLeft color="white"/> <Text marginLeft="0.5rem">Go Back</Text></Button>
           </Box>
           <Grid
             templateColumns={{
@@ -57,6 +60,7 @@ const Home = () => {
             rowGap={{ base: "1rem", md: "2rem", lg: "3rem", xl: "4rem" }}
             width={{ base: "75%", md: "70%", lg: "70%", xl: "80%", "2xl": "75%" }}
             alignItems={"center"}
+            marginTop="0rem"
             col
           >
             {eventCards.map((card, index) => (
@@ -76,6 +80,10 @@ const Home = () => {
                 }}
                 paddingY={"2rem"}
                 border="1px solid white"
+                height="120px"
+                display={"flex"}
+                alignItems={"center"}
+                justifyContent={"center"}
                 >
                 <Heading
                   as="h3"

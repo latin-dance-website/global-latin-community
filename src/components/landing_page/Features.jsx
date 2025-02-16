@@ -29,6 +29,14 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
   const cardData = useMemo(
     () => [
       {
+        icon: FiTrendingUp,
+        title: "Events",
+        description:
+          "Attend exclusive workshops, bootcamps, and live events hosted by top Latin dance experts.",
+        link: "See Events",
+        href: "/events",
+      },
+      {
         icon: FiMusic,
         title: "Music & Culture",
         description:
@@ -43,14 +51,6 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
           "Access beginner to advanced tutorials and structured courses designed for your growth, wherever you are.",
         link: "Start Learning",
         href: "/tutorial-courses",
-      },
-      {
-        icon: FiTrendingUp,
-        title: "Events",
-        description:
-          "Attend exclusive workshops, bootcamps, and live events hosted by top Latin dance experts.",
-        link: "See Events",
-        href: "/events",
       },
       {
         icon: FiUser,
@@ -107,7 +107,7 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
       px={{ base: "1rem", md: "4rem", lg: "4rem", xl: "7rem", "2xl": "10rem" }}
       paddingBottom={{ md: "3rem", lg: "3rem", xl: "5rem", "2xl": "8rem" }}
       bgColor="transparent"
-      filter={isSelectedTileEvent ? "blur(100px)" : ""}
+      filter={isSelectedTileEvent ? "blur(500px)" : ""}
       marginTop={{ base: "3rem", md: "2rem", xl: "0rem", "2xl": "0rem" }}
     >
       {/* Header */}

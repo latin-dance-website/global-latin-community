@@ -100,7 +100,7 @@ export default function EventCard() {
             City
           </MenuButton>
           <MenuList>
-            <MenuItem>Cubbon Park</MenuItem>
+            <MenuItem>Cubbon Park</MenuItem> 
           </MenuList>
         </Menu>
       </Box>

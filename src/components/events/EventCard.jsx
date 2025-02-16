@@ -66,11 +66,11 @@ export default function EventCard() {
           marginTop={"1rem"}
           fontFamily={"montserrat"}
         >
-          Our Initiatives/ Events
+          Our Initiatives / Events
         </Heading>
         <Box
           height="0.2rem"
-          width="10rem"
+          width="20rem"
           borderRadius={"1rem"}
           backgroundColor={"brand.purple"}
           alignSelf="center"

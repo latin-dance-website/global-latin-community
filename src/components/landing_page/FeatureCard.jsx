@@ -30,7 +30,7 @@ function FeatureCard({
         transition: "0.3s",
       }}
       onClick={() => {
-        if(title === "Events"){
+        if(title === "Events (In Development)"){
           setIsSelectedTileEvent(true);
         }else{
           setIsSelectedTileEvent(false);

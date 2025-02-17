@@ -80,27 +80,27 @@ export default function EventCard() {
       <Box display="flex" gap="0.3rem" alignItems={"center"} flexWrap={"wrap"} justifyContent={"center"} paddingX="0rem">
         <Text fontSize="1.2rem" fontFamily="montserrat" fontWeight="600">Filters: </Text>
         <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={1}>
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={2} fontSize="sm">
             Month
           </MenuButton>
-          <MenuList>
-            <MenuItem>January</MenuItem>
+          <MenuList p={1} fontSize="sm" minWidth="auto">
+            <MenuItem p={2}>January</MenuItem>
           </MenuList>
         </Menu>
         <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={1} >
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={2} fontSize="sm" >
             Dance Style
           </MenuButton>
-          <MenuList>
-            <MenuItem>Salsa</MenuItem>
+          <MenuList p={1} fontSize="sm" minWidth="auto">
+            <MenuItem p={2}>Salsa</MenuItem>
           </MenuList>
         </Menu>
         <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={1}>
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={2} fontSize="sm">
             City
           </MenuButton>
-          <MenuList>
-            <MenuItem>Cubbon Park</MenuItem> 
+          <MenuList p={1} fontSize="sm" minWidth="auto">
+            <MenuItem p={2}>Cubbon Park</MenuItem> 
           </MenuList>
         </Menu>
       </Box>

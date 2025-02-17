@@ -28,6 +28,7 @@ function FeatureCard({
         transform: "translateY(-5px)",
         shadow: "lg",
         transition: "0.3s",
+        cursor:"pointer"
       }}
       onClick={() => {
         if(title === "Events (In Development)"){

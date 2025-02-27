@@ -222,7 +222,7 @@ export default function EventInfo({setIsToastVisible}) {
               {/* <HStack><FaMoneyBill color="#ff7c19" size="1.3rem"></FaMoneyBill><Text fontSize="1.2rem">Rs 500 /- Onwards</Text></HStack> */}
             </Box>
             { isBookNowClicked  ?
-            <Box display="flex" flexDirection={{base:"row", md:"column"}}>
+            <Box display="flex" flexDirection={{base:"column", md:"column"}}>
             <Box position="relative" right={{base:"0rem", md:"0"}}  spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex"  justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
             <Box
               height="2.8rem"

@@ -18,12 +18,15 @@ export default function EventCard() {
 
   const eventCards = [
     {
-      subtitle:"Featured Event",
-      title: "Event 1",
-      description: "Some description of the event to be given in one or two line,Some description of the event to be given in one or two line.",
-      date: "25th January, 2025",
-      time: "6:30PM",
-      location: "Cubbon Park"
+      subtitle1:"@amandaandrishabh_official",
+      subtitle2:" x ",
+      subtitle3:"@bangalore_latin_events",
+      title: "BACHATA PARTNERWORK INTENSIVE",
+      description1: "Next Edition of our Bachata Intensive in Bangalore! This time, we’re bringing the incredible Amanda Rishabh from Mumbai to level up your dance journey.",
+      description2:"Build Communication & Create Connection",
+      date: "21st, 22nd, 23rd March, 2025",
+      time: "8 Hours",
+      location: "Dhurii Domlur, Bangalore"
     }, 
     // {
     //   subtitle:"Featured Event",
@@ -149,11 +152,11 @@ export default function EventCard() {
                 marginTop="1rem"
                 cursor="pointer"
               >
-                <Image src="/assets/images/eventGlance1.png" width={{md:"50%", base:"100%"}} height={{md:"100%", base:"auto"}}></Image>
+                <Image src="/assets/images/eventGlance2.jpg" width={{md:"50%", base:"100%"}} height={{md:"100%", base:"auto"}}></Image>
                 <Box display="flex" flexDirection={"column"} justifyContent={"space-between"} padding="0rem" width={{base:"100%", sm:""}} height="100%" overflow='hidden' >
-                  <Text fontWeight={"400"} fontSize="1rem" fontFamily={"montserrat"} padding="1rem" paddingBottom="0px">{event.subtitle}</Text>
-                  <Text fontWeight={"700"} fontSize="1rem" fontFamily={"montserrat"} paddingX="1rem">{event.title}</Text>
-                  <Text fontWeight={"300"} display={{sm:"block", base:"none"}} fontSize="0.8rem" fontFamily={"montserrat"} paddingX="1rem">{event.description}</Text>
+                  <Text fontWeight={"400"} fontSize="1rem" textAlign={"center"} fontStyle={"italic"} fontFamily={"montserrat"} padding="1rem" pt="0.5rem" paddingBottom="0px"><Text as="span">{event.subtitle1}</Text><Text as="span">{event.subtitle2}</Text><Text as='span'>{event.subtitle3}</Text></Text>
+                  <Text fontWeight={"700"} fontSize="1rem" fontFamily={"montserrat"} paddingX="1rem" textAlign={"center"} my="1rem">{event.title}</Text>
+                  <Text fontWeight={"300"} display={{sm:"block", base:"none"}} fontSize="0.8rem" fontFamily={"montserrat"} paddingX="1rem">{event.description1}<Text fontWeight={"600"}>{event.description2}</Text></Text>
                   <VStack align="start" paddingX="1rem">
                     <HStack><FaCalendar color='hotpink'/> <Text fontSize="1rem">{event.date}</Text></HStack>
                     <HStack><FaClock color='hotpink'/> <Text fontSize="1rem">{event.time}</Text></HStack>

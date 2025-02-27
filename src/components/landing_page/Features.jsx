@@ -30,7 +30,7 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
     () => [
       {
         icon: FiTrendingUp,
-        title: "Events (In Development)",
+        title: "Events",
         description:
           "Attend exclusive workshops, bootcamps, and live events hosted by top Latin dance experts.",
         link: "See Events",

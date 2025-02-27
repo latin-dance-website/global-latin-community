@@ -31,7 +31,7 @@ function FeatureCard({
         cursor:"pointer"
       }}
       onClick={() => {
-        if(title === "Events (In Development)"){
+        if(title === "Events"){
           setIsSelectedTileEvent(true);
         }else{
           setIsSelectedTileEvent(false);

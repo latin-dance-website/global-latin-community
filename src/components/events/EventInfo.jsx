@@ -223,6 +223,7 @@ export default function EventInfo({setIsToastVisible}) {
             </Box>
             { isBookNowClicked  ?
             <Box display="flex" flexDirection={{base:"column", md:"column"}}>
+            <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.5rem"} marginTop="1rem" fontWeight="600">Early Bird Ticket: </Text>
             <Box position="relative" right={{base:"0rem", md:"0"}}  spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex"  justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
             <Box
               height="2.8rem"
@@ -240,7 +241,7 @@ export default function EventInfo({setIsToastVisible}) {
               fontWeight="500"
               fontSize="1rem"
               whiteSpace={"nowrap"}
-            >Early Bird Ticket - Single (₹ 4000)</Box>
+            > Single (₹ 4000)</Box>
             <Button
               bg="#ff7c19"
               position="absolute"
@@ -278,7 +279,7 @@ export default function EventInfo({setIsToastVisible}) {
               fontWeight="500"
               fontSize="1rem"
               whiteSpace={"nowrap"}
-            >Early Bird Ticket - Couple (₹ 7500)</Box>
+            > Couple (₹ 7500)</Box>
             <Button
               bg="#ff7c19"
               position="absolute"

@@ -1,4 +1,4 @@
-import { Box, HStack, Image, Text, Button, Divider, UnorderedList, useToast, ListItem } from '@chakra-ui/react'
+import { Box, HStack, Image, Text, Button, Divider, UnorderedList, useToast, ListItem, Input } from '@chakra-ui/react'
 import React, {useState} from 'react'
 import { useRouter } from 'next/router';
 import { FaCalendar, FaMoneyBill, FaStar, FaClock, FaWhatsapp, FaInstagram } from 'react-icons/fa';
@@ -11,6 +11,8 @@ export default function EventInfo({setIsToastVisible}) {
     console.log("id: ", id);
     const toast = useToast();
     const [isBookNowClicked, setIsBookNowClicked] = useState(false);
+    const [email, setEmail] = useState("");
+    const [isValidateEmail, setIsValidateEmail] = useState(false);
 
     const KEY_ID = "rzp_live_5e4WhgJbQt8tjI";
 
@@ -88,29 +90,49 @@ export default function EventInfo({setIsToastVisible}) {
           }).then( res => res.json());
   
           console.log("Payment Verified: ", data);
-          if(data.status === "ok"){
+          // if(data.status === "ok"){
             setIsToastVisible(true);
             toast({
                 title: "Payment Successful!",
-                description: "Your payment is successfully captured.",
+                description: "Your payment is successfully captured. Email will soon be sent to you!",
                 status: "success",
-                duration: 3000,
+                duration: 5000,
                 isClosable: true,
                 position: "top",
                 onCloseComplete: () => setIsToastVisible(false)
               });
-          }else{
-            setIsToastVisible(true);
-            toast({
-                title: "Payment verification failed.",
-                description: "Your payment is not authorized, please try again.",
-                status: "error",
-                duration: 3000,
-                isClosable: true,
-                position: "top",
-                onCloseComplete: () => setIsToastVisible(false)
-              });
-          }
+              try {
+                const response = await fetch(
+                  "https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      metadata: { email: email.toLowerCase(), event: "emailUpload", purpose:"paymentSuccessfulEmail"}
+                     }),
+                  }
+                );
+        
+                // if (response.ok) {
+                //   setEmail(""); // Clear the input field on success
+                // } 
+              } catch (error) {
+                console.log("Email sending having problem: ", error);
+              }
+          // }else{
+          //   setIsToastVisible(true);
+          //   toast({
+          //       title: "Payment verification failed.",
+          //       description: "Your payment is not authorized, please try again.",
+          //       status: "error",
+          //       duration: 3000,
+          //       isClosable: true,
+          //       position: "top",
+          //       onCloseComplete: () => setIsToastVisible(false)
+          //     });
+          // }
         }
       };
       const paymentObject = new window.Razorpay(options); 
@@ -177,39 +199,83 @@ export default function EventInfo({setIsToastVisible}) {
           }).then( res => res.json());
   
           console.log("Payment Verified: ", data);
-          if(data.status === "ok"){
+          // if(data.status === "ok"){
             setIsToastVisible(true);
             toast({
                 title: "Payment Successful!",
-                description: "Your payment is successfully captured.",
+                description: "Your payment is successfully captured. Email will soon be sent to you!",
                 status: "success",
-                duration: 3000,
+                duration: 5000,
                 isClosable: true,
                 position: "top",
                 onCloseComplete: () => setIsToastVisible(false)
               });
-          }else{
-            setIsToastVisible(true);
-            toast({
-                title: "Payment verification failed.",
-                description: "Your payment is not authorized, please try again.",
-                status: "error",
-                duration: 3000,
-                isClosable: true,
-                position: "top",
-                onCloseComplete: () => setIsToastVisible(false)
-              });
-          }
+              try {
+                const response = await fetch(
+                  "https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      metadata: { email: email.toLowerCase(), event: "emailUpload", purpose:"paymentSuccessfulEmail"}
+                     }),
+                  }
+                );
+        
+                // if (response.ok) {
+                //   setEmail(""); // Clear the input field on success
+                // } 
+              } catch (error) {
+                console.log("Email sending having problem: ", error);
+              }
+          // }else{
+          //   setIsToastVisible(true);
+          //   toast({
+          //       title: "Payment verification failed.",
+          //       description: "Your payment is not authorized, please try again.",
+          //       status: "error",
+          //       duration: 5000,
+          //       isClosable: true,
+          //       position: "top",
+          //       onCloseComplete: () => setIsToastVisible(false)
+          //     });
+            
+          // }
         }
       };
       const paymentObject = new window.Razorpay(options); 
       paymentObject.open();
     }
 
+    const validateEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    };
+
+  const handleSubmit = async () => {
+      if (!validateEmail(email)) {
+        // Show an error toast
+        setIsToastVisible(true);
+        toast({
+          title: "Error",
+          description: "Please enter a valid email address.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+          onCloseComplete: () => setIsToastVisible(false)
+        });
+      } else {
+        setIsValidateEmail(true);
+      }
+    };
+
   return (
     <Box width="100vw" minHeight="80vh" display="flex" flexDirection={"column"} paddingY="20px" paddingX={{lg:"10rem",base:"20px"}}>
         <Image src={`/assets/images/eventImages/${id}.jpg`} width="100%" height="auto" borderRadius={"15px"}></Image>
-        <Box width="100%" display="flex" flexDirection={{md:"row", base:"column"}} justifyContent={{md:"space-between", base:"center"}} alignItems={{md:"center", base:"start"}}>
+        <Box width="100%" display="flex" flexDirection={{md:"row", base:"column"}} justifyContent={{md:"center", base:"center"}} alignItems={{md:"center", base:"start"}}>
             <Box>
                 <Text fontSize={{md:"2rem", base:"1.5rem"}} marginTop="1rem" fontWeight={"600"} fontFamily={"montserrat"}>Bachata Partnerwork Intensive</Text>
                 {/* <HStack marginBottom="0.5rem"><FaStar color="#ff7c19" size="1.5rem"></FaStar><Text fontSize="1.5rem" fontWeight={"600"} fontFamily={"montserrat"}>9.5/10</Text></HStack> */}
@@ -221,85 +287,129 @@ export default function EventInfo({setIsToastVisible}) {
               {/* <HStack><FaClock color="#ff7c19" size="1.3rem"></FaClock><Text fontSize="1.2rem">6:30 PM onwards</Text></HStack> */}
               {/* <HStack><FaMoneyBill color="#ff7c19" size="1.3rem"></FaMoneyBill><Text fontSize="1.2rem">Rs 500 /- Onwards</Text></HStack> */}
             </Box>
-            { isBookNowClicked  ?
-            <Box display="flex" flexDirection={{base:"column", md:"column"}}>
-            <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.5rem"} marginTop="1rem" fontWeight="600">Early Bird Ticket: </Text>
-            <Box position="relative" right={{base:"0rem", md:"0"}}  spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex"  justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
-            <Box
-              height="2.8rem"
-              bg="white"
-              width={{base:"90vw", md:"full"}}
-              border={"3px solid #cccac7"}
-              focusBorderColor="blue.400"
-              borderRadius="18px"
-              display="flex"
-              marginLeft={{base:"-1rem", md:"1rem" }}
-              justifyContent={"center"}
-              paddingLeft={{base:"0rem", md:"0rem"}}
-              alignItems="center"
-              paddingRight={{base:"7rem", sm:"7rem"}}
-              fontWeight="500"
-              fontSize="1rem"
-              whiteSpace={"nowrap"}
-            > Single (₹ 4000)</Box>
-            <Button
-              bg="#ff7c19"
-              position="absolute"
-              right={{sm:"3px", base:"3px"}}
-              bottom={"3px"}
-              height="38.8px"
-              width="fit-content"
-              zIndex={"20"}
-              color="white"
-              paddingX={{base:"1rem"}}
-              borderRadius="15px"
-              _hover={{ bg: "#ff7c19" }}
-              _active={{bg: "#ff7c19"}}
-              onClick={handleSingleBooking}
-              marginTop={{base:"0rem", md:"0rem"}}
-              marginBottom={{base:"0rem", md:"0rem"}}
-            >
-              Book Now
-            </Button>
-          </Box>
-          <Box position="relative" right={{base:"0rem", md:"0"}} spacing="1rem" marginTop={{md:"0.5rem", base:"-1rem"}} marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
-          <Box
-              height="2.8rem"
-              bg="white"
-              width={{base:"90vw", md:"full"}}
-              border={"3px solid #cccac7"}
-              focusBorderColor="blue.400"
-              borderRadius="18px"
-              display="flex"
-              marginLeft={{base:"-1rem", md:"1rem" }}
-              justifyContent={"center"}
-              paddingLeft={{base:"0rem", md:"1rem"}}
-              alignItems="center"
-              paddingRight={{base:"7rem", sm:"7rem"}}
-              fontWeight="500"
-              fontSize="1rem"
-              whiteSpace={"nowrap"}
-            > Couple (₹ 7500)</Box>
-            <Button
-              bg="#ff7c19"
-              position="absolute"
-              right={{sm:"3px", base:"3px"}}
-              bottom={"3px"}
-              height="38.8px"
-              width="fit-content"
-              zIndex={"20"}
-              color="white"
-              paddingX={{base:"1rem"}}
-              borderRadius="15px"
-              _hover={{ bg: "#ff7c19" }}
-              _active={{bg: "#ff7c19"}}
-              onClick={handleCoupleBooking}
-              marginTop={{base:"0rem", md:"0rem"}}
-              marginBottom={{base:"0rem", md:"0rem"}}
-            >
-              Book Now
-            </Button>
-          </Box>
+            { isBookNowClicked ?
+            <Box display="flex" flexDirection={{base:"column", md:"column"}} width="60%">
+              { isValidateEmail ?
+                <>
+                 <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.5rem"} marginTop="1rem" fontWeight="600">Early Bird Ticket: </Text>
+                 <Box position="relative" right={{base:"0rem", md:"0"}}  spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex"  justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
+                 <Box
+                   height="2.8rem"
+                   bg="white"
+                   width={{base:"90vw", md:"full"}}
+                   border={"3px solid #cccac7"}
+                   focusBorderColor="blue.400"
+                   borderRadius="18px"
+                   display="flex"
+                   marginLeft={{base:"-1rem", md:"1rem" }}
+                   justifyContent={"center"}
+                   paddingLeft={{base:"0rem", md:"0rem"}}
+                   alignItems="center"
+                   paddingRight={{base:"7rem", sm:"7rem"}}
+                   fontWeight="500"
+                   fontSize="1rem"
+                   whiteSpace={"nowrap"}
+                 > Single (₹ 4000)</Box>
+                 <Button
+                   bg="#ff7c19"
+                   position="absolute"
+                   right={{sm:"3px", base:"3px"}}
+                   bottom={"3px"}
+                   height="38.8px"
+                   width="fit-content"
+                   zIndex={"20"}
+                   color="white"
+                   paddingX={{base:"1rem"}}
+                   borderRadius="15px"
+                   _hover={{ bg: "#ff7c19" }}
+                   _active={{bg: "#ff7c19"}}
+                   onClick={handleSingleBooking}
+                   marginTop={{base:"0rem", md:"0rem"}}
+                   marginBottom={{base:"0rem", md:"0rem"}}
+                 >
+                   Book Now
+                 </Button>
+               </Box>
+               <Box position="relative" right={{base:"0rem", md:"0"}} spacing="1rem" marginTop={{md:"0.5rem", base:"-1rem"}} marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
+               <Box
+                   height="2.8rem"
+                   bg="white"
+                   width={{base:"90vw", md:"full"}}
+                   border={"3px solid #cccac7"}
+                   focusBorderColor="blue.400"
+                   borderRadius="18px"
+                   display="flex"
+                   marginLeft={{base:"-1rem", md:"1rem" }}
+                   justifyContent={"center"}
+                   paddingLeft={{base:"0rem", md:"1rem"}}
+                   alignItems="center"
+                   paddingRight={{base:"7rem", sm:"7rem"}}
+                   fontWeight="500"
+                   fontSize="1rem"
+                   whiteSpace={"nowrap"}
+                 > Couple (₹ 7500)</Box>
+                 <Button
+                   bg="#ff7c19"
+                   position="absolute"
+                   right={{sm:"3px", base:"3px"}}
+                   bottom={"3px"}
+                   height="38.8px"
+                   width="fit-content"
+                   zIndex={"20"}
+                   color="white"
+                   paddingX={{base:"1rem"}}
+                   borderRadius="15px"
+                   _hover={{ bg: "#ff7c19" }}
+                   _active={{bg: "#ff7c19"}}
+                   onClick={handleCoupleBooking}
+                   marginTop={{base:"0rem", md:"0rem"}}
+                   marginBottom={{base:"0rem", md:"0rem"}}
+                 >
+                   Book Now
+                 </Button>
+               </Box>
+               </>
+               :
+               <>
+               <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.5rem"} marginTop="1rem" fontWeight="600">Email: </Text>
+              <Box position="relative" right={{base:"0rem", md:"0"}} spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
+                <Input
+                  placeholder="Enter your email here.."
+                  height="2.8rem"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  bg="white"
+                  border={"3px solid #cccac7"}
+                  focusBorderColor="blue.400"
+                  borderRadius="18px"
+                  paddingRight={{base:"7rem", sm:"7rem"}}
+                  isRequired
+                />
+                <Button
+                  bg="black"
+                  position="absolute"
+                  right={{sm:"3px", base:"3px"}}
+                  // bottom={{base:"", md:"-8%"}}
+                  bottom={"3px"}
+                  height="38.8px"
+                  width="fit-content"
+                  zIndex={"20"}
+                  color="white"
+                  paddingX={{base:"1rem"}}
+                  borderRadius="15px"
+                  _hover={{ bg: "black" }}
+                  _active={{bg: "black"}}
+                  onClick={handleSubmit}
+                  marginTop={{base:"0rem", md:"0rem"}}
+                  marginBottom={{base:"0rem", md:"0rem"}}
+                  // width="10rem"
+                >
+                  Notify me
+                </Button>
+              </Box>
+              </>
+              }
           </Box>
           :
           <Button bg="#ff7c19" padding="10px 20px" color='white' fontSize="1.2rem" onClick={() => setIsBookNowClicked(true)} marginBottom={{base:"1rem", md:""}}>Book Now!</Button>

@@ -153,7 +153,7 @@ export default function EventCard() {
                 cursor="pointer"
                 boxShadow={"lg"}
               >
-                <Image src="/assets/images/eventGlance2.jpg" width={{md:"50%", base:"90%"}} height={{md:"100%", base:"auto"}}></Image>
+                <Image src="/assets/images/eventGlance2.jpg" width={{md:"50%", base:"100%"}} height={{md:"100%", base:"auto"}}></Image>
                 <Box display="flex" flexDirection={"column"} justifyContent={"space-between"} padding="0rem" width={{base:"100%", sm:""}} height="100%" overflow='hidden' >
                   <Text fontWeight={"400"} fontSize="1rem" textAlign={"center"} fontStyle={"italic"} fontFamily={"montserrat"} padding="1rem" pt="0.5rem" paddingBottom="0px"><Text as="span">{event.subtitle1}</Text><Text as="span">{event.subtitle2}</Text><Text as='span'>{event.subtitle3}</Text></Text>
                   <Text fontWeight={"700"} fontSize="1rem" fontFamily={"montserrat"} paddingX="1rem" textAlign={"center"} my="1rem">{event.title}</Text>

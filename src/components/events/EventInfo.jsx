@@ -275,12 +275,12 @@ export default function EventInfo({setIsToastVisible}) {
   return (
     <Box width="100vw" minHeight="80vh" display="flex" flexDirection={"column"} paddingY="20px" paddingX={{lg:"10rem",base:"20px"}}>
         <Image src={`/assets/images/eventImages/${id}.jpg`} width="100%" height="auto" borderRadius={"15px"}></Image>
-        <Box width="100%" display="flex" flexDirection={{md:"row", base:"column"}} justifyContent={{md:"center", base:"center"}} alignItems={{md:"center", base:"start"}} gap="1rem">
+        <Box width="100%" display="flex" flexDirection={{md:"row", base:"column"}} justifyContent={{md:"space-between", base:"center"}} alignItems={{md:"center", base:"start"}} gap="1rem">
             <Box>
                 <Text fontSize={{md:"2rem", base:"1.5rem"}} marginTop="1rem" fontWeight={"600"} fontFamily={"montserrat"}>Bachata Partnerwork Intensive</Text>
                 {/* <HStack marginBottom="0.5rem"><FaStar color="#ff7c19" size="1.5rem"></FaStar><Text fontSize="1.5rem" fontWeight={"600"} fontFamily={"montserrat"}>9.5/10</Text></HStack> */}
             </Box>
-            <Box display="flex" flexWrap={"wrap"} gap='0.5rem' mt="1rem" mb="1rem">
+            <Box display="flex" flexWrap={"wrap"} flexDirection={"column"} gap='0.5rem' mt="1rem" mb="1rem" justifyContent={"center"}>
               <HStack><FaCalendar color="#ff7c19" size="1.3rem"></FaCalendar><Text fontSize="1.2rem">21st March, 2025: 8PM to 10PM</Text></HStack>
               <HStack><FaCalendar color="#ff7c19" size="1.3rem"></FaCalendar><Text fontSize="1.2rem">22nd March, 2025: 7PM to 10PM</Text></HStack>
               <HStack><FaCalendar color="#ff7c19" size="1.3rem"></FaCalendar><Text fontSize="1.2rem">23rd March, 2025: 7PM to 10PM</Text></HStack>
@@ -414,7 +414,7 @@ export default function EventInfo({setIsToastVisible}) {
               }
           </Box>
           :
-          <Button bg="#ff7c19" padding="10px 20px" color='white' fontSize="1rem" onClick={() => setIsBookNowClicked(true)} marginBottom={{base:"1rem", md:""}}>Book Now!</Button>
+          <Button bg="#ff7c19" padding="10px 20px" width="180px" color='white' fontSize="1rem" onClick={() => setIsBookNowClicked(true)} marginBottom={{base:"1rem", md:""}}>Book Now!</Button>
             }
         </Box>
         

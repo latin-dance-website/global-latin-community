@@ -275,7 +275,7 @@ export default function EventInfo({setIsToastVisible}) {
   return (
     <Box width="100vw" minHeight="80vh" display="flex" flexDirection={"column"} paddingY="20px" paddingX={{lg:"10rem",base:"20px"}}>
         <Image src={`/assets/images/eventImages/${id}.jpg`} width="100%" height="auto" borderRadius={"15px"}></Image>
-        <Box width="100%" display="flex" flexDirection={{md:"row", base:"column"}} justifyContent={{md:"center", base:"center"}} alignItems={{md:"center", base:"start"}}>
+        <Box width="100%" display="flex" flexDirection={{md:"row", base:"column"}} justifyContent={{md:"center", base:"center"}} alignItems={{md:"center", base:"start"}} gap="1rem">
             <Box>
                 <Text fontSize={{md:"2rem", base:"1.5rem"}} marginTop="1rem" fontWeight={"600"} fontFamily={"montserrat"}>Bachata Partnerwork Intensive</Text>
                 {/* <HStack marginBottom="0.5rem"><FaStar color="#ff7c19" size="1.5rem"></FaStar><Text fontSize="1.5rem" fontWeight={"600"} fontFamily={"montserrat"}>9.5/10</Text></HStack> */}
@@ -288,11 +288,11 @@ export default function EventInfo({setIsToastVisible}) {
               {/* <HStack><FaMoneyBill color="#ff7c19" size="1.3rem"></FaMoneyBill><Text fontSize="1.2rem">Rs 500 /- Onwards</Text></HStack> */}
             </Box>
             { isBookNowClicked ?
-            <Box display="flex" flexDirection={{base:"column", md:"column"}} width="60%">
+            <Box display="flex" flexDirection={{base:"column", md:"column"}} width="100%">
               { isValidateEmail ?
                 <>
                  <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.5rem"} marginTop="1rem" fontWeight="600">Early Bird Ticket: </Text>
-                 <Box position="relative" right={{base:"0rem", md:"0"}}  spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex"  justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
+                 <Box position="relative" width={{base:"90vw", md:"full"}} right={{base:"0rem", md:"0"}} marginTop="0.5rem"  marginX={{base:"0rem", sm:"0rem"}} marginBottom={"2rem"} display="flex"  justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
                  <Box
                    height="2.8rem"
                    bg="white"
@@ -303,7 +303,7 @@ export default function EventInfo({setIsToastVisible}) {
                    display="flex"
                    marginLeft={{base:"-1rem", md:"1rem" }}
                    justifyContent={"center"}
-                   paddingLeft={{base:"0rem", md:"0rem"}}
+                   paddingLeft={{base:"0rem", md:"1rem"}}
                    alignItems="center"
                    paddingRight={{base:"7rem", sm:"7rem"}}
                    fontWeight="500"
@@ -313,7 +313,7 @@ export default function EventInfo({setIsToastVisible}) {
                  <Button
                    bg="#ff7c19"
                    position="absolute"
-                   right={{sm:"3px", base:"3px"}}
+                   right={{sm:"-3px", base:"12px",md:"-13px"}}
                    bottom={"3px"}
                    height="38.8px"
                    width="fit-content"
@@ -330,7 +330,7 @@ export default function EventInfo({setIsToastVisible}) {
                    Book Now
                  </Button>
                </Box>
-               <Box position="relative" right={{base:"0rem", md:"0"}} spacing="1rem" marginTop={{md:"0.5rem", base:"-1rem"}} marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
+               <Box position="relative" width={{base:"90vw", md:"full"}} marginTop={{md:"0.5rem", base:"-1rem"}} marginX={{base:"0rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
                <Box
                    height="2.8rem"
                    bg="white"
@@ -351,7 +351,7 @@ export default function EventInfo({setIsToastVisible}) {
                  <Button
                    bg="#ff7c19"
                    position="absolute"
-                   right={{sm:"3px", base:"3px"}}
+                   right={{sm:"-3px", base:"12px", md:"-13px"}}
                    bottom={"3px"}
                    height="38.8px"
                    width="fit-content"
@@ -372,10 +372,11 @@ export default function EventInfo({setIsToastVisible}) {
                :
                <>
                <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.5rem"} marginTop="1rem" fontWeight="600">Email: </Text>
-              <Box position="relative" right={{base:"0rem", md:"0"}} spacing="1rem" marginTop="0.5rem"  marginX={{base:"1rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
+              <Box position="relative" width={{base:"90vw", md:"full"}} marginTop="0.5rem"  marginX={{base:"0rem", sm:"0rem"}} marginBottom={"2rem"} display="flex" justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
                 <Input
-                  placeholder="Enter your email here.."
+                  placeholder="Email.."
                   height="2.8rem"
+                  width={{base:"90vw", md:"full"}}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
@@ -383,13 +384,14 @@ export default function EventInfo({setIsToastVisible}) {
                   border={"3px solid #cccac7"}
                   focusBorderColor="blue.400"
                   borderRadius="18px"
-                  paddingRight={{base:"7rem", sm:"7rem"}}
+                  // marginLeft={{base:"9rem", md:"0"}}
+                  paddingRight={{base:"0rem", sm:"7rem"}}
                   isRequired
                 />
                 <Button
                   bg="black"
                   position="absolute"
-                  right={{sm:"3px", base:"3px"}}
+                  right={{sm:"3px", base:"0"}}
                   // bottom={{base:"", md:"-8%"}}
                   bottom={"3px"}
                   height="38.8px"
@@ -405,14 +407,14 @@ export default function EventInfo({setIsToastVisible}) {
                   marginBottom={{base:"0rem", md:"0rem"}}
                   // width="10rem"
                 >
-                  Notify me
+                  Book Now
                 </Button>
               </Box>
               </>
               }
           </Box>
           :
-          <Button bg="#ff7c19" padding="10px 20px" color='white' fontSize="1.2rem" onClick={() => setIsBookNowClicked(true)} marginBottom={{base:"1rem", md:""}}>Book Now!</Button>
+          <Button bg="#ff7c19" padding="10px 20px" color='white' fontSize="1rem" onClick={() => setIsBookNowClicked(true)} marginBottom={{base:"1rem", md:""}}>Book Now!</Button>
             }
         </Box>
         

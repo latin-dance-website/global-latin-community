@@ -31,7 +31,7 @@ export default function EventInfo({setIsToastVisible}) {
     }
     
     async function handleSingleBooking () {
-      const amount = 4000;
+      const amount = 1;
       const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
   
         if (!res){
@@ -313,8 +313,8 @@ export default function EventInfo({setIsToastVisible}) {
                  <Button
                    bg="#ff7c19"
                    position="absolute"
-                   right={{sm:"-3px", base:"12px",md:"-13px"}}
-                   bottom={"3px"}
+                   right={{sm:"10px", base:"12px", md:"-5px", lg:"-13px", xl:"3px"}}
+                   bottom={{xl:"3px", md:"3.5px"}}
                    height="38.8px"
                    width="fit-content"
                    zIndex={"20"}
@@ -351,8 +351,8 @@ export default function EventInfo({setIsToastVisible}) {
                  <Button
                    bg="#ff7c19"
                    position="absolute"
-                   right={{sm:"-3px", base:"12px", md:"-13px"}}
-                   bottom={"3px"}
+                   right={{sm:"10px", base:"12px", md:"-5px", lg:"-13px", xl:"3px"}}
+                   bottom={{xl:"3px", md:"3.5px"}}
                    height="38.8px"
                    width="fit-content"
                    zIndex={"20"}

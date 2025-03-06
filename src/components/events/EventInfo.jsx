@@ -12,6 +12,7 @@ export default function EventInfo({setIsToastVisible}) {
     const toast = useToast();
     const [isBookNowClicked, setIsBookNowClicked] = useState(false);
     const [email, setEmail] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const [isValidateEmail, setIsValidateEmail] = useState(false);
 
     const KEY_ID = "rzp_live_5e4WhgJbQt8tjI";
@@ -31,7 +32,7 @@ export default function EventInfo({setIsToastVisible}) {
     }
     
     async function handleSingleBooking () {
-      const amount = 1;
+      const amount = 4000;
       const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
   
         if (!res){
@@ -91,36 +92,17 @@ export default function EventInfo({setIsToastVisible}) {
   
           console.log("Payment Verified: ", data);
           // if(data.status === "ok"){
-            setIsToastVisible(true);
-            toast({
-                title: "Payment Successful!",
-                description: "Your payment is successfully captured. Email will soon be sent to you!",
-                status: "success",
-                duration: 5000,
-                isClosable: true,
-                position: "top",
-                onCloseComplete: () => setIsToastVisible(false)
-              });
-              try {
-                const response = await fetch(
-                  "https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      metadata: { email: email.toLowerCase(), event: "emailUpload", purpose:"paymentSuccessfulEmail"}
-                     }),
-                  }
-                );
-        
-                // if (response.ok) {
-                //   setEmail(""); // Clear the input field on success
-                // } 
-              } catch (error) {
-                console.log("Email sending having problem: ", error);
-              }
+          setIsToastVisible(true);
+          toast({
+              title: "Payment Successful!",
+              description: "Your payment is successfully captured. Enter your email to get notified.",
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+              position: "top",
+              onCloseComplete: () => setIsToastVisible(false)
+            });
+          setIsValidateEmail(true);
           // }else{
           //   setIsToastVisible(true);
           //   toast({
@@ -203,33 +185,14 @@ export default function EventInfo({setIsToastVisible}) {
             setIsToastVisible(true);
             toast({
                 title: "Payment Successful!",
-                description: "Your payment is successfully captured. Email will soon be sent to you!",
+                description: "Your payment is successfully captured. Enter your email to get notified.",
                 status: "success",
                 duration: 5000,
                 isClosable: true,
                 position: "top",
                 onCloseComplete: () => setIsToastVisible(false)
               });
-              try {
-                const response = await fetch(
-                  "https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      metadata: { email: email.toLowerCase(), event: "emailUpload", purpose:"paymentSuccessfulEmail"}
-                     }),
-                  }
-                );
-        
-                // if (response.ok) {
-                //   setEmail(""); // Clear the input field on success
-                // } 
-              } catch (error) {
-                console.log("Email sending having problem: ", error);
-              }
+            setIsValidateEmail(true);
           // }else{
           //   setIsToastVisible(true);
           //   toast({
@@ -268,7 +231,60 @@ export default function EventInfo({setIsToastVisible}) {
           onCloseComplete: () => setIsToastVisible(false)
         });
       } else {
-        setIsValidateEmail(true);
+          setIsLoading(true);
+          try {
+            const response = await fetch(
+              "https://s356o5gg2kfik723dpxbqrb2da0wahnn.lambda-url.ap-south-1.on.aws/",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  metadata: { email: email.toLowerCase(), event: "emailUpload", purpose:"paymentSuccessfulEmail"}
+                }),
+              }
+            );
+    
+            if (response.ok) {
+              setEmail("");
+              setIsToastVisible(true);
+              toast({
+                title: "Email sent successfully.",
+                description: "Email is sent. You will get it soon.",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+                position: "top",
+                onCloseComplete: () => setIsToastVisible(false)
+              });
+            }else{
+              setIsToastVisible(true);
+              toast({
+                title: "Server Error",
+                description: "Please try again.",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+                position: "top",
+                onCloseComplete: () => setIsToastVisible(false)
+              });
+            }
+          } catch (error) {
+            console.log("Email sending having problem: ", error);
+            setIsToastVisible(true);
+              toast({
+                title: "Server Error",
+                description: "Please try again.",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+                position: "top",
+                onCloseComplete: () => setIsToastVisible(false)
+              });
+          } finally{
+            setIsLoading(false);
+          }
       }
     };
 
@@ -289,7 +305,7 @@ export default function EventInfo({setIsToastVisible}) {
             </Box>
             { isBookNowClicked ?
             <Box display="flex" flexDirection={{base:"column", md:"column"}} width="100%">
-              { isValidateEmail ?
+              { !isValidateEmail ?
                 <>
                  <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.5rem"} marginTop="1rem" fontWeight="600">Early Bird Ticket: </Text>
                  <Box position="relative" width={{base:"90vw", md:"full"}} right={{base:"0rem", md:"0"}} marginTop="0.5rem"  marginX={{base:"0rem", sm:"0rem"}} marginBottom={"2rem"} display="flex"  justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
@@ -403,11 +419,12 @@ export default function EventInfo({setIsToastVisible}) {
                   _hover={{ bg: "black" }}
                   _active={{bg: "black"}}
                   onClick={handleSubmit}
+                  isLoading={isLoading}
                   marginTop={{base:"0rem", md:"0rem"}}
                   marginBottom={{base:"0rem", md:"0rem"}}
                   // width="10rem"
                 >
-                  Book Now
+                  Notify
                 </Button>
               </Box>
               </>

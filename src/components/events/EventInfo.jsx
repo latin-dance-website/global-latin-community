@@ -182,9 +182,9 @@ export default function EventInfo({setIsToastVisible}) {
             setIsToastVisible(true);
             toast({
                 title: "Payment verification failed.",
-                description: "Your payment is not authorized, please try again.",
+                description: "Your payment is not authorized, please try again. Or reach out to us through our social media handles.",
                 status: "error",
-                duration: 5000,
+                duration: 7000,
                 isClosable: true,
                 position: "top",
                 onCloseComplete: () => setIsToastVisible(false)

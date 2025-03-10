@@ -1,9 +1,8 @@
-import { Box, HStack, Image, Text, Button, Divider, UnorderedList, useToast, ListItem, Input } from '@chakra-ui/react'
+import { Box, HStack, Image, Text, Button, Divider, UnorderedList, useToast, ListItem, Input, Link } from '@chakra-ui/react'
 import React, {useState} from 'react'
 import { useRouter } from 'next/router';
 import { FaCalendar, FaMoneyBill, FaStar, FaClock, FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
-import Link from 'next/link';
 
 export default function EventInfo({setIsToastVisible}) {
     const router = useRouter();
@@ -482,7 +481,17 @@ export default function EventInfo({setIsToastVisible}) {
                     <Text fontSize="1.5rem" fontWeight="600" fontFamily={"montserrat"} marginBottom="0.5rem">Venue</Text>
                     <Text fontSize="1.2rem" fontWeight="600" fontFamily={"montserrat"} marginBottom="0.5rem">Dhurii Academy of Arts</Text>
                     <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom="0.5rem">Domlur, Bengaluru, Karnataka 560071</Text>
-                    <Link href="https://maps.app.goo.gl/WcGRLCwbbuXe7ErM6?g_st=iw"><Text cursor="pointer">View In Google Maps</Text></Link>
+                    <Link href="https://maps.app.goo.gl/WcGRLCwbbuXe7ErM6?g_st=iw" isExternal><Text cursor="pointer">View In Google Maps</Text></Link>
+                    <Box mt={2}>
+                      <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3695.857219532653!2d77.6388245!3d12.9562128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae153e2e11cd31%3A0x302df0f97fe220b9!2sDhurii%20Academy%20of%20Arts!5e1!3m2!1sen!2sin!4v1741606142543!5m2!1sen!2sin" 
+                        width="100%" 
+                        height="400" 
+                        style={{borderRadius: "15px"}}
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                      </iframe>
+                    </Box>
                 </Box>
             </Box>
         </Box>

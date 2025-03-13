@@ -23,6 +23,7 @@ const Navbar = ({isToastVisible}) => {
       justifyContent="space-between"
       bgColor="whiteAlpha.100"
       borderBottom="solid 0.1rem"
+      borderRadius="15px"
       bg={isToastVisible ? "rgba(0, 0, 0, 0.5)" : ""}
     >
       <Box
@@ -89,51 +90,56 @@ const Navbar = ({isToastVisible}) => {
           >
             Reach Out To Us:{" "}
           </Text>
-          <Link href="https://www.instagram.com/bangalore_latin_events?igsh=ZTh6cTdoeXVrYW96">
-            <Icon
-              as={RiInstagramFill}
-              href="https://www.instagram.com/bangalore_latin_events?igsh=ZTh6cTdoeXVrYW96"
-              fontSize={{
-                base: "1.2rem",
-                md: "1.5rem",
-                lg: "1.8rem",
-                xl: "1.8rem",
-                "2xl": "2rem",
-              }}
-              _hover={{
-                cursor:"pointer"
-              }}
-              color="brand.pink"
-            />
+          <Link href="https://www.instagram.com/bangalore_latin_events?igsh=ZTh6cTdoeXVrYW96" passHref>
+            <a target="_blank" rel="noopener noreferrer">
+              <Icon
+                as={RiInstagramFill}
+                fontSize={{
+                  base: "1.2rem",
+                  md: "1.5rem",
+                  lg: "1.8rem",
+                  xl: "1.8rem",
+                  "2xl": "2rem",
+                }}
+                _hover={{
+                  cursor:"pointer"
+                }}
+                color="brand.pink"
+              />
+            </a>
           </Link>
-          <Icon
-            as={RiYoutubeFill}
-            href="https://instagram.com"
-            fontSize={{
-              base: "1.2rem",
-              md: "1.5rem",
-              lg: "1.8rem",
-              xl: "1.8rem",
-              "2xl": "2rem",
-            }}
-            color="red"
-          />
-          <Link href="https://chat.whatsapp.com/Lr08jfHbN3o1wI4pGAkNxY">
-            <Icon
-              as={RiWhatsappFill}
-              href="https://chat.whatsapp.com/Lr08jfHbN3o1wI4pGAkNxY"
-              fontSize={{
-                base: "1.2rem",
-                md: "1.5rem",
-                lg: "1.8rem",
-                xl: "1.8rem",
-                "2xl": "2rem",
-              }}
-              color="#25d366"
-              _hover={{
-                cursor:"pointer"
-              }}
-            />
+          <Link href="https://www.youtube.com/" passHref>
+            <a target="_blank" rel="noopener noreferrer">
+              <Icon
+                as={RiYoutubeFill}
+                fontSize={{
+                  base: "1.2rem",
+                  md: "1.5rem",
+                  lg: "1.8rem",
+                  xl: "1.8rem",
+                  "2xl": "2rem",
+                }}
+                color="red"
+              />
+            </a>
+          </Link>
+          <Link href="https://chat.whatsapp.com/Lr08jfHbN3o1wI4pGAkNxY" passHref>
+            <a target="_blank" rel="noopener noreferrer">
+              <Icon
+                as={RiWhatsappFill}
+                fontSize={{
+                  base: "1.2rem",
+                  md: "1.5rem",
+                  lg: "1.8rem",
+                  xl: "1.8rem",
+                  "2xl": "2rem",
+                }}
+                color="#25d366"
+                _hover={{
+                  cursor:"pointer"
+                }}
+              />
+            </a>
           </Link>
         </HStack>
       </HStack>

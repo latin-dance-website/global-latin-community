@@ -1,4 +1,4 @@
-import { Box, HStack, Image, Text, Button, Divider, UnorderedList, useToast, ListItem, Input, Link, Flex } from '@chakra-ui/react'
+import { Box, HStack, Image, Text, Button, Divider, UnorderedList, useToast, ListItem, Input, Link, Spinner } from '@chakra-ui/react'
 import React, {useState, useEffect} from 'react'
 import { useRouter } from 'next/router';
 import { FaCalendar, FaMoneyBill, FaStar, FaClock, FaWhatsapp, FaInstagram } from 'react-icons/fa';
@@ -8,6 +8,7 @@ export default function EventInfo({setIsToastVisible}) {
     const router = useRouter();
     const toast = useToast();
     const [isBookNowClicked, setIsBookNowClicked] = useState(false);
+    const [isEventLoading, setIsEventLoading] = useState(true);
     const [eventId, setEventId] = useState(null);
     const [email, setEmail] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -23,11 +24,12 @@ export default function EventInfo({setIsToastVisible}) {
     });
 
     useEffect(() => {
-      const {id} = router.query;
-      console.log("router.query: ", router.query);
-      console.log("id: ", id);
-      setEventId("partnerwork-intensive");
-    },[])
+      if (router.isReady) {
+        console.log("router object: ", router);
+        setEventId(router.query.id);
+        setIsEventLoading(false)
+      }
+    }, [router.isReady, router.query.id]);
 
     const events = [
       {
@@ -275,6 +277,9 @@ export default function EventInfo({setIsToastVisible}) {
 
   return (
     <Box width="100vw" minHeight="80vh" display="flex" flexDirection={"column"} paddingY="20px" paddingX={{lg:"10rem",base:"20px"}}>
+      {isEventLoading ? <Spinner size="xl" thickness="4px" speed="0.65s" color="gray.400" />
+      : (
+        <>
       {events.filter((event) => event.id === eventId)
              .map((event) => {
               return(
@@ -296,9 +301,9 @@ export default function EventInfo({setIsToastVisible}) {
                         { !isValidateEmail ?
                           <>
                           <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.5rem"} marginTop="1rem" fontWeight="600">{event.ticketClass}: </Text>
-                          {event.tickets.map((ticketObject) => {
+                          {event.tickets.map((ticketObject, index) => {
                             return (
-                              <Box position="relative" width={{base:"90vw", md:"full"}} right={{base:"0rem", md:"0"}} marginTop="0.5rem"  marginX={{base:"0rem", sm:"0rem"}} marginBottom={"2rem"} display="flex"  justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
+                              <Box key={index} position="relative" width={{base:"90vw", md:"full"}} right={{base:"0rem", md:"0"}} marginTop="0.5rem"  marginX={{base:"0rem", sm:"0rem"}} marginBottom={"2rem"} display="flex"  justifyContent={"center"} alignItems={{base:"center", lg:"start", xl:""}} gap={{base:"1rem", sm:""}} flexDirection={{base:"column", xl:"row"}}>
                               <Box
                                 height="2.8rem"
                                 bg="white"
@@ -393,9 +398,9 @@ export default function EventInfo({setIsToastVisible}) {
                           <Box>
                               <Text fontSize="1.5rem" fontWeight="600" fontFamily={"montserrat"} marginTop="0.5rem">Terms and Conditions</Text>
                               <UnorderedList>
-                                  {event.terms.map(term => {
+                                  {event.terms.map((term, index) => {
                                     return (
-                                      <ListItem fontSize="1rem" fontFamily={"montserrat"}>{term}</ListItem>
+                                      <ListItem key={index} fontSize="1rem" fontFamily={"montserrat"}>{term}</ListItem>
                                     )
                                   })}
                               </UnorderedList>
@@ -424,7 +429,8 @@ export default function EventInfo({setIsToastVisible}) {
                 </>
               )
              })
-      }
+            }
+      </>)}
     </Box>
   )
 }

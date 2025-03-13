@@ -6,8 +6,6 @@ import { FaLocationDot } from 'react-icons/fa6';
 
 export default function EventInfo({setIsToastVisible}) {
     const router = useRouter();
-    const {id} = router.query;
-    console.log("id: ", id);
     const toast = useToast();
     const [isBookNowClicked, setIsBookNowClicked] = useState(false);
     const [eventId, setEventId] = useState(null);
@@ -26,7 +24,9 @@ export default function EventInfo({setIsToastVisible}) {
 
     useEffect(() => {
       const {id} = router.query;
-      setEventId(id);
+      console.log("router.query: ", router.query);
+      console.log("id: ", id);
+      setEventId("partnerwork-intensive");
     },[])
 
     const events = [

@@ -1,7 +1,8 @@
 import { Box, Button, Heading, Image, Text, VStack, HStack, Divider } from '@chakra-ui/react';
+import { Grid, GridItem } from "@chakra-ui/react";
 import React from 'react';
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
@@ -11,7 +12,6 @@ import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useBreakpointValue } from "@chakra-ui/react";
 import Link from 'next/link';
-// import eventGlance1 from "../../../public/assets/images/eventGlance1.png";
 
 
 export default function EventCard() {
@@ -54,64 +54,27 @@ export default function EventCard() {
           marginTop={"1rem"}
           fontFamily={"montserrat"}
         >
-          At A Glance
+          Our Initiatives / Events
         </Heading>
         <Box
           height="0.2rem"
-          width="10rem"
+          width="30rem"
           borderRadius={"1rem"}
           backgroundColor={"brand.purple"}
           alignSelf="center"
           marginBottom={"1rem"}
         />
       </Box>
-      {/* <Box display="flex" gap="0.3rem" alignItems={"center"} flexWrap={"wrap"} justifyContent={"center"} paddingX="0rem">
-        <Text fontSize="1.2rem" fontFamily="montserrat" fontWeight="600">Filters: </Text>
-        <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={2} fontSize="sm">
-            Month
-          </MenuButton>
-          <MenuList p={1} fontSize="sm" minWidth="auto">
-            <MenuItem p={2}>January</MenuItem>
-          </MenuList>
-        </Menu>
-        <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={2} fontSize="sm" >
-            Dance Style
-          </MenuButton>
-          <MenuList p={1} fontSize="sm" minWidth="auto">
-            <MenuItem p={2}>Salsa</MenuItem>
-          </MenuList>
-        </Menu>
-        <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={2} fontSize="sm">
-            City
-          </MenuButton>
-          <MenuList p={1} fontSize="sm" minWidth="auto">
-            <MenuItem p={2}>Bengaluru</MenuItem> 
-          </MenuList>
-        </Menu>
-      </Box> */}
       <Swiper
         style={{
           width: swiperWidth,
           marginBottom: "1.2rem",
         }}
-        // navigation
-        // autoplay={{
-        //   delay: 2000,
-        // }}
-        // modules={[Navigation, Autoplay]}
-        // slidesPerView="auto"
-        // sx={{
-        //   "& .swiper-button-next, & .swiper-button-prev": {
-        //     color: "blue.500", // Chakra UI color syntax
-        //     display: "none",  // Hides the arrows
-        //   },
-        //   "& .swiper-button-next:hover, & .swiper-button-prev:hover": {
-        //     color: "red.500", // Changes color on hover
-        //   },
-        // }}
+        modules={[Pagination]}
+        pagination={{
+          clickable: true,
+        }}
+        slidesPerView="auto"
       >
         {eventCards.map((event, index) => {
           return (
@@ -156,63 +119,45 @@ export default function EventCard() {
           )
       })}
       </Swiper>
-      <Box display="flex" flexDirection={"column"} alignItems={"center"}>
-        <Heading
-          as="h1"
-          fontSize={{
-            base: "1.5rem",
-            md: "2rem",
-            lg: "2rem",
-            xl: "2.5rem",
-            "2xl": "2.5rem",
-          }}
-          marginTop={"1rem"}
-          fontFamily={"montserrat"}
-        >
-          Our Initiatives / Events
-        </Heading>
-        <Box
-          height="0.2rem"
-          width="30rem"
-          borderRadius={"1rem"}
-          backgroundColor={"brand.purple"}
-          alignSelf="center"
-          marginBottom={"1rem"}
-        />
-      </Box>
+      <Grid width="100%" templateColumns={{sm:"repeat(4, 1fr)", base:"repeat(4, 0.8fr)"}} gap={{md:4, base:2}} paddingX={{md:"5rem", base:"0.5rem"}} paddingLeft={{md:"3.5rem", base:"1rem"}} marginTop="2rem">
+        <GridItem justifyContent={"center"} alignItems={"center"}>
+          <Box height="100%" display="flex" alignItems={"center"} justifyContent={"center"} fontSize={{sm:"1.5rem", base:"1rem"}} fontFamily="montserrat" fontWeight="600">Filters: </Box>
+        </GridItem>
+        <GridItem>
+          <Menu>
+            <MenuButton width="100%" bgColor={"white"} border="2px solid #AD752F" as={Button} rightIcon={<ChevronDownIcon />} p={2} fontSize={{md:"md", base:"sm"}}>
+              Month
+            </MenuButton>
+            <MenuList p={1} fontSize="sm" minWidth="auto">
+              <MenuItem p={2}>January</MenuItem>
+            </MenuList>
+          </Menu>
+        </GridItem>
+        <GridItem>
+          <Menu>
+            <MenuButton width="100%" bgColor={"white"} border="2px solid #AD752F" as={Button} rightIcon={<ChevronDownIcon />} p={2}  >
+              Dance Style
+            </MenuButton>
+            <MenuList p={1} fontSize="sm" minWidth="auto">
+              <MenuItem p={2}>Salsa</MenuItem>
+            </MenuList>
+          </Menu>
+        </GridItem>
+        <GridItem>
+          <Menu>
+            <MenuButton width="90%" bgColor={"white"} border="2px solid #AD752F" as={Button} rightIcon={<ChevronDownIcon />} p={2} >
+              City
+            </MenuButton>
+            <MenuList p={1} fontSize="sm" minWidth="auto">
+              <MenuItem p={2}>Bengaluru</MenuItem> 
+            </MenuList>
+          </Menu>
+        </GridItem>
+      </Grid>
       <Box width="100%" display="flex" gap="2rem" padding="2rem" paddingTop="0rem" flexDirection={{md:"row", base:"column"}}>
-        <Box bg="white" width={{md:"40vh", base:"100%"}} padding="1rem 2rem" borderRadius="20px" opaicty="0.5">
-        <Box display="flex" gap="0.3rem" flexWrap={"wrap"} justifyContent={"center"} alignItems={{md:"start", base:"center"}} paddingX="0rem" flexDirection={{md:"column", base:"row"}}>
-        <Text fontSize="1.2rem" fontFamily="montserrat" fontWeight="600">Filters: </Text>
-        <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={2} fontSize="sm">
-            Month
-          </MenuButton>
-          <MenuList p={1} fontSize="sm" minWidth="auto">
-            <MenuItem p={2}>January</MenuItem>
-          </MenuList>
-        </Menu>
-        <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={2} fontSize="sm" >
-            Dance Style
-          </MenuButton>
-          <MenuList p={1} fontSize="sm" minWidth="auto">
-            <MenuItem p={2}>Salsa</MenuItem>
-          </MenuList>
-        </Menu>
-        <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} p={2} fontSize="sm">
-            City
-          </MenuButton>
-          <MenuList p={1} fontSize="sm" minWidth="auto">
-            <MenuItem p={2}>Bengaluru</MenuItem> 
-          </MenuList>
-        </Menu>
-      </Box>
-        </Box>
-        <Box width="100%" borderRadius="20px" bg="white" padding="20px" border="2px solid #8547E6" display="Flex" flexDirection="column">
-          <Text color="black" fontWeight={"600"} fontSize="2rem" alignSelf={"start"}>Events</Text>
-          <Divider></Divider>
+        <Box width="100%" borderRadius="20px" padding="20px" display="Flex" flexDirection="column">
+          {/* <Text color="black" fontWeight={"600"} fontSize="2rem" alignSelf={"start"}>Events</Text>
+          <Divider borderColor="gray"></Divider> */}
           <Box width="100%" height="100%" display="flex" justifyContent={{base:"center", sm:"start"}} alignItems={{base:"center", sm:"start"}} flexWrap={"wrap"}>
             {eventCards.map((event, index) => {
               return (

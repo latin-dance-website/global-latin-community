@@ -129,7 +129,7 @@ export default function EventCard() {
               Month
             </MenuButton>
             <MenuList p={1} fontSize="sm" minWidth="auto">
-              <MenuItem p={2}>January</MenuItem>
+              <MenuItem p={2}>March</MenuItem>
             </MenuList>
           </Menu>
         </GridItem>
@@ -139,7 +139,7 @@ export default function EventCard() {
               Dance Style
             </MenuButton>
             <MenuList p={1} fontSize="sm" minWidth="auto">
-              <MenuItem p={2}>Salsa</MenuItem>
+              <MenuItem p={2}>Bachata</MenuItem>
             </MenuList>
           </Menu>
         </GridItem>

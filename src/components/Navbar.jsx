@@ -23,7 +23,6 @@ const Navbar = ({isToastVisible}) => {
       justifyContent="space-between"
       bgColor="whiteAlpha.100"
       borderBottom="solid 0.1rem"
-      borderRadius="15px"
       bg={isToastVisible ? "rgba(0, 0, 0, 0.5)" : ""}
     >
       <Box
@@ -74,6 +73,7 @@ const Navbar = ({isToastVisible}) => {
           paddingX="1rem"
           paddingY="0.5rem"
           borderRadius={{
+            base:"0.4rem",
             md: "0.4rem",
             lg: "0.4rem",
             xl: "0.4rem",

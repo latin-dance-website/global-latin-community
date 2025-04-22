@@ -2,15 +2,17 @@
   "name": "latin_dance",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "apollo:download-schema": "apollo client:download-schema schema.graphql",
-    "apollo:generate-types": "rm -rf __generated__ && apollo client:codegen --target typescript --outputFlat",
-    "apollo:sync": "npm run apollo:download-schema && npm run apollo:generate-types",
-    "codegen:generate": "graphql-codegen"
-  },
+ "scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "apollo:download-schema": "apollo client:download-schema schema.graphql",
+  "apollo:generate-types": "rm -rf __generated__ && apollo client:codegen --target typescript --outputFlat",
+  "apollo:sync": "npm run apollo:download-schema && npm run apollo:generate-types",
+  "codegen:generate": "graphql-codegen",
+  "test": "echo \"No tests defined\""
+}
+,
   "dependencies": {
     "@apollo/client": "^3.3.7",
     "@chakra-ui/icons": "^2.2.4",

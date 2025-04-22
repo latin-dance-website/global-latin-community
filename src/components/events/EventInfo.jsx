@@ -76,7 +76,73 @@ export default function EventInfo({setIsToastVisible}) {
         subAddress:"Domlur, Bengaluru, Karnataka 560071",
         googleMapsLink:"https://maps.app.goo.gl/WcGRLCwbbuXe7ErM6?g_st=iw",
         iframeLink:"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3695.857219532653!2d77.6388245!3d12.9562128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae153e2e11cd31%3A0x302df0f97fe220b9!2sDhurii%20Academy%20of%20Arts!5e1!3m2!1sen!2sin!4v1741606142543!5m2!1sen!2sin"
-      }
+      } ,
+   
+
+
+
+
+      {
+        id:"partnerwork-pune",
+        ticketClass: "Early Bird Ticket",
+        tickets:[
+          {name:"Single", amount:3500},
+          {name:"Couple", amount:6500}
+        ],
+        title:"Bachata Intensive Workshop",
+        dates:[
+          "16th May, 2025: 8PM to 10PM",
+          "17th May, 2025: 2PM to 6PM",
+          "18th May, 2025: 11AM to 1PM"
+        ],
+        about: () => (
+          <Box>
+            <Text fontSize="1.5rem" fontWeight="600" fontFamily={"montserrat"}>About</Text>
+            <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.5rem"}> BACHATA INTENSiIVR WORKSHOP – PUNE EDITION
+
+This is not just a workshop—it’s a full-blown experience! Dive deep into the heart of Dominican Bachata with Aman Bassi as he takes you through immersive solo sessions on history, culture, musicality, technique, and foundational movement rooted in the Dominican Republic and turn up the energy with partnerwork, body movement by Megha Khatri. </Text>
+           
+            <Text fontSize="1.2rem" fontFamily={"montserrat"} marginBottom={"0.5rem"} fontWeight="500">✨ What to expect?</Text>
+            <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.2rem"}> Day 1 </Text>
+              <Text fontSize="0.8rem" fontFamily={"montserrat"}> History, Culture, and Music Explore the origins of Bachata
+            in the Dominican Republic Understand the cultural evolution and
+            cultural aspects of the dance Introduction to the key instruments:
+            requinto (lead guitar), segunda (rhythm guitar), Bass, bongos,
+            guira. Recognize and identify different Bachata rhythms and how to
+            listen deeply to them</Text>
+              {/* <Text fontSize="0.8rem" fontFamily={"montserrat"}> - Changing instruments individually and with a partner</Text> */}
+              {/* <Text fontSize="0.8rem" fontFamily={"montserrat"} marginBottom={"0.5rem"}> - Expanding footwork vocabulary</Text> */}
+            <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.2rem"}>Day 2 </Text>
+              <Text fontSize="0.8rem" fontFamily={"montserrat"}> Applying Musicality, Partnerwork,
+            Movements, and Styling Insights on Freestyling Applying Musicality
+            to your solo and partner dancing Body Movements and Styling
+            Partnerwork</Text>
+              {/* <Text fontSize="0.8rem" fontFamily={"montserrat"}> - Incorporating turns and upper body movement</Text> */}
+            <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.2rem"}> Day 3</Text>
+              <Text fontSize="0.8rem" fontFamily={"montserrat"}> Last Day, Doing a fun Choreo together(Time to
+            have some fun) Work on a Bachata Choreo. Applying concepts in a
+            choreography that we have taught so far.</Text>
+              {/* <Text fontSize="0.8rem" fontFamily={"montserrat"}> -  Cross-over turns, hammerlock, cross grip, haircombs, flicks</Text> */}
+              {/* <Text fontSize="0.8rem" fontFamily={"montserrat"} marginBottom={"0.5rem"}> - Grip changes, preparation, timing, resistance, balance</Text> */}
+            {/* <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.2rem"}>4. Practice & Creative Application</Text> */}
+              {/* <Text fontSize="0.8rem" fontFamily={"montserrat"}> - Intensive drills to internalize techniques</Text> */}
+              {/* <Text fontSize="0.8rem" fontFamily={"montserrat"} marginBottom={"0.5rem"}> -  Applying learned movements creatively to music</Text> */}
+            <Text fontSize="1rem" fontFamily={"montserrat"} marginBottom={"0.5rem"}>Share with your partner & let’s level up together! 💯🔥</Text>
+            <Text fontSize="1rem" fontFamily={"montserrat"} color="blue.300">#BachataPartnerwork #RootedinCulture #AmanAndMegha #BachataWorkshop #RefinedinMovement. #bachataintensive</Text>
+          </Box>
+        ),
+        terms:[
+          "The ticket is non - refundable"
+        ],
+        venue:"The Stardom studio",
+        subAddress:"Sanghvi Nagar, Pune",
+        googleMapsLink:"https://g.co/kgs/XV4AqUe",
+        iframeLink: "https://www.google.com/maps?q=The+Stardom+Studio,+Sanghvi+Nagar,+Pune&output=embed"
+      } 
+
+
+   
+   
     ]
 
     const KEY_ID = "rzp_live_5e4WhgJbQt8tjI";

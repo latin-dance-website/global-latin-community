@@ -219,22 +219,27 @@ export default function EventInfo({ setIsToastVisible }) {
           <Text fontSize="1.5rem" fontWeight="600" fontFamily={"montserrat"}>
             About
           </Text>
-          <Text
-            fontSize="1rem"
-            fontFamily={"montserrat"}
-            marginBottom={"0.5rem"}
-          >
-            Three Days. Two Educators. One Immersive Experience. Join Aman Bassi
-            and Megha Khatri who are coming together for the first time for
-            Bachata Intensive deep dive journey Aman Bassi brings you into the
-            soul of Bachata through solo sessions that explore its history,
-            music, and foundational movement rooted in the streets of the
-            Dominican Republic. Megha Khatri adds flavor with body movement, and
-            styling that elevates your dance from basic steps to confident
-            expression and adds beauty and elegance to ur dancing 💃 Then, they
-            would be coming together for the first time to teach an amazing
-            choreo and some partner-work
-          </Text>
+          <Text fontSize="1rem" fontFamily="montserrat" mb="0.5rem">
+        Three Days. Two Educators. One Immersive Experience.
+      </Text>
+      <Text fontSize="1rem" fontFamily="montserrat" mb="0.5rem">
+        Join Aman Bassi and Megha Khatri who are coming together for the first
+        time for Bachata Intensive deep dive journey.
+      </Text>
+      <Text fontSize="1rem" fontFamily="montserrat" mb="0.5rem">
+        Aman Bassi brings you into the soul of Bachata through solo sessions
+        that explore its history, music, and foundational movement rooted in the
+        streets of the Dominican Republic.
+      </Text>
+      <Text fontSize="1rem" fontFamily="montserrat" mb="0.5rem">
+        Megha Khatri adds flavor with body movement, and styling that elevates
+        your dance from basic steps to confident expression and adds beauty and
+        elegance to your dancing 💃
+      </Text>
+      <Text fontSize="1rem" fontFamily="montserrat" mb="0.5rem">
+        Then, they would be coming together for the first time to teach an
+        amazing choreo and some partner-work.
+      </Text>
 
           <Text
             fontSize="1.2rem"

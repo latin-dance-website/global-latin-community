@@ -346,133 +346,146 @@ export default function EventInfo({ setIsToastVisible }) {
     },
   ];
 
-  const KEY_ID = "rzp_live_5e4WhgJbQt8tjI";
+  // const KEY_ID = "rzp_live_5e4WhgJbQt8tjI";
 
-  function loadScript(src) {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = src;
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-      document.body.appendChild(script);
-    });
-  }
+  // function loadScript(src) {
+  //   return new Promise((resolve) => {
+  //     const script = document.createElement("script");
+  //     script.src = src;
+  //     script.onload = () => {
+  //       resolve(true);
+  //     };
+  //     script.onerror = () => {
+  //       resolve(false);
+  //     };
+  //     document.body.appendChild(script);
+  //   });
+  // }
 
-  async function handleBooking(ticketObject, title, ticketClass) {
-    const amount = ticketObject.amount;
-    const res = await loadScript(
-      "https://checkout.razorpay.com/v1/checkout.js"
-    );
+  // async function handleBooking(ticketObject, title, ticketClass) {
+  //   const amount = ticketObject.amount;
+  //   const res = await loadScript(
+  //     "https://checkout.razorpay.com/v1/checkout.js"
+  //   );
 
-    if (!res) {
-      alert("Razropay failed to load!!");
-      return;
-    }
+    // if (!res) {
+    //   alert("Razropay failed to load!!");
+    //   return;
+    // }
 
-    const order = await fetch(
-      "https://3jvno3zjoxtzp3wpbj4uqa43540unylc.lambda-url.ap-south-1.on.aws/",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          route: "create-order",
-          metadata: {
-            amount: amount,
-            currency: "INR",
-            receipt: "receipt",
-            notes: {},
-          },
-        }),
-      }
-    ).then((t) => t.json());
+    // const order = await fetch(
+    //   "https://3jvno3zjoxtzp3wpbj4uqa43540unylc.lambda-url.ap-south-1.on.aws/",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       route: "create-order",
+    //       metadata: {
+    //         amount: amount,
+    //         currency: "INR",
+    //         receipt: "receipt",
+    //         notes: {},
+    //       },
+    //     }),
+    //   }
+    // ).then((t) => t.json());
 
-    console.log("order: ", order);
+    // console.log("order: ", order);
 
-    const options = {
-      key: KEY_ID, // Enter the Key ID generated from the Dashboard
-      amount: order.data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-      currency: "INR",
-      name: "Global Latin Dance Community",
-      description: "Test Transaction",
-      image:
-        "https://www.globallatindancecommunity.com/assets/images/ogLogo4(200).png",
-      order_id: order.data.id, //This is Order ID
-      notes: {
-        address: "Razorpay Corporate Office",
-      },
-      theme: {
-        color: "#3399cc",
-      },
-      handler: async function (response) {
-        console.log(response);
-        const data = await fetch(
-          "https://3jvno3zjoxtzp3wpbj4uqa43540unylc.lambda-url.ap-south-1.on.aws/",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              route: "verify",
-              metadata: {
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_signature: response.razorpay_signature,
-              },
-            }),
-          }
-        ).then((res) => res.json());
+  //   const options = {
+  //     key: KEY_ID, // Enter the Key ID generated from the Dashboard
+  //     amount: order.data.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+  //     currency: "INR",
+  //     name: "Global Latin Dance Community",
+  //     description: "Test Transaction",
+  //     image:
+  //       "https://www.globallatindancecommunity.com/assets/images/ogLogo4(200).png",
+  //     order_id: order.data.id, //This is Order ID
+  //     notes: {
+  //       address: "Razorpay Corporate Office",
+  //     },
+  //     theme: {
+  //       color: "#3399cc",
+  //     },
+  //     handler: async function (response) {
+  //       console.log(response);
+  //       const data = await fetch(
+  //         "https://3jvno3zjoxtzp3wpbj4uqa43540unylc.lambda-url.ap-south-1.on.aws/",
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({
+  //             route: "verify",
+  //             metadata: {
+  //               razorpay_payment_id: response.razorpay_payment_id,
+  //               razorpay_order_id: response.razorpay_order_id,
+  //               razorpay_signature: response.razorpay_signature,
+  //             },
+  //           }),
+  //         }
+  //       ).then((res) => res.json());
 
-        console.log("Payment Verified: ", data);
-        if (data.status === "ok") {
-          setIsToastVisible(true);
-          toast({
-            title: "Payment Successful!",
-            description:
-              "Your payment is successfully captured. Enter your email to get notified.",
-            status: "success",
-            duration: 5000,
-            isClosable: true,
-            position: "top",
-            onCloseComplete: () => setIsToastVisible(false),
-          });
-          setIsValidateEmail(true);
-          setPaymentDetails((prev) => {
-            return {
-              ...prev,
-              amountPaid: amount.toString(),
-              paymentId: response.razorpay_payment_id,
-              ticketDetails: {
-                ...prev.ticketDetails,
-                Class: ticketClass,
-                Name: title,
-                Type: ticketObject.name,
-              },
-            };
-          });
-        } else {
-          setIsToastVisible(true);
-          toast({
-            title: "Payment verification failed.",
-            description:
-              "Your payment is not authorized, please try again. Or reach out to us through our social media handles.",
-            status: "error",
-            duration: 7000,
-            isClosable: true,
-            position: "top",
-            onCloseComplete: () => setIsToastVisible(false),
-          });
+  //       console.log("Payment Verified: ", data);
+  //       if (data.status === "ok") {
+  //         setIsToastVisible(true);
+  //         toast({
+  //           title: "Payment Successful!",
+  //           description:
+  //             "Your payment is successfully captured. Enter your email to get notified.",
+  //           status: "success",
+  //           duration: 5000,
+  //           isClosable: true,
+  //           position: "top",
+  //           onCloseComplete: () => setIsToastVisible(false),
+  //         });
+  //         setIsValidateEmail(true);
+  //         setPaymentDetails((prev) => {
+  //           return {
+  //             ...prev,
+  //             amountPaid: amount.toString(),
+  //             paymentId: response.razorpay_payment_id,
+  //             ticketDetails: {
+  //               ...prev.ticketDetails,
+  //               Class: ticketClass,
+  //               Name: title,
+  //               Type: ticketObject.name,
+  //             },
+  //           };
+  //         });
+  //       } else {
+  //         setIsToastVisible(true);
+  //         toast({
+  //           title: "Payment verification failed.",
+  //           description:
+  //             "Your payment is not authorized, please try again. Or reach out to us through our social media handles.",
+  //           status: "error",
+  //           duration: 7000,
+  //           isClosable: true,
+  //           position: "top",
+  //           onCloseComplete: () => setIsToastVisible(false),
+  //         });
+  //       }
+  //     },
+  //   };
+  //   const paymentObject = new window.Razorpay(options);
+  //   paymentObject.open();
+  // }
+
+  const handleBooking = (ticketObject, title, ticketClass) => { 
+
+        const amount = ticketObject.amount;
+        if (amount==3500){
+          window.open("https://rzp.io/rzp/I27Xl1Y", "_blank", "noreferrer");
         }
-      },
-    };
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
+        if (amount==6500){
+          window.open("https://rzp.io/rzp/b0j3oPqB", "_blank", "noreferrer");
+        }
+
+
   }
 
   const validateEmail = (email) => {
@@ -707,7 +720,7 @@ export default function EventInfo({ setIsToastVisible }) {
                                     marginTop={{ base: "0rem", md: "0rem" }}
                                     marginBottom={{ base: "0rem", md: "0rem" }}
                                   >
-                                    Book Now
+                                    Book Now 
                                   </Button>
                                 </Box>
                               );

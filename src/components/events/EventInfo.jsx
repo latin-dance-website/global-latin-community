@@ -203,10 +203,10 @@ export default function EventInfo({ setIsToastVisible }) {
 
     {
       id: "partnerwork-pune",
-      ticketClass: "Early Bird Ticket",
+      ticketClass: "Tickets Price",
       tickets: [
-        { name: "Single", amount: 3500 },
-        { name: "Couple", amount: 6500 },
+        { name: "Single", amount: 4000 },
+        { name: "Couple", amount: 7000 },
       ],
       title: "Bachata Intensive Workshop",
       dates: [
@@ -478,10 +478,10 @@ export default function EventInfo({ setIsToastVisible }) {
   const handleBooking = (ticketObject, title, ticketClass) => { 
 
         const amount = ticketObject.amount;
-        if (amount==3500){
+        if (amount==4000){
           window.open("https://rzp.io/rzp/I27Xl1Y", "_blank", "noreferrer");
         }
-        if (amount==6500){
+        if (amount==7000){
           window.open("https://rzp.io/rzp/b0j3oPqB", "_blank", "noreferrer");
         }
 

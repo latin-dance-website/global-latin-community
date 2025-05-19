@@ -25,7 +25,6 @@ import { FaLocationDot } from "react-icons/fa6";
 import { google } from "googleapis";
 
 export async function getServerSideProps() {
-
   const auth = await google.auth.getClient({
     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
   });
@@ -63,43 +62,41 @@ export async function getServerSideProps() {
 }
 
 export default function EventsPage({ dataByCity, cities }) {
-  
   const [showPopup, setShowPopup] = useState(false);
   const [toEmail, setToEmail] = useState("");
   const [isSending, setIsSending] = useState(false);
-const handleSend = async () => {
-  if (!toEmail) return alert("Please enter recipient email");
-  setIsSending(true);
-  
-  // Prepare the events data in the expected format
-  const eventList = events.map((event, index) => ({
-    event: event.title, 
-  }));
+  const handleSend = async () => {
+    if (!toEmail) return alert("Please enter recipient email");
+    setIsSending(true);
 
-  const formData = { events: eventList }; // Structure formData as expected by the backend
-console.log(formData)
-  try {
-    const res = await fetch("/api/eventmail", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ to: toEmail, formData }),
-    });
-    const result = await res.json();
-    if (res.ok) {
-      alert("✅ Email sent!");
-    } else {
-      alert(" Failed to send: " + result.message);
+    // Prepare the events data in the expected format
+    const eventList = events.map((event, index) => ({
+      event: event.title,
+    }));
+
+    const formData = { events: eventList }; // Structure formData as expected by the backend
+    console.log(formData);
+    try {
+      const res = await fetch("/api/eventmail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to: toEmail, formData }),
+      });
+      const result = await res.json();
+      if (res.ok) {
+        alert("✅ Email sent!");
+      } else {
+        alert(" Failed to send: " + result.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert(" Error sending email");
+    } finally {
+      setIsSending(false);
+      setShowPopup(false);
+      setToEmail("");
     }
-  } catch (err) {
-    console.error(err);
-    alert(" Error sending email");
-  } finally {
-    setIsSending(false);
-    setShowPopup(false);
-    setToEmail("");
-  }
-};
-
+  };
 
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState(cities[0]);
@@ -281,250 +278,240 @@ console.log(formData)
       </Box>
 
       <Box
-  width="70%"
-  // background="linear-gradient(135deg, #fff4e6, #fff)"
-  display="flex"
-  flexDirection="column"
-  alignItems="center"
-  justifyContent="center"
-  paddingY="2rem"
-  marginTop="1rem"
-  // border="2px solid #ff7c19"
-  borderRadius="12px"
-  boxShadow="0 6px 20px rgba(0, 0, 0, 0.1)"
->
-  <HStack
-    width="100%"
-    justifyContent="center"
-    flexDirection="column"
-    alignItems="center"
-    spacing={4}
-  >
-    <Heading
-      as="h2"
-      fontWeight="bold"
-      size="xl"
-      textAlign="center"
-      color="#f63c80"
-      marginBottom="0.5rem"
-    >
-Where’s the Party? <span style={{ color: "#a23cf6" }}> Just Pick a City!</span>
-    </Heading>
-
-    <Text
-  fontWeight="medium"
-  fontSize="md"
-  color="#333"
-  textAlign="center"
-  maxW="600px"
->
-  Discover the hottest <span style={{ color: "#f63c80", fontWeight: "light" }}>{selectedCity}</span> Latin dance events from salsa socials to bachata nights, all organized under one vibrant roof. Your rhythm starts here!
-</Text>
-
-
-    <select
-      value={selectedCity}
-      onChange={(e) => setSelectedCity(e.target.value)}
-      style={{
-        marginTop: "16px",
-        padding: "12px 20px",
-        border: "2px solid #f63c80",
-        borderRadius: "10px",
-        backgroundColor: "#fff",
-        color: "#f63c80",
-        fontWeight: "600",
-        fontSize: "1rem",
-        cursor: "pointer",
-        outline: "none",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-        transition: "all 0.2s ease-in-out",
-      }}
-    >
-      {cities.map((city) => (
-        <option key={city} value={city}>
-          {city}
-        </option>
-      ))}
-    </select>
-    <Button
-  bg="#f63c7f"
-  color="white"
-  size="md"
-  borderRadius="5px"
-  px={6}
-  py={4}
-  fontWeight="bold"
-  boxShadow="md"
-  leftIcon={<CalendarIcon />}
-  _hover={{ bg: "#e12a6e", transform: "scale(1.05)" }}
-  _active={{ bg: "#c41f5f" }}
-
-  onClick={() => setShowPopup(true)}
-  className="bg-blue-500 text-white px-4 py-2 rounded"
-
->
-  Add to Calendar
-</Button>
-<Button onClick={() => setShowPopup(true)} colorScheme="pink">
-  Send Events to Email
-</Button>
-
-{showPopup && (
-  <Box
-    position="fixed"
-    top="0"
-    left="0"
-    width="100vw"
-    height="100vh"
-    backgroundColor="rgba(0, 0, 0, 0.5)"
-    display="flex"
-    justifyContent="center"
-    alignItems="center"
-    zIndex={1000}
-  >
-    <Box
-      bg="white"
-      p={6}
-      borderRadius="md"
-      boxShadow="lg"
-      minW={{ base: "80%", md: "400px" }}
-      display="flex"
-      flexDirection="column"
-      gap={4}
-    >
-      <Heading size="md" color="pink.500">
-        Enter Email to Send Events
-      </Heading>
-      <input
-        type="email"
-        placeholder="Enter recipient email"
-        value={toEmail}
-        onChange={(e) => setToEmail(e.target.value)}
-        style={{
-          padding: "0.5rem",
-          border: "1px solid #ccc",
-          borderRadius: "5px",
-        }}
-      />
-      <HStack justifyContent="flex-end" mt={2}>
-        <Button variant="ghost" onClick={() => setShowPopup(false)}>
-          Cancel
-        </Button>
-        <Button
-          colorScheme="pink"
-          isLoading={isSending}
-          onClick={handleSend}
-        >
-          Send
-        </Button>
-      </HStack>
-    </Box>
-  </Box>
-)}
-
-
-  </HStack>
-</Box>
-
-<Box
-  width="70%"
-  background="linear-gradient(135deg, #a23cf6, #f63c80)"
-  display="flex"
-  flexDirection="column"
-  alignItems="center"
-  justifyContent="center"
-  paddingY="2rem"
-  borderRadius="12px"
-  boxShadow="0 4px 16px rgba(0, 0, 0, 0.1)"
-  marginTop="1.5rem"
->
-  <HStack
-    width="100%"
-    justifyContent="center"
-    alignItems="center"
-  >
-<Heading
-  as="h2"
-  size="xl"
-  textAlign="center"
-  color="white"
-  fontWeight="extrabold"
-  letterSpacing="1px"
->
-  {selectedCity} in MAY !
-</Heading>
-
-  </HStack>
-</Box>
-
-      <Box>
-        <Box
-          minH={"100vh"}
+        width="70%"
+        // background="linear-gradient(135deg, #fff4e6, #fff)"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        paddingY="2rem"
+        marginTop="1rem"
+        // border="2px solid #ff7c19"
+        borderRadius="12px"
+        boxShadow="0 6px 20px rgba(0, 0, 0, 0.1)"
+      >
+        <HStack
           width="100%"
-          display="flex"
+          justifyContent="center"
           flexDirection="column"
           alignItems="center"
-          justifyContent="center"
-          position="relative"
-          padding="1rem"
+          spacing={4}
         >
-          <Box
-            width={"100%"}
-            display="grid"
-            gridTemplateColumns={{
-              base: "repeat(2, 1fr)",
-              sm: "repeat(3, 1fr)",
-              md: "repeat(5, 1fr)",
-              lg: "repeat(7, 1fr)",
-            }}
-            gap="10px"
-            padding="1rem"
+          <Heading
+            as="h2"
+            fontWeight="bold"
+            size="xl"
+            textAlign="center"
+            color="#f63c80"
+            marginBottom="0.5rem"
           >
-            {events.map((event, index) => (
+            Where’s the Party?{" "}
+            <span style={{ color: "#a23cf6" }}> Just Pick a City!</span>
+          </Heading>
+
+          <Text
+            fontWeight="medium"
+            fontSize="md"
+            color="#333"
+            textAlign="center"
+            maxW="600px"
+          >
+            Discover the hottest{" "}
+            <span style={{ color: "#f63c80", fontWeight: "light" }}>
+              {selectedCity}
+            </span>{" "}
+            Latin dance events from salsa socials to bachata nights, all
+            organized under one vibrant roof. Your rhythm starts here!
+          </Text>
+
+          <select
+            value={selectedCity}
+            onChange={(e) => setSelectedCity(e.target.value)}
+            style={{
+              marginTop: "16px",
+              padding: "12px 20px",
+              border: "2px solid #f63c80",
+              borderRadius: "10px",
+              backgroundColor: "#fff",
+              color: "#f63c80",
+              fontWeight: "600",
+              fontSize: "1rem",
+              cursor: "pointer",
+              outline: "none",
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              transition: "all 0.2s ease-in-out",
+            }}
+          >
+            {cities.map((city) => (
+              <option key={city} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
+          <Button
+            bg="#f63c7f"
+            color="white"
+            size="md"
+            borderRadius="5px"
+            px={6}
+            py={4}
+            fontWeight="bold"
+            boxShadow="md"
+            leftIcon={<CalendarIcon />}
+            _hover={{ bg: "#e12a6e", transform: "scale(1.05)" }}
+            _active={{ bg: "#c41f5f" }}
+            onClick={() => setShowPopup(true)}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Add to Calendar
+          </Button>
+          <Button onClick={() => setShowPopup(true)} colorScheme="pink">
+            Send Events to Email
+          </Button>
+
+          {showPopup && (
+            <Box
+              position="fixed"
+              top="0"
+              left="0"
+              width="100vw"
+              height="100vh"
+              backgroundColor="rgba(0, 0, 0, 0.5)"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              zIndex={1000}
+            >
               <Box
-                key={index}
-                border="1px solid #ccc"
-                // width="100px"
-                borderRadius="10px"
-                padding="14px"
-                backgroundColor="#ffffff"
-                boxShadow="0px 4px 6px rgba(0, 0, 0, 0.1)"
+                bg="white"
+                p={6}
+                borderRadius="md"
+                boxShadow="lg"
+                minW={{ base: "80%", md: "400px" }}
                 display="flex"
                 flexDirection="column"
-                justifyContent="space-between"
+                gap={4}
               >
-                <Heading
-                  as="h3"
-                  size="sm"
-                  textAlign="center"
-                  marginBottom="5px"
-                  color="#f63c80"
-                >
-                  Day {index + 1}
+                <Heading size="md" color="pink.500">
+                  Enter Email to Send Events
                 </Heading>
-                <VStack spacing="5px">
-                  <Box
-                    width="100%"
-                    padding="5px"
-                    border="1px solid #ddd"
-                    borderRadius="5px"
-                    textAlign="center"
-                    fontWeight="light"
-                    backgroundColor={
-                      index % 3 === 0
-                        ? "#f63c80"
-                        : index % 3 === 1
-                        ? "#a23cf6"
-                        : "#ff7c19"
-                    }
-                    color="white"
+                <input
+                  type="email"
+                  placeholder="Enter recipient email"
+                  value={toEmail}
+                  onChange={(e) => setToEmail(e.target.value)}
+                  style={{
+                    padding: "0.5rem",
+                    border: "1px solid #ccc",
+                    borderRadius: "5px",
+                    color: "black",
+                  }}
+                />
+                <HStack justifyContent="flex-end" mt={2}>
+                  <Button variant="ghost" onClick={() => setShowPopup(false)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    colorScheme="pink"
+                    isLoading={isSending}
+                    onClick={handleSend}
                   >
-                    {event}
-                  </Box>
-                </VStack>
+                    Send
+                  </Button>
+                </HStack>
               </Box>
-            ))}
-          </Box>
+            </Box>
+          )}
+        </HStack>
+      </Box>
+
+      <Box
+        width="70%"
+        background="linear-gradient(135deg, #a23cf6, #f63c80)"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        paddingY="2rem"
+        borderRadius="12px"
+        boxShadow="0 4px 16px rgba(0, 0, 0, 0.1)"
+        marginTop="1.5rem"
+      >
+        <HStack width="100%" justifyContent="center" alignItems="center">
+          <Heading
+            as="h2"
+            size="xl"
+            textAlign="center"
+            color="white"
+            fontWeight="extrabold"
+            letterSpacing="1px"
+          >
+            {selectedCity} in MAY !
+          </Heading>
+        </HStack>
+      </Box>
+
+      <Box bg="#f9f9f9" my={10} py={10} px={5}>
+        <Box
+          maxW="1200px"
+          mx="auto"
+          display="grid"
+          gridTemplateColumns={{
+            base: "repeat(2, 1fr)",
+            sm: "repeat(3, 1fr)",
+            md: "repeat(5, 1fr)",
+            lg: "repeat(7, 1fr)",
+          }}
+          gap={6}
+        >
+          {events.map((event, index) => (
+            <Box
+              key={index}
+              borderRadius="12px"
+              p={4}
+              bg="white"
+              boxShadow="md"
+              transition="transform 0.2s, box-shadow 0.2s"
+              _hover={{
+                transform: "translateY(-4px)",
+                boxShadow: "lg",
+              }}
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Heading
+                as="h3"
+                size="sm"
+                mb={3}
+                color="#f63c80"
+                fontWeight="bold"
+                textAlign="center"
+              >
+                Day {index + 1}
+              </Heading>
+
+              <Box
+                w="100%"
+                py={2}
+                px={3}
+                borderRadius="8px"
+                textAlign="center"
+                fontWeight="medium"
+                color="white"
+                bg={
+                  index % 3 === 0
+                    ? "#f63c80"
+                    : index % 3 === 1
+                    ? "#a23cf6"
+                    : "#ff7c19"
+                }
+              >
+                {event}
+              </Box>
+            </Box>
+          ))}
         </Box>
       </Box>
     </Box>

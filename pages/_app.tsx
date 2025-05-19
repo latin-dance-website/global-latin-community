@@ -7,6 +7,10 @@ import theme from "../theme/theme.js";
 import Fonts from "../theme/Fonts.jsx";
 import { StrictMode } from "react";
 import Head from "next/head.js";
+import "react-day-picker/dist/style.css";
+// import 'antd/dist/antd.css';
+// import "antd/dist/reset.css"; 
+
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (

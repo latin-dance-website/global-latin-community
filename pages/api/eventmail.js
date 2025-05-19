@@ -11,6 +11,8 @@ export default async function handler(req, res) {
 
   // Extract events from formData
   const { events } = formData;
+  console.log('evets',events);
+  
   
   if (!events || events.length === 0) {
     return res.status(400).json({ message: "No events data provided" });

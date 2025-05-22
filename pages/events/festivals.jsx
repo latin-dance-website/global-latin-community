@@ -9,17 +9,22 @@ import Map from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
 import { CalendarIcon } from "@chakra-ui/icons";
+import Caraousel from "../.././components/carousel";
 import {
   Box,
   Button,
   Heading,
   Image,
   Text,
+  InputLeftElement,
+  InputGroup,
+  Input,
+  Select,
   VStack,
   HStack,
   Divider,
 } from "@chakra-ui/react";
-import { FaCalendar, FaClock } from "react-icons/fa";
+import { FaCalendar, FaClock,FaSearch } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 
 import { google } from "googleapis";
@@ -119,163 +124,7 @@ export default function EventsPage({ dataByCity, cities }) {
       <LayerBlur2 />
       {/* <MarqueeComponent /> */}
 
-      <Box
-        minH={"fit"}
-        width="100%"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        position="relative"
-        padding="1rem"
-      >
-        <Box
-          width={"100%"}
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          position="relative"
-        >
-          <Box
-            display="flex"
-            overflowX="auto"
-            width="100%"
-            alignItems="center"
-            justifyContent="center"
-            css={{
-              "&::-webkit-scrollbar": {
-                display: "none",
-              },
-            }}
-            flexWrap={{ base: "wrap", md: "nowrap" }}
-          >
-            {[
-              {
-                id: 1,
-                title: "Music Festival",
-                details: "Enjoy live music and performances.",
-                location: "Central Park, NY",
-                dateTime: "June 25, 2023, 6:00 PM",
-                image:
-                  "https://images.unsplash.com/photo-1504609813442-a8924e83f76e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                buttonColor: "#f63c80",
-              },
-              {
-                id: 2,
-                title: "Food Festival",
-                details: "Taste delicious cuisines from around the world.",
-                location: "Downtown LA, CA",
-                dateTime: "July 10, 2023, 12:00 PM",
-                image:
-                  "https://images.unsplash.com/photo-1587403310983-968055703d5a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                buttonColor: "#a23cf6",
-              },
-              {
-                id: 3,
-                title: "Art Festival",
-                details: "Explore amazing art and creativity.",
-                location: "Art District, SF",
-                dateTime: "August 15, 2023, 10:00 AM",
-                image:
-                  "https://images.unsplash.com/photo-1593893197313-b05f4d012f8f?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                buttonColor: "#ff7c19",
-              },
-            ].map((event) => (
-              <Box
-                key={event.id}
-                flex="0 0 auto"
-                width={{ base: "90%", sm: "400px" }}
-                height={"auto"}
-                margin="10px"
-                display="flex"
-                flexDirection="column"
-                backgroundColor="#fff"
-                alignItems="center"
-                justifyContent="space-between"
-                border="1px solid #ccc"
-                borderRadius="10px"
-                overflow="hidden"
-                boxShadow="0px 4px 6px rgba(0, 0, 0, 0.1)"
-              >
-                <Box
-                  flex="0 0 auto"
-                  width="100%"
-                  height={"200px"}
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  borderRadius="5px"
-                  overflow="hidden"
-                >
-                  <Box flex="1" height={"100%"} padding={"6px"}>
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: "5px",
-                        objectFit: "cover",
-                      }}
-                      loading="lazy"
-                    />
-                  </Box>
-                  <Box
-                    flex="1"
-                    padding="10px"
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="space-between"
-                  >
-                    <Box>
-                      <h3 style={{ fontSize: "18px", fontWeight: "bold" }}>
-                        {event.title}
-                      </h3>
-                      <p style={{ fontSize: "14px", color: "#555" }}>
-                        {event.details}
-                      </p>
-                    </Box>
-                    <HStack>
-                      <FaCalendar color={event.buttonColor} />
-                      <Text fontSize="1rem">
-                        {event.dateTime.split(",")[0]}
-                      </Text>
-                    </HStack>
-                    <HStack>
-                      <FaClock color={event.buttonColor} />
-                      <Text fontSize="1rem">
-                        {event.dateTime.split(",")[1]}
-                      </Text>
-                    </HStack>
-                    <HStack>
-                      <FaLocationDot color={event.buttonColor} />
-                      <Text fontSize="1rem">{event.location}</Text>
-                    </HStack>
-                  </Box>
-                </Box>
-                <Box width="100%">
-                  <button
-                    style={{
-                      backgroundColor: event.buttonColor,
-                      color: "white",
-                      width: "100%",
-                      borderRadius: "5px",
-                      padding: "6px 15px",
-                      cursor: "pointer",
-                      fontSize: "14px",
-                    }}
-                    onClick={() => alert(`You clicked on ${event.title}`)}
-                  >
-                    Buy Now
-                  </button>
-                </Box>
-              </Box>
-            ))}
-          </Box>
-        </Box>
-      </Box>
+      <Caraousel/>
 
       <Box
         width="70%"
@@ -316,15 +165,12 @@ export default function EventsPage({ dataByCity, cities }) {
             textAlign="center"
             maxW="600px"
           >
-            Discover the hottest{" "}
-            <span style={{ color: "#f63c80", fontWeight: "light" }}>
-              {selectedCity}
-            </span>{" "}
-            Latin dance events from salsa socials to bachata nights, all
-            organized under one vibrant roof. Your rhythm starts here!
+            Discover the verified <br />
+            Global Latin Dance Events <br />
+            Salsa, Bachata, Kizomba & Zouk Nights <br />
           </Text>
 
-          <select
+         {/* <select
             value={selectedCity}
             onChange={(e) => setSelectedCity(e.target.value)}
             style={{
@@ -347,7 +193,36 @@ export default function EventsPage({ dataByCity, cities }) {
                 {city}
               </option>
             ))}
-          </select>
+          </select>*/}
+        <InputGroup maxW="200px">
+  <InputLeftElement pointerEvents="none">
+    <FaSearch color="#f63c80" />
+  </InputLeftElement>
+  <Select
+    value={selectedCity}
+    onChange={(e) => setSelectedCity(e.target.value)}
+    placeholder="" /* Placeholder removed */
+    border="2px solid #f63c80"
+    borderRadius="10px"
+    bg="white"
+    color="#f63c80"
+    fontWeight="600"
+    fontSize="1rem"
+    height="40px"
+    boxShadow="0 4px 10px rgba(0, 0, 0, 0.1)"
+    textAlign="center" /* Ensures proper alignment */
+    transition="all 0.2s ease-in-out"
+    _hover={{ borderColor: "#e12a6e" }}
+    _focus={{
+      borderColor: "#c41f5f",
+      boxShadow: "0 0 0 3px rgba(246, 60, 128, 0.3)",
+    }}
+  >
+    <option value="Bangalore">Bangalore, India</option>
+    <option value="Hanoi">Hanoi, Vietnam</option>
+  </Select>
+</InputGroup>
+
           <Button
             bg="#f63c7f"
             color="white"
@@ -363,7 +238,7 @@ export default function EventsPage({ dataByCity, cities }) {
             onClick={() => setShowPopup(true)}
             className="bg-blue-500 text-white px-4 py-2 rounded"
           >
-            Add to Calendar
+            Set Travel Dates
           </Button>
           <Button onClick={() => setShowPopup(true)} colorScheme="pink">
             Send Events to Email

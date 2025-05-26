@@ -123,8 +123,11 @@ export default function AutoCarousel() {
       {/* Carousel Content */}
       <Box
         ref={scrollRef}
+        mx={"1.5rem"}
+        mt="8px"
         display="flex"
-        overflowX="scroll"
+        overflow="clip"
+        borderRadius={"15px"}
         scrollSnapType="x mandatory"
         css={{
           "&::-webkit-scrollbar": { display: "none" },
@@ -139,8 +142,7 @@ export default function AutoCarousel() {
           >
             <Box
               mx={2}
-              mt={-2}
-              borderRadius="10px"
+              borderRadius="20px"
               overflow="hidden"
               boxShadow="lg"
               bg="white"
@@ -198,7 +200,7 @@ export default function AutoCarousel() {
       <HStack justify="center">
         {events.map((_, idx) => (
           <Box
-            mt={0}
+            mt = {{ sm: "2", base: "-3" }}
             key={idx}
             w={index === idx ? "12px" : "8px"}
             h={index === idx ? "12px" : "8px"}

@@ -42,7 +42,7 @@ import Map from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Caraousel from "../.././components/carousel";
 import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
-import { CalendarIcon } from "@chakra-ui/icons";
+import { CalendarIcon, ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -52,6 +52,7 @@ import {
   Image,
   Grid,
   InputGroup,
+  IconButton,
   InputLeftElement,
   useColorModeValue,
   Select,
@@ -74,6 +75,7 @@ import {
   chakra,
   Popover,
 } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { FaCalendar, FaClock, FaSearch, FaWhatsapp } from "react-icons/fa";
 
 import { DatePickerWithRange } from "../.././components/DatePicker";
@@ -119,51 +121,126 @@ export async function getServerSideProps() {
   };
 }
 
-const HourlyCalendar = ({ eventHour }) => {
-  const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+const HourlyCalendar = ({eventHour}) => {
+  // const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
 
-  useEffect(() => {
-    const el = document.getElementById(`hour-${eventHour}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
+  // useEffect(() => {
+  //   const el = document.getElementById(`hour-${eventHour}`);
+  //   if (el) {
+  //     el.scrollIntoView({ behavior: "smooth", block: "center" });
+  //   }
+  // }, [eventHour]);
+
+  const scrollRef = useRef(null);
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const container = scrollRef.current;
+      const padding = 32;
+      const scrollAmount = container.clientWidth + padding;
+
+      container.scrollBy({
+        left: direction === "right" ? scrollAmount : -scrollAmount,
+        behavior: "smooth",
+      })
     }
-  }, [eventHour]);
+  };
+
 
   return (
     <Box display={{ base: "block", md: "none" }}>
-      <Text fontWeight="bold" fontSize="sm" mb={2}>
-        Hourly View
-      </Text>
-      <Box
-        maxH="300px"
-        overflowY="auto"
-        border="1px solid #eee"
-        borderRadius="md"
-        p={2}
-        bg="gray.50"
-      >
-        {Array.from({ length: 24 }, (_, idx) => (
-          <Box
-            key={idx}
-            id={`hour-${idx}`}
-            h="50px"
-            px={4}
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            borderBottom="1px solid #ddd"
-            bg={eventHour === idx ? "orange.100" : "white"}
-          >
-            <Text fontSize="sm">{`${idx}:00`}</Text>
-            {eventHour === idx && (
-              <Text fontSize="xs" color="orange.600" fontWeight="bold">
-                Event
-              </Text>
-            )}
+    <Text fontWeight="bold" fontSize="sm" mb={2}>
+      Hourly Timings
+    </Text>
+
+    {/* Horizontal carousel wrapper */}
+    <Box position="relative">
+        {/* Arrows */}
+        <IconButton
+          aria-label="Scroll left"
+          icon={<ArrowBackIcon />}
+          position="absolute"
+          left={-5}
+          top="50%"
+          transform="translateY(-50%)"
+          zIndex={1}
+          size="sm"
+          onClick={() => scroll("left")}
+        />
+        <IconButton
+          aria-label="Scroll right"
+          icon={<ArrowForwardIcon />}
+          position="absolute"
+          right={-5}
+          top="50%"
+          transform="translateY(-50%)"
+          zIndex={1}
+          size="sm"
+          onClick={() => scroll("right")}
+        />
+
+        {/* Scrollable container */}
+        <Box
+          ref={scrollRef}
+          maxH="300px"
+          overflowX="auto"
+          whiteSpace="nowrap"
+          border="1px solid #eee"
+          borderRadius="md"
+          bg="gray.50"
+          scrollBehavior="smooth"
+        >
+          <Box display="flex" gap={4}>
+            {/* Slide 1 */}
+            <Box minW="100%">
+              {Array.from({ length: 5 }, (_, idx) => (
+                <Box
+                  key={idx}
+                  h="50px"
+                  px={4}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  borderBottom="1px solid #ddd"
+                  bg={eventHour === idx ? "orange.100" : "white"}
+                >
+                  <Text fontSize="sm">{`${idx}:00`}</Text>
+                  {eventHour === idx && (
+                    <Text fontSize="xs" color="orange.600" fontWeight="bold">
+                      Event
+                    </Text>
+                  )}
+                </Box>
+              ))}
+            </Box>
+
+            {/* Slide 2 */}
+            <Box minW="100%">
+              {Array.from({ length: 5 }, (_, idx) => (
+                <Box
+                  key={idx + 5}
+                  h="50px"
+                  px={4}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  borderBottom="1px solid #ddd"
+                  bg={eventHour === idx + 5 ? "orange.100" : "white"}
+                >
+                  <Text fontSize="sm">{`${idx + 5}:00`}</Text>
+                  {eventHour === idx + 5 && (
+                    <Text fontSize="xs" color="orange.600" fontWeight="bold">
+                      Event
+                    </Text>
+                  )}
+                </Box>
+              ))}
+            </Box>
           </Box>
-        ))}
+        </Box>
       </Box>
-    </Box>
+  </Box>
+
   );
 };
 
@@ -250,6 +327,17 @@ export default function EventsPage({ dataByCity, cities }) {
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState("");
 
+  const blinkColorSwap = keyframes`
+    0%, 100% {
+      color: #f63c80;
+      background-color: white;
+    }
+    50% {
+      color: white;
+      background-color: #f63c80;
+    }
+  `;
+
   const events = dataByCity[selectedCity] || [];
   console.log("selected city", selectedCity);
 
@@ -279,14 +367,14 @@ export default function EventsPage({ dataByCity, cities }) {
         justifyContent="center"
         borderRadius="12px"
         boxShadow="0 6px 20px rgba(0, 0, 0, 0.6)"
-        py="24px"
+        py="10px"
         mt="10px"
       >
         <HStack
           width="100%"
           justifyContent="center"
           flexDirection="column"
-          spacing={4}
+          spacing={1}
         >
           <Heading
             as="h2"
@@ -295,7 +383,7 @@ export default function EventsPage({ dataByCity, cities }) {
             textAlign="center"
             color="#f63c80"
           >
-            <p className="m-6">Where’s The Party?</p>
+            Where’s The Party?
           </Heading>
 
           <Heading as="h3" size="md" color="#a23cf6">
@@ -317,16 +405,17 @@ export default function EventsPage({ dataByCity, cities }) {
 
           <Flex
             mt="16px"
-            mr={{ base: "0", md: "10px" }}
+            mr={{ base: "0", md: "0" }}
             justify="center"
             align="center"
             gap="12px"
             wrap="wrap"
             direction={{ base: "column", md: "row" }} // stack vertically on mobile
           >
-            <Box width="100%">
-              <InputGroup width={{ base: "95%", md: "200px" }}>
-                <InputLeftElement pointerEvents="none">
+            <Box width="100%" display={"flex"} justifyContent={"center"}>
+              <InputGroup width={{ base: "100%", md: "200px" }} mt="-1">
+                <InputLeftElement pointerEvents="none"
+                >
                   {/* <span>
                   <FaSearch color="#f63c80" />
                 </span> */}
@@ -343,12 +432,14 @@ export default function EventsPage({ dataByCity, cities }) {
                   fontWeight="600"
                   fontSize="1rem"
                   boxShadow="sm"
-                  mr={3}
                   transition="all 0.2s ease"
                   _hover={{ borderColor: "#e12a6e" }}
                   _focus={{
                     borderColor: "#c41f5f",
                     boxShadow: "0 0 0 3px rgba(246, 60, 128, 0.3)",
+                  }}
+                  sx={{
+                    animation: `${blinkColorSwap} 1.5s infinite`,
                   }}
                 >
                   <option value="Vietnam">Bangalore, India</option>
@@ -672,15 +763,13 @@ export default function EventsPage({ dataByCity, cities }) {
                 <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
                   <ModalOverlay />
                   <ModalContent borderRadius="16px" p={2}>
-                    <ModalHeader>Day 1 Schedule</ModalHeader>
-                    <ModalCloseButton />
-
+                    <ModalHeader bg="pink.100" borderRadius={"10px"}>Day 1 Schedule</ModalHeader>
+                    <ModalCloseButton/>
                     <ModalBody>
                       <Stack spacing={16}>
                         {isMobile && (
                           <HourlyCalendar eventHour={5} /> // 6 PM = hour 18
                         )}
-                        <Box>
                           {/* <Box display={{ base: "block", md: "none" }}>
                             <Text fontWeight="bold" fontSize="sm" mb={2}>
                               Hourly View
@@ -720,16 +809,8 @@ export default function EventsPage({ dataByCity, cities }) {
                             </Box>
                           </Box> */}
 
-                          <Image
-                            src="/assets/images/hero.jpg"
-                            alt="Salsa dance"
-                            borderRadius="md"
-                            w="full"
-                            h="250px"
-                            objectFit="fill"
-                          />
-
-                          <Box mt={4}>
+                        <Box bg="gray.200" p={4} py={4} pt="6" borderRadius={"15px"}>
+                          <Box>
                             <Heading size="sm" mb={1}>
                               Salsa dance class
                             </Heading>
@@ -738,7 +819,6 @@ export default function EventsPage({ dataByCity, cities }) {
                               it teach or some two-line description.
                             </Text>
                           </Box>
-
                           <Box
                             display="flex"
                             alignItems="center"
@@ -756,23 +836,20 @@ export default function EventsPage({ dataByCity, cities }) {
                             <Text>Free</Text>
                           </Box>
 
-                          <Box display="flex" gap={2}>
+                          <Box display="flex" gap={2} mb="1.5rem">
                             <Text fontWeight="semibold">Location:</Text>
                             <Text>Cubbon Park</Text>
                           </Box>
+                          <Button
+                            colorScheme="orange"
+                            onClick={() => router.push("/events/social")}
+                            float={"right"}
+                          >
+                            Book Now
+                          </Button>
                         </Box>
                       </Stack>
                     </ModalBody>
-
-                    <ModalFooter>
-                      <Button
-                        colorScheme="orange"
-                        mr={3}
-                        onClick={() => router.push("/events/social")}
-                      >
-                        Book Now
-                      </Button>
-                    </ModalFooter>
                   </ModalContent>
                 </Modal>
               </>

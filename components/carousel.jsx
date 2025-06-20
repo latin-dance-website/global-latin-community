@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from "react";
 const events = [
   {
     id: 1,
-    title: "Music Festival",
+    title: "100% Bachata Social Night",
     details: "Enjoy live music and performances.",
     location: "Central Park, NY",
     dateTime: "June 25, 2023, 6:00 PM",
@@ -123,7 +123,7 @@ export default function AutoCarousel() {
       {/* Carousel Content */}
       <Box
         ref={scrollRef}
-        mx={"1.5rem"}
+        mx={{base: "2.5rem", md:"4rem"}}
         mt="8px"
         display="flex"
         overflow="clip"
@@ -157,12 +157,12 @@ export default function AutoCarousel() {
                 />
               </Box>
               <Box p={4}>
-                <Text fontWeight="bold" fontSize="xl">
+                <Text fontWeight="bold" fontSize="lg">
                   {event.title}
                 </Text>
-                <Text fontSize="md" mb={2}>
+                {/* <Text fontSize="md" mb={2}>
                   {event.details}
-                </Text>
+                </Text> */}
                 <HStack>
                   <FaCalendar color={event.buttonColor} />
                   <Text fontSize="sm">{event.dateTime.split(",")[0]}</Text>
@@ -200,7 +200,7 @@ export default function AutoCarousel() {
       <HStack justify="center">
         {events.map((_, idx) => (
           <Box
-            mt = {{ sm: "2", base: "-3" }}
+            mt = {{ sm: "2", base: "1" }}
             key={idx}
             w={index === idx ? "12px" : "8px"}
             h={index === idx ? "12px" : "8px"}

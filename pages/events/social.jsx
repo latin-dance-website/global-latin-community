@@ -21,6 +21,147 @@ import { useState } from "react";
 export default function Social() {
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [isToastVisible, setIsToastVisible] = useState(false);
+  const events = [
+  {
+    id: "bliss-thursdays",
+    eventType:"SBK Night",
+    ticketClass: "Early Bird Ticket",
+    tickets: [
+      { name: "Single", amount: 4000 },
+      { name: "Couple", amount: 7500 },
+    ],
+    title: "Bachata Bliss Thursdays",
+    dates: [
+      "21st March, 2025: 8PM to 10PM",
+    ],
+    about: () => (
+      <Box>
+        <Text fontSize="1.5rem" fontWeight="600" fontFamily={"montserrat"}>
+          About
+        </Text>
+        <Text
+          fontSize="1rem"
+          fontFamily={"montserrat"}
+          marginBottom={"0.5rem"}
+        >
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        </Text>
+        <Text
+          fontSize="1rem"
+          fontFamily={"montserrat"}
+          marginBottom={"0.5rem"}
+        >
+           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        </Text>
+        <Text
+          fontSize="1.2rem"
+          fontFamily={"montserrat"}
+          marginBottom={"0.5rem"}
+          fontWeight="500"
+        >
+          ✨ What to expect?
+        </Text>
+        <Text
+          fontSize="1rem"
+          fontFamily={"montserrat"}
+          marginBottom={"0.2rem"}
+        >
+          1. Partner Work & Fundamentals
+        </Text>
+        <Text fontSize="0.8rem" fontFamily={"montserrat"}>
+          {" "}
+          - Resistance and connection
+        </Text>
+        <Text fontSize="0.8rem" fontFamily={"montserrat"}>
+          {" "}
+          - Changing instruments individually and with a partner
+        </Text>
+        <Text
+          fontSize="0.8rem"
+          fontFamily={"montserrat"}
+          marginBottom={"0.5rem"}
+        >
+          {" "}
+          - Expanding footwork vocabulary
+        </Text>
+        <Text
+          fontSize="1rem"
+          fontFamily={"montserrat"}
+          marginBottom={"0.2rem"}
+        >
+          2. Musicality & Modern Dance Understanding
+        </Text>
+        <Text fontSize="0.8rem" fontFamily={"montserrat"}>
+          {" "}
+          - Exploring modern songs and their musical differences
+        </Text>
+        <Text fontSize="0.8rem" fontFamily={"montserrat"}>
+          {" "}
+          - Incorporating turns and upper body movement
+        </Text>
+        <Text
+          fontSize="1rem"
+          fontFamily={"montserrat"}
+          marginBottom={"0.2rem"}
+        >
+          3. Turns & Technique Drills
+        </Text>
+        <Text fontSize="0.8rem" fontFamily={"montserrat"}>
+          {" "}
+          - Teaching all basic turns (lead & follow)
+        </Text>
+        <Text fontSize="0.8rem" fontFamily={"montserrat"}>
+          {" "}
+          - Cross-over turns, hammerlock, cross grip, haircombs, flicks
+        </Text>
+        <Text
+          fontSize="0.8rem"
+          fontFamily={"montserrat"}
+          marginBottom={"0.5rem"}
+        >
+          {" "}
+          - Grip changes, preparation, timing, resistance, balance
+        </Text>
+        <Text
+          fontSize="1rem"
+          fontFamily={"montserrat"}
+          marginBottom={"0.2rem"}
+        >
+          4. Practice & Creative Application
+        </Text>
+        <Text fontSize="0.8rem" fontFamily={"montserrat"}>
+          {" "}
+          - Intensive drills to internalize techniques
+        </Text>
+        <Text
+          fontSize="0.8rem"
+          fontFamily={"montserrat"}
+          marginBottom={"0.5rem"}
+        >
+          {" "}
+          - Applying learned movements creatively to music
+        </Text>
+        <Text
+          fontSize="1rem"
+          fontFamily={"montserrat"}
+          marginBottom={"0.5rem"}
+        >
+          Share with your partner & let’s level up together! 💯🔥
+        </Text>
+        <Text fontSize="1rem" fontFamily={"montserrat"} color="blue.300">
+          #BachataPartnerwork #BangaloreLatinEvents #AmandaAndRishabh
+          #BachataWorkshop #DhuriiBangalore #bachataintensive
+        </Text>
+      </Box>
+    ),
+    terms: ["The ticket is non - refundable"],
+    venue: "Karma & Kurry, Garuda Mall",
+    subAddress: "4th Floor, Magrath road, Garuda Mall Rd, Bengaluru, Karnataka 560001",
+    googleMapsLink: "https://maps.app.goo.gl/WcGRLCwbbuXe7ErM6?g_st=iw",
+    iframeLink:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3695.857219532653!2d77.6388245!3d12.9562128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae153e2e11cd31%3A0x302df0f97fe220b9!2sDhurii%20Academy%20of%20Arts!5e1!3m2!1sen!2sin!4v1741606142543!5m2!1sen!2sin",
+    }
+  ];
 
   return (
     <Box

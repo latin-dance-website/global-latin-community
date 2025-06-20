@@ -38,6 +38,81 @@ body {
   animation-delay: 2s;
 }
 
+.custom-range-picker .ant-picker-input > input::placeholder {
+  color: #76172c !important;
+  opacity: 1 !important;
+  font-weight: 600;
+}
+
+.custom-range-picker{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  transition: width 2s ease, border-radius 0.4s ease;
+}
+
+.custom-range-picker.range-selected{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  z-index: 100;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  cursor: pointer;
+}
+
+.ant-picker:focus-within .ant-picker-clear{
+  opacity: 1;
+}
+
+@media (max-width: 504px) {
+  .custom-range-picker:hover {
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    z-index: 100;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    cursor: pointer;
+  }
+
+  .custom-range-picker:focus-within {
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    z-index: 100;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    cursor: pointer;
+  }
+}
+
+/* .custom-range-picker .ant-picker-panels {
+  flex-direction: column !important;
+}
+
+.custom-range-picker .ant-picker-panels > *:not(:first-child) {
+  display: none !important;
+} */
+
+@media (max-width: 768px) {
+  .ant-picker-panels {
+    display:flex;
+    flex-direction: column !important;
+  }
+}
+
+.ant-picker-suffix {
+  display: none !important;
+}
+
+/* .custom-range-picker .ant-picker-panels > *:nth-child(2) {
+  display: none !important;
+} */
+
+
 @keyframes blobanimation {
   0% {
     transform: translate(0px, 0px) scale(1);

@@ -40,9 +40,11 @@ import Map from "react-map-gl/mapbox";
 // If using with mapbox-gl v1:
 // import Map from 'react-map-gl/mapbox-legacy';
 import "mapbox-gl/dist/mapbox-gl.css";
+import dayjs from "dayjs";
 import Caraousel from "../.././components/carousel";
 import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
 import { CalendarIcon, ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
+import { CalendarOutlined } from '@ant-design/icons';
 import {
   Box,
   Button,
@@ -76,6 +78,8 @@ import {
   Popover,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
+import 'react-phone-input-2/lib/style.css';
+import PhoneInput from 'react-phone-input-2';
 import { FaCalendar, FaClock, FaSearch, FaWhatsapp } from "react-icons/fa";
 
 import { DatePickerWithRange } from "../.././components/DatePicker";
@@ -83,6 +87,7 @@ import { DatePickerWithRange } from "../.././components/DatePicker";
 import { DatePicker, Space, Modal as modal } from "antd";
 
 import { google } from "googleapis";
+import { FaLocationDot } from "react-icons/fa6";
 
 export async function getServerSideProps() {
   const auth = await google.auth.getClient({
@@ -149,7 +154,7 @@ const HourlyCalendar = ({eventHour}) => {
 
   return (
     <Box display={{ base: "block", md: "none" }}>
-    <Text fontWeight="bold" fontSize="sm" mb={2}>
+    <Text fontWeight="bold" fontSize="sm" align="center" mb={2}>
       Hourly Timings
     </Text>
 
@@ -160,10 +165,17 @@ const HourlyCalendar = ({eventHour}) => {
           aria-label="Scroll left"
           icon={<ArrowBackIcon />}
           position="absolute"
-          left={-5}
+          bg="#fc658b"
+          _hover={{ bg: "#fc658b" }}
+          _active={{ bg: "#fc658b", borderColor: "#fc658b" }}
+          _focus={{ boxShadow: "none", bg: "#fc658b" }}
+          borderRadius="50%"
+          color="white"
+          left={-3}
           top="50%"
           transform="translateY(-50%)"
           zIndex={1}
+          border="1px solid #fc658b"
           size="sm"
           onClick={() => scroll("left")}
         />
@@ -171,22 +183,31 @@ const HourlyCalendar = ({eventHour}) => {
           aria-label="Scroll right"
           icon={<ArrowForwardIcon />}
           position="absolute"
-          right={-5}
+          right={-3}
+          borderRadius="50%"
+          bg="#fc658b"
+          _hover={{ bg: "#fc658b" }}
+          _active={{ bg: "#fc658b", borderColor: "#fc658b" }}
+          _focus={{ boxShadow: "none", bg: "#fc658b" }}
+          color="white"
           top="50%"
           transform="translateY(-50%)"
           zIndex={1}
+          border="1px solid #fc658b"
           size="sm"
           onClick={() => scroll("right")}
         />
 
         {/* Scrollable container */}
         <Box
+          mx="2rem"
           ref={scrollRef}
           maxH="300px"
           overflowX="auto"
           whiteSpace="nowrap"
           border="1px solid #eee"
           borderRadius="md"
+          boxShadow={"-25px 25px 50px -12px rgba(0, 0, 0, 0.25)"}
           bg="gray.50"
           scrollBehavior="smooth"
         >
@@ -196,19 +217,25 @@ const HourlyCalendar = ({eventHour}) => {
               {Array.from({ length: 5 }, (_, idx) => (
                 <Box
                   key={idx}
-                  h="50px"
+                  h={"55px"}
                   px={4}
                   display="flex"
                   alignItems="center"
                   justifyContent="space-between"
                   borderBottom="1px solid #ddd"
-                  bg={eventHour === idx ? "orange.100" : "white"}
+                  color = {eventHour === idx ? "white" : idx%2 === 0 ? "black" : "white"}
+                  bg={eventHour === idx ? "#9E0232" : idx%2 === 0 ? "#FFE5EC" : "#FB6F92"}
                 >
                   <Text fontSize="sm">{`${idx}:00`}</Text>
                   {eventHour === idx && (
-                    <Text fontSize="xs" color="orange.600" fontWeight="bold">
-                      Event
-                    </Text>
+                    <Box display={"flex"} flexDirection={"column"} alignItems="center">
+                      <Text fontSize="xs" color="white" fontWeight="bold">
+                        Event
+                      </Text>
+                      <Text fontSize="xs" bg="#800128" borderRadius="10px" mt="5px" p="0.5rem" color="white" fontWeight="bold">
+                        Buy Now
+                      </Text>
+                    </Box>
                   )}
                 </Box>
               ))}
@@ -219,19 +246,25 @@ const HourlyCalendar = ({eventHour}) => {
               {Array.from({ length: 5 }, (_, idx) => (
                 <Box
                   key={idx + 5}
-                  h="50px"
+                  h={eventHour === idx + 5 ? "75px" : "50px"}
                   px={4}
                   display="flex"
                   alignItems="center"
                   justifyContent="space-between"
                   borderBottom="1px solid #ddd"
-                  bg={eventHour === idx + 5 ? "orange.100" : "white"}
+                  color = {eventHour === idx + 5 ? "white" : idx%2 === 0 ? "black" : "white"}
+                  bg={eventHour === idx + 5 ? "#9E0232" : idx%2 === 0 ? "#FFE5EC" : "#FB6F92"}
                 >
                   <Text fontSize="sm">{`${idx + 5}:00`}</Text>
                   {eventHour === idx + 5 && (
-                    <Text fontSize="xs" color="orange.600" fontWeight="bold">
-                      Event
-                    </Text>
+                    <Box display={"flex"} flexDirection={"column"} alignItems="center">
+                      <Text fontSize="xs" color="white" fontWeight="bold">
+                        Event
+                      </Text>
+                      <Text fontSize="xs" bg="#800128" borderRadius="10px" mt="5px" p="0.5rem" color="white" fontWeight="bold" onClick={() => router.push("/events/social")}>
+                        Buy Now
+                      </Text>
+                    </Box>
                   )}
                 </Box>
               ))}
@@ -249,33 +282,33 @@ const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export default function EventsPage({ dataByCity, cities }) {
   const [showPopup, setShowPopup] = useState(false);
   const [toEmail, setToEmail] = useState("");
-  const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [instagramId, setInstagramId] = useState("");
   const [isSending, setIsSending] = useState(false);
   const stripeColor = useColorModeValue("#f63c80", "#e53e3e");
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const inputWidth = useBreakpointValue({ base: "100%", md: "200px" });
-  const [isDateOpen, setIsDateOpen] = useState(false);
+  // const inputWidth = useBreakpointValue({ base: "100%", md: "200px" });
+  // const [isDateOpen, setIsDateOpen] = useState(false);
 
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const initialFocusRef = useRef();
+  // const [isOpenModal, setIsOpenModal] = useState(false);
+  // const initialFocusRef = useRef();
   const { RangePicker } = DatePicker;
-  const triggerRef = useRef();
-  const [range, setRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
-  const rangePickerRef = useRef(null);
+  // const triggerRef = useRef();
+  // const [range, setRange] = useState([
+  //   {
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //     key: "selection",
+  //   },
+  // ]);
+  // const rangePickerRef = useRef(null);
 
-  const handleOpenCalendar = () => {
-    const input = rangePickerRef.current?.input;
-    if (input) {
-      input.click(); // this will open the calendar popup
-    }
-  };
+  // const handleOpenCalendar = () => {
+  //   const input = rangePickerRef.current?.input;
+  //   if (input) {
+  //     input.click(); // this will open the calendar popup
+  //   }
+  // };
 
   // const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
 
@@ -325,7 +358,21 @@ export default function EventsPage({ dataByCity, cities }) {
   };
 
   const [isToastVisible, setIsToastVisible] = useState(false);
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState("the selected city");
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [isBothDatesSelected, setIsBothDatesSelected] = useState(false)
+  const [dates, setDates] = useState([]);
+
+  const handleDateChange = (values) => {
+    setDates(values);
+  };
+
+  useEffect(() => {
+    setIsBothDatesSelected(prev => {
+      return (dates && dates.length === 2 && dates[0] && dates[1] && dayjs(dates[0]).isValid() && dayjs(dates[1]).isValid());
+    })
+  }, [dates])
+
 
   const blinkColorSwap = keyframes`
     0%, 100% {
@@ -360,14 +407,17 @@ export default function EventsPage({ dataByCity, cities }) {
       <Caraousel />
 
       <Box
-        width="95%"
+        width="90%"
         display="flex"
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
         borderRadius="12px"
-        boxShadow="0 6px 20px rgba(0, 0, 0, 0.6)"
+        bg="white"
+        boxShadow={"xl"}
+        border="1px solid pink"
         py="10px"
+        px="1rem"
         mt="10px"
       >
         <HStack
@@ -375,11 +425,11 @@ export default function EventsPage({ dataByCity, cities }) {
           justifyContent="center"
           flexDirection="column"
           spacing={1}
+          mb="1rem"
         >
           <Heading
-            as="h2"
+            fontSize="2xl"
             fontWeight="bold"
-            size="xl"
             textAlign="center"
             color="#f63c80"
           >
@@ -396,6 +446,7 @@ export default function EventsPage({ dataByCity, cities }) {
             color="#333"
             textAlign="center"
             maxW="600px"
+            px="1rem"
           >
             Discover the verified <br />
             Global Latin Dance Events <br />
@@ -409,21 +460,25 @@ export default function EventsPage({ dataByCity, cities }) {
             justify="center"
             align="center"
             gap="12px"
+            width="100%"
             wrap="wrap"
+            px={{base:"0rem", md:"1rem"}}
             direction={{ base: "column", md: "row" }} // stack vertically on mobile
           >
-            <Box width="100%" display={"flex"} justifyContent={"center"}>
-              <InputGroup width={{ base: "100%", md: "200px" }} mt="-1">
-                <InputLeftElement pointerEvents="none"
-                >
-                  {/* <span>
-                  <FaSearch color="#f63c80" />
-                </span> */}
-                </InputLeftElement>
-
+            <Box width="100%" display="flex" height="40px" justifyContent={"center"} alignItems={"center"}>
+              <FaLocationDot color="#f63c80" size="25" paddingBottom="20px"/>
+              <InputGroup width={{ base: "90%", md: "200px" }} mt="-1">
                 <Select
                   value={selectedCity}
                   onChange={(e) => setSelectedCity(e.target.value)}
+                  mx="0.5rem"
+                  onFocus= {
+                    () => {
+                      if(!hasInteracted){
+                        setHasInteracted(true);
+                      }
+                    }
+                  }
                   placeholder="Select a city"
                   border="1px solid #f63c80"
                   borderRadius="10px"
@@ -433,19 +488,22 @@ export default function EventsPage({ dataByCity, cities }) {
                   fontSize="1rem"
                   boxShadow="sm"
                   transition="all 0.2s ease"
-                  _hover={{ borderColor: "#e12a6e" }}
+                  _hover={{ borderColor: "#e12a6e", pointer: "cursor" }}
                   _focus={{
                     borderColor: "#c41f5f",
                     boxShadow: "0 0 0 3px rgba(246, 60, 128, 0.3)",
                   }}
                   sx={{
-                    animation: `${blinkColorSwap} 1.5s infinite`,
+                    animation: !hasInteracted ? `${blinkColorSwap} 1.5s infinite` : "none",
                   }}
                 >
-                  <option value="Vietnam">Bangalore, India</option>
-                  <option value="Bangalore">Hanoi, Vietnam</option>
+                  <option value="Bangalore">Bangalore, India</option>
+                  <option value="Vietnam">Hanoi, Vietnam</option>
+                  <option value="Bangkok">Bangkok, Thailand</option>
                 </Select>
-
+              </InputGroup>
+            </Box>
+            
                 {/* <Modal isOpen={isOpen} onClose={onClose} isCentered>
               <ModalOverlay />
               <ModalContent>
@@ -524,36 +582,38 @@ export default function EventsPage({ dataByCity, cities }) {
                   />
               </Box>
             )} */}
-              </InputGroup>
-              {/* <Button
-                border="1px solid #f63c80"
-                borderRadius="10px"
-                bg="white"
-                color="#f63c80"
-                width={60}
-                onClick={() => setIsOpenModal(!isDateOpen)}
-              >
-                Set Travel Dates
-              </Button> */}
-            </Box>
+            {/* <Button
+              border="1px solid #f63c80"
+              borderRadius="10px"
+              bg="white"
+              color="#f63c80"
+              width={60}
+              onClick={() => setIsOpenModal(!isDateOpen)}
+            >
+              Set Travel Dates
+            </Button> */}
 
-            <Box width="90%">
+            <Flex align="center" width={{ base: "100%", md: "500px" }} textColor="black" position="relative">
+              <Text fontWeight="semibold" p="4.5px" pb="3.5px" color="white" whiteSpace="nowrap" bg="#f279a6" borderTopLeftRadius="5px" pl="8px" borderBottomLeftRadius="5px" zIndex={1}
+                _hover={{ cursor: "pointer"}}
+              >Set Travel Dates</Text>
               <RangePicker
-                block
-                format="yyyy-MM-dd"
-                placeholder="Start date → End date"
-                style={{ width: "100%" }}
-                placement="bottomLeft" // or "bottomRight" or try custom placement
-                direction="vertical" // if supported (antd v5+)
+                className={`custom-range-picker ${isBothDatesSelected ? "range-selected" : ""}`}
+                format="YYYY-MM-DD"
+                _hover={{ cursor: "pointer"}}
+                placeholder={["Start", "End"]}
+                style={{ flex: 1, border: "1px solid #f279a6", color: "#76172c" }}
+                placement="bottomLeft"
+                onChange={handleDateChange}
               />
-            </Box>
+            </Flex>
             <Box>
               <Button
                 onClick={() => setShowPopup(true)}
                 bg="#f63c80"
                 color="white"
-                px={6}
-                py={2}
+                // px={6}
+                // py={2}
                 borderRadius="8px"
                 fontWeight="600"
                 boxShadow="md"
@@ -569,8 +629,8 @@ export default function EventsPage({ dataByCity, cities }) {
               </Button>
             </Box>
           </Flex>
-
-          {/* Popup */}
+        </HStack>
+        {/* Popup */}
           {showPopup && (
             <Box
               position="fixed"
@@ -578,7 +638,7 @@ export default function EventsPage({ dataByCity, cities }) {
               left="0"
               width="100vw"
               height="100vh"
-              backgroundColor="rgba(0, 0, 0, 0.5)"
+              backgroundColor="rgba(0, 0, 0, 0.9)"
               display="flex"
               justifyContent="center"
               alignItems="center"
@@ -587,66 +647,78 @@ export default function EventsPage({ dataByCity, cities }) {
               <Box
                 bg="white"
                 p={6}
-                borderRadius="md"
                 boxShadow="lg"
-                minW={{ base: "80%", md: "400px" }}
+                w={{ base: "90%", sm: "400px" }}
                 display="flex"
                 flexDirection="column"
                 gap={4}
               >
                 <Text
-                  fontSize="xl"
+                  fontSize={{ base: "lg" , sm: "xl"}}
                   fontWeight="bold"
                   color="pink.500"
                   size="md"
+                  textAlign={"center"}
                 >
-                  Hey, Hope you have a great time in xxx (city name).
+                  Hey, Hope you have a great time in {selectedCity}.
                 </Text>
 
                 {/* Email Input */}
                 <input
                   type="email"
-                  placeholder="Enter recipient email"
+                  placeholder="Enter your email..."
                   value={toEmail}
                   onChange={(e) => setToEmail(e.target.value)}
+                  required
                   style={{
                     padding: "0.5rem",
-                    border: "1px solid #ccc",
-                    borderRadius: "5px",
+                    pr: "1rem",
+                    border: "1px solid black",
+                    borderRadius: "20px",
                     color: "black",
+                    paddingLeft: "1rem"
                   }}
                 />
 
-                {/* WhatsApp Input */}
-                <input
-                  type="tel"
-                  placeholder="WhatsApp number (with country code)"
-                  value={whatsappNumber}
-                  onChange={(e) => setWhatsappNumber(e.target.value)}
-                  style={{
-                    padding: "0.5rem",
-                    border: "1px solid #ccc",
-                    borderRadius: "5px",
-                    color: "black",
+                {/* Phone Number Input */}
+                <PhoneInput
+                  country={'in'} // default country
+                  value={phoneNumber}
+                  onChange={setPhoneNumber}
+                  inputStyle={{
+                    width: '100%',
+                    borderRadius: '20px',
+                    border: '1px solid black',
+                    paddingLeft: '3rem',
+                    color: 'black',
                   }}
+                  buttonStyle={{
+                    // borderRadius: '5px 0 0 5px',
+                    // overflow:"hidden",
+                    border: '1px solid black',
+                    // backgroundColor: '#c4c3c0',
+                  }}
+                  placeholder="Phone number"
                 />
 
                 {/* Instagram ID Input */}
                 <input
                   type="text"
-                  placeholder="Instagram handle (without @)"
+                  placeholder="Enter Instagram username"
                   value={instagramId}
                   onChange={(e) => setInstagramId(e.target.value)}
                   style={{
                     padding: "0.5rem",
-                    border: "1px solid #ccc",
-                    borderRadius: "5px",
+                    pr: "1rem",
+                    border: "1px solid black",
+                    borderRadius: "20px",
                     color: "black",
+                    paddingLeft: "1rem"
                   }}
                 />
-                <Text fontSize="sm">
-                  Get authenticated data sent to you so that you just dance
-                  leave everything else to us
+                <Text fontSize="sm" textAlign={"center"}>
+                  Get verified schedule sent to you so that you just dance.
+                  Leave everything else to us.
                 </Text>
 
                 <HStack justifyContent="flex-end" mt={2}>
@@ -664,197 +736,228 @@ export default function EventsPage({ dataByCity, cities }) {
               </Box>
             </Box>
           )}
-        </HStack>
       </Box>
+      <Box position="relative" textAlign="center" mt={8}>
+        <Box display="flex" flexDirection={"column"} alignItems="center" justifyContent="center" mb={-3} mr="2rem">
+          <svg width="300" height="30" viewBox="0 0 220 30" xmlns="http://www.w3.org/2000/svg">
+            {Array.from({ length: 15 }).map((_, i) => (
+              <g key={i}>
+                <rect
+                  x={i * 20 + 8}
+                  y="0"
+                  width="4"
+                  height="30"
+                  rx="2"
+                  fill="#555"
+                />
+                <circle cx={i * 20 + 10} cy="5" r="2" fill="#aaa" />
+                <circle cx={i * 20 + 10} cy="25" r="2" fill="#aaa" />
+              </g>
+            ))}
+          </svg>
+        </Box>
+         <Box display="flex" flexDirection={"column"} alignItems="center" justifyContent="center" mb={-5} mr="2rem">
+          <svg width="300" height="20" viewBox="0 0 220 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {Array.from({ length: 15 }).map((_, i) => (
+              <circle key={i} cx={20 * i + 10} cy={10} r={4} fill="#333" />
+            ))}
+          </svg>
+         </Box>
+        <Box bg={useColorModeValue("#f9f9f9", "gray.800")} py={8} px={4} borderRadius="md" boxShadow="dark-lg" textColor="black">
+          <Box maxW="1200px" mx="auto">
+            {/* Weekday Header for large screens */}
+            {!isMobile && (
+              <Grid templateColumns="repeat(7, 2fr)" mb={4} gap={2} px={1}>
+                {weekdays.map((day) => (
+                  <Flex
+                    key={day}
+                    justify="center"
+                    align="center"
+                    py={2}
+                    bg={useColorModeValue("white", "gray.700")}
+                    borderTop="4px solid"
+                    borderColor={stripeColor}
+                    borderRadius="6px"
+                    boxShadow="sm"
+                  >
+                    <Text fontSize="sm" fontWeight="bold" color={stripeColor}>
+                      {day}
+                    </Text>
+                  </Flex>
+                ))}
+              </Grid>
+            )}
 
-      <Box bg={useColorModeValue("#f9f9f9", "gray.800")} my={8} py={8} px={4}>
-        <Box maxW="1200px" mx="auto">
-          {/* Weekday Header for large screens */}
-          {!isMobile && (
-            <Grid templateColumns="repeat(7, 2fr)" mb={4} gap={2} px={1}>
-              {weekdays.map((day) => (
-                <Flex
-                  key={day}
-                  justify="center"
-                  align="center"
-                  py={2}
-                  bg={useColorModeValue("white", "gray.700")}
-                  borderTop="4px solid"
-                  borderColor={stripeColor}
-                  borderRadius="6px"
-                  boxShadow="sm"
-                >
-                  <Text fontSize="sm" fontWeight="bold" color={stripeColor}>
-                    {day}
-                  </Text>
-                </Flex>
+            {/* Responsive Event Grid */}
+            <Grid
+              templateColumns={{
+                base: "repeat(2, 2fr)", // single column on mobile
+                sm: "repeat(2, 1fr)",
+                md: "repeat(4, 1fr)",
+                lg: "repeat(7, 1fr)",
+              }}
+              gap={4}
+            >
+              {events.map((event, idx) => (
+                <>
+                  {/* Clickable Card */}
+                  <Box
+                    as="button"
+                    onClick={onOpen}
+                    bg="white"
+                    borderRadius="12px"
+                    boxShadow="md"
+                    position="relative"
+                    _hover={{
+                      transform: "translateY(-3px)",
+                      boxShadow: "lg",
+                    }}
+                    transition="all 0.2s"
+                    overflow="hidden"
+                    p={{ base: 4, sm: 5 }}
+                    pt={6}
+                    w="full"
+                    textAlign="center"
+                  >
+                    {/* Top Stripe */}
+                    <Box
+                      position="absolute"
+                      top={0}
+                      left="0"
+                      w="100%"
+                      h="6px"
+                      bg={stripeColor}
+                    />
+
+                    <Heading
+                      as="h4"
+                      size="sm"
+                      color={stripeColor}
+                      fontWeight="bold"
+                      mb={2}
+                    >
+                      Day {idx + 1}
+                    </Heading>
+
+                    <Box
+                      bg={
+                        idx % 3 === 0
+                          ? "#f63c80"
+                          : idx % 3 === 1
+                          ? "#a23cf6"
+                          : "#ff7c19"
+                      }
+                      color="white"
+                      borderRadius="8px"
+                      px={3}
+                    >
+                      <Text fontSize="sm">{event}</Text>
+                    </Box>
+                  </Box>
+
+                  {/* Modal on Click */}
+                  <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
+                    <ModalOverlay />
+                    <ModalContent borderRadius="16px" mx="0.5rem">
+                      <Text align="center" bg="#A020F0" color="white" borderTopRadius={"10px"} fontSize="20px" p="10px 10px 10px 30px">Day 1 Schedule</Text>
+                      <ModalCloseButton color="white"/>
+                      <ModalBody>
+                        <Stack spacing={6}>
+                          {isMobile && (
+                            <HourlyCalendar eventHour={5} /> // 6 PM = hour 18
+                          )}
+                            {/* <Box display={{ base: "block", md: "none" }}>
+                              <Text fontWeight="bold" fontSize="sm" mb={2}>
+                                Hourly View
+                              </Text>
+                              <Box
+                                maxH="300px"
+                                overflowY="auto"
+                                border="1px solid #eee"
+                                borderRadius="md"
+                                p={2}
+                                bg="gray.50"
+                              >
+                                {Array.from({ length: 24 }, (_, idx) => (
+                                  <Box
+                                    key={idx}
+                                    id={`hour-${idx}`}
+                                    h="60px"
+                                    px={4}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="space-between"
+                                    borderBottom="1px solid #ddd"
+                                    bg="orange.100"
+                                  >
+                                    <Text fontSize="sm">{`${idx}:00`}</Text>
+                                    {
+                                      <Text
+                                        fontSize="xs"
+                                        color="orange.600"
+                                        fontWeight="bold"
+                                      >
+                                        Event
+                                      </Text>
+                                    }
+                                  </Box>
+                                ))}
+                              </Box>
+                            </Box> */}                                      
+                            <Box bg="#E9CFE8" p={4} py={4} borderRadius={"15px"} mb="10px" border="0.5px solid #b5b3b3" boxShadow="-25px 25px 50px -12px rgba(0, 0, 0, 0.25)">
+                              <Box>
+                                <Box display="flex" width="100%" justifyContent="space-between" alignItems="center">
+                                  <Heading size="sm" mb={1}>
+                                    Salsa dance class
+                                  </Heading>
+                                  <Button
+                                    bg="#7806bf"
+                                    onClick={() => router.push("/events/social")}
+                                    float={"right"}
+                                    color="white"
+                                    _hover={{
+                                      bg: "#3b025e",
+                                      boxShadow: "lg",
+                                    }}
+                                  >
+                                    Book Now
+                                  </Button>
+                                </Box>
+                                <Text fontSize="sm" color="gray.600" mt='8px'>
+                                  About the dance class, who is taking it, what will
+                                  it teach or some two-line description.
+                                </Text>
+                              </Box>
+                              <Box
+                                display="flex"
+                                alignItems="center"
+                                gap={2}
+                                mt={3}
+                              >
+                                <CalendarIcon />
+                                <Text fontSize="sm" fontWeight="medium">
+                                  21 January 2025 &nbsp;|&nbsp; 6:30 PM – 8:00 PM
+                                </Text>
+                              </Box>
+
+                              <Box display="flex" gap={2}>
+                                <Text fontWeight="semibold">Fees:</Text>
+                                <Text>Free</Text>
+                              </Box>
+
+                              <Box display="flex" gap={2} >
+                                <Text fontWeight="semibold">Location:</Text>
+                                <Text>Cubbon Park</Text>
+                              </Box>
+                            </Box>
+                        </Stack>
+                      </ModalBody>
+                    </ModalContent>
+                  </Modal>
+                </>
               ))}
             </Grid>
-          )}
-
-          {/* Responsive Event Grid */}
-          <Grid
-            templateColumns={{
-              base: "repeat(2, 2fr)", // single column on mobile
-              sm: "repeat(2, 1fr)",
-              md: "repeat(4, 1fr)",
-              lg: "repeat(7, 1fr)",
-            }}
-            gap={4}
-          >
-            {events.map((event, idx) => (
-              <>
-                {/* Clickable Card */}
-                <Box
-                  as="button"
-                  onClick={onOpen}
-                  bg="white"
-                  borderRadius="12px"
-                  boxShadow="md"
-                  position="relative"
-                  _hover={{
-                    transform: "translateY(-3px)",
-                    boxShadow: "lg",
-                  }}
-                  transition="all 0.2s"
-                  overflow="hidden"
-                  p={{ base: 4, sm: 5 }}
-                  pt={6}
-                  w="full"
-                  textAlign="center"
-                >
-                  {/* Top Stripe */}
-                  <Box
-                    position="absolute"
-                    top={0}
-                    left="0"
-                    w="100%"
-                    h="6px"
-                    bg={stripeColor}
-                  />
-
-                  <Heading
-                    as="h4"
-                    size="sm"
-                    color={stripeColor}
-                    fontWeight="bold"
-                    mb={2}
-                  >
-                    Day {idx + 1}
-                  </Heading>
-
-                  <Box
-                    bg={
-                      idx % 3 === 0
-                        ? "#f63c80"
-                        : idx % 3 === 1
-                        ? "#a23cf6"
-                        : "#ff7c19"
-                    }
-                    color="white"
-                    borderRadius="8px"
-                    px={3}
-                  >
-                    <Text fontSize="sm">{event}</Text>
-                  </Box>
-                </Box>
-
-                {/* Modal on Click */}
-                <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
-                  <ModalOverlay />
-                  <ModalContent borderRadius="16px" p={2}>
-                    <ModalHeader bg="pink.100" borderRadius={"10px"}>Day 1 Schedule</ModalHeader>
-                    <ModalCloseButton/>
-                    <ModalBody>
-                      <Stack spacing={16}>
-                        {isMobile && (
-                          <HourlyCalendar eventHour={5} /> // 6 PM = hour 18
-                        )}
-                          {/* <Box display={{ base: "block", md: "none" }}>
-                            <Text fontWeight="bold" fontSize="sm" mb={2}>
-                              Hourly View
-                            </Text>
-                            <Box
-                              maxH="300px"
-                              overflowY="auto"
-                              border="1px solid #eee"
-                              borderRadius="md"
-                              p={2}
-                              bg="gray.50"
-                            >
-                              {Array.from({ length: 24 }, (_, idx) => (
-                                <Box
-                                  key={idx}
-                                  id={`hour-${idx}`}
-                                  h="60px"
-                                  px={4}
-                                  display="flex"
-                                  alignItems="center"
-                                  justifyContent="space-between"
-                                  borderBottom="1px solid #ddd"
-                                  bg="orange.100"
-                                >
-                                  <Text fontSize="sm">{`${idx}:00`}</Text>
-                                  {
-                                    <Text
-                                      fontSize="xs"
-                                      color="orange.600"
-                                      fontWeight="bold"
-                                    >
-                                      Event
-                                    </Text>
-                                  }
-                                </Box>
-                              ))}
-                            </Box>
-                          </Box> */}
-
-                        <Box bg="gray.200" p={4} py={4} pt="6" borderRadius={"15px"}>
-                          <Box>
-                            <Heading size="sm" mb={1}>
-                              Salsa dance class
-                            </Heading>
-                            <Text fontSize="sm" color="gray.600">
-                              About the dance class, who is taking it, what will
-                              it teach or some two-line description.
-                            </Text>
-                          </Box>
-                          <Box
-                            display="flex"
-                            alignItems="center"
-                            gap={2}
-                            mt={3}
-                          >
-                            <CalendarIcon />
-                            <Text fontSize="sm" fontWeight="medium">
-                              21 January 2025 &nbsp;|&nbsp; 6:30 PM – 8:00 PM
-                            </Text>
-                          </Box>
-
-                          <Box display="flex" gap={2}>
-                            <Text fontWeight="semibold">Fees:</Text>
-                            <Text>Free</Text>
-                          </Box>
-
-                          <Box display="flex" gap={2} mb="1.5rem">
-                            <Text fontWeight="semibold">Location:</Text>
-                            <Text>Cubbon Park</Text>
-                          </Box>
-                          <Button
-                            colorScheme="orange"
-                            onClick={() => router.push("/events/social")}
-                            float={"right"}
-                          >
-                            Book Now
-                          </Button>
-                        </Box>
-                      </Stack>
-                    </ModalBody>
-                  </ModalContent>
-                </Modal>
-              </>
-            ))}
-          </Grid>
+          </Box>
         </Box>
       </Box>
     </Box>

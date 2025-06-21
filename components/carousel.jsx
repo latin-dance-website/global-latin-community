@@ -9,63 +9,32 @@ import { FaCalendar, FaClock, FaLocationDot } from "react-icons/fa6";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useEffect, useRef, useState } from "react";
 
-const events = [
-  {
-    id: 1,
-    title: "100% Bachata Social Night",
-    details: "Enjoy live music and performances.",
-    location: "Central Park, NY",
-    dateTime: "June 25, 2023, 6:00 PM",
-    image:
-      "https://images.unsplash.com/photo-1504609813442-a8924e83f76e?q=80&w=2070&auto=format&fit=crop",
-    buttonColor: "#f63c80",
-  },
-  {
-    id: 2,
-    title: "Food Festival",
-    details: "Taste delicious cuisines from around the world.",
-    location: "Downtown LA, CA",
-    dateTime: "July 10, 2023, 12:00 PM",
-    image:
-      "https://images.unsplash.com/photo-1587403310983-968055703d5a?q=80&w=2070&auto=format&fit=crop",
-    buttonColor: "#a23cf6",
-  },
-  {
-    id: 3,
-    title: "Art Festival",
-    details: "Explore amazing art and creativity.",
-    location: "Art District, SF",
-    dateTime: "August 15, 2023, 10:00 AM",
-    image:
-      "https://images.unsplash.com/photo-1593893197313-b05f4d012f8f?q=80&w=2071&auto=format&fit=crop",
-    buttonColor: "#ff7c19",
-  },
-  {
-    id: 4,
-    title: "Art Festival",
-    details: "Explore amazing art and creativity.",
-    location: "Art District, SF",
-    dateTime: "August 15, 2023, 10:00 AM",
-    image:
-      "https://images.unsplash.com/photo-1593893197313-b05f4d012f8f?q=80&w=2071&auto=format&fit=crop",
-    buttonColor: "#ff7c19",
-  },
-  {
-    id: 5,
-    title: "Art Festival",
-    details: "Explore amazing art and creativity.",
-    location: "Art District, SF",
-    dateTime: "August 15, 2023, 10:00 AM",
-    image:
-      "https://images.unsplash.com/photo-1593893197313-b05f4d012f8f?q=80&w=2071&auto=format&fit=crop",
-    buttonColor: "#ff7c19",
-  },
-];
-
 export default function AutoCarousel() {
   const scrollRef = useRef(null);
   const [index, setIndex] = useState(0);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
   const isMobile = useBreakpointValue({ base: true, md: false });
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('/api/events');
+        const data = await response.json();
+        if (response.ok) {
+          setEvents(data);
+        } else {
+          console.error("Failed to fetch events:", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const scrollToIndex = (idx) => {
     if (scrollRef.current) {
@@ -83,6 +52,22 @@ export default function AutoCarousel() {
 
   const next = () => setIndex((prev) => (prev + 1) % events.length);
   const prev = () => setIndex((prev - 1 + events.length) % events.length);
+
+  if (loading) {
+    return (
+      <Box position="relative" pb={2} width="100%" overflow="hidden" height="300px" display="flex" justifyContent="center" alignItems="center">
+        <Text>Loading events...</Text>
+      </Box>
+    );
+  }
+
+  if (events.length === 0) {
+    return (
+      <Box position="relative" pb={2} width="100%" overflow="hidden" height="300px" display="flex" justifyContent="center" alignItems="center">
+        <Text>No events found</Text>
+      </Box>
+    );
+  }
 
   return (
     <Box position="relative" pb={2} width="100%" overflow="hidden">
@@ -151,7 +136,7 @@ export default function AutoCarousel() {
             >
               <Box height="200px" overflow="hidden">
                 <img
-                  src={event.image}
+                  src={event.image || "/assets/images/default-event.jpg"}
                   alt={event.title}
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
@@ -160,26 +145,23 @@ export default function AutoCarousel() {
                 <Text fontWeight="bold" fontSize="lg">
                   {event.title}
                 </Text>
-                {/* <Text fontSize="md" mb={2}>
-                  {event.details}
-                </Text> */}
                 <HStack>
-                  <FaCalendar color={event.buttonColor} />
-                  <Text fontSize="sm">{event.dateTime.split(",")[0]}</Text>
+                  <FaCalendar color={event.buttonColor || "#f63c80"} />
+                  <Text fontSize="sm">{event.date}</Text>
                 </HStack>
                 <HStack>
-                  <FaClock color={event.buttonColor} />
-                  <Text fontSize="sm">{event.dateTime.split(",")[1]}</Text>
+                  <FaClock color={event.buttonColor || "#f63c80"} />
+                  <Text fontSize="sm">{event.startTime} - {event.endTime}</Text>
                 </HStack>
                 <HStack>
-                  <FaLocationDot color={event.buttonColor} />
+                  <FaLocationDot color={event.buttonColor || "#f63c80"} />
                   <Text fontSize="sm">{event.location}</Text>
                 </HStack>
               </Box>
               <Box>
                 <button
                   style={{
-                    backgroundColor: event.buttonColor,
+                    backgroundColor: event.buttonColor || "#f63c80",
                     color: "white",
                     width: "100%",
                     border: "none",
@@ -200,7 +182,7 @@ export default function AutoCarousel() {
       <HStack justify="center">
         {events.map((_, idx) => (
           <Box
-            mt = {{ sm: "2", base: "1" }}
+            mt={{ sm: "2", base: "1" }}
             key={idx}
             w={index === idx ? "12px" : "8px"}
             h={index === idx ? "12px" : "8px"}

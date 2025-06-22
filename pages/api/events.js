@@ -3,20 +3,33 @@ import { google } from "googleapis";
 export default async function handler(req, res) {
   const { id, city } = req.query;
 
+  if (!process.env.GOOGLE_SERVICE_ACCOUNT || !process.env.SHEET_ID) {
+    return res.status(500).json({ message: "Missing required environment variables" });
+  }
+
   try {
-    const auth = await google.auth.getClient({
+    // Parse service account credentials
+    let serviceAccount;
+    try {
+      serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
+    } catch (jsonError) {
+      console.error("Failed to parse GOOGLE_SERVICE_ACCOUNT", jsonError);
+      return res.status(500).json({ message: "Invalid service account credentials" });
+    }
+
+    const auth = new google.auth.GoogleAuth({
+      credentials: serviceAccount,
       scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
     });
 
-    const sheets = google.sheets({ version: "v4", auth });
+    const sheets = google.sheets({ version: "v4", auth: await auth.getClient() });
     const spreadsheetId = process.env.SHEET_ID;
     const range = "Sheet1!A2:K";
 
-    // Removed the timeout — let it load fully
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range,
-    });
+    const response = await Promise.race([
+      sheets.spreadsheets.values.get({ spreadsheetId, range }),
+      new Promise((_, reject) => setTimeout(() => reject(new Error("Google Sheets timeout")), 7000)),
+    ]);
 
     const rows = response.data.values;
 
@@ -38,6 +51,8 @@ export default async function handler(req, res) {
         buttonColor:
           index % 3 === 0 ? "#f63c80" : index % 3 === 1 ? "#a23cf6" : "#ff7c19",
       }));
+
+      res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
       return res.status(200).json(carouselEvents);
     }
 
@@ -46,6 +61,7 @@ export default async function handler(req, res) {
       if (!eventRow) {
         return res.status(404).json({ message: "Event not found" });
       }
+
       const event = {
         id: eventRow[1],
         city: eventRow[0],
@@ -63,7 +79,6 @@ export default async function handler(req, res) {
       return res.status(200).json(event);
     }
 
-    // For socials page - get all events for a city
     if (city) {
       const cityEvents = rows
         .filter((row) => row[0] === city)
@@ -86,7 +101,7 @@ export default async function handler(req, res) {
 
     return res.status(400).json({ message: "Invalid request" });
   } catch (error) {
-    console.error("Error fetching events:", error);
+    console.error("Error fetching events:", error.message, error);
     return res.status(500).json({ message: "Error fetching events" });
   }
 }

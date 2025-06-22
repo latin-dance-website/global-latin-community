@@ -12,12 +12,11 @@ export default async function handler(req, res) {
     const spreadsheetId = process.env.SHEET_ID;
     const range = "Sheet1!A2:K";
 
-    const response = await Promise.race([
-  sheets.spreadsheets.values.get({ spreadsheetId, range }),
-  new Promise((_, reject) =>
-    setTimeout(() => reject(new Error("Google Sheets timeout")), 5000)
-  ),
-]);
+    // Removed the timeout — let it load fully
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range,
+    });
 
     const rows = response.data.values;
 
@@ -55,11 +54,11 @@ export default async function handler(req, res) {
         description: eventRow[3],
         date: eventRow[4],
         startTime: eventRow[5],
-        endTime: row[6],
-        fees: row[7],
-        location: row[8],
-        googleMapsLink: row[9],
-        image: row[10] || null,
+        endTime: eventRow[6],
+        fees: eventRow[7],
+        location: eventRow[8],
+        googleMapsLink: eventRow[9],
+        image: eventRow[10] || null,
       };
       return res.status(200).json(event);
     }

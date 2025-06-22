@@ -62,19 +62,15 @@ export async function getStaticProps() {
     const auth = new google.auth.GoogleAuth({
       scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
     });
+
     const authClient = await auth.getClient();
     const sheets = google.sheets({ version: "v4", auth: authClient });
 
-    // Add timeout wrapper
-    const response = await Promise.race([
-      sheets.spreadsheets.values.get({
-        spreadsheetId: process.env.SHEET_ID,
-        range: "Sheet1!A2:J",
-      }),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Timeout after 5s")), 5000)
-      ),
-    ]);
+    // Direct fetch without timeout
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.SHEET_ID,
+      range: "Sheet1!A2:J",
+    });
 
     const rows = response.data.values || [];
 
@@ -113,6 +109,7 @@ export async function getStaticProps() {
     };
   }
 }
+
 
 const HourlyCalendar = ({ eventHour }) => {
   const scrollRef = useRef(null);

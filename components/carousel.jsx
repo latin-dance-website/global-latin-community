@@ -41,37 +41,39 @@ export default function AutoCarousel() {
     );
   };
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch("/api/events");
-        const data = await response.json();
-        if (response.ok) {
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          
-          const todaysEvents = data.filter((event) => {
-            const eventDate = new Date(event.date);
-            eventDate.setHours(0, 0, 0, 0);
-            return isSameDay(eventDate, today);
-          }).map(event => ({
-            ...event,
-            date: formatDate(event.date)
-          }));
-          
-          setEvents(todaysEvents);
-        } else {
-          console.error("Failed to fetch events:", data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  
+useEffect(() => {
+  const fetchEvents = async () => {
+    try {
+      const response = await fetch("/api/events");
+      const data = await response.json();
 
-    fetchEvents();
-  }, []);
+      if (response.ok) {
+        const today = dayjs().format("YYYY-MM-DD");
+
+        const todaysEvents = data
+          .filter((event) => {
+            const eventDate = dayjs(event.date).format("YYYY-MM-DD");
+            return eventDate === today;
+          })
+          .map((event) => ({
+            ...event,
+            date: dayjs(event.date).format("DD/MM/YY"),
+          }));
+
+        setEvents(todaysEvents);
+      } else {
+        console.error("Failed to fetch events:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchEvents();
+}, []);
 
   const scrollToCard = (idx) => {
     if (scrollRef.current && !isScrolling && events.length > 0) {

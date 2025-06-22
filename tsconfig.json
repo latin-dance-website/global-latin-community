@@ -37,6 +37,6 @@
     "src/components/video_upload/LayerBlur.jsx",
     "src/components/video_upload/index.jsx",
     "pages/index.jsx"
-, "pages/events/socials.jsx"  ],
+, "pages/events/socials.jsx", "src/components/components/ui/button.jsx", "src/components/components/ui/button.jsx"  ],
   "exclude": ["node_modules", "__generated__/globalTypes.ts"]
 }

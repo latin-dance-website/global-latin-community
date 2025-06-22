@@ -7,23 +7,22 @@ export const sendEmail = async ({ to, subject, text, html }) => {
     const transporter = nodemailer.createTransport({
       host: "smtp-relay.brevo.com",
       port: 587,
+      secure: false,
       auth: {
-        user: process.env.BREVO_EMAIL,      // e.g., 877bb6001@smtp-brevo.com
-        pass: process.env.BREVO_API_KEY,    // your Brevo SMTP key
+        user: process.env.BREVO_EMAIL,
+        pass: process.env.BREVO_SMTP_PASSWORD,
       },
     });
 
     const mailOptions = {
-      from: process.env.BREVO_FROM_EMAIL,  // e.g., vijay762005@gmail.com
-      to,                                  // recipient email
-      subject,                             // subject of the email
-      text,                                // plain text version (fallback)
-      html,                                // rich HTML content
+      from: process.env.BREVO_FROM_EMAIL,
+      to,
+      subject,
+      text,
+      html,
     };
 
-    console.log('mailoptions',mailOptions);
-    
-
+    console.log("Sending with", mailOptions);
     await transporter.sendMail(mailOptions);
     console.log("✅ Email sent successfully");
   } catch (error) {

@@ -9,6 +9,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import dayjs from "dayjs";
 import Caraousel from "../.././components/carousel";
 import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
+import { CaretDownOutlined } from "@ant-design/icons";
 import {
   CalendarIcon,
   ArrowBackIcon,
@@ -57,54 +58,57 @@ import { google } from "googleapis";
 import { FaLocationDot } from "react-icons/fa6";
 
 export async function getServerSideProps() {
-  const auth = await google.auth.getClient({
-    scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
-  });
-
-  const sheets = google.sheets({ version: "v4", auth });
-
-  const range = "Sheet1!A2:J";
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.SHEET_ID,
-    range,
-  });
-
-  const rows = response.data.values;
-
-  if (!rows || rows.length === 0) {
-    return { props: { eventsByCity: {} } };
-  }
-
-  const eventsByCity = {};
-  rows.forEach((row) => {
-    const city = row[0];
-    if (!eventsByCity[city]) {
-      eventsByCity[city] = [];
-    }
-    eventsByCity[city].push({
-      id: row[1],
-      city: row[0],
-      day: row[1],
-      title: row[2],
-      description: row[3],
-      date: row[4],
-      startTime: row[5],
-      endTime: row[6],
-      fees: row[7],
-      location: row[8],
-      googleMapsLink: row[9],
-      // image: row[10]
+  try {
+    // Initialize auth and sheets API
+    const auth = new google.auth.GoogleAuth({
+      scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
     });
-  });
+    const authClient = await auth.getClient();
+    const sheets = google.sheets({ version: "v4", auth: authClient });
 
-  const cities = Object.keys(eventsByCity);
+    // Fetch data with timeout
+    const response = await Promise.race([
+      sheets.spreadsheets.values.get({
+        spreadsheetId: process.env.SHEET_ID,
+        range: "Sheet1!A2:J",
+      }),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout after 5s")), 5000)
+      )
+    ]); // <-- This closing parenthesis was missing
 
-  return {
-    props: {
-      eventsByCity,
-      cities,
-    },
-  };
+    const rows = response.data.values || [];
+
+    // Process data (fast)
+    const eventsByCity = {};
+    rows.forEach((row) => {
+      const city = row[0];
+      if (!eventsByCity[city]) eventsByCity[city] = [];
+      eventsByCity[city].push({
+        id: row[1],
+        city: row[0],
+        title: row[2],
+        date: row[4],
+        startTime: row[5],
+        endTime: row[6],
+        fees: row[7],
+        location: row[8],
+        googleMapsLink: row[9],
+      });
+    });
+
+    return {
+      props: {
+        eventsByCity,
+        cities: Object.keys(eventsByCity),
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return {
+      props: { eventsByCity: {}, cities: [] }, // Fallback empty data
+    };
+  }
 }
 
 const HourlyCalendar = ({ eventHour }) => {
@@ -307,7 +311,7 @@ export default function EventsPage({ eventsByCity, cities }) {
   const [isSending, setIsSending] = useState(false);
   const stripeColor = useColorModeValue("#f63c80", "#e53e3e");
   const isMobile = useBreakpointValue({ base: true, md: false });
-
+  const [dateRange, setDateRange] = useState(null);
   const { RangePicker } = DatePicker;
 
   const router = useRouter();
@@ -352,8 +356,14 @@ export default function EventsPage({ eventsByCity, cities }) {
   const [isBothDatesSelected, setIsBothDatesSelected] = useState(false);
   const [dates, setDates] = useState([]);
 
-  const handleDateChange = (values) => {
-    setDates(values);
+  const handleDateChange = (dates) => {
+    setDateRange(dates); // Store the selected dates
+    if (dates && dates[0] && dates[1]) {
+      setIsBothDatesSelected(true);
+      // Your other logic for handling date changes
+    } else {
+      setIsBothDatesSelected(false);
+    }
   };
 
   useEffect(() => {
@@ -469,7 +479,7 @@ export default function EventsPage({ eventsByCity, cities }) {
             direction={{ base: "column", md: "row" }}
           >
             <Box
-              width="100%"
+              width="80%"
               display="flex"
               height="40px"
               justifyContent={"center"}
@@ -516,42 +526,64 @@ export default function EventsPage({ eventsByCity, cities }) {
             </Box>
 
             <Flex
-              align="center"
-              width={{ base: "100%", md: "500px" }}
-              textColor="black"
-              position="relative"
-            >
-              <Text
-                fontWeight="semibold"
-                p="4.5px"
-                pb="3.5px"
-                color="white"
-                whiteSpace="nowrap"
-                bg="#f279a6"
-                borderTopLeftRadius="5px"
-                pl="8px"
-                borderBottomLeftRadius="5px"
-                zIndex={1}
-                _hover={{ cursor: "pointer" }}
-              >
-                Set Travel Dates
-              </Text>
-              <RangePicker
-                className={`custom-range-picker ${
-                  isBothDatesSelected ? "range-selected" : ""
-                }`}
-                format="YYYY-MM-DD"
-                _hover={{ cursor: "pointer" }}
-                placeholder={["Start", "End"]}
-                style={{
-                  flex: 1,
-                  border: "1px solid #f279a6",
-                  color: "#76172c",
-                }}
-                placement="bottomLeft"
-                onChange={handleDateChange}
-              />
-            </Flex>
+  align="center"
+  width={{ base: "180px", md: "400px" }}
+  textColor="black"
+  position="relative"
+>
+  <Text
+    fontWeight="semibold"
+    p="4.5px"
+    pb="3.5px"
+    color="white"
+    whiteSpace="nowrap"
+    bg="#f279a6"
+    borderTopLeftRadius="5px"
+    pl="8px"
+    borderBottomLeftRadius="5px"
+    zIndex={1}
+    _hover={{ cursor: "pointer" }}
+    fontSize={{ base: "sm", md: "md" }}
+  >
+    Set Travel Dates
+  </Text>
+  <RangePicker
+    className={`custom-range-picker ${
+      isBothDatesSelected ? "range-selected" : ""
+    }`}
+    format="Do MMMM"
+    value={dateRange}
+    onChange={(dates) => {
+      handleDateChange(dates);
+      setDateRange(dates);
+    }}
+    placeholder={["Start", "End"]}
+    style={{
+      flex: 1,
+      border: "1px solid #f279a6",
+      color: "#76172c",
+      height: "36px",
+      padding: "0 6px",
+      fontSize: "14px",
+    }}
+    placement="bottomLeft"
+    suffixIcon={[
+      <CaretDownOutlined key="start" />,
+      <CaretDownOutlined key="end" />,
+    ]}
+    separator={
+      <span style={{ 
+        margin: "0 4px",
+        fontSize: "16px",
+        fontWeight: "bold",
+        color: "#f279a6"
+      }}>→</span>
+    }
+    size="medium"
+    getPopupContainer={(trigger) => trigger.parentNode}
+    onFocus={(e) => e.stopPropagation()} // Add this line
+  />
+</Flex>
             <Box>
               <Button
                 onClick={() => setShowPopup(true)}
@@ -676,6 +708,7 @@ export default function EventsPage({ eventsByCity, cities }) {
             </Box>
           </Box>
         )}
+        {/* <Caraousel /> */}
       </Box>
       <Box position="relative" textAlign="center" mt={8}>
         <Box
@@ -686,27 +719,27 @@ export default function EventsPage({ eventsByCity, cities }) {
           mb={-3}
           mr="2rem"
         >
-          <svg
+          {/* <svg
             width="300"
             height="30"
             viewBox="0 0 220 30"
             xmlns="http://www.w3.org/2000/svg"
-          >
-            {Array.from({ length: 15 }).map((_, i) => (
-              <g key={i}>
-                <rect
-                  x={i * 20 + 8}
-                  y="0"
-                  width="4"
-                  height="30"
-                  rx="2"
-                  fill="#555"
-                />
-                <circle cx={i * 20 + 10} cy="5" r="2" fill="#aaa" />
-                <circle cx={i * 20 + 10} cy="25" r="2" fill="#aaa" />
-              </g>
-            ))}
-          </svg>
+          > */}
+          {Array.from({ length: 15 }).map((_, i) => (
+            <g key={i}>
+              <rect
+                x={i * 20 + 8}
+                y="0"
+                width="4"
+                height="30"
+                rx="2"
+                fill="#555"
+              />
+              <circle cx={i * 20 + 10} cy="5" r="2" fill="#aaa" />
+              <circle cx={i * 20 + 10} cy="25" r="2" fill="#aaa" />
+            </g>
+          ))}
+          {/* </svg> */}
         </Box>
         <Box
           display="flex"
@@ -716,31 +749,31 @@ export default function EventsPage({ eventsByCity, cities }) {
           mb={-5}
           mr="2rem"
         >
-          <svg
+          {/* <svg
             width="300"
             height="20"
             viewBox="0 0 220 20"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-          >
-            {Array.from({ length: 15 }).map((_, i) => (
+          > */}
+          {/* {Array.from({ length: 15 }).map((_, i) => (
               <circle key={i} cx={20 * i + 10} cy={10} r={4} fill="#333" />
-            ))}
-          </svg>
-        </Box>
-        <Box
+            ))} */}
+          {/* </svg> */}
+          {/* </Box> */}
+          {/* <Box
           bg={useColorModeValue("#f9f9f9", "gray.800")}
           py={8}
           px={4}
           borderRadius="md"
           boxShadow="dark-lg"
           textColor="black"
-        >
+        > */}
           <Box maxW="1200px" mx="auto">
             {/* Weekday Header for large screens */}
             {!isMobile && (
               <Grid templateColumns="repeat(7, 2fr)" mb={4} gap={2} px={1}>
-                {weekdays.map((day) => (
+                {/* {weekdays.map((day) => (
                   <Flex
                     key={day}
                     justify="center"
@@ -756,7 +789,7 @@ export default function EventsPage({ eventsByCity, cities }) {
                       {day}
                     </Text>
                   </Flex>
-                ))}
+                ))} */}
               </Grid>
             )}
 
@@ -773,7 +806,7 @@ export default function EventsPage({ eventsByCity, cities }) {
               {events.map((event, idx) => (
                 <React.Fragment key={event.id}>
                   {/* Clickable Card */}
-                  <Box
+                  {/* <Box
                     as="button"
                     onClick={() => handleEventClick(event)}
                     bg="white"
@@ -790,18 +823,18 @@ export default function EventsPage({ eventsByCity, cities }) {
                     pt={6}
                     w="full"
                     textAlign="center"
-                  >
-                    {/* Top Stripe */}
-                    <Box
+                  > */}
+                  {/* Top Stripe */}
+                  {/* <Box
                       position="absolute"
                       top={0}
                       left="0"
                       w="100%"
                       h="6px"
                       bg={stripeColor}
-                    />
+                    /> */}
 
-                    <Heading
+                  {/* <Heading
                       as="h4"
                       size="sm"
                       color={stripeColor}
@@ -809,9 +842,9 @@ export default function EventsPage({ eventsByCity, cities }) {
                       mb={2}
                     >
                       Day {event.day}
-                    </Heading>
+                    </Heading> */}
 
-                    <Box
+                  {/* <Box
                       bg={
                         idx % 3 === 0
                           ? "#f63c80"
@@ -822,10 +855,10 @@ export default function EventsPage({ eventsByCity, cities }) {
                       color="white"
                       borderRadius="8px"
                       px={3}
-                    >
-                      <Text fontSize="sm">{event.title}</Text>
-                    </Box>
-                  </Box>
+                    > */}
+                  {/* <Text fontSize="sm">{event.title}</Text> */}
+                  {/* </Box> */}
+                  {/* </Box> */}
                 </React.Fragment>
               ))}
             </Grid>

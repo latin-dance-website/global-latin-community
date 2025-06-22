@@ -26,30 +26,34 @@ export default function Social() {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
 
-   useEffect(() => {
+  useEffect(() => {
+    const eventData = sessionStorage.getItem("currentEvent");
 
-    const eventData = sessionStorage.getItem('currentEvent');
-    
     if (eventData) {
       setEvent(JSON.parse(eventData));
       setLoading(false);
     } else {
-
-      router.push('/events');
+      router.push("/events");
     }
   }, []);
 
   if (loading) {
     return (
-      <Box minH="100vh" display="flex" justifyContent="center" alignItems="center">
-        <Text>Loading event details...</Text>
+      <Box>
+        <Text>Event not found</Text>
+        <Button onClick={() => router.push("/events")}>Back to Events</Button>
       </Box>
     );
   }
 
   if (!event) {
     return (
-      <Box minH="100vh" display="flex" justifyContent="center" alignItems="center">
+      <Box
+        minH="100vh"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Text>Event not found</Text>
       </Box>
     );
@@ -64,7 +68,6 @@ export default function Social() {
       flexDirection="column"
       alignItems="center"
       px={{ base: 4, md: 6 }}
-      py={{ base: 4, md: 8 }}
       overflowX="clip"
       opacity={isToastVisible ? "0.2" : "1"}
     >
@@ -74,36 +77,35 @@ export default function Social() {
       </Box>
       <LayerBlur2 />
 
-      {/* Hero Banner */}
-      <Box
-        w="full"
-        borderRadius="2xl"
-        overflow="hidden"
-        position="relative"
-        mb={{ base: 6, md: 10 }}
-        mt={{ base: 2, md: 4 }}
-      >
-        <Image
-          src={event.image || "/assets/images/hero.jpg"}
-          alt={event.title || "Event"}
-          objectFit="cover"
+      <Box w="full" mt="60px">
+        {/* Hero Banner */}
+        <Box
           w="full"
-          h={{ base: "200px", md: "400px" }}
-          filter="brightness(0.75)"
-        />
-        <Box position="absolute" bottom={4} left={4} color="white">
-          <Text fontSize={{ base: "xl", md: "3xl" }} fontWeight="bold">
-            {event.title}
-          </Text>
-          <HStack mt={1} spacing={1} color="yellow.300">
-            <Icon as={MdStar} />
-            <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>
-              9.5 / 10
+          borderRadius={{ base: "xl", md: "2xl" }}
+          overflow="hidden"
+          position="relative"
+        >
+          <Image
+            src={event.image || "/assets/images/hero.jpg"}
+            alt={event.title || "Event"}
+            objectFit="cover"
+            w="full"
+            h={{ base: "180px", md: "350px" }}
+            filter="brightness(0.75)"
+          />
+          <Box position="absolute" bottom={4} left={4} color="white">
+            <Text fontSize={{ base: "xl", md: "3xl" }} fontWeight="bold">
+              {event.title}
             </Text>
-          </HStack>
+            <HStack mt={1} spacing={1} color="yellow.300">
+              <Icon as={MdStar} />
+              <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>
+                9.5 / 10
+              </Text>
+            </HStack>
+          </Box>
         </Box>
       </Box>
-
       {/* Event Info */}
       <Stack
         direction={{ base: "column", md: "row" }}
@@ -137,17 +139,20 @@ export default function Social() {
 
       {/* CTA Button */}
       <Button
-        as="a"
+        as={event.googleMapsLink ? "a" : "button"}
         href={event.googleMapsLink || "#"}
-        target="_blank"
+        target={event.googleMapsLink ? "_blank" : undefined}
         size="lg"
         colorScheme="orange"
         borderRadius="full"
         px={10}
         mb={8}
         w={{ base: "full", md: "auto" }}
+        onClick={!event.googleMapsLink ? (e) => e.preventDefault() : undefined}
+        cursor={event.googleMapsLink ? "pointer" : "not-allowed"}
+        opacity={!event.googleMapsLink ? 0.7 : 1}
       >
-        View Location
+        {event.googleMapsLink ? "View Location" : "Location Not Available"}
       </Button>
 
       {/* Sections */}
@@ -176,7 +181,9 @@ export default function Social() {
             </Box>
             <Box>
               <Text fontWeight="semibold">Time:</Text>
-              <Text>{event.startTime} - {event.endTime}</Text>
+              <Text>
+                {event.startTime} - {event.endTime}
+              </Text>
             </Box>
             <Box>
               <Text fontWeight="semibold">Location:</Text>

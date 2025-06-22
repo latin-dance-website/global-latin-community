@@ -12,10 +12,12 @@ export default async function handler(req, res) {
     const spreadsheetId = process.env.SHEET_ID;
     const range = "Sheet1!A2:K";
 
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range,
-    });
+    const response = await Promise.race([
+  sheets.spreadsheets.values.get({ spreadsheetId, range }),
+  new Promise((_, reject) =>
+    setTimeout(() => reject(new Error("Google Sheets timeout")), 5000)
+  ),
+]);
 
     const rows = response.data.values;
 

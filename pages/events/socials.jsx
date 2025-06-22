@@ -57,29 +57,27 @@ import { DatePicker, Space, Modal as modal } from "antd";
 import { google } from "googleapis";
 import { FaLocationDot } from "react-icons/fa6";
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
-    // Initialize auth and sheets API
     const auth = new google.auth.GoogleAuth({
       scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
     });
     const authClient = await auth.getClient();
     const sheets = google.sheets({ version: "v4", auth: authClient });
 
-    // Fetch data with timeout
+    // Add timeout wrapper
     const response = await Promise.race([
       sheets.spreadsheets.values.get({
         spreadsheetId: process.env.SHEET_ID,
         range: "Sheet1!A2:J",
       }),
-      new Promise((_, reject) => 
+      new Promise((_, reject) =>
         setTimeout(() => reject(new Error("Timeout after 5s")), 5000)
-      )
-    ]); // <-- This closing parenthesis was missing
+      ),
+    ]);
 
     const rows = response.data.values || [];
 
-    // Process data (fast)
     const eventsByCity = {};
     rows.forEach((row) => {
       const city = row[0];
@@ -102,11 +100,16 @@ export async function getServerSideProps() {
         eventsByCity,
         cities: Object.keys(eventsByCity),
       },
+      revalidate: 60, // Regenerate page every 60 seconds
     };
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("Error fetching data:", error.message);
     return {
-      props: { eventsByCity: {}, cities: [] }, // Fallback empty data
+      props: {
+        eventsByCity: {},
+        cities: [],
+      },
+      revalidate: 60, // Still try to regenerate later
     };
   }
 }

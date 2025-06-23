@@ -69,21 +69,21 @@ export default function Social() {
   }
 
   const formatDateWithDay = (dateString) => {
-  if (!dateString || dateString.toLowerCase() === "to be decided") {
-    return "To be decided";
-  }
+    if (!dateString || dateString.toLowerCase() === "to be decided") {
+      return "To be decided";
+    }
 
-  try {
-    // Parse "Mon, 24 Jun" assuming current year
-    const parsed = dayjs(dateString, "ddd, DD MMM");
-    if (!parsed.isValid()) return dateString;
+    try {
+      // Parse "Mon, 24 Jun" assuming current year
+      const parsed = dayjs(dateString, "ddd, DD MMM");
+      if (!parsed.isValid()) return dateString;
 
-    const withYear = parsed.year(dayjs().year()); // attach current year
-    return withYear.format("dddd, DD MMMM YYYY");
-  } catch (e) {
-    return dateString;
-  }
-};
+      const withYear = parsed.year(dayjs().year()); // attach current year
+      return withYear.format("dddd, DD MMMM YYYY");
+    } catch (e) {
+      return dateString;
+    }
+  };
 
   const currencies = event.currencySymbols
     ? event.currencySymbols.split(",")
@@ -108,9 +108,15 @@ export default function Social() {
       </Box>
       <LayerBlur2 />
 
-      <Container maxW="container.lg" w="full" mt="80px" pb={10} px={{ base: 0, md: 4 }}>
+      <Container
+        maxW="container.lg"
+        w="full"
+        mt="80px"
+        pb={10}
+        px={{ base: 0, md: 4 }}
+      >
         {isMobile ? (
-          /* Mobile Layout - Full width image */
+          /* Mobile Layout - Full width image with content below */
           <Box>
             {/* Hero Image - Full width on mobile */}
             <Image
@@ -121,7 +127,7 @@ export default function Social() {
               h="300px"
             />
 
-            {/* Event Title */}
+            {/* Event Title and Instagram Button */}
             <Box px={4} mt={4}>
               <Heading fontSize="2xl" fontWeight="bold" mb={2}>
                 {event.title}
@@ -141,165 +147,10 @@ export default function Social() {
                 </Button>
               )}
             </Box>
-          </Box>
-        ) : (
-          /* Desktop Layout - Split image and content */
-          <Grid templateColumns="repeat(2, 1fr)" gap={8} alignItems="start">
-            {/* Image Column */}
-            <GridItem>
-              <Image
-                src={event.image || "/assets/images/hero.jpg"}
-                alt={event.title || "Event"}
-                objectFit="cover"
-                w="full"
-                h="500px"
-                borderRadius="xl"
-              />
-            </GridItem>
 
-            {/* Content Column */}
-            <GridItem>
-              <Heading fontSize="3xl" fontWeight="bold" mb={4}>
-                {event.title}
-              </Heading>
-              {event.instagramHandle && (
-                <Button
-                  as="a"
-                  href={event.instagramHandle}
-                  target="_blank"
-                  size="md"
-                  colorScheme="pink"
-                  borderRadius="full"
-                  leftIcon={<FaInstagram />}
-                  mb={6}
-                >
-                  Event Page
-                </Button>
-              )}
-            </GridItem>
-          </Grid>
-        )}
-
-        {/* Event Info Cards - Below image on mobile, in content column on desktop */}
-        <Box px={{ base: 4, md: 0 }} mt={{ base: 4, md: isMobile ? 4 : 0 }}>
-          {!isMobile && (
-            <Grid templateColumns="repeat(2, 1fr)" gap={8}>
-              <GridItem colSpan={1}>
-                {/* Empty space to align with image */}
-              </GridItem>
-              <GridItem>
-                <Flex
-                  direction="row"
-                  gap={4}
-                  mb={8}
-                  flexWrap="wrap"
-                >
-                  <Box
-                    bg="white"
-                    p={4}
-                    borderRadius="lg"
-                    boxShadow="md"
-                    flex="1"
-                    minW="200px"
-                  >
-                    <HStack spacing={3} align="center">
-                      <CalendarIcon color="orange.500" boxSize={5} />
-                      <VStack align="start" spacing={0}>
-                        <Text fontSize="sm" color="gray.500">
-                          Date
-                        </Text>
-                        <Text fontWeight="medium">
-                          {formatDateWithDay(event.date)}
-                        </Text>
-                      </VStack>
-                    </HStack>
-                  </Box>
-
-                  <Box
-                    bg="white"
-                    p={4}
-                    borderRadius="lg"
-                    boxShadow="md"
-                    flex="1"
-                    minW="200px"
-                  >
-                    <HStack spacing={3} align="center">
-                      <TimeIcon color="orange.500" boxSize={5} />
-                      <VStack align="start" spacing={0}>
-                        <Text fontSize="sm" color="gray.500">
-                          Time
-                        </Text>
-                        <Text fontWeight="medium">
-                          {event.startTime} - {event.endTime}
-                        </Text>
-                      </VStack>
-                    </HStack>
-                  </Box>
-                </Flex>
-
-                <Flex
-                  direction="row"
-                  gap={4}
-                  mb={8}
-                  flexWrap="wrap"
-                >
-                  <Box
-                    bg="white"
-                    p={4}
-                    borderRadius="lg"
-                    boxShadow="md"
-                    flex="1"
-                    minW="200px"
-                  >
-                    <HStack spacing={3} align="center">
-                      <Icon as={MdLocationOn} color="orange.500" boxSize={5} />
-                      <VStack align="start" spacing={0}>
-                        <Text fontSize="sm" color="gray.500">
-                          Location
-                        </Text>
-                        <Text fontWeight="medium">{event.location}</Text>
-                      </VStack>
-                    </HStack>
-                  </Box>
-
-                  <Box
-                    bg="white"
-                    p={4}
-                    borderRadius="lg"
-                    boxShadow="md"
-                    flex="1"
-                    minW="200px"
-                  >
-                    <HStack spacing={3} align="center">
-                      <Icon as={MdAttachMoney} color="orange.500" boxSize={5} />
-                      <VStack align="start" spacing={0}>
-                        <Text fontSize="sm" color="gray.500">
-                          Price
-                        </Text>
-                        <Text fontWeight="medium">
-                          {event.fees} {currencies[0] || ""}
-                        </Text>
-                      </VStack>
-                    </HStack>
-                  </Box>
-                </Flex>
-              </GridItem>
-            </Grid>
-          )}
-
-          {/* Mobile Info Cards */}
-          {isMobile && (
-            <Flex
-              direction="column"
-              gap={4}
-              mb={8}
-            >
-              <Box
-                bg="white"
-                p={4}
-                borderRadius="lg"
-                boxShadow="md"
-              >
+            {/* Mobile Info Cards */}
+            <Flex direction="column" gap={4} mb={8} px={4}>
+              <Box bg="white" p={4} borderRadius="lg" boxShadow="md">
                 <HStack spacing={3} align="center">
                   <CalendarIcon color="orange.500" boxSize={5} />
                   <VStack align="start" spacing={0}>
@@ -313,12 +164,7 @@ export default function Social() {
                 </HStack>
               </Box>
 
-              <Box
-                bg="white"
-                p={4}
-                borderRadius="lg"
-                boxShadow="md"
-              >
+              <Box bg="white" p={4} borderRadius="lg" boxShadow="md">
                 <HStack spacing={3} align="center">
                   <TimeIcon color="orange.500" boxSize={5} />
                   <VStack align="start" spacing={0}>
@@ -332,12 +178,7 @@ export default function Social() {
                 </HStack>
               </Box>
 
-              <Box
-                bg="white"
-                p={4}
-                borderRadius="lg"
-                boxShadow="md"
-              >
+              <Box bg="white" p={4} borderRadius="lg" boxShadow="md">
                 <HStack spacing={3} align="center">
                   <Icon as={MdLocationOn} color="orange.500" boxSize={5} />
                   <VStack align="start" spacing={0}>
@@ -349,12 +190,7 @@ export default function Social() {
                 </HStack>
               </Box>
 
-              <Box
-                bg="white"
-                p={4}
-                borderRadius="lg"
-                boxShadow="md"
-              >
+              <Box bg="white" p={4} borderRadius="lg" boxShadow="md">
                 <HStack spacing={3} align="center">
                   <Icon as={MdAttachMoney} color="orange.500" boxSize={5} />
                   <VStack align="start" spacing={0}>
@@ -368,114 +204,213 @@ export default function Social() {
                 </HStack>
               </Box>
             </Flex>
-          )}
-        </Box>
 
-        {/* CTA Button */}
-        <Flex justify="center" mb={10} px={{ base: 4, md: 0 }}>
-          <Button
-            as={event.googleMapsLink ? "a" : "button"}
-            href={event.googleMapsLink || "#"}
-            target={event.googleMapsLink ? "_blank" : undefined}
-            size="lg"
-            colorScheme="orange"
-            borderRadius="full"
-            px={10}
-            rightIcon={<MdLink />}
-            onClick={!event.googleMapsLink ? (e) => e.preventDefault() : undefined}
-            cursor={event.googleMapsLink ? "pointer" : "not-allowed"}
-            opacity={!event.googleMapsLink ? 0.7 : 1}
-          >
-            {event.googleMapsLink ? "View Location on Map" : "Location Not Available"}
-          </Button>
-        </Flex>
+            {/* CTA Button */}
+            <Flex justify="center" mb={10} px={4}>
+              <Button
+                as={event.googleMapsLink ? "a" : "button"}
+                href={event.googleMapsLink || "#"}
+                target={event.googleMapsLink ? "_blank" : undefined}
+                size="lg"
+                colorScheme="orange"
+                borderRadius="full"
+                px={10}
+                rightIcon={<MdLink />}
+                onClick={
+                  !event.googleMapsLink ? (e) => e.preventDefault() : undefined
+                }
+                cursor={event.googleMapsLink ? "pointer" : "not-allowed"}
+                opacity={!event.googleMapsLink ? 0.7 : 1}
+              >
+                {event.googleMapsLink
+                  ? "View Location on Map"
+                  : "Location Not Available"}
+              </Button>
+            </Flex>
 
-        {/* About Section */}
-        <Box
-          bg="white"
-          p={6}
-          borderRadius={{ base: "none", md: "xl" }}
-          boxShadow={{ md: "md" }}
-          mb={8}
-          mx={{ base: 0, md: "auto" }}
-        >
-          <Heading fontSize="2xl" mb={4} color="gray.800">
-            About the Event
-          </Heading>
-          <Text fontSize="md" color="gray.700" lineHeight="1.7" mb={4}>
-            {event.description || "No description available."}
-          </Text>
-          {event.musicRatio && (
-            <Box mt={4}>
-              <Text fontWeight="semibold" mb={2}>
-                Music Ratio:
+            {/* About Section */}
+            <Box bg="white" p={6} borderRadius="none" mb={8}>
+              <Heading fontSize="2xl" mb={4} color="gray.800">
+                About the Event
+              </Heading>
+              <Text fontSize="md" color="gray.700" lineHeight="1.7" mb={4}>
+                {event.description || "No description available."}
               </Text>
-              <Text fontSize="sm" color="gray.600">
-                {event.musicRatio}
-              </Text>
+              {event.musicRatio && (
+                <Box mt={4}>
+                  <Text fontWeight="semibold" mb={2}>
+                    Music Ratio:
+                  </Text>
+                  <Text fontSize="sm" color="gray.600">
+                    {event.musicRatio}
+                  </Text>
+                </Box>
+              )}
             </Box>
-          )}
-        </Box>
 
-        {/* Details Section */}
-        <Box
-          bg="white"
-          p={6}
-          borderRadius={{ base: "none", md: "xl" }}
-          boxShadow={{ md: "md" }}
-          mb={8}
-          mx={{ base: 0, md: "auto" }}
-        >
-          <Heading fontSize="2xl" mb={4} color="gray.800">
-            Event Details
-          </Heading>
-          <VStack align="start" spacing={4}>
-            <Box>
-              <Text fontWeight="semibold" mb={1}>
-                Date:
-              </Text>
-              <Text color="gray.600">{formatDateWithDay(event.date)}</Text>
-            </Box>
-            <Box>
-              <Text fontWeight="semibold" mb={1}>
-                Time:
-              </Text>
-              <Text color="gray.600">
-                {event.startTime} - {event.endTime}
+            {/* Reviews Section */}
+            <Box bg="white" p={6} borderRadius="none">
+              <Heading fontSize="2xl" mb={4} color="gray.800">
+                Reviews
+              </Heading>
+              <Text color="gray.500" fontStyle="italic">
+                Coming soon...
               </Text>
             </Box>
-            <Box>
-              <Text fontWeight="semibold" mb={1}>
-                Location:
-              </Text>
-              <Text color="gray.600">{event.location}</Text>
-            </Box>
-            <Box>
-              <Text fontWeight="semibold" mb={1}>
-                Entry Fee:
-              </Text>
-              <Text color="gray.600">
-                {event.fees} {currencies[0] || ""}
-              </Text>
-            </Box>
-          </VStack>
-        </Box>
+          </Box>
+        ) : (
+          /* Desktop Layout - Split image and content */
+          <Box>
+            <Grid templateColumns="repeat(2, 1fr)" gap={8} alignItems="start">
+              {/* Image Column */}
+              <GridItem>
+                <Image
+                  src={event.image || "/assets/images/hero.jpg"}
+                  alt={event.title || "Event"}
+                  objectFit="cover"
+                  w="full"
+                  h="500px"
+                  borderRadius="xl"
+                />
+              </GridItem>
 
-        {/* Reviews Section */}
-        <Box
-          bg="white"
-          p={6}
-          borderRadius={{ base: "none", md: "xl" }}
-          boxShadow={{ md: "md" }}
-          mx={{ base: 0, md: "auto" }}
-        >
-          <Heading fontSize="2xl" mb={4} color="gray.800">
-            Reviews
-          </Heading>
-          <Text color="gray.500" fontStyle="italic">
-            Coming soon...
-          </Text>
-        </Box>
+              {/* Content Column */}
+              <GridItem>
+                <Heading fontSize="3xl" fontWeight="bold" mb={4}>
+                  {event.title}
+                </Heading>
+                {event.instagramHandle && (
+                  <Button
+                    as="a"
+                    href={event.instagramHandle}
+                    target="_blank"
+                    size="md"
+                    colorScheme="pink"
+                    borderRadius="full"
+                    leftIcon={<FaInstagram />}
+                    mb={6}
+                  >
+                    Event Page
+                  </Button>
+                )}
+
+                <Flex direction="column" gap={4}>
+                  {/* Info Cards */}
+                  <Box bg="white" p={4} borderRadius="lg" boxShadow="md">
+                    <HStack spacing={3}>
+                      <CalendarIcon color="orange.500" boxSize={5} />
+                      <VStack align="start" spacing={0}>
+                        <Text fontSize="sm" color="gray.500">
+                          Date
+                        </Text>
+                        <Text fontWeight="medium">
+                          {formatDateWithDay(event.date)}
+                        </Text>
+                      </VStack>
+                    </HStack>
+                  </Box>
+
+                  <Box bg="white" p={4} borderRadius="lg" boxShadow="md">
+                    <HStack spacing={3}>
+                      <TimeIcon color="orange.500" boxSize={5} />
+                      <VStack align="start" spacing={0}>
+                        <Text fontSize="sm" color="gray.500">
+                          Time
+                        </Text>
+                        <Text fontWeight="medium">
+                          {event.startTime} - {event.endTime}
+                        </Text>
+                      </VStack>
+                    </HStack>
+                  </Box>
+
+                  <Box bg="white" p={4} borderRadius="lg" boxShadow="md">
+                    <HStack spacing={3}>
+                      <Icon as={MdLocationOn} color="orange.500" boxSize={5} />
+                      <VStack align="start" spacing={0}>
+                        <Text fontSize="sm" color="gray.500">
+                          Location
+                        </Text>
+                        <Text fontWeight="medium">{event.location}</Text>
+                      </VStack>
+                    </HStack>
+                  </Box>
+
+                  <Box bg="white" p={4} borderRadius="lg" boxShadow="md">
+                    <HStack spacing={3}>
+                      <Icon as={MdAttachMoney} color="orange.500" boxSize={5} />
+                      <VStack align="start" spacing={0}>
+                        <Text fontSize="sm" color="gray.500">
+                          Price
+                        </Text>
+                        <Text fontWeight="medium">
+                          {event.fees} {currencies[0] || ""}
+                        </Text>
+                      </VStack>
+                    </HStack>
+                  </Box>
+                </Flex>
+
+                {/* CTA Button */}
+                <Flex justify="flex-start" mt={6}>
+                  <Button
+                    as={event.googleMapsLink ? "a" : "button"}
+                    href={event.googleMapsLink || "#"}
+                    target={event.googleMapsLink ? "_blank" : undefined}
+                    size="lg"
+                    colorScheme="orange"
+                    borderRadius="full"
+                    px={10}
+                    rightIcon={<MdLink />}
+                    onClick={
+                      !event.googleMapsLink
+                        ? (e) => e.preventDefault()
+                        : undefined
+                    }
+                    cursor={event.googleMapsLink ? "pointer" : "not-allowed"}
+                    opacity={!event.googleMapsLink ? 0.7 : 1}
+                  >
+                    {event.googleMapsLink
+                      ? "View Location on Map"
+                      : "Location Not Available"}
+                  </Button>
+                </Flex>
+              </GridItem>
+            </Grid>
+
+            {/* About Section - Below the image and info cards on desktop */}
+            <Box bg="white" p={6} borderRadius="xl" boxShadow="md" mt={8}>
+              <Heading fontSize="2xl" mb={4} color="gray.800">
+                About the Event
+              </Heading>
+              <Text fontSize="md" color="gray.700" lineHeight="1.7" mb={4}>
+                {event.description || "No description available."}
+              </Text>
+              {event.musicRatio && (
+                <Box mt={4}>
+                  <Text fontWeight="semibold" mb={2}>
+                    Music Ratio:
+                  </Text>
+                  <Text fontSize="sm" color="gray.600">
+                    {event.musicRatio}
+                  </Text>
+                </Box>
+              )}
+            </Box>
+
+            {/* Details Section */}
+
+            {/* Reviews Section */}
+            <Box bg="white" p={6} borderRadius="xl" boxShadow="md">
+              <Heading fontSize="2xl" mb={4} color="gray.800">
+                Reviews
+              </Heading>
+              <Text color="gray.500" fontStyle="italic">
+                Coming soon...
+              </Text>
+            </Box>
+          </Box>
+        )}
       </Container>
     </Box>
   );

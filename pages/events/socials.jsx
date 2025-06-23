@@ -464,7 +464,8 @@ export default function EventsPage({ eventsByCity, cities }) {
 
 export async function getStaticProps() {
   try {
-    const res = await fetch("http://localhost:3000/api/events");
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const res = await fetch(`${baseUrl}/api/events`);
     if (!res.ok) {
       throw new Error(`Failed to fetch events: ${res.status}`);
     }

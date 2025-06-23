@@ -1,107 +1,129 @@
-import { google } from "googleapis";
+import { parse } from "csv-parse/sync";
+import fetch from "node-fetch";
 
 export default async function handler(req, res) {
   const { id, city } = req.query;
 
-  if (!process.env.GOOGLE_SERVICE_ACCOUNT || !process.env.SHEET_ID) {
-    return res.status(500).json({ message: "Missing required environment variables" });
+  const csvUrl = process.env.SHEET_CSV_URL;
+  if (!csvUrl) {
+    return res.status(500).json({
+      message: "Server configuration error",
+      details: "Missing SHEET_CSV_URL in .env",
+    });
   }
 
   try {
-    // Parse service account credentials
-    let serviceAccount;
-    try {
-      serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
-    } catch (jsonError) {
-      console.error("Failed to parse GOOGLE_SERVICE_ACCOUNT", jsonError);
-      return res.status(500).json({ message: "Invalid service account credentials" });
-    }
+    const response = await fetch(csvUrl);
+    const csvText = await response.text();
 
-    const auth = new google.auth.GoogleAuth({
-      credentials: serviceAccount,
-      scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+    const records = parse(csvText, {
+      columns: false,
+      skip_empty_lines: true,
     });
 
-    const sheets = google.sheets({ version: "v4", auth: await auth.getClient() });
-    const spreadsheetId = process.env.SHEET_ID;
-    const range = "Sheet1!A2:K";
-
-    const response = await Promise.race([
-      sheets.spreadsheets.values.get({ spreadsheetId, range }),
-      new Promise((_, reject) => setTimeout(() => reject(new Error("Google Sheets timeout")), 7000)),
-    ]);
-
-    const rows = response.data.values;
-
-    if (!rows || rows.length === 0) {
-      return res.status(404).json({ message: "No events found" });
-    }
+    const rows = records.slice(1);
 
     if (!id && !city) {
       const carouselEvents = rows.map((row, index) => ({
+        city: row[0] || "Unknown City",
         id: index + 1,
-        title: row[2],
-        date: row[4],
-        startTime: row[5],
-        endTime: row[6],
-        fees: row[7],
-        location: row[8],
-        googleMapsLink: row[9],
+        title: row[2] || "Untitled Event",
+        description: row[3] || "",
+        date: row[4] || "Date not specified",
+        startTime: row[5] || "",
+        endTime: row[6] || "",
+        fees: row[7] || "Free",
+        location: row[8] || "Location not specified",
+        googleMapsLink: row[9] || "",
         image: row[10] || "/assets/images/default-event.jpg",
-        buttonColor:
-          index % 3 === 0 ? "#f63c80" : index % 3 === 1 ? "#a23cf6" : "#ff7c19",
+        musicRatio: row[11] || "50% Salsa, 30% Bachata, 20% Kizomba",
+        currencySymbols: row[12] || "₹,₫,฿",
+        instagramHandle: row[13] || null,
+        buttonColor: ["#f63c80", "#a23cf6", "#ff7c19"][index % 3],
       }));
 
-      res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
+      res.setHeader(
+        "Cache-Control",
+        "public, s-maxage=300, stale-while-revalidate=60"
+      );
       return res.status(200).json(carouselEvents);
     }
 
     if (id && city) {
-      const eventRow = rows.find((row) => row[1] === id && row[0] === city);
+      const eventRow = rows.find(
+        (row) =>
+          String(row[1]).toLowerCase() === String(id).toLowerCase() &&
+          String(row[0]).toLowerCase() === String(city).toLowerCase()
+      );
+
       if (!eventRow) {
-        return res.status(404).json({ message: "Event not found" });
+        return res.status(404).json({
+          message: "Event not found",
+          details: `No event found with ID ${id} in ${city}`,
+        });
       }
 
       const event = {
         id: eventRow[1],
         city: eventRow[0],
-        day: eventRow[1],
-        title: eventRow[2],
-        description: eventRow[3],
-        date: eventRow[4],
-        startTime: eventRow[5],
-        endTime: eventRow[6],
-        fees: eventRow[7],
-        location: eventRow[8],
-        googleMapsLink: eventRow[9],
+        title: eventRow[2] || "Untitled Event",
+        description: eventRow[3] || "",
+        date: eventRow[4] || "Date not specified",
+        startTime: eventRow[5] || "",
+        endTime: eventRow[6] || "",
+        fees: eventRow[7] || "Free",
+        location: eventRow[8] || "Location not specified",
+        googleMapsLink: eventRow[9] || "",
         image: eventRow[10] || null,
+        musicRatio: eventRow[11] || "50% Salsa, 30% Bachata, 20% Kizomba",
+        currencySymbols: eventRow[12] || "₹,₫,฿",
+        instagramHandle: eventRow[13] || null,
       };
+
       return res.status(200).json(event);
     }
 
     if (city) {
       const cityEvents = rows
-        .filter((row) => row[0] === city)
+        .filter(
+          (row) => String(row[0]).toLowerCase() === String(city).toLowerCase()
+        )
         .map((row) => ({
           id: row[1],
           city: row[0],
-          day: row[1],
-          title: row[2],
-          description: row[3],
-          date: row[4],
-          startTime: row[5],
-          endTime: row[6],
-          fees: row[7],
-          location: row[8],
-          googleMapsLink: row[9],
+          title: row[2] || "Untitled Event",
+          description: row[3] || "",
+          date: row[4] || "Date not specified",
+          startTime: row[5] || "",
+          endTime: row[6] || "",
+          fees: row[7] || "Free",
+          location: row[8] || "Location not specified",
+          googleMapsLink: row[9] || "",
           image: row[10] || null,
+          musicRatio: row[11] || "Ratio not specified",
+          currencySymbols: row[12] || "Symbols not specified",
+          instagramHandle: row[13] || null,
         }));
+
+      if (cityEvents.length === 0) {
+        return res.status(404).json({
+          message: "No events found",
+          details: `No events found for city: ${city}`,
+        });
+      }
+
       return res.status(200).json(cityEvents);
     }
 
-    return res.status(400).json({ message: "Invalid request" });
+    return res.status(400).json({
+      message: "Invalid request",
+      details: "Missing or invalid query parameters",
+    });
   } catch (error) {
-    console.error("Error fetching events:", error.message, error);
-    return res.status(500).json({ message: "Error fetching events" });
+    console.error("Unexpected error:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      details: error.message,
+    });
   }
 }

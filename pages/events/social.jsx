@@ -59,6 +59,32 @@ export default function Social() {
     );
   }
 
+  const formatDateWithDay = (dateString) => {
+    if (!dateString || dateString.toLowerCase() === "to be decided") {
+      return "To be decided";
+    }
+
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return dateString;
+      }
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      return date.toLocaleDateString(undefined, options);
+    } catch (e) {
+      return dateString;
+    }
+  };
+
+  const currencies = event.currencySymbols
+    ? event.currencySymbols.split(",")
+    : ["₹", "₫", "฿"];
+
   return (
     <Box
       minH="100vh"
@@ -106,6 +132,24 @@ export default function Social() {
           </Box>
         </Box>
       </Box>
+
+      {/* Event Page Link */}
+      {event.instagramHandle && (
+        <Button
+          as="a"
+          href={event.instagramHandle}
+          target="_blank"
+          size="sm"
+          colorScheme="pink"
+          borderRadius="full"
+          px={6}
+          mb={4}
+          w={{ base: "full", md: "auto" }}
+        >
+          View Event Page
+        </Button>
+      )}
+
       {/* Event Info */}
       <Stack
         direction={{ base: "column", md: "row" }}
@@ -119,7 +163,9 @@ export default function Social() {
       >
         <HStack spacing={2}>
           <CalendarIcon color="orange.400" />
-          <Text fontSize={{ base: "sm", md: "md" }}>{event.date}</Text>
+          <Text fontSize={{ base: "sm", md: "md" }}>
+            {formatDateWithDay(event.date)}
+          </Text>
         </HStack>
         <HStack spacing={2}>
           <TimeIcon color="orange.400" />
@@ -133,7 +179,9 @@ export default function Social() {
         </HStack>
         <HStack spacing={2}>
           <Icon as={MdAttachMoney} color="orange.400" />
-          <Text fontSize={{ base: "sm", md: "md" }}>{event.fees}</Text>
+          <Text fontSize={{ base: "sm", md: "md" }}>
+            {event.fees} {currencies[0] || ""}
+          </Text>
         </HStack>
       </Stack>
 
@@ -157,14 +205,24 @@ export default function Social() {
 
       {/* Sections */}
       <VStack align="start" spacing={6} w="full">
-        {/* About Class */}
+        {/* About Event */}
         <Box w="full">
           <Text fontSize="xl" fontWeight="bold" mb={2}>
             About the event
           </Text>
-          <Text fontSize="sm" color="gray.700" lineHeight="1.8">
+          <Text fontSize="sm" color="gray.700" lineHeight="1.8" mb={4}>
             {event.description}
           </Text>
+          {event.musicRatio && (
+            <>
+              <Text fontSize="md" fontWeight="semibold" mb={2}>
+                Music Ratio:
+              </Text>
+              <Text fontSize="sm" color="gray.700">
+                {event.musicRatio}
+              </Text>
+            </>
+          )}
         </Box>
 
         <Divider />
@@ -177,7 +235,7 @@ export default function Social() {
           <VStack align="start" spacing={3}>
             <Box>
               <Text fontWeight="semibold">Date:</Text>
-              <Text>{event.date}</Text>
+              <Text>{formatDateWithDay(event.date)}</Text>
             </Box>
             <Box>
               <Text fontWeight="semibold">Time:</Text>
@@ -191,7 +249,9 @@ export default function Social() {
             </Box>
             <Box>
               <Text fontWeight="semibold">Entry Fee:</Text>
-              <Text>{event.fees}</Text>
+              <Text>
+                {event.fees} {currencies[0] || ""}
+              </Text>
             </Box>
           </VStack>
         </Box>

@@ -5,8 +5,8 @@ import Caraousel from "../.././components/carousel";
 import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
 import { CaretDownOutlined } from "@ant-design/icons";
 import isBetween from "dayjs/plugin/isBetween";
-
-
+import weekday from "dayjs/plugin/weekday";
+import weekOfYear from "dayjs/plugin/weekOfYear";
 
 import {
   Box,
@@ -26,6 +26,10 @@ import { FaCalendar, FaClock, FaLocationDot } from "react-icons/fa6";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 
+dayjs.extend(isBetween);
+dayjs.extend(weekday);
+dayjs.extend(weekOfYear);
+
 export default function EventsPage({ eventsByCity, cities }) {
   const blink = keyframes`
   0% { box-shadow: 0 0 0px rgb(246, 60, 128); }
@@ -38,13 +42,67 @@ export default function EventsPage({ eventsByCity, cities }) {
   const [showEvents, setShowEvents] = useState(false);
   const { RangePicker } = DatePicker;
   const isMobile = useBreakpointValue({ base: true, md: false });
+
   const handleExploreNow = (event) => {
     sessionStorage.setItem("currentEvent", JSON.stringify(event));
     router.push("/events/social");
   };
+
   const handleShowEvents = () => {
     if (!selectedCity) return;
     setShowEvents(true);
+  };
+
+  const dayNameToNumber = {
+    sunday: 0,
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
+  };
+
+  const getDatesForDayInRange = (dayName, startDate, endDate) => {
+    const dayNumber = dayNameToNumber[dayName.toLowerCase()];
+    if (dayNumber === undefined) return [];
+
+    let currentDate = dayjs(startDate).startOf("day");
+    const lastDate = dayjs(endDate).startOf("day");
+    const dates = [];
+
+    currentDate = currentDate.day(dayNumber);
+    if (currentDate.isBefore(startDate)) {
+      currentDate = currentDate.add(1, "week");
+    }
+
+    while (currentDate.isBefore(lastDate) || currentDate.isSame(lastDate)) {
+      if (currentDate.isBetween(startDate, lastDate, null, "[]")) {
+        dates.push(currentDate);
+      }
+      currentDate = currentDate.add(1, "week");
+    }
+
+    return dates;
+  };
+
+  const formatEventDates = (events, startDate, endDate) => {
+    if (!startDate || !endDate) return [];
+
+    return events.flatMap((event) => {
+      const eventDay = event.day?.toLowerCase();
+      if (!eventDay || !dayNameToNumber[eventDay]) return [];
+
+      const eventDates = getDatesForDayInRange(event.day, startDate, endDate);
+
+      return eventDates.map((eventDate) => ({
+        ...event,
+        date: eventDate.toDate(),
+        formattedDate: eventDate.format("ddd, DD MMM"),
+        shortDate: eventDate.format("DD MMM"),
+        day: eventDate.format("ddd"),
+      }));
+    });
   };
 
   const getFilteredEvents = () => {
@@ -52,17 +110,34 @@ export default function EventsPage({ eventsByCity, cities }) {
 
     let events = [...eventsByCity[selectedCity]];
 
-    if (dateRange && dateRange[0] && dateRange[1]) {
-      const startDate = dayjs(dateRange[0]);
-      const endDate = dayjs(dateRange[1]);
-      dayjs.extend(isBetween);
-      events = events.filter((event) => {
-        const eventDate = dayjs(event.date);
-        return eventDate.isBetween(startDate, endDate, null, "[]");
-      });
+    if (!dateRange || !dateRange[0] || !dateRange[1]) {
+      const today = dayjs();
+      return events
+        .map((event) => {
+          const eventDay = event.day?.toLowerCase();
+          if (!eventDay || !dayNameToNumber[eventDay]) return null;
+
+          const dayNumber = dayNameToNumber[eventDay];
+          let nextDate = today.day(dayNumber);
+          if (nextDate.isBefore(today)) {
+            nextDate = nextDate.add(1, "week");
+          }
+
+          return {
+            ...event,
+            date: nextDate.toDate(),
+            formattedDate: nextDate.format("ddd, DD MMM"),
+            shortDate: nextDate.format("DD MMM"),
+            day: nextDate.format("ddd"),
+          };
+        })
+        .filter(Boolean);
     }
 
-    return events;
+    const startDate = dayjs(dateRange[0]);
+    const endDate = dayjs(dateRange[1]);
+
+    return formatEventDates(events, startDate, endDate);
   };
 
   return (
@@ -78,15 +153,17 @@ export default function EventsPage({ eventsByCity, cities }) {
     >
       <Navbar />
       <Box mt={{ base: 2, md: 3 }} mb={2} textAlign="center">
-  <Heading fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }} fontWeight="extrabold" color="#f63c80">
-    Social Nights Today
-  </Heading>
-</Box>
-
+        <Heading
+          fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+          fontWeight="extrabold"
+          color="#f63c80"
+        >
+          Social Nights Today
+        </Heading>
+      </Box>
 
       <LayerBlur2 />
       <Caraousel />
-
 
       <Box
         width="90%"
@@ -100,7 +177,7 @@ export default function EventsPage({ eventsByCity, cities }) {
         border="1px solid pink"
         py="10px"
         px="1rem"
-        mt="4" // reduced
+        mt="4"
         mb="8"
       >
         <HStack
@@ -157,28 +234,29 @@ export default function EventsPage({ eventsByCity, cities }) {
               <FaLocationDot color="#f63c80" size="25" paddingBottom="20px" />
               <InputGroup width={{ base: "90%", md: "200px" }} mt="-1">
                 <Select
-  value={selectedCity}
-  onChange={(e) => {
-    setSelectedCity(e.target.value);
-    setShowEvents(false);
-  }}
-  mx="0.5rem"
-  placeholder="Select a city"
-  border="1px solid #f63c80"
-  borderRadius="10px"
-  bg="white"
-  color="#f63c80"
-  fontWeight="600"
-  fontSize="1rem"
-  animation={selectedCity ? "none" : `${blink} 1.5s ease-in-out infinite`}
->
-  {cities.map((city) => (
-    <option key={city} value={city}>
-      {city.trim()}
-    </option>
-  ))}
-</Select>
-
+                  value={selectedCity}
+                  onChange={(e) => {
+                    setSelectedCity(e.target.value);
+                    setShowEvents(false);
+                  }}
+                  mx="0.5rem"
+                  placeholder="Select a city"
+                  border="1px solid #f63c80"
+                  borderRadius="10px"
+                  bg="white"
+                  color="#f63c80"
+                  fontWeight="600"
+                  fontSize="1rem"
+                  animation={
+                    selectedCity ? "none" : `${blink} 1.5s ease-in-out infinite`
+                  }
+                >
+                  {cities.map((city) => (
+                    <option key={city} value={city}>
+                      {city.trim()}
+                    </option>
+                  ))}
+                </Select>
               </InputGroup>
             </Box>
 
@@ -294,9 +372,9 @@ export default function EventsPage({ eventsByCity, cities }) {
             }}
             gap={6}
           >
-            {getFilteredEvents().map((event) => (
+            {getFilteredEvents().map((event, index) => (
               <Box
-                key={event.id}
+                key={`${event.id}-${index}`}
                 borderWidth="1px"
                 borderRadius="lg"
                 overflow="hidden"
@@ -324,7 +402,7 @@ export default function EventsPage({ eventsByCity, cities }) {
                   </Text>
                   <HStack mt={2} spacing={3}>
                     <FaCalendar color="#f63c80" />
-                    <Text>{dayjs(event.date).format("ddd, MMM D, YYYY")}</Text>
+                    <Text>{event.formattedDate}</Text>
                   </HStack>
                   <HStack mt={2} spacing={3}>
                     <FaClock color="#f63c80" />

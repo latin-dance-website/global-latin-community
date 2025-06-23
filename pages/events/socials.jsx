@@ -6,6 +6,8 @@ import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
 import { CaretDownOutlined } from "@ant-design/icons";
 import isBetween from "dayjs/plugin/isBetween";
 
+
+
 import {
   Box,
   Button,
@@ -25,6 +27,11 @@ import { DatePicker } from "antd";
 import dayjs from "dayjs";
 
 export default function EventsPage({ eventsByCity, cities }) {
+  const blink = keyframes`
+  0% { box-shadow: 0 0 0px rgb(246, 60, 128); }
+  50% { box-shadow: 0 0 10px rgb(246, 60, 128); }
+  100% { box-shadow: 0 0 0px rgb(246, 60, 128); }
+`;
   const router = useRouter();
   const [selectedCity, setSelectedCity] = useState("");
   const [dateRange, setDateRange] = useState(null);
@@ -70,8 +77,16 @@ export default function EventsPage({ eventsByCity, cities }) {
       overflowX="clip"
     >
       <Navbar />
+      <Box mt={{ base: 2, md: 3 }} mb={2} textAlign="center">
+  <Heading fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }} fontWeight="extrabold" color="#f63c80">
+    Social Nights Today
+  </Heading>
+</Box>
+
+
       <LayerBlur2 />
       <Caraousel />
+
 
       <Box
         width="90%"
@@ -85,7 +100,8 @@ export default function EventsPage({ eventsByCity, cities }) {
         border="1px solid pink"
         py="10px"
         px="1rem"
-        mt="10px"
+        mt="4" // reduced
+        mb="8"
       >
         <HStack
           width="100%"
@@ -141,26 +157,28 @@ export default function EventsPage({ eventsByCity, cities }) {
               <FaLocationDot color="#f63c80" size="25" paddingBottom="20px" />
               <InputGroup width={{ base: "90%", md: "200px" }} mt="-1">
                 <Select
-                  value={selectedCity}
-                  onChange={(e) => {
-                    setSelectedCity(e.target.value);
-                    setShowEvents(false);
-                  }}
-                  mx="0.5rem"
-                  placeholder="Select a city"
-                  border="1px solid #f63c80"
-                  borderRadius="10px"
-                  bg="white"
-                  color="#f63c80"
-                  fontWeight="600"
-                  fontSize="1rem"
-                >
-                  {cities.map((city) => (
-                    <option key={city} value={city}>
-                      {city.trim()}
-                    </option>
-                  ))}
-                </Select>
+  value={selectedCity}
+  onChange={(e) => {
+    setSelectedCity(e.target.value);
+    setShowEvents(false);
+  }}
+  mx="0.5rem"
+  placeholder="Select a city"
+  border="1px solid #f63c80"
+  borderRadius="10px"
+  bg="white"
+  color="#f63c80"
+  fontWeight="600"
+  fontSize="1rem"
+  animation={selectedCity ? "none" : `${blink} 1.5s ease-in-out infinite`}
+>
+  {cities.map((city) => (
+    <option key={city} value={city}>
+      {city.trim()}
+    </option>
+  ))}
+</Select>
+
               </InputGroup>
             </Box>
 

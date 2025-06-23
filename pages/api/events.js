@@ -25,22 +25,24 @@ export default async function handler(req, res) {
 
     if (!id && !city) {
       const carouselEvents = rows.map((row, index) => ({
-        city: row[0] || "Unknown City",
-        id: index + 1,
-        title: row[2] || "Untitled Event",
-        description: row[3] || "",
-        date: row[4] || "Date not specified",
-        startTime: row[5] || "",
-        endTime: row[6] || "",
-        fees: row[7] || "Free",
-        location: row[8] || "Location not specified",
-        googleMapsLink: row[9] || "",
-        image: row[10] || "/assets/images/default-event.jpg",
-        musicRatio: row[11] || "50% Salsa, 30% Bachata, 20% Kizomba",
-        currencySymbols: row[12] || "₹,₫,฿",
-        instagramHandle: row[13] || null,
-        buttonColor: ["#f63c80", "#a23cf6", "#ff7c19"][index % 3],
-      }));
+  city: row[0] || "Unknown City",
+  id: index + 1,
+  title: row[2] || "Untitled Event",
+  description: row[3] || "",
+  date: row[4] || "Date not specified",
+  startTime: row[5] || "",
+  endTime: row[6] || "",
+  fees: row[7] || "Free",
+  location: row[8] || "Location not specified",
+  googleMapsLink: row[9] || "",
+  image: row[10] || "/assets/images/default-event.jpg",
+  musicRatio: row[11] || "50% Salsa, 30% Bachata, 20% Kizomba",
+  currencySymbols: row[12] || "₹,₫,฿",
+  instagramHandle: row[13] || null,
+  day: row[14] || null, // <-- your new column here
+  buttonColor: ["#f63c80", "#a23cf6", "#ff7c19"][index % 3],
+}));
+
 
       res.setHeader(
         "Cache-Control",
@@ -65,7 +67,7 @@ export default async function handler(req, res) {
 
       const event = {
         id: eventRow[1],
-        city: eventRow[0],
+        city: eventRow[0] || "Unknown City",
         title: eventRow[2] || "Untitled Event",
         description: eventRow[3] || "",
         date: eventRow[4] || "Date not specified",
@@ -78,6 +80,7 @@ export default async function handler(req, res) {
         musicRatio: eventRow[11] || "50% Salsa, 30% Bachata, 20% Kizomba",
         currencySymbols: eventRow[12] || "₹,₫,฿",
         instagramHandle: eventRow[13] || null,
+        day: eventRow[14] || null,
       };
 
       return res.status(200).json(event);
@@ -103,6 +106,7 @@ export default async function handler(req, res) {
           musicRatio: row[11] || "Ratio not specified",
           currencySymbols: row[12] || "Symbols not specified",
           instagramHandle: row[13] || null,
+          day: row[14] || null,
         }));
 
       if (cityEvents.length === 0) {

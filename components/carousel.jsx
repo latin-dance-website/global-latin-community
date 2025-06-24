@@ -22,6 +22,7 @@ export default function Carousel() {
   const [loading, setLoading] = useState(true);
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [isScrolling, setIsScrolling] = useState(false);
+  const [autoPlay, setAutoPlay] = useState(true);
 
   const cardsPerView = isMobile ? 2 : 4;
 
@@ -29,6 +30,8 @@ export default function Carousel() {
     if (!isScrolling && events.length > 0) {
       const maxIndex = Math.max(0, events.length - cardsPerView);
       setIndex((prev) => Math.max(0, prev - 1));
+      setAutoPlay(false); // Stop autoplay when user interacts
+      setTimeout(() => setAutoPlay(true), 10000); // Resume after 10 seconds
     }
   };
 
@@ -36,6 +39,8 @@ export default function Carousel() {
     if (!isScrolling && events.length > 0) {
       const maxIndex = Math.max(0, events.length - cardsPerView);
       setIndex((prev) => Math.min(maxIndex, prev + 1));
+      setAutoPlay(false); // Stop autoplay when user interacts
+      setTimeout(() => setAutoPlay(true), 10000); // Resume after 10 seconds
     }
   };
 
@@ -107,6 +112,20 @@ export default function Carousel() {
   }, []);
 
   useEffect(() => scrollTo(index), [index, isMobile]);
+
+  // Auto-play functionality
+  useEffect(() => {
+    if (!autoPlay || events.length === 0 || events.length <= cardsPerView) return;
+
+    const interval = setInterval(() => {
+      setIndex((prevIndex) => {
+        const maxIndex = Math.max(0, events.length - cardsPerView);
+        return prevIndex >= maxIndex ? 0 : prevIndex + 1;
+      });
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [autoPlay, events.length, cardsPerView]);
 
   if (loading)
     return (
@@ -213,7 +232,10 @@ export default function Carousel() {
                   ? "calc(33.333% - 14px)"
                   : "calc(25% - 15px)",
             }}
-            onClick={() => handleCardClick(event)}
+            onClick={() => {
+              handleCardClick(event);
+              setAutoPlay(false); // Stop autoplay when card is clicked
+            }}
             cursor="pointer"
             maxWidth={{ base: "300px", md: "350px" }}
           >
@@ -268,7 +290,7 @@ export default function Carousel() {
                   fontWeight="700"
                   noOfLines={1}
                   lineHeight="1.2"
-                  color="gray.800"
+                  color="#E53E3E"
                   width="100%"
                   textAlign="center"
                   mb={{ base: "4px", md: "6px" }}
@@ -280,62 +302,153 @@ export default function Carousel() {
                   {event.title}
                 </Text>
 
-                {/* Combined Date and Time in Single Line */}
-                <Flex
-                  align="flex-start"
-                  justify="flex-start"
-                  width="100%"
-                  mb={{ base: "3px", md: "4px" }}
-                >
-                  <Flex align="flex-start" gap={2} width="100%">
-                    <Box
-                      flexShrink={0}
-                      color="#6366f1"
-                      fontSize={{ base: "11px", md: "13px" }}
-                      mt="1px"
-                    >
-                      <FaCalendar />
-                    </Box>
-                    <Text
-                      fontSize={{ base: "11px", md: "12px" }}
-                      color="gray.600"
-                      fontWeight="600"
-                      noOfLines={1}
-                      lineHeight="1.3"
-                      textAlign="left"
-                      flex="1"
-                      wordBreak="break-word"
-                    >
-                      {event.day},{event.shortDate} {event.startTime}-{event.endTime}
-                    </Text>
-                  </Flex>
-                </Flex>
+                {/* Mobile Layout - Date & Time on same line, Location below */}
+                {isMobile ? (
+                  <Flex align="flex-start" justify="center" width="100%" gap={1}>
+  {/* Left column with Calendar and Location icons stacked vertically */}
+  <VStack spacing={1} align="center" mt="1px" width="12px" flexShrink={0}>
+    <Box
+      color="#6366f1"
+      fontSize="10px"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      width="12px"
+      height="12px"
+    >
+      <FaCalendar />
+    </Box>
+    <Box
+      color="#6366f1"
+      fontSize="10px"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      width="12px"
+      height="12px"
+    >
+      <FaLocationDot />
+    </Box>
+  </VStack>
 
-                {/* Location - Consistent font sizing */}
-                <Flex align="flex-start" justify="flex-start" width="100%">
-                  <Flex align="flex-start" gap={2} width="100%">
-                    <Box
-                      flexShrink={0}
-                      color="#6366f1"
-                      fontSize={{ base: "11px", md: "13px" }}
-                      mt="1px"
+  {/* Right column with Date+Time on top line, Location on second line */}
+  <VStack spacing={1} align="flex-start" width="100%">
+    {/* Date + Time Row */}
+    <Flex align="center" gap={2} flexWrap="nowrap" flex="1" flexShrink={1}>
+      {/* Date */}
+      <Flex align="center" gap={1} whiteSpace="nowrap">
+        <Text
+          fontSize="10px"
+          color="gray.600"
+          fontWeight="600"
+          lineHeight="1.3"
+        >
+          {event.day}, {event.shortDate}
+        </Text>
+      </Flex>
+      {/* Time */}
+      <Flex align="center" gap={1} whiteSpace="nowrap">
+        <Box
+          flexShrink={0}
+          color="#6366f1"
+          fontSize="10px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          width="12px"
+          height="12px"
+        >
+          <FaClock />
+        </Box>
+        <Text
+          fontSize="10px"
+          color="gray.600"
+          fontWeight="600"
+          lineHeight="1.3"
+        >
+          {event.startTime} hrs-{event.endTime} hrs
+        </Text>
+      </Flex>
+    </Flex>
+
+    {/* Location Row */}
+    <Text
+      fontSize="10px"
+      color="gray.600"
+      fontWeight="600"
+      lineHeight="1.3"
+      wordBreak="break-word"
+    >
+      {event.location}
+    </Text>
+  </VStack>
+</Flex>
+
+
+
+                ) : (
+                  /* Desktop Layout - Original layout */
+                  <>
+                    {/* Date and Time Combined */}
+                    <Flex
+                      align="flex-start"
+                      justify="center" 
+                      width="100%"
+                      mb={{ base: "3px", md: "4px" }}
                     >
-                      <FaLocationDot />
-                    </Box>
-                    <Text
-                      fontSize={{ base: "11px", md: "12px" }}
-                      color="gray.600"
-                      fontWeight="600"
-                      noOfLines={2}
-                      lineHeight="1.3"
-                      textAlign="left"
-                      flex="1"
-                      wordBreak="break-word"
+                      <Flex align="flex-start" gap={{ base: 0.5, md: 2 }} justify="center">
+                        <Box
+                          flexShrink={0}
+                          color="#6366f1"
+                          fontSize="13px"
+                          mt="1px"
+                        >
+                          <FaCalendar />
+                        </Box>
+                        <Text
+                          fontSize="12px"
+                          color="gray.600"
+                          fontWeight="600"
+                          noOfLines={1}
+                          lineHeight="1.3"
+                          textAlign="center"
+                          flex="none"
+                          wordBreak="break-word"
+                        >
+                          {event.day}, {event.shortDate} {event.startTime}-{event.endTime}
+                        </Text>
+                      </Flex>
+                    </Flex>
+
+                    {/* Location - Icon left, text centered */}
+                    <Flex 
+                      align="center" 
+                      justify="center" 
+                      width="100%"
                     >
-                      {event.location}
-                    </Text>
-                  </Flex>
-                </Flex>
+                      <Flex align="center" gap={2}>
+                        <Box
+                          flexShrink={0}
+                          color="#6366f1"
+                          fontSize="13px"
+                        >
+                          <FaLocationDot />
+                        </Box>
+                        <Text
+                          fontSize="12px"
+                          color="gray.600"
+                          fontWeight="600"
+                          noOfLines={2}
+                          lineHeight="1.3"
+                          textAlign="center"
+                          wordBreak="break-word"
+                        >
+                          {event.location}
+                        </Text>
+                      </Flex>
+                    </Flex>
+                  </>
+                )}
               </Box>
             </Box>
           </Box>
@@ -354,7 +467,11 @@ export default function Carousel() {
               borderRadius="full"
               transition="all 0.3s ease"
               cursor="pointer"
-              onClick={() => setIndex(i)}
+              onClick={() => {
+                setIndex(i);
+                setAutoPlay(false); // Stop autoplay when dot is clicked
+                setTimeout(() => setAutoPlay(true), 10000); // Resume after 10 seconds
+              }}
               _hover={{ bg: index === i ? "#e91e63" : "gray.400" }}
             />
           ))}

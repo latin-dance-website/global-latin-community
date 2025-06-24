@@ -3,25 +3,46 @@ import NavbarCompact from "@components/NavbarCompact";
 import { useRouter } from "next/router";
 import Caraousel from "../.././components/carousel";
 import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
-import { CaretDownOutlined } from "@ant-design/icons";
+import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import isBetween from "dayjs/plugin/isBetween";
 import weekday from "dayjs/plugin/weekday";
 import weekOfYear from "dayjs/plugin/weekOfYear";
-
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import {
   Box,
   Button,
   Heading,
   Text,
   HStack,
+  Image,
   Grid,
+  Input, // Add this import
   InputGroup,
   IconButton,
+  InputLeftElement,
+  useColorModeValue,
   Select,
   Flex,
+  PopoverTrigger,
+  PopoverContent,
   useBreakpointValue,
   VStack,
-  SimpleGrid,
+  // PhoneInput,
+  useDisclosure,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
+  ModalCloseButton,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverBody,
+  ModalHeader,
+  Stack,
+  chakra,
+  Popover,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { FaCalendar, FaClock, FaLocationDot } from "react-icons/fa6";
@@ -34,16 +55,59 @@ dayjs.extend(weekOfYear);
 
 export default function EventsPage({ eventsByCity, cities }) {
   const blink = keyframes`
-  0% { box-shadow: 0 0 0px rgb(156, 60, 246); }
-  50% { box-shadow: 0 0 10px rgb(156, 60, 246); }
-  100% { box-shadow: 0 0 0px rgb(156, 60, 246); }
-`;
+    0% { box-shadow: 0 0 0px rgb(156, 60, 246); }
+    50% { box-shadow: 0 0 10px rgb(156, 60, 246); }
+    100% { box-shadow: 0 0 0px rgb(156, 60, 246); }
+  `;
+  
   const router = useRouter();
   const [selectedCity, setSelectedCity] = useState("");
   const [dateRange, setDateRange] = useState(null);
   const [showEvents, setShowEvents] = useState(false);
   const { RangePicker } = DatePicker;
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const scrollContainerRef = useRef(null);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+const [showPopup, setShowPopup] = useState(false);
+const [toEmail, setToEmail] = useState("");
+const [phoneNumber, setPhoneNumber] = useState("");
+const [instagramId, setInstagramId] = useState("");
+const [isSending, setIsSending] = useState(false);
+const handleSend = async () => {
+  setIsSending(true);
+  try {
+    // Your email sending logic here
+    console.log({ toEmail, phoneNumber, instagramId });
+    // After successful send:
+    setShowPopup(false);
+  } catch (error) {
+    console.error("Error sending details:", error);
+  } finally {
+    setIsSending(false);
+  }
+};
+  // Auto-scroll functionality
+  useEffect(() => {
+    if (!showEvents || !isAutoScrolling) return;
+
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const scrollInterval = setInterval(() => {
+      if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
+        container.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        const cardWidth = isMobile ? 300 : 350;
+        const gap = isMobile ? 24 : 20;
+        container.scrollBy({ left: cardWidth + gap, behavior: 'smooth' });
+      }
+    }, 3000);
+
+    return () => clearInterval(scrollInterval);
+  }, [showEvents, isAutoScrolling, isMobile]);
+
+  const handleMouseEnter = () => setIsAutoScrolling(false);
+  const handleMouseLeave = () => setIsAutoScrolling(true);
 
   const handleExploreNow = (event) => {
     sessionStorage.setItem("currentEvent", JSON.stringify(event));
@@ -159,8 +223,7 @@ export default function EventsPage({ eventsByCity, cities }) {
         <NavbarCompact />
       </Box>
 
-      {/* Reduced margin top to bring title closer to navbar */}
-      <Box mt={{ base: 1, md: 1 }} mb={-4} textAlign="center">
+      <Box mt={{ base: 4, md: 6 }} mb={-2} textAlign="center">
         <Heading
           fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
           fontWeight="extrabold"
@@ -173,218 +236,384 @@ export default function EventsPage({ eventsByCity, cities }) {
       <LayerBlur2 />
       <Caraousel />
 
+      {/* Main Control Box */}
       <Box
-        width="90%"
+        width={{ base: "95%", md: "90%", lg: "80%" }}
+        maxWidth="800px"
         display="flex"
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        borderRadius="12px"
+        borderRadius="16px"
         bg="white"
-        boxShadow={"xl"}
-        border="1px solid #9c3cf6"
-        py="10px"
-        px="1rem"
-        mt={{ base: "-5", md: "4" }} // Move box down for desktop
-        mb="8"
+        boxShadow="xl"
+        border="2px solid #9c3cf6"
+        py={{ base: 6, md: 8 }}
+        px={{ base: 4, md: 6 }}
+        mt={{ base: 2, md: 6 }}
+        mb={8}
       >
-        <HStack
-          width="100%"
-          justifyContent="center"
-          flexDirection="column"
-          spacing={1}
-          mb="1rem"
-        >
+        {/* Header Text */}
+        <VStack spacing={1.5} mb={6} textAlign="center">
+          <Box mt={-2}>  
+    <Heading
+      fontSize={{ base: "2xl", md: "2xl" }}
+      fontWeight="bold"
+      color="#000001"
+    >
+      Where's The Party?
+    </Heading>
+  </Box>
           <Heading
-            fontSize="2xl"
-            fontWeight="bold"
-            textAlign="center"
-            color="#000001"
-            mt="-2"
+            as="h3"
+            fontSize={{ base: "md", md: "lg" }}
+            color="#a23cf6"
+            fontWeight="semibold"
           >
-            Where's The Party?
-          </Heading>
-
-          <Heading as="h3" size="md" color="#a23cf6">
             Just Pick a City!
           </Heading>
-
-          <Text
-            fontWeight="medium"
-            fontSize="md"
-            color="#333"
-            textAlign="center"
-            maxW="600px"
-            px="1rem"
-          >
-            Discover the verified <br />
-            Global Latin Dance Events <br />
-            Salsa, Bachata, Kizomba & Zouk Nights <br />
-          </Text>
-
-          <Flex
-            mt="16px"
-            mr={{ base: "0", md: "0" }}
-            justify="center"
-            align="center"
-            gap="12px"
-            width="100%"
-            wrap="wrap"
-            px={{ base: "0rem", md: "1rem" }}
-            direction={{ base: "column", md: "row" }}
-          >
-            {/* City Selector */}
-            <Box
-              width={{ base: "80%", md: "200px" }}
-              display="flex"
-              height="40px"
-              justifyContent="center"
-              alignItems="center"
+          <Box textAlign="center" lineHeight="1.6">
+            <Text
+              fontWeight="medium"
+              fontSize={{ base: "sm", md: "md" }}
+              color="#333"
             >
-              <InputGroup width="100%" mt={{ base: "-8", md: "0" }}>
-                <Select
-                  value={selectedCity}
-                  onChange={(e) => {
-                    setSelectedCity(e.target.value);
-                    setShowEvents(false);
-                  }}
-                  mx="0.5rem"
-                  placeholder="Select a city"
-                  border="1px solid #9c3cf6"
-                  borderRadius="10px"
-                  bg="white"
-                  color="#9c3cf6"
-                  fontWeight="600"
-                  fontSize="1rem"
-                  height="40px"
-                  animation={
-                    selectedCity ? "none" : `${blink} 1.5s ease-in-out infinite`
-                  }
-                >
-                  {cities.map((city) => (
-                    <option key={city} value={city}>
-                      {city.trim()}
-                    </option>
-                  ))}
-                </Select>
-              </InputGroup>
-            </Box>
-
-            {/* Date Range Picker */}
-            <Flex
-              align="center"
-              width={{ base: "240px", md: "320px" }}
-              textColor="black"
-              position="relative"
-              height="40px"
+              Discover the verified
+            </Text>
+            <Text
+              fontWeight="medium"
+              fontSize={{ base: "sm", md: "md" }}
+              color="#333"
             >
-              <Text
-                fontWeight="semibold"
+              Global Latin Dance Events
+            </Text>
+            <Text
+              fontWeight="bold"
+              fontSize={{ base: "sm", md: "md" }}
+              color="#333"
+            >
+              <Text as="span" color="#ff6b35">Salsa</Text>
+              {", "}
+              <Text as="span" color="#9c3cf6">Bachata</Text>
+              {", "}
+              <Text as="span" color="#10b981">Kizomba</Text>
+              {" & "}
+              <Text as="span" color="#f59e0b">Zouk</Text>
+              {" Nights"}
+            </Text>
+          </Box>
+        </VStack>
+
+        {/* Controls Container */}
+        <VStack spacing={4} width="100%" align="center">
+          {/* City Selector */}
+          <Box width={{ base: "75%", md: "100%" }} maxWidth={{ base: "200px", md: "300px" }}>
+            <Select
+  value={selectedCity}
+  onChange={(e) => {
+    setSelectedCity(e.target.value);
+    setShowEvents(false);
+  }}
+  placeholder="Select a city"
+  border="2px solid #9c3cf6"
+  borderRadius={{ base: "10px", md: "12px" }}
+  bg="white"
+  color="#9c3cf6"
+  fontWeight="600"
+  fontSize={{ base: "13px", md: "16px" }}
+  height={{ base: "44px", md: "48px" }}
+  _focus={{
+    borderColor: "#9c3cf6",
+    boxShadow: "0 0 0 1px #9c3cf6",
+  }}
+  _hover={{
+    borderColor: "#8a2be2",
+  }}
+  animation={
+    selectedCity ? "none" : `${blink} 1.5s ease-in-out infinite`
+  }
+  sx={{
+    '& option': {
+      color: '#9c3cf6',
+      backgroundColor: 'white',
+      fontWeight: '600',
+      _hover: {
+        backgroundColor: '#f8f4ff',
+      },
+      _selected: {
+        backgroundColor: '#9c3cf6',
+        color: 'white',
+      },
+      // Add this for the blinking animation on options
+      animation: `${blink} 1.5s ease-in-out infinite`,
+      animationDelay: 'calc(var(--option-index) * 0.1s)'
+    }
+  }}
+>
+  {cities.map((city, index) => (
+    <option 
+      key={city} 
+      value={city}
+      style={{
+        '--option-index': index // This will be used for staggered animation
+      }}
+    >
+      {city.trim()}
+    </option>
+  ))}
+</Select>
+          </Box>
+
+          {/* Date Range Picker */}
+          <Box 
+            width={{ base: "95%", md: "100%" }}
+            maxWidth={{ base: "260px", md: "280px" }}
+            borderRadius={{ base: "10px", md: "12px" }}
+            overflow="hidden"
+            bg="white"
+            position="relative"
+            border={{ base: "2px solid #9c3cf6", md: "none" }}
+          >
+            <Flex align="center" height={{ base: "44px", md: "48px" }}>
+              {/* Set Travel Dates Label */}
+              <Box
+                bg="linear-gradient(135deg, #ff6b35, #f59e0b)"
                 color="white"
-                whiteSpace="nowrap"
-                bg="#9c3cf6"
-                borderTopLeftRadius="5px"
-                borderBottomLeftRadius="5px"
-                borderTopRightRadius="5px"
-                borderBottomRightRadius="5px"
-                zIndex={1}
-                _hover={{ cursor: "pointer" }}
-                fontSize="xs"
-                flex="1"
-                textAlign="center"
-                height="32px"
+                px={{ base: 2, md: 3 }}
+                py={0}
+                height="100%"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                marginRight="4px"
-                minW="100px"
-                mt={{ base: "-7", md: "0" }}
+                minWidth={{ base: "100px", md: "120px" }}
+                fontWeight="600"
+                fontSize={{ base: "11px", md: "14px" }}
+                borderRight="1px solid #9c3cf6"
               >
                 Set Travel Dates
-              </Text>
-              <RangePicker
-                format="DD MMMM"
-                value={dateRange}
-                onChange={(dates) => {
-                  setDateRange(dates);
-                  setShowEvents(false);
-                }}
-                _hover={{ cursor: "pointer" }}
-                placeholder={["Start", "End"]}
-                style={{
-                  width: "150px",
-                  border: "1px solid #9c3cf6",
-                  color: "#5a1a73",
-                  fontSize: "12px",
-                  height: "32px",
-                  marginTop: isMobile ? "-28px" : "0px",
-                }}
-                placement={isMobile ? "bottomRight" : "bottomLeft"}
-                inputReadOnly={isMobile}
-                suffixIcon={[
-                  <CaretDownOutlined
-                    key="start"
-                    style={{ fontSize: "10px" }}
-                  />,
-                  <CaretDownOutlined key="end" style={{ fontSize: "10px" }} />,
-                ]}
-                separator={
-                  <span
-                    style={{
-                      margin: "0 1px",
-                      fontSize: "12px",
-                      fontWeight: "bold",
-                      color: "#9c3cf6",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "16px",
-                    }}
-                  >
-                    →
-                  </span>
-                }
-                size="small"
-              />
+              </Box>
+              
+              {/* Date Range Picker */}
+              <Box flex="1" height="100%">
+                <RangePicker
+                  format="DD MMM"
+                  value={dateRange}
+                  onChange={(dates) => {
+                    setDateRange(dates);
+                    setShowEvents(false);
+                  }}
+                  placeholder={["Start Date", "End Date"]}
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    height: isMobile ? "42px" : "46px",
+                    fontSize: isMobile ? "11px" : "12px",
+                    fontWeight: "600",
+                    color: "#9c3cf6",
+                    backgroundColor: "transparent",
+                    border: isMobile ? "none" : "1px solid #9c3cf6", // <-- added border for desktop
+  borderRadius: "6px", // optional for a rounded border
+  paddingLeft: "8px", 
+                  }}
+                  suffixIcon={null}
+                  separator={
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      px={1}
+                      fontSize={{ base: "14px", md: "16px" }}
+                      color="#9c3cf6"
+                      fontWeight="bold"
+                    >
+                      ⇌
+                    </Box>
+                  }
+                  inputReadOnly={isMobile}
+                  placement="bottomLeft"
+                />
+              </Box>
             </Flex>
+          </Box>
 
-            {/* Get Events Button */}
-            <Box mt={{ base: "-14px", md: "0" }} height="40px" display="flex" alignItems="center">
-              <Button
-                onClick={handleShowEvents}
-                bg="#9c3cf6"
-                color="white"
-                borderRadius="8px"
-                fontWeight="600"
-                boxShadow="md"
-                height="40px"
-                isDisabled={!selectedCity}
-                _hover={{
-                  bg: "#8a2be2",
-                  transform: "translateY(-1px)",
-                  boxShadow: "lg",
-                }}
-                _active={{ bg: "#7b1fa2" }}
-                transition="all 0.2s ease"
-              >
-                Get Personalised Event Details
-              </Button>
-            </Box>
-          </Flex>
-        </HStack>
+          {/* Get Events Button */}
+          <Box width={{ base: "85%", md: "100%" }} maxWidth={{ base: "260px", md: "300px" }}>
+            <Button
+              onClick={() => {
+                if (!selectedCity) {
+                  alert("Please select a city first!");
+                  return;
+                }
+                if (!dateRange || !dateRange[0] || !dateRange[1]) {
+                  if (window.confirm("No travel dates selected. Would you like to see all upcoming events for " + selectedCity + "?")) {
+                    handleShowEvents();
+                    setShowPopup(true); // Show popup after confirming
+                  }
+                  return;
+                }
+                handleShowEvents();
+                setShowPopup(true); // Show popup when dates are selected
+              }}
+              bg={selectedCity && dateRange ? "#9c3cf6" : "#ff6b35"}
+              color="white"
+              borderRadius={{ base: "10px", md: "12px" }}
+              fontWeight="700"
+              fontSize={{ base: "12px", md: "16px" }}
+              height={{ base: "44px", md: "48px" }}
+              width="100%"
+              boxShadow={selectedCity && dateRange ? "md" : "0 0 15px rgba(255, 107, 53, 0.6)"}
+              _hover={{
+                bg: selectedCity && dateRange ? "#8a2be2" : "#ff5722",
+                transform: "translateY(-2px)",
+                boxShadow: selectedCity && dateRange ? "lg" : "0 0 20px rgba(255, 107, 53, 0.8)",
+              }}
+              _active={{ 
+                bg: selectedCity && dateRange ? "#7b1fa2" : "#e64a19",
+                transform: "translateY(0px)",
+              }}
+              transition="all 0.2s ease"
+              animation={!selectedCity || !dateRange ? `${blink} 2s ease-in-out infinite` : "none"}
+            >
+              Get Personalised Event Details
+            </Button>
+            {/* Popup - Place this right after your button */}
+{showPopup && (
+  <Box
+    position="fixed"
+    top="0"
+    left="0"
+    width="100vw"
+    height="100vh"
+    backgroundColor="rgba(0, 0, 0, 0.7)"
+    backdropFilter="blur(5px)"
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
+    zIndex={9999}
+    onClick={(e) => {
+      if (e.target === e.currentTarget) {
+        setShowPopup(false);
+      }
+    }}
+  >
+    <Box
+      bg="white"
+      p={6}
+      borderRadius="lg"
+      boxShadow="2xl"
+      w={{ base: "90%", sm: "400px" }}
+      maxW="95vw"
+    >
+      <Text
+        fontSize={{ base: "lg", sm: "xl" }}
+        fontWeight="bold"
+        color="pink.500"
+        textAlign="center"
+        mb={4}
+      >
+        Hey, Hope you have a great time in {selectedCity}.
+      </Text>
+
+      {/* Input fields */}
+      <Stack spacing={4}>
+        <Input
+          placeholder="Enter your email..."
+          value={toEmail}
+          onChange={(e) => setToEmail(e.target.value)}
+          type="email"
+          borderRadius="full"
+          borderColor="gray.300"
+          px={4}
+        />
+
+        <PhoneInput
+          country={'in'}
+          value={phoneNumber}
+          onChange={setPhoneNumber}
+          inputStyle={{
+            width: '100%',
+            borderRadius: '9999px',
+            border: '1px solid #E2E8F0',
+            paddingLeft: '48px',
+          }}
+          containerStyle={{
+            width: '100%',
+          }}
+        />
+
+        <Input
+          placeholder="Instagram username"
+          value={instagramId}
+          onChange={(e) => setInstagramId(e.target.value)}
+          borderRadius="full"
+          borderColor="gray.300"
+          px={4}
+        />
+      </Stack>
+
+      <Text fontSize="sm" textAlign="center" mt={4} color="gray.600">
+        Get verified schedule sent to you so you can just dance.
+        Leave everything else to us.
+      </Text>
+
+      <Flex justify="flex-end" mt={6}>
+        <Button
+          mr={3}
+          variant="outline"
+          onClick={() => setShowPopup(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          colorScheme="pink"
+          isLoading={isSending}
+          onClick={handleSend}
+        >
+          Send Details
+        </Button>
+      </Flex>
+    </Box>
+  </Box>
+)}
+          </Box>
+        </VStack>
       </Box>
 
+      {/* Events Display */}
       {showEvents && selectedCity && (
         <Box width="100%" mt={8} mb={12} px={{ base: 4, md: 6 }}>
-          {/* Mobile: Single column scrollable */}
+          {/* Mobile: Horizontal scrolling */}
           <Box display={{ base: "block", md: "none" }}>
-            <VStack spacing={6} align="stretch">
+            <Box
+              ref={scrollContainerRef}
+              display="flex"
+              overflowX="auto"
+              gap={6}
+              pb={4}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              css={{
+                '&::-webkit-scrollbar': {
+                  height: '8px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  background: '#f1f1f1',
+                  borderRadius: '10px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: '#9c3cf6',
+                  borderRadius: '10px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  background: '#8a2be2',
+                },
+              }}
+            >
               {getFilteredEvents().map((event, index) => (
                 <Box
                   key={`${event.id}-${index}`}
-                  width="100%"
+                  minWidth="300px"
                   maxWidth="300px"
-                  mx="auto"
                   onClick={() => handleExploreNow(event)}
                   cursor="pointer"
                 >
@@ -404,7 +633,6 @@ export default function EventsPage({ eventsByCity, cities }) {
                     display="flex"
                     flexDirection="column"
                   >
-                    {/* Event Image */}
                     <Box
                       width="100%"
                       height="240px"
@@ -425,7 +653,6 @@ export default function EventsPage({ eventsByCity, cities }) {
                       />
                     </Box>
 
-                    {/* Event Details */}
                     <Box
                       p="6px"
                       flex="1"
@@ -433,7 +660,6 @@ export default function EventsPage({ eventsByCity, cities }) {
                       flexDirection="column"
                       justifyContent="flex-start"
                     >
-                      {/* Title */}
                       <Text
                         fontSize="11px"
                         fontWeight="700"
@@ -451,60 +677,45 @@ export default function EventsPage({ eventsByCity, cities }) {
                         {event.title}
                       </Text>
 
-                      {/* Date */}
                       <Flex
                         align="center"
-                        justify="space-between"
+                        justify="flex-start"
                         width="100%"
                         mb="3px"
+                        gap={2}
                       >
-                        <Flex align="center" gap={2}>
-                          <Box color="#6366f1" fontSize="11px">
-                            <FaCalendar />
-                          </Box>
-                          <Text
-                            fontSize="11px"
-                            color="gray.600"
-                            fontWeight="600"
-                          >
-                            {event.formattedDate}
-                          </Text>
-                        </Flex>
+                        <Box color="#6366f1" fontSize="11px">
+                          <FaCalendar />
+                        </Box>
+                        <Text
+                          fontSize="11px"
+                          color="gray.600"
+                          fontWeight="600"
+                        >
+                          {event.formattedDate}
+                        </Text>
+                        <Box color="#6366f1" fontSize="11px">
+                          <FaClock />
+                        </Box>
+                        <Text
+                          fontSize="11px"
+                          color="gray.600"
+                          fontWeight="600"
+                        >
+                          {event.startTime} - {event.endTime}
+                        </Text>
                       </Flex>
 
-                      {/* Time */}
                       <Flex
                         align="center"
-                        justify="space-between"
-                        width="100%"
-                        mb="3px"
-                      >
-                        <Flex align="center" gap={2}>
-                          <Box color="#6366f1" fontSize="11px">
-                            <FaClock />
-                          </Box>
-                          <Text
-                            fontSize="11px"
-                            color="gray.600"
-                            fontWeight="600"
-                          >
-                            {event.startTime} - {event.endTime}
-                          </Text>
-                        </Flex>
-                      </Flex>
-
-                      {/* Location */}
-                      <Flex
-                        align="flex-start"
                         justify="flex-start"
                         width="100%"
                       >
-                        <Flex align="flex-start" gap={2} width="100%">
+                        <Flex align="center" gap={2} width="100%">
                           <Box
                             flexShrink={0}
                             color="#6366f1"
                             fontSize="11px"
-                            mt="1px"
                           >
                             <FaLocationDot />
                           </Box>
@@ -526,27 +737,40 @@ export default function EventsPage({ eventsByCity, cities }) {
                   </Box>
                 </Box>
               ))}
-            </VStack>
+            </Box>
           </Box>
 
-          {/* Desktop: Grid layout */}
+          {/* Desktop: Horizontal scrolling grid */}
           <Box display={{ base: "none", md: "block" }}>
-            <SimpleGrid
-              columns={{
-                md:
-                  getFilteredEvents().length >= 4
-                    ? 4
-                    : getFilteredEvents().length,
+            <Box
+              ref={scrollContainerRef}
+              display="flex"
+              overflowX="auto"
+              gap={5}
+              pb={4}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              css={{
+                '&::-webkit-scrollbar': {
+                  height: '10px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  background: '#f1f1f1',
+                  borderRadius: '10px',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: '#9c3cf6',
+                  borderRadius: '10px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  background: '#8a2be2',
+                },
               }}
-              spacing={5}
-              justifyItems="center"
-              maxWidth="1400px"
-              mx="auto"
             >
               {getFilteredEvents().map((event, index) => (
                 <Box
                   key={`${event.id}-${index}`}
-                  width="100%"
+                  minWidth="350px"
                   maxWidth="350px"
                   onClick={() => handleExploreNow(event)}
                   cursor="pointer"
@@ -567,7 +791,6 @@ export default function EventsPage({ eventsByCity, cities }) {
                     display="flex"
                     flexDirection="column"
                   >
-                    {/* Event Image */}
                     <Box
                       width="100%"
                       height="280px"
@@ -588,7 +811,6 @@ export default function EventsPage({ eventsByCity, cities }) {
                       />
                     </Box>
 
-                    {/* Event Details */}
                     <Box
                       p="8px"
                       flex="1"
@@ -596,7 +818,6 @@ export default function EventsPage({ eventsByCity, cities }) {
                       flexDirection="column"
                       justifyContent="flex-start"
                     >
-                      {/* Title */}
                       <Text
                         fontSize="13px"
                         fontWeight="700"
@@ -614,60 +835,45 @@ export default function EventsPage({ eventsByCity, cities }) {
                         {event.title}
                       </Text>
 
-                      {/* Date */}
                       <Flex
                         align="center"
-                        justify="space-between"
+                        justify="flex-start"
                         width="100%"
                         mb="4px"
+                        gap={2}
                       >
-                        <Flex align="center" gap={2}>
-                          <Box color="#6366f1" fontSize="13px">
-                            <FaCalendar />
-                          </Box>
-                          <Text
-                            fontSize="12px"
-                            color="gray.600"
-                            fontWeight="600"
-                          >
-                            {event.formattedDate}
-                          </Text>
-                        </Flex>
+                        <Box color="#6366f1" fontSize="13px">
+                          <FaCalendar />
+                        </Box>
+                        <Text
+                          fontSize="12px"
+                          color="gray.600"
+                          fontWeight="600"
+                        >
+                          {event.formattedDate}
+                        </Text>
+                        <Box color="#6366f1" fontSize="13px">
+                          <FaClock />
+                        </Box>
+                        <Text
+                          fontSize="12px"
+                          color="gray.600"
+                          fontWeight="600"
+                        >
+                          {event.startTime} - {event.endTime}
+                        </Text>
                       </Flex>
 
-                      {/* Time */}
                       <Flex
                         align="center"
-                        justify="space-between"
-                        width="100%"
-                        mb="4px"
-                      >
-                        <Flex align="center" gap={2}>
-                          <Box color="#6366f1" fontSize="13px">
-                            <FaClock />
-                          </Box>
-                          <Text
-                            fontSize="12px"
-                            color="gray.600"
-                            fontWeight="600"
-                          >
-                            {event.startTime} - {event.endTime}
-                          </Text>
-                        </Flex>
-                      </Flex>
-
-                      {/* Location */}
-                      <Flex
-                        align="flex-start"
                         justify="flex-start"
                         width="100%"
                       >
-                        <Flex align="flex-start" gap={2} width="100%">
+                        <Flex align="center" gap={2} width="100%">
                           <Box
                             flexShrink={0}
                             color="#6366f1"
                             fontSize="13px"
-                            mt="1px"
                           >
                             <FaLocationDot />
                           </Box>
@@ -689,7 +895,7 @@ export default function EventsPage({ eventsByCity, cities }) {
                   </Box>
                 </Box>
               ))}
-            </SimpleGrid>
+            </Box>
           </Box>
 
           {/* No events message */}

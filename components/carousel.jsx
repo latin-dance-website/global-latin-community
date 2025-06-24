@@ -321,6 +321,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                         width="12px"
                         height="12px"
                         mt="-1px"
+                        ml="-6px"
                       >
                         <FaCalendar />
                       </Box>
@@ -333,6 +334,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                         width="12px"
                         height="12px"
                         mt="1px"
+                        ml="-6px"
                       >
                         <FaLocationDot />
                       </Box>
@@ -352,6 +354,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                             noOfLines={1}
                             overflow="hidden"
                             textOverflow="ellipsis"
+                            ml="0px"
                           >
                             {event.day}, {event.shortDate}
                           </Text>
@@ -367,6 +370,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                             justifyContent="center"
                             width="12px"
                             height="12px"
+                            ml="6px"
                           >
                             <FaClock />
                           </Box>
@@ -392,6 +396,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                         lineHeight="1.3"
                         wordBreak="break-word"
                         noOfLines={2}
+                        ml="-2px"
                       >
                         {event.location}
                       </Text>

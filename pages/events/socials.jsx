@@ -59,7 +59,27 @@ export default function EventsPage({ eventsByCity, cities }) {
     50% { box-shadow: 0 0 10px rgb(156, 60, 246); }
     100% { box-shadow: 0 0 0px rgb(156, 60, 246); }
   `;
-  
+  const flashBoxAndText = keyframes`
+  0%, 100% {
+    background-color: white;
+    color: black;
+  }
+  50% {
+    background-color: #9c3cf6;
+    color: white;
+  }
+`;
+const flashBackgroundDark = keyframes`
+  0%, 100% {
+    background-color: white;
+    color: black;
+  }
+  50% {
+    background-color: #9c3cf6;
+    color: white;
+  }
+`;
+
   const router = useRouter();
   const [selectedCity, setSelectedCity] = useState("");
   const [dateRange, setDateRange] = useState(null);
@@ -334,27 +354,34 @@ const handleSend = async () => {
         {/* Controls Container */}
         <VStack spacing={4} width="100%" align="center">
           {/* City Selector */}
-          <Box width={{ base: "75%", md: "100%" }} maxWidth={{ base: "200px", md: "300px" }}>
-            <Select
-  value={selectedCity}
-  onChange={(e) => {
-    setSelectedCity(e.target.value);
-    setShowEvents(false);
-  }}
-  placeholder="Select a city"
-  border="2px solid #9c3cf6"
+          <Box
+  width={{ base: "75%", md: "100%" }}
+  maxWidth={{ base: "200px", md: "300px" }}
   borderRadius={{ base: "10px", md: "12px" }}
-  bg="white"
-  color="#9c3cf6"
-  fontWeight="600"
-  fontSize={{ base: "13px", md: "16px" }}
-  height={{ base: "44px", md: "48px" }}
-  _focus={{
-    borderColor: "#9c3cf6",
-    boxShadow: "0 0 0 1px #9c3cf6",
-  }}
-  _hover={{
-    borderColor: "#8a2be2",
+  animation={
+    !selectedCity ? `${flashBackgroundDark} 1.3s ease-in-out infinite` : "none"
+  }
+>
+  <Select
+    value={selectedCity}
+    onChange={(e) => {
+      setSelectedCity(e.target.value);
+      setShowEvents(false);
+    }}
+    placeholder="Select a city"
+    border="2px solid #9c3cf6"
+    borderRadius={{ base: "10px", md: "12px" }}
+    bg="transparent" // important to allow box color to show
+    color="black"
+    fontWeight="600"
+    fontSize={{ base: "13px", md: "16px" }}
+    height={{ base: "44px", md: "48px" }}
+    _focus={{
+      borderColor: "#9c3cf6",
+      boxShadow: "0 0 0 1px #9c3cf6",
+    }}
+    _hover={{
+      borderColor: "#8a2be2",
   }}
   animation={
     selectedCity ? "none" : `${blink} 1.5s ease-in-out infinite`

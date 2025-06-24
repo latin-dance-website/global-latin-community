@@ -280,17 +280,19 @@ export default function Carousel() {
                   {event.title}
                 </Text>
 
-                {/* Date - Consistent font sizing */}
+                {/* Combined Date and Time in Single Line */}
                 <Flex
-                  align="center"
-                  justify="space-between"
+                  align="flex-start"
+                  justify="flex-start"
                   width="100%"
                   mb={{ base: "3px", md: "4px" }}
                 >
-                  <Flex align="center" gap={2}>
+                  <Flex align="flex-start" gap={2} width="100%">
                     <Box
+                      flexShrink={0}
                       color="#6366f1"
                       fontSize={{ base: "11px", md: "13px" }}
+                      mt="1px"
                     >
                       <FaCalendar />
                     </Box>
@@ -298,32 +300,13 @@ export default function Carousel() {
                       fontSize={{ base: "11px", md: "12px" }}
                       color="gray.600"
                       fontWeight="600"
+                      noOfLines={1}
+                      lineHeight="1.3"
+                      textAlign="left"
+                      flex="1"
+                      wordBreak="break-word"
                     >
-                      {event.day}, {event.shortDate}
-                    </Text>
-                  </Flex>
-                </Flex>
-
-                {/* Time - Consistent font sizing */}
-                <Flex
-                  align="center"
-                  justify="space-between"
-                  width="100%"
-                  mb={{ base: "3px", md: "4px" }}
-                >
-                  <Flex align="center" gap={2}>
-                    <Box
-                      color="#6366f1"
-                      fontSize={{ base: "11px", md: "13px" }}
-                    >
-                      <FaClock />
-                    </Box>
-                    <Text
-                      fontSize={{ base: "11px", md: "12px" }}
-                      color="gray.600"
-                      fontWeight="600"
-                    >
-                      {event.startTime} - {event.endTime}
+                      {event.day},{event.shortDate} {event.startTime}-{event.endTime}
                     </Text>
                   </Flex>
                 </Flex>

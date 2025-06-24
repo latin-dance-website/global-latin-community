@@ -9,11 +9,10 @@ const NavbarCompact = ({ isToastVisible }) => {
     <HStack
       mx="auto"
       color="white"
-      py={{ base: "0.2rem", md: "0.5rem", xl: "1rem" }} // reduced vertical padding on mobile
-      px={{ base: "1rem", md: "3rem", lg: "4rem", xl: "6rem", "2xl": "8rem" }}
+      py={{ base: "0.2rem", md: "0.5rem", xl: "1rem" }} 
       position="sticky"
       zIndex="1000"
-      height={{ base: "48px", md: "7vh", lg: "7vh", xl: "10vh" }} // reduced height on base (mobile)
+      height={{ base: "48px", md: "7vh", lg: "7vh", xl: "10vh" }} 
       alignItems="center"
       top="0"
       w="100vw"
@@ -61,14 +60,14 @@ const NavbarCompact = ({ isToastVisible }) => {
         borderRadius="0.5rem"
       >
         <HStack
-          gap={{ base: "1rem", md: "1rem", lg: "1.3rem", xl: "1.3rem", "2xl": "2rem" }}
-          justifyContent="center"
-          bg="white"
-          px="1rem"
-          py="0.3rem" // reduced vertical padding
-          borderRadius="0.4rem"
-          bg={isToastVisible ? "rgba(0, 0, 0, 0.5)" : ""}
-        >
+  gap={{ base: "1rem", md: "1rem", lg: "1.3rem", xl: "1.3rem", "2xl": "2rem" }}
+  justifyContent="center"
+  px="1rem"
+  py="0.3rem"
+  borderRadius="0.4rem"
+  bg={isToastVisible ? "rgba(0, 0, 0, 0.5)" : "white"}
+>
+
           <Text
             color="black"
             fontWeight="semibold"

@@ -298,7 +298,7 @@ export default function EventsPage({ eventsByCity, cities }) {
                 justifyContent="center"
                 marginRight="4px"
                 minW="100px"
-                mt={{ base: "-8", md: "0" }}
+                mt={{ base: "-7", md: "0" }}
               >
                 Set Travel Dates
               </Text>
@@ -317,7 +317,7 @@ export default function EventsPage({ eventsByCity, cities }) {
                   color: "#5a1a73",
                   fontSize: "12px",
                   height: "32px",
-                  marginTop: isMobile ? "-30px" : "0px",
+                  marginTop: isMobile ? "-28px" : "0px",
                 }}
                 placement={isMobile ? "bottomRight" : "bottomLeft"}
                 inputReadOnly={isMobile}

@@ -40,6 +40,7 @@
     "mapbox-gl": "^3.11.1",
     "next": "^12.1.6",
     "next-compose-plugins": "^2.2.1",
+    "node-fetch": "^3.3.2",
     "nodemailer": "^7.0.2",
     "react": "^18.0.0",
     "react-date-range": "^2.0.1",

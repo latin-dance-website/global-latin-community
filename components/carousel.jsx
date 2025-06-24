@@ -6,6 +6,7 @@ import {
   useBreakpointValue,
   VStack,
   Flex,
+  useMediaQuery,
   SimpleGrid,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
@@ -23,7 +24,7 @@ export default function Carousel() {
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [isScrolling, setIsScrolling] = useState(false);
   const [autoPlay, setAutoPlay] = useState(true);
-
+const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
   const cardsPerView = isMobile ? 2 : 4;
 
   const prev = () => {
@@ -155,7 +156,7 @@ export default function Carousel() {
   const showNavigation = events.length > cardsPerView;
   const maxIndex = Math.max(0, events.length - cardsPerView);
 
-  return (
+ return (
     <Box
       position="relative"
       width="100%"
@@ -164,7 +165,7 @@ export default function Carousel() {
       pt={4}
       pb={6}
     >
-      {/* Navigation Arrows */}
+      {/* Navigation Arrows - keep existing */}
       {showNavigation && (
         <>
           <IconButton
@@ -234,7 +235,7 @@ export default function Carousel() {
             }}
             onClick={() => {
               handleCardClick(event);
-              setAutoPlay(false); // Stop autoplay when card is clicked
+              setAutoPlay(false);
             }}
             cursor="pointer"
             maxWidth={{ base: "300px", md: "350px" }}
@@ -255,7 +256,7 @@ export default function Carousel() {
               display="flex"
               flexDirection="column"
             >
-              {/* Event Image - Takes up most of the card */}
+              {/* Event Image */}
               <Box
                 width="100%"
                 height={{ base: "240px", md: "280px" }}
@@ -276,7 +277,7 @@ export default function Carousel() {
                 />
               </Box>
 
-              {/* Event Details - Reduced padding and spacing */}
+              {/* Event Details */}
               <Box
                 p={{ base: "6px", md: "8px" }}
                 flex="1"
@@ -284,9 +285,13 @@ export default function Carousel() {
                 flexDirection="column"
                 justifyContent="flex-start"
               >
-                {/* Title - Moved up with less margin */}
+                {/* Title */}
                 <Text
-                  fontSize={{ base: "11px", sm: "12px", md: "13px" }}
+                  fontSize={{ 
+                    base: isVerySmallMobile ? "10px" : "11px", 
+                    sm: "12px", 
+                    md: "13px" 
+                  }}
                   fontWeight="700"
                   noOfLines={1}
                   lineHeight="1.2"
@@ -302,94 +307,99 @@ export default function Carousel() {
                   {event.title}
                 </Text>
 
-                {/* Mobile Layout - Date & Time on same line, Location below */}
+                {/* Mobile Layout */}
                 {isMobile ? (
-                  <Flex align="flex-start" justify="center" width="100%" gap={1}>
-  {/* Left column with Calendar and Location icons stacked vertically */}
-  <VStack spacing={1} align="center" mt="1px" width="12px" flexShrink={0}>
-    <Box
-      color="#6366f1"
-      fontSize="10px"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      width="12px"
-      height="12px"
-    >
-      <FaCalendar />
-    </Box>
-    <Box
-      color="#6366f1"
-      fontSize="10px"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      width="12px"
-      height="12px"
-    >
-      <FaLocationDot />
-    </Box>
-  </VStack>
+                  <Flex align="flex-start" justify="center" width="100%" gap={0.5} px={0}>
+                    {/* Icons column - unchanged */}
+                    <VStack spacing={1} align="center" mt="1px" width="12px" flexShrink={0} ml={0.5}>
+                      <Box
+                        color="#6366f1"
+                        fontSize="10px"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        width="12px"
+                        height="12px"
+                        mt="-1px"
+                      >
+                        <FaCalendar />
+                      </Box>
+                      <Box
+                        color="#6366f1"
+                        fontSize="10px"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        width="12px"
+                        height="12px"
+                        mt="1px"
+                      >
+                        <FaLocationDot />
+                      </Box>
+                    </VStack>
 
-  {/* Right column with Date+Time on top line, Location on second line */}
-  <VStack spacing={1} align="flex-start" width="100%">
-    {/* Date + Time Row */}
-    <Flex align="center" gap={2} flexWrap="nowrap" flex="1" flexShrink={1}>
-      {/* Date */}
-      <Flex align="center" gap={1} whiteSpace="nowrap">
-        <Text
-          fontSize="10px"
-          color="gray.600"
-          fontWeight="600"
-          lineHeight="1.3"
-        >
-          {event.day}, {event.shortDate}
-        </Text>
-      </Flex>
-      {/* Time */}
-      <Flex align="center" gap={1} whiteSpace="nowrap">
-        <Box
-          flexShrink={0}
-          color="#6366f1"
-          fontSize="10px"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          width="12px"
-          height="12px"
-        >
-          <FaClock />
-        </Box>
-        <Text
-          fontSize="10px"
-          color="gray.600"
-          fontWeight="600"
-          lineHeight="1.3"
-        >
-          {event.startTime} hrs-{event.endTime} hrs
-        </Text>
-      </Flex>
-    </Flex>
+                    {/* Content column */}
+                    <VStack spacing={1} align="flex-start" width="100%" pr={0}>
+                      {/* Date + Time Row */}
+                      <Flex align="center" gap={1} flexWrap="nowrap" flex="1" flexShrink={1} width="100%">
+                        {/* Date */}
+                        <Flex align="center" gap={1} whiteSpace="nowrap" flexShrink={0} ml= "-3px">
+                          <Text
+                            fontSize={isVerySmallMobile ? "9px" : "10px"}
+                            color="gray.600"
+                            fontWeight="600"
+                            lineHeight="1.3"
+                            noOfLines={1}
+                            overflow="hidden"
+                            textOverflow="ellipsis"
+                          >
+                            {event.day}, {event.shortDate}
+                          </Text>
+                        </Flex>
+                        {/* Time */}
+                        <Flex align="center" gap={0.5} whiteSpace="nowrap" flexShrink={1} minWidth={0} ml="-3px">
+                          <Box
+                            flexShrink={0}
+                            color="#6366f1"
+                            fontSize="10px"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                            width="12px"
+                            height="12px"
+                          >
+                            <FaClock />
+                          </Box>
+                          <Text
+                            fontSize={isVerySmallMobile ? "9px" : "10px"}
+                            color="gray.600"
+                            fontWeight="600"
+                            lineHeight="1.3"  
+                            overflow="hidden"
+                            textOverflow="ellipsis"
+                            whiteSpace="nowrap"
+                          >
+                            {event.startTime}-{event.endTime === '0:00' ? '00:00' : event.endTime} hrs
+                          </Text>
+                        </Flex>
+                      </Flex>
 
-    {/* Location Row */}
-    <Text
-      fontSize="10px"
-      color="gray.600"
-      fontWeight="600"
-      lineHeight="1.3"
-      wordBreak="break-word"
-    >
-      {event.location}
-    </Text>
-  </VStack>
-</Flex>
-
-
-
+                      {/* Location Row */}
+                      <Text
+                        fontSize={isVerySmallMobile ? "9px" : "10px"}
+                        color="gray.600"
+                        fontWeight="600"
+                        lineHeight="1.3"
+                        wordBreak="break-word"
+                        noOfLines={2}
+                      >
+                        {event.location}
+                      </Text>
+                    </VStack>
+                  </Flex>
                 ) : (
-                  /* Desktop Layout - Original layout */
+                  /* Desktop Layout - unchanged */
                   <>
-                    {/* Date and Time Combined */}
                     <Flex
                       align="flex-start"
                       justify="center" 
@@ -420,7 +430,6 @@ export default function Carousel() {
                       </Flex>
                     </Flex>
 
-                    {/* Location - Icon left, text centered */}
                     <Flex 
                       align="center" 
                       justify="center" 
@@ -455,7 +464,7 @@ export default function Carousel() {
         ))}
       </Box>
 
-      {/* Dots Navigation */}
+      {/* Dots Navigation - keep existing */}
       {showNavigation && (
         <HStack justify="center" mt={2} spacing={2}>
           {Array.from({ length: maxIndex + 1 }).map((_, i) => (
@@ -469,8 +478,8 @@ export default function Carousel() {
               cursor="pointer"
               onClick={() => {
                 setIndex(i);
-                setAutoPlay(false); // Stop autoplay when dot is clicked
-                setTimeout(() => setAutoPlay(true), 10000); // Resume after 10 seconds
+                setAutoPlay(false);
+                setTimeout(() => setAutoPlay(true), 10000);
               }}
               _hover={{ bg: index === i ? "#e91e63" : "gray.400" }}
             />

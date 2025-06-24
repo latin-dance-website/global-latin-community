@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import NavbarCompact from "@components/NavbarCompact";
+import Navbar from "@components/Navbar";
 import { useRouter } from "next/router";
 import Caraousel from "../.././components/carousel";
 import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
@@ -76,12 +76,39 @@ const [isSending, setIsSending] = useState(false);
 const handleSend = async () => {
   setIsSending(true);
   try {
-    // Your email sending logic here
-    console.log({ toEmail, phoneNumber, instagramId });
-    // After successful send:
-    setShowPopup(false);
+    const filteredEvents = getFilteredEvents();
+    
+    const response = await fetch('/api/send-events-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        events: filteredEvents,
+        city: selectedCity,
+        userDetails: {
+          email: toEmail,
+          phone: phoneNumber,
+          instagram: instagramId,
+        },
+      }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert('Event details sent successfully! Check your email.');
+      setShowPopup(false);
+      // Reset form
+      setToEmail("");
+      setPhoneNumber("");
+      setInstagramId("");
+    } else {
+      alert(`Failed to send email: ${result.message}`);
+    }
   } catch (error) {
     console.error("Error sending details:", error);
+    alert('Failed to send email. Please try again.');
   } finally {
     setIsSending(false);
   }
@@ -220,7 +247,7 @@ const handleSend = async () => {
       m={0}
     >
       <Box w="100%" maxW="1200px" px={0} py={0} m={0}>
-        <NavbarCompact />
+        <Navbar />
       </Box>
 
       <Box mt={{ base: 4, md: 6 }} mb={-2} textAlign="center">
@@ -375,23 +402,23 @@ const handleSend = async () => {
             border={{ base: "2px solid #9c3cf6", md: "none" }}
           >
             <Flex align="center" height={{ base: "44px", md: "48px" }}>
-              {/* Set Travel Dates Label */}
-              <Box
-                bg="linear-gradient(135deg, #ff6b35, #f59e0b)"
-                color="white"
-                px={{ base: 2, md: 3 }}
-                py={0}
-                height="100%"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                minWidth={{ base: "100px", md: "120px" }}
-                fontWeight="600"
-                fontSize={{ base: "11px", md: "14px" }}
-                borderRight="1px solid #9c3cf6"
-              >
-                Set Travel Dates
-              </Box>
+  {/* Set Travel Dates Label */}
+  <Box
+    bg="linear-gradient(135deg, #9c3cf6, #7c3aed)"
+    color="white"
+    px={{ base: 2, md: 3 }}
+    py={0}
+    height="100%"
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    minWidth={{ base: "100px", md: "120px" }}
+    fontWeight="600"
+    fontSize={{ base: "11px", md: "14px" }}
+    borderRight="1px solid #6b21a8"
+  >
+    Set Travel Dates
+  </Box>
               
               {/* Date Range Picker */}
               <Box flex="1" height="100%">

@@ -579,7 +579,7 @@ export default function EventsDisplayPage({ allEvents }) {
               textAlign="center"
               mb={4}
             >
-              Hey, Hope you have a great time in {city}.
+              Hey, Hope you have a great time  dancing  in {city}.
             </Text>
 
             {/* Input fields */}
@@ -619,20 +619,21 @@ export default function EventsDisplayPage({ allEvents }) {
               />
             </Stack>
 
-            <Text fontSize="sm" textAlign="center" mt={4} color="gray.600">
-              Get verified schedule sent to you so you can just dance.
-              Leave everything else to us.
+            <Text fontSize="md" textAlign="center" mt={4} color="gray.600">
+              Get verified schedule sent to your contacts.  
+           
+            </Text>
+            <Text fontSize="md" textAlign="center" mt={4} color="gray.600" mt>
+           
+              We handle the plan. You handle the dancing.
             </Text>
 
-            <Flex justify="flex-end" mt={6}>
+            <Flex justify="center" mt={6}>
+              
               <Button
-                mr={3}
-                variant="outline"
-                onClick={() => setShowPopup(false)}
-              >
-                Cancel
-              </Button>
-              <Button
+                width="200px"
+                 h="50px"
+                 fontSize="lg" 
                 colorScheme="pink"
                 isLoading={isSending}
                 onClick={handleSend}

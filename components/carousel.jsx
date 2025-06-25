@@ -649,7 +649,7 @@ export default function Carousel() {
 
       {/* Dots Navigation */}
       {showNavigation && (
-        <HStack justify="center" mt={2} spacing={2}>
+        <HStack justify="center" mt={4} spacing={2}>
           {Array.from({ length: maxIndex + 1 }).map((_, i) => (
             <Box
               key={`dot-${i}`}

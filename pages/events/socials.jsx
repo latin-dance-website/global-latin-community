@@ -1,6 +1,6 @@
 // pages/events/index.js (or adjust path as needed)
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Navbar from "@components/Navbar";
 import { useRouter } from "next/router";
 import Caraousel from "../.././components/carousel"; // Adjust path if necessary
@@ -57,6 +57,8 @@ export default function EventsHomePage({ cities }) {
   const [selectedCity, setSelectedCity] = useState("");
   const [dateRange, setDateRange] = useState(null); // [dayjs, dayjs]
   const [showDateSelectionPopup, setShowDateSelectionPopup] = useState(false); // New state for date selection popup
+  const [datePickerOpen, setDatePickerOpen] = useState(false); // New state for controlling date picker
+  const datePickerRef = useRef(null); // Ref to access the date picker
   const { RangePicker } = DatePicker;
 
   // Keyframes for animations
@@ -124,11 +126,22 @@ export default function EventsHomePage({ cities }) {
   };
 
   // Handle city selection with popup
+   // Modified city change handler
   const handleCityChange = (selectedValue) => {
     setSelectedCity(selectedValue);
     if (selectedValue) {
       // Show popup to prompt date selection
       setShowDateSelectionPopup(true);
+      
+      // Auto-open the date picker after a short delay
+      setTimeout(() => {
+        setDatePickerOpen(true);
+        // Focus on the date picker to trigger the calendar
+        if (datePickerRef.current) {
+          datePickerRef.current.focus();
+        }
+      }, 1500); // 1.5 second delay to let user see the popup first
+      
       // Auto-hide the popup after 4 seconds
       setTimeout(() => {
         setShowDateSelectionPopup(false);
@@ -136,6 +149,10 @@ export default function EventsHomePage({ cities }) {
     }
   };
 
+  // Handle date picker open/close
+  const handleDatePickerOpenChange = (open) => {
+    setDatePickerOpen(open);
+  };
   const handleGetEvents = () => {
     if (!selectedCity) {
       alert("Please select a city first!");
@@ -295,7 +312,7 @@ export default function EventsHomePage({ cities }) {
   border="2px solid #9c3cf6"
   py={{ base: 6, md: 8 }}
   px={{ base: 4, md: 6 }} // Reduced side padding
-  mt={{ base: "-18px", md: "-50px" }} // 🔼 Move upward
+  mt={{ base: "-8px", md: "-50px" }} // 🔼 Move upward
   position="relative"
   mx="auto"
   _hover={{
@@ -408,7 +425,7 @@ export default function EventsHomePage({ cities }) {
         <VStack spacing={3} width="100%" align="center" mt={-2}>
           {/* City Selector */}
           <Box
-            width={{ base: "85%", md: "100%" }}
+            width={{ base: "89%", md: "100%" }}
             maxWidth={{ base: "260px", md: "340px" }}
             borderRadius={{ base: "10px", md: "12px" }}
             animation={!selectedCity ? `${flashBackgroundDark} 1.3s ease-in-out infinite` : "none"}
@@ -418,13 +435,13 @@ export default function EventsHomePage({ cities }) {
               onChange={(e) => {
                 handleCityChange(e.target.value); // Use the new handler
               }}
-              placeholder="Select a City"
+              placeholder="Select  City"
               border="2px solid #9c3cf6"
               borderRadius={{ base: "10px", md: "12px" }}
               bg="transparent"
               color="black"
               fontWeight="600"
-              fontSize={{ base: "14px", md: "16px" }}
+              fontSize={{ base: "16px", md: "18px" }}
               height={{ base: "46px", md: "50px" }}
               width="100%"
               _focus={{
@@ -466,87 +483,82 @@ export default function EventsHomePage({ cities }) {
 
           {/* Date Range Picker */}
           <Box
-            width={{ base: "90%", md: "100%" }}
-            maxWidth={{ base: "260px", md: "280px" }}
-            borderRadius={{ base: "10px", md: "12px" }}
-            overflow="hidden"
-            bg="white"
-            position="relative"
-            border="2px solid #9c3cf6"
-            animation={selectedCity && !dateRange ? `${blink} 1.5s ease-in-out infinite` : "none"}
-          >
-            <Flex align="center" height={{ base: "44px", md: "48px" }}>
-  {/* Set Travel Dates Label - unchanged */}
-  <Box
-    bg="linear-gradient(135deg, #9c3cf6, #7c3aed)"
-    color="white"
-    px={{ base: 2, md: 3 }}
-    py={0}
-    height="100%"
-    display="flex"
-    alignItems="center"
-    justifyContent="center"
-   minWidth={{ base: "90 px", md: "120px" }}  // Reduced mobile width
-    fontWeight="600"
-    fontSize={{ base: "14px", md: "16px" }}
-    borderRight="1px solid #6b21a8"
-    ml="-1.5"
-  >
-    Set Travel Dates
-  </Box>
-
-  {/* Responsive Date Range Picker */}
-  <Box flex="1" height="100%">
-    <RangePicker
-      format="DD MMM"
-      value={dateRange}
-      onChange={setDateRange}
-      onCalendarChange={(dates) => {
-        if (dates && dates.length === 2) {
-          setDateRange(dates);
-        }
-      }}
-      placeholder={["Start", "End"]} // Shorter placeholders
-      style={{
-  width: "100%",
-  border: "none", 
-  height: "100%",
-  fontSize: "11px", 
-  fontWeight: "600",
-  color: "#9c3cf6", 
-  backgroundColor: "transparent",
-  padding: "0 6px",
-  cursor: "pointer",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center"  // 👈 This centers the date format
-}}
-      separator={
-        <Box
-  display="flex"
-  alignItems="center"
-  justifyContent="center"
-  px={{ base: 1, md: 2 }}
-  fontSize="clamp(12px, 3vw, 16px)"
-  color="#9c3cf6"
-  fontWeight="bold"
-  ml={{ base: "-4px", md: "-4px" }} // ← move arrow left
+  width={{ base: "90%", md: "100%" }}
+  maxWidth={{ base: "260px", md: "280px" }}
+  borderRadius={{ base: "10px", md: "12px" }}
+  overflow="hidden"
+  bg="white"
+  position="relative"
+  border="2px solid #9c3cf6"
+  animation={selectedCity && !dateRange ? `${blink} 1.5s ease-in-out infinite` : "none"}
 >
-  ⇌
-</Box>
+  <Flex align="center" height={{ base: "44px", md: "48px" }}>
+    {/* Set Travel Dates Label */}
+    <Box
+      bg="linear-gradient(135deg, #9c3cf6, #7c3aed)"
+      color="white"
+      px={{ base: 2, md: 3 }}
+      py={0}
+      height="100%"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      minWidth={{ base: "90px", md: "120px" }}
+      fontWeight="600"
+      fontSize={{ base: "14px", md: "16px" }}
+      borderRight="1px solid #6b21a8"
+      ml="0"
+    >
+      Set Travel Dates
+    </Box>
 
-      }
-      allowEmpty={[false, false]}
-      disabledDate={(current) => current && current < dayjs().startOf('day')}
-      autoFocus={true}
-      open={undefined}
-      inputReadOnly={true} // Prevent keyboard popup on mobile
-      suffixIcon={null} // Remove default calendar icon
-      className="responsive-date-picker" // For additional custom styling
-    />
-  </Box>
-</Flex>
-          </Box>
+    {/* Responsive Date Range Picker with auto-open */}
+     <Box flex="1" height="100%">
+          <RangePicker
+            ref={datePickerRef}
+            format="DD MMM"
+            value={dateRange}
+            onChange={setDateRange}
+            onCalendarChange={(dates) => {
+              if (dates && dates.length === 2) {
+                setDateRange(dates);
+              }
+            }}
+            open={datePickerOpen}
+            onOpenChange={handleDatePickerOpenChange}
+            placeholder={["Start", "End"]}
+            style={{
+              width: "100%",
+              border: "none", 
+              height: "100%",
+              backgroundColor: "transparent",
+              padding: "0 4px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+            }}
+            separator={
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                px={1}
+                fontSize="14px"
+                color="#9c3cf6"
+                fontWeight="bold"
+              >
+                ⇌
+              </Box>
+            }
+            allowEmpty={[false, false]}
+            disabledDate={(current) => current && current < dayjs().startOf('day')}
+            inputReadOnly={true}
+            suffixIcon={null}
+            className="responsive-date-picker"
+          />
+        </Box>
+      </Flex>
+    </Box>
 
           {/* Get Events Button */}
           <Box width={{ base: "85%", md: "100%" }} maxWidth={{ base: "260px", md: "300px" }} mb={-3}>
@@ -608,15 +620,15 @@ export default function EventsHomePage({ cities }) {
                   w={{ base: "90%", sm: "400px" }}
                   maxW="95vw"
                 >
-                  <Text
-                    fontSize={{ base: "lg", sm: "xl" }}
-                    fontWeight="bold"
-                    color="pink.500"
-                    textAlign="center"
-                    mb={4}
-                  >
-                    Hey, Hope you have a great time in {selectedCity}.
-                  </Text>
+                   <Text
+              fontSize={{ base: "lg", sm: "xl" }}
+              fontWeight="bold"
+              color="pink.500"
+              textAlign="center"
+              mb={4}
+            >
+              Hey, Hope you have a great time  dancing  in {Selectedcity}.
+            </Text>
 
                   {/* Input fields */}
                   <Stack spacing={4}>
@@ -656,8 +668,7 @@ export default function EventsHomePage({ cities }) {
                   </Stack>
 
                   <Text fontSize="sm" textAlign="center" mt={4} color="gray.600">
-                    Get verified schedule sent to you so you can just dance.
-                    Leave everything else to us.
+                    Get verified schedule send.
                   </Text>
 
                   <Flex justify="flex-end" mt={6}>

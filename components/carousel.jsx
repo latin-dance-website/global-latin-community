@@ -14,6 +14,31 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { FaCalendar, FaClock, FaLocationDot } from "react-icons/fa6";
+function addFlagToCity(citybycountry) {
+  if (!citybycountry) return "";
+
+  const flagMap = {
+    India: "🇮🇳",
+    Vietnam: "🇻🇳",
+    Thailand: "🇹🇭",
+    USA: "🇺🇸",
+    Japan: "🇯🇵",
+    Germany: "🇩🇪",
+    France: "🇫🇷",
+    Singapore: "🇸🇬",
+    UAE: "🇦🇪",
+    // Add more as needed
+  };
+
+  const parts = citybycountry.split(",");
+  const country = parts[1]?.trim();
+  const flag = flagMap[country] || "";
+
+  // Prevent appending flag twice
+  if (citybycountry.includes(flag)) return citybycountry;
+
+  return `${citybycountry} ${flag}`;
+}
 
 export default function Carousel() {
   const router = useRouter();
@@ -390,16 +415,17 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
 
                       {/* Location Row */}
                       <Text
-                        fontSize={isVerySmallMobile ? "9px" : "10px"}
-                        color="gray.600"
-                        fontWeight="600"
-                        lineHeight="1.3"
-                        wordBreak="break-word"
-                        noOfLines={2}
-                        ml="-2px"
-                      >
-                        {event.location}
-                      </Text>
+  fontSize={isVerySmallMobile ? "9px" : "10px"}
+  color="gray.600"
+  fontWeight="600"
+  lineHeight="1.3"
+  wordBreak="break-word"
+  noOfLines={2}
+  ml="-2px"
+>
+  {addFlagToCity(event.citybycountry)}
+</Text>
+
                     </VStack>
                   </Flex>
                 ) : (
@@ -457,7 +483,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                           textAlign="center"
                           wordBreak="break-word"
                         >
-                          {event.location}
+                          {addFlagToCity(event.citybycountry)}
                         </Text>
                       </Flex>
                     </Flex>

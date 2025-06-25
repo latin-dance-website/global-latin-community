@@ -282,80 +282,94 @@ export default function EventsHomePage({ cities }) {
 
       {/* Main Control Box */}
       <Box
-        width={{ base: "95%", md: "90%", lg: "80%" }}
-        maxWidth="800px"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        borderRadius="16px"
-        bg="white"
-        boxShadow="xl"
-        border="2px solid #9c3cf6"
-        py={{ base: 6, md: 8 }}
-        px={{ base: 4, md: 6 }}
-        mt={{ base: -4, md: 2 }}
-        mb={8}
-        position="relative"
-        _hover={{
-          "&::before": {
-            opacity: 1,
-          },
-          borderColor: "#8a2be2",
-        }}
-        _focusWithin={{
-          "&::before": {
-            opacity: 1,
-            boxShadow: "0 0 10px 2px rgba(156, 60, 246, 0.6)",
-          },
-        }}
-        sx={{
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            top: "-4px",
-            left: "-4px",
-            right: "-4px",
-            bottom: "-4px",
-            borderRadius: "18px", // Slightly larger than main box
-            border: "2px solid transparent",
-            background: "linear-gradient(90deg, #9c3cf6, #ff6b35, #9c3cf6) border-box",
-            backgroundSize: "200% 100%",
-            animation: "borderGradient 3s linear infinite",
-            opacity: 0,
-            transition: "opacity 0.3s ease, box-shadow 0.3s ease",
-            zIndex: -1,
-          },
-          "@keyframes borderGradient": {
-            "0%": { backgroundPosition: "0% 50%" },
-            "100%": { backgroundPosition: "200% 50%" },
-          },
-        }}
-      >
+  width="fit-content"
+  maxWidth={{ base: "90%", md: "550px" }} // Adjusted for single-line heading
+  minWidth="300px"
+  display="flex"
+  flexDirection="column"
+  alignItems="center"
+  justifyContent="center"
+  borderRadius="16px"
+  bg="white"
+  boxShadow="xl"
+  border="2px solid #9c3cf6"
+  py={{ base: 6, md: 8 }}
+  px={{ base: 4, md: 6 }} // Reduced side padding
+  mt={{ base: "-18px", md: "-50px" }} // 🔼 Move upward
+  position="relative"
+  mx="auto"
+  _hover={{
+    "&::before": {
+      opacity: 1,
+    },
+    borderColor: "#8a2be2",
+  }}
+  _focusWithin={{
+    "&::before": {
+      opacity: 1,
+      boxShadow: "0 0 10px 2px rgba(156, 60, 246, 0.6)",
+    },
+  }}
+  sx={{
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: "-2px",
+      left: "-2px",
+      right: "-2px",
+      bottom: "-2px",
+      borderRadius: "18px",
+      border: "2px solid transparent",
+      background: "linear-gradient(90deg, #9c3cf6, #ff6b35, #9c3cf6) border-box",
+      backgroundSize: "200% 100%",
+      animation: "borderGradient 3s linear infinite",
+      opacity: 0,
+      transition: "opacity 0.3s ease, box-shadow 0.3s ease",
+      zIndex: -1,
+    },
+    "@keyframes borderGradient": {
+      "0%": { backgroundPosition: "0% 50%" },
+      "100%": { backgroundPosition: "200% 50%" },
+    },
+  }}
+>
         {/* Inner content remains the same */}
         <VStack spacing={0.5} mb={4} textAlign="center" position="relative" zIndex={1}>
           <Box mt={-4}>
             <Heading
-              fontSize={{ base: "2xl", md: "3xl" }}
-              fontWeight="extrabold"
-              color="#000001"
-              lineHeight="1.1"
-              mb={1}
-            >
-              Where's The Party?
-            </Heading>
+        fontSize={{ base: "xl", md: "2xl" }} // Heading size stays same
+        fontWeight="extrabold"
+        color="#000001"
+        lineHeight="1.1"
+        mb={1}
+      >
+        Find Latin Events in your City
+      </Heading>
           </Box>
 
-          <Heading
-            as="h3"
-            fontSize={{ base: "lg", md: "xl" }}
-            color="#a23cf6"
-            fontWeight="bold"
-            mb={1}
-            lineHeight="1.1"
-          >
-            Just Pick a City!
-          </Heading>
+         <Heading
+  as="h3"
+  fontSize={{ base: "lg", md: "xl" }}
+  color="#a23cf6"
+  fontWeight="bold"
+  mb={1}
+  lineHeight="1.1"
+>
+  Just Pick a City{' '}
+  <Box
+    as="span"
+    display="inline-block"
+    sx={{
+      animation: "bounce 1s infinite ease-in-out",
+      "@keyframes bounce": {
+        "0%, 100%": { transform: "translateY(0)" },
+        "50%": { transform: "translateY(-4px)" }
+      }
+    }}
+  >
+    ↓
+  </Box>
+</Heading>
 
           <Box textAlign="center" maxW="100%">
             <VStack spacing={1}>
@@ -371,69 +385,27 @@ export default function EventsHomePage({ cities }) {
 
               <Text
                 fontWeight="bold"
-                fontSize={{ base: "md", md: "lg" }}
+                fontSize={{ base: "sm", md: "md" }}
                 color="#333"
                 lineHeight="1.2"
                 mt={-1}
+                mb={1}
               >
-                <Text as="span" color="#ff6b35" fontWeight="extrabold">Salsa</Text>
+                <Text as="span"  >Salsa</Text>
                 {", "}
-                <Text as="span" color="#9c3cf6" fontWeight="extrabold">Bachata</Text>
+                <Text as="span"  >Bachata</Text>
                 {", "}
-                <Text as="span" color="#10b981" fontWeight="extrabold">Kizomba</Text>
+                <Text as="span"  >Kizomba</Text>
                 {" & "}
-                <Text as="span" color="#f59e0b" fontWeight="extrabold">Zouk</Text>
+                <Text as="span" >Zouk</Text>
                 {" Nights"}
-              </Text>
-              <Text
-                fontSize={{ base: "sm", md: "md" }}
-                fontWeight="medium"
-                color="#9c3cf6"
-                textAlign="center"
-                mt={-1}
-                mb={3}
-                px={2}
-                sx={{
-                  animation: "fadeInBounce 2s ease-in-out",
-                  "@keyframes fadeInBounce": {
-                    "0%": {
-                      opacity: 0,
-                      transform: "translateY(10px)"
-                    },
-                    "60%": {
-                      opacity: 1,
-                      transform: "translateY(-2px)"
-                    },
-                    "80%": {
-                      transform: "translateY(1px)"
-                    },
-                    "100%": {
-                      transform: "translateY(0)"
-                    }
-                  }
-                }}
-              >
-                Find events in your city{" "}
-                <Box
-                  as="span"
-                  display="inline-block"
-                  sx={{
-                    animation: "bounce 1s infinite ease-in-out",
-                    "@keyframes bounce": {
-                      "0%, 100%": { transform: "translateY(0)" },
-                      "50%": { transform: "translateY(-4px)" }
-                    }
-                  }}
-                >
-                  ↓
-                </Box>
               </Text>
             </VStack>
           </Box>
         </VStack>
 
         {/* Controls Container */}
-        <VStack spacing={3} width="100%" align="center" mt={-4}>
+        <VStack spacing={3} width="100%" align="center" mt={-2}>
           {/* City Selector */}
           <Box
             width={{ base: "85%", md: "100%" }}
@@ -494,7 +466,7 @@ export default function EventsHomePage({ cities }) {
 
           {/* Date Range Picker */}
           <Box
-            width={{ base: "95%", md: "100%" }}
+            width={{ base: "90%", md: "100%" }}
             maxWidth={{ base: "260px", md: "280px" }}
             borderRadius={{ base: "10px", md: "12px" }}
             overflow="hidden"
@@ -504,97 +476,110 @@ export default function EventsHomePage({ cities }) {
             animation={selectedCity && !dateRange ? `${blink} 1.5s ease-in-out infinite` : "none"}
           >
             <Flex align="center" height={{ base: "44px", md: "48px" }}>
-              {/* Set Travel Dates Label */}
-              <Box
-                bg="linear-gradient(135deg, #9c3cf6, #7c3aed)"
-                color="white"
-                px={{ base: 2, md: 3 }}
-                py={0}
-                height="100%"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                minWidth={{ base: "100px", md: "120px" }}
-                fontWeight="600"
-                fontSize={{ base: "11px", md: "14px" }}
-                borderRight="1px solid #6b21a8"
-              >
-                Set Travel Dates
-              </Box>
+  {/* Set Travel Dates Label - unchanged */}
+  <Box
+    bg="linear-gradient(135deg, #9c3cf6, #7c3aed)"
+    color="white"
+    px={{ base: 2, md: 3 }}
+    py={0}
+    height="100%"
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+   minWidth={{ base: "90 px", md: "120px" }}  // Reduced mobile width
+    fontWeight="600"
+    fontSize={{ base: "14px", md: "16px" }}
+    borderRight="1px solid #6b21a8"
+    ml="-1.5"
+  >
+    Set Travel Dates
+  </Box>
 
-              {/* Improved Date Range Picker */}
-              <Box flex="1" height="100%">
-                <RangePicker
-                  format="DD MMM"
-                  value={dateRange}
-                  onChange={setDateRange}
-                  onCalendarChange={(dates) => {
-                    if (dates && dates.length === 2) {
-                      setDateRange(dates);
-                    }
-                  }}
-                  placeholder={["Start Date", "End Date"]}
-                  style={{
-                    width: "100%",
-                    border: "none",
-                    height: "100%",
-                    fontSize: { base: "11px", md: "12px" },
-                    fontWeight: "600",
-                    color: "#9c3cf6",
-                    backgroundColor: "transparent",
-                    paddingLeft: "8px",
-                    cursor: "pointer"
-                  }}
-                  separator={
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      px={1}
-                      fontSize={{ base: "14px", md: "16px" }}
-                      color="#9c3cf6"
-                      fontWeight="bold"
-                    >
-                      ⇌
-                    </Box>
-                  }
-                  allowEmpty={[false, false]} // Both dates required
-                  disabledDate={(current) => {
-                    return current && current < dayjs().startOf('day');
-                  }}
-                  autoFocus={true} // Automatically focus on first pick
-                  open={undefined} // Let the component handle its own open state
-                />
-              </Box>
-            </Flex>
+  {/* Responsive Date Range Picker */}
+  <Box flex="1" height="100%">
+    <RangePicker
+      format="DD MMM"
+      value={dateRange}
+      onChange={setDateRange}
+      onCalendarChange={(dates) => {
+        if (dates && dates.length === 2) {
+          setDateRange(dates);
+        }
+      }}
+      placeholder={["Start", "End"]} // Shorter placeholders
+      style={{
+  width: "100%",
+  border: "none", 
+  height: "100%",
+  fontSize: "11px", 
+  fontWeight: "600",
+  color: "#9c3cf6", 
+  backgroundColor: "transparent",
+  padding: "0 6px",
+  cursor: "pointer",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center"  // 👈 This centers the date format
+}}
+      separator={
+        <Box
+  display="flex"
+  alignItems="center"
+  justifyContent="center"
+  px={{ base: 1, md: 2 }}
+  fontSize="clamp(12px, 3vw, 16px)"
+  color="#9c3cf6"
+  fontWeight="bold"
+  ml={{ base: "-4px", md: "-4px" }} // ← move arrow left
+>
+  ⇌
+</Box>
+
+      }
+      allowEmpty={[false, false]}
+      disabledDate={(current) => current && current < dayjs().startOf('day')}
+      autoFocus={true}
+      open={undefined}
+      inputReadOnly={true} // Prevent keyboard popup on mobile
+      suffixIcon={null} // Remove default calendar icon
+      className="responsive-date-picker" // For additional custom styling
+    />
+  </Box>
+</Flex>
           </Box>
 
           {/* Get Events Button */}
           <Box width={{ base: "85%", md: "100%" }} maxWidth={{ base: "260px", md: "300px" }} mb={-3}>
             <Button
-              onClick={handleGetEvents}
-              bg={selectedCity && dateRange ? "#9c3cf6" : "#ff6b35"}
-              color="white"
-              borderRadius={{ base: "10px", md: "12px" }}
-              fontWeight="700"
-              fontSize={{ base: "12px", md: "16px" }}
-              height={{ base: "44px", md: "48px" }}
-              width="100%"
-              boxShadow={selectedCity && dateRange ? "md" : "0 0 15px rgba(255, 107, 53, 0.6)"}
-              _hover={{
-                bg: selectedCity && dateRange ? "#8a2be2" : "#ff5722",
-                transform: "translateY(-2px)",
-                boxShadow: selectedCity && dateRange ? "lg" : "0 0 20px rgba(255, 107, 53, 0.8)",
-              }}
-              _active={{
-                bg: selectedCity && dateRange ? "#7b1fa2" : "#e64a19",
-                transform: "translateY(0px)",
-              }}
-              transition="all 0.2s ease"
-              animation={!selectedCity || (!dateRange || !dateRange[0] || !dateRange[1]) ? `${blink} 2s ease-in-out infinite` : "none"}
-            >
-              Get Personalised Event Details
-            </Button>
+  onClick={handleGetEvents}
+  bg={selectedCity && dateRange ? "#9c3cf6" : "#ff6b35"}
+  color="white"
+  borderRadius={{ base: "12px", md: "14px" }}
+  fontWeight="700"
+  fontSize={{ base: "16px", md: "20px" }} 
+  height={{ base: "52px", md: "58px" }}
+  width={{ base: "110%", md: "105%" }}
+  px={8} 
+  py={3} 
+  mx={{ base: "-5%", md: "-2.5%" }}
+  boxShadow={selectedCity && dateRange ? "md" : "0 0 15px rgba(255, 107, 53, 0.6)"}
+  _hover={{
+    bg: selectedCity && dateRange ? "#8a2be2" : "#ff5722",
+    transform: "translateY(-2px)",
+    boxShadow: selectedCity && dateRange ? "lg" : "0 0 20px rgba(255, 107, 53, 0.8)",
+  }}
+  _active={{
+    bg: selectedCity && dateRange ? "#7b1fa2" : "#e64a19",
+    transform: "translateY(0px)",
+  }}
+  transition="all 0.2s ease"
+  animation={!selectedCity || (!dateRange || !dateRange[0] || !dateRange[1]) ? `${blink} 2s ease-in-out infinite` : "none"}
+  display="flex"
+  alignItems="center"
+  justifyContent="center"
+>
+  Get Personalised Event Details
+</Button>
             {/* Popup - This will likely be triggered on the display page now or based on a successful navigation */}
             {showPopup && (
               <Box

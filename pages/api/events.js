@@ -40,6 +40,7 @@ export default async function handler(req, res) {
   currencySymbols: row[12] || "₹,₫,฿",
   instagramHandle: row[13] || null,
   day: row[14] || null, // <-- your new column here
+  citybycountry: row[15] || null, // <-- your new column here
   buttonColor: ["#f63c80", "#a23cf6", "#ff7c19"][index % 3],
 }));
 
@@ -81,6 +82,7 @@ export default async function handler(req, res) {
         currencySymbols: eventRow[12] || "₹,₫,฿",
         instagramHandle: eventRow[13] || null,
         day: eventRow[14] || null,
+        citybycountry: eventRow[15] || null,
       };
 
       return res.status(200).json(event);
@@ -107,6 +109,7 @@ export default async function handler(req, res) {
           currencySymbols: row[12] || "Symbols not specified",
           instagramHandle: row[13] || null,
           day: row[14] || null,
+          citybycountry: row[15] || null,
         }));
 
       if (cityEvents.length === 0) {

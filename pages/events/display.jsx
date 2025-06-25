@@ -234,7 +234,7 @@ export default function EventsDisplayPage({ allEvents }) {
         <Navbar />
       </Box>
 
-      <Box mt={8} mb={4} textAlign="center">
+      <Box mt={{ base: "-2px", md: "-3px" }} mb={4} textAlign="center">
         <Heading
           fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
           fontWeight="extrabold"
@@ -250,7 +250,7 @@ export default function EventsDisplayPage({ allEvents }) {
       </Box>
 
       {/* Events Display */}
-      <Box width="100%" mt={8} mb={12} px={{ base: 4, md: 6 }}>
+      <Box width="100%" mt={0} mb={12} px={{ base: 4, md: 6 }}>
         {/* Mobile: Vertical grid */}
         <Box display={{ base: "block", md: "none" }}>
           <Box
@@ -378,7 +378,7 @@ export default function EventsDisplayPage({ allEvents }) {
                             flex="1"
                             wordBreak="break-word"
                           >
-                            {event.location}
+                            {event.citybycountry}
                           </Text>
                         </Flex>
                       </Flex>
@@ -516,7 +516,7 @@ export default function EventsDisplayPage({ allEvents }) {
                             flex="1"
                             wordBreak="break-word"
                           >
-                            {event.location}
+                            {event.citybycountry}
                           </Text>
                         </Flex>
                       </Flex>

@@ -7,38 +7,105 @@ import {
   VStack,
   Flex,
   useMediaQuery,
-  SimpleGrid,
+  Skeleton,
+  SkeletonText,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { FaCalendar, FaClock, FaLocationDot } from "react-icons/fa6";
-function addFlagToCity(citybycountry) {
+
+// Move this outside component to avoid recreation
+const weekdays = [
+  "Sunday", "Monday", "Tuesday", "Wednesday", 
+  "Thursday", "Friday", "Saturday"
+];
+
+const flagMap = {
+  India: "🇮🇳",
+  Vietnam: "🇻🇳",
+  Thailand: "🇹🇭",
+  USA: "🇺🇸",
+  Japan: "🇯🇵",
+  Germany: "🇩🇪",
+  France: "🇫🇷",
+  Singapore: "🇸🇬",
+  UAE: "🇦🇪",
+};
+
+// Memoized flag function
+const addFlagToCity = (citybycountry) => {
   if (!citybycountry) return "";
-
-  const flagMap = {
-    India: "🇮🇳",
-    Vietnam: "🇻🇳",
-    Thailand: "🇹🇭",
-    USA: "🇺🇸",
-    Japan: "🇯🇵",
-    Germany: "🇩🇪",
-    France: "🇫🇷",
-    Singapore: "🇸🇬",
-    UAE: "🇦🇪",
-    // Add more as needed
-  };
-
+  
   const parts = citybycountry.split(",");
   const country = parts[1]?.trim();
   const flag = flagMap[country] || "";
-
-  // Prevent appending flag twice
+  
   if (citybycountry.includes(flag)) return citybycountry;
-
   return `${citybycountry} ${flag}`;
-}
+};
+
+// Enhanced loading skeleton component with shimmer and staggered animation
+const EventCardSkeleton = ({ isMobile, isVerySmallMobile, delay = 0 }) => (
+  <Box
+    flex="none"
+    width={{
+      base: "calc(50% - 8px)",
+      md: "calc(25% - 15px)",
+    }}
+    maxWidth={{ base: "300px", md: "350px" }}
+    opacity={0}
+    animation={`fadeInUp 0.6s ease-out ${delay}ms forwards`}
+    sx={{
+      '@keyframes fadeInUp': {
+        '0%': {
+          opacity: 0,
+          transform: 'translateY(20px)'
+        },
+        '100%': {
+          opacity: 1,
+          transform: 'translateY(0)'
+        }
+      }
+    }}
+  >
+    <Box
+      borderRadius="12px"
+      overflow="hidden"
+      bg="white"
+      height={{ base: "auto", md: "380px" }}
+      border="1px solid #e2e8f0"
+      boxShadow="sm"
+      display="flex"
+      flexDirection="column"
+      position="relative"
+    >
+      {/* Add shimmer effect */}
+      <Box
+        position="absolute"
+        top="0"
+        left="-100%"
+        width="100%"
+        height="100%"
+        background="linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)"
+        animation="shimmer 1.5s infinite"
+        zIndex={1}
+        sx={{
+          '@keyframes shimmer': {
+            '0%': { left: '-100%' },
+            '100%': { left: '100%' }
+          }
+        }}
+      />
+      <Skeleton height={{ base: "240px", md: "280px" }} />
+      <Box p={{ base: "6px", md: "8px" }} flex="1">
+        <SkeletonText noOfLines={1} mb={2} />
+        <SkeletonText noOfLines={2} spacing={1} />
+      </Box>
+    </Box>
+  </Box>
+);
 
 export default function Carousel() {
   const router = useRouter();
@@ -46,37 +113,137 @@ export default function Carousel() {
   const [index, setIndex] = useState(0);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showCards, setShowCards] = useState(false); // Add this new state
+  const [error, setError] = useState(null);
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [isScrolling, setIsScrolling] = useState(false);
   const [autoPlay, setAutoPlay] = useState(true);
-const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
+  const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
+  
   const cardsPerView = isMobile ? 2 : 4;
 
-  const prev = () => {
-    if (!isScrolling && events.length > 0) {
-      const maxIndex = Math.max(0, events.length - cardsPerView);
-      setIndex((prev) => Math.max(0, prev - 1));
-      setAutoPlay(false); // Stop autoplay when user interacts
-      setTimeout(() => setAutoPlay(true), 10000); // Resume after 10 seconds
-    }
-  };
+  // Memoize today's calculations
+  const todayInfo = useMemo(() => {
+    const today = dayjs();
+    return {
+      today,
+      todayFullDay: today.format("dddd"),
+      todayIndex: today.day()
+    };
+  }, []);
 
-  const next = () => {
+  // Memoized event processing function
+  const processEvents = useCallback((data) => {
+    const { today, todayFullDay, todayIndex } = todayInfo;
+    
+    return data
+      .filter((e) => e.id && weekdays.includes(e.day))
+      .map((e) => {
+        const targetDayIndex = weekdays.indexOf(e.day);
+        let offset = targetDayIndex - todayIndex;
+        if (offset < 0) offset += 7;
+
+        const targetDate = today.add(offset, "day");
+
+        return {
+          ...e,
+          originalDay: e.day,
+          date: targetDate.format("ddd, DD MMM"),
+          shortDate: targetDate.format("DD MMM"),
+          day: targetDate.format("ddd"),
+          title: e.title?.replace(/\s+/g, " ").trim() || "",
+          processedLocation: addFlagToCity(e.citybycountry), // Pre-process flag
+        };
+      })
+      .filter((e) => e.originalDay === todayFullDay);
+  }, [todayInfo]);
+
+  // Optimized navigation functions
+  const prev = useCallback(() => {
+    if (!isScrolling && events.length > 0) {
+      setIndex((prev) => Math.max(0, prev - 1));
+      setAutoPlay(false);
+      setTimeout(() => setAutoPlay(true), 10000);
+    }
+  }, [isScrolling, events.length]);
+
+  const next = useCallback(() => {
     if (!isScrolling && events.length > 0) {
       const maxIndex = Math.max(0, events.length - cardsPerView);
       setIndex((prev) => Math.min(maxIndex, prev + 1));
-      setAutoPlay(false); // Stop autoplay when user interacts
-      setTimeout(() => setAutoPlay(true), 10000); // Resume after 10 seconds
+      setAutoPlay(false);
+      setTimeout(() => setAutoPlay(true), 10000);
     }
-  };
+  }, [isScrolling, events.length, cardsPerView]);
 
-  const handleCardClick = (event) => {
+  const handleCardClick = useCallback((event) => {
     sessionStorage.setItem("currentEvent", JSON.stringify(event));
     router.push("/events/social");
-  };
+  }, [router]);
 
-  const scrollTo = (idx) => {
+  // Enhanced fetch with 1.5 second minimum loading time
+  useEffect(() => {
+    const abortController = new AbortController();
+    
+    async function load() {
+      try {
+        setLoading(true);
+        setShowCards(false); // Reset show cards
+        setError(null);
+        
+        const startTime = Date.now();
+        
+        const res = await fetch("/api/events", {
+          signal: abortController.signal,
+          headers: {
+            'Cache-Control': 'public, max-age=300' // 5 minute cache
+          }
+        });
+        
+        if (!res.ok) {
+          throw new Error(`Failed to fetch: ${res.status}`);
+        }
+        
+        const data = await res.json();
+        const processedEvents = processEvents(data);
+        
+        setEvents(processedEvents);
+        
+        // Ensure minimum 1.5 second loading time
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, 1500 - elapsedTime);
+        
+        setTimeout(() => {
+          setLoading(false);
+          // Small delay then show cards with animation
+          setTimeout(() => {
+            setShowCards(true);
+          }, 100);
+        }, remainingTime);
+        
+      } catch (e) {
+        if (e.name !== 'AbortError') {
+          console.error("Fetch error:", e);
+          setError(e.message);
+          // Still show loading for 1.5 seconds even on error
+          setTimeout(() => {
+            setLoading(false);
+          }, 1500);
+        }
+      }
+    }
+    
+    load();
+    
+    return () => {
+      abortController.abort();
+    };
+  }, [processEvents]);
+
+  // Optimized scroll function
+  const scrollTo = useCallback((idx) => {
     if (!scrollRef.current || isScrolling || events.length === 0) return;
+    
     setIsScrolling(true);
     const container = scrollRef.current;
     const cardWidth = container.children[0]?.offsetWidth || 0;
@@ -85,61 +252,11 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
 
     container.scrollTo({ left: scrollAmount, behavior: "smooth" });
     setTimeout(() => setIsScrolling(false), 300);
-  };
+  }, [isScrolling, events.length, isMobile]);
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const res = await fetch("/api/events");
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || res.status);
+  useEffect(() => scrollTo(index), [index, scrollTo]);
 
-        const today = dayjs();
-        const todayFullDay = today.format("dddd");
-        const weekdays = [
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ];
-
-        const mapped = data
-          .filter((e) => e.id && weekdays.includes(e.day))
-          .map((e) => {
-            const targetDayIndex = weekdays.indexOf(e.day);
-            const todayIndex = today.day();
-            let offset = targetDayIndex - todayIndex;
-            if (offset < 0) offset += 7;
-
-            const targetDate = today.add(offset, "day");
-
-            return {
-              ...e,
-              originalDay: e.day,
-              date: targetDate.format("ddd, DD MMM"),
-              shortDate: targetDate.format("DD MMM"),
-              day: targetDate.format("ddd"),
-              title: e.title?.replace(/\s+/g, " ").trim() || "",
-            };
-          });
-
-        const filtered = mapped.filter((e) => e.originalDay === todayFullDay);
-        setEvents(filtered);
-      } catch (e) {
-        console.error("Fetch error:", e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-  }, []);
-
-  useEffect(() => scrollTo(index), [index, isMobile]);
-
-  // Auto-play functionality
+  // Auto-play with cleanup
   useEffect(() => {
     if (!autoPlay || events.length === 0 || events.length <= cardsPerView) return;
 
@@ -153,19 +270,53 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
     return () => clearInterval(interval);
   }, [autoPlay, events.length, cardsPerView]);
 
-  if (loading)
+  // Loading state with staggered skeletons
+  if (loading) {
+    return (
+      <Box
+        position="relative"
+        width="100%"
+        overflow="hidden"
+        px={{ base: 4, md: 6 }}
+        pt={4}
+        pb={6}
+      >
+        <Box
+          display="flex"
+          overflowX="hidden"
+          gap={{ base: 4, md: 5 }}
+          justifyContent="flex-start"
+        >
+          {Array.from({ length: cardsPerView }).map((_, i) => (
+            <EventCardSkeleton 
+              key={i} 
+              isMobile={isMobile} 
+              isVerySmallMobile={isVerySmallMobile}
+              delay={i * 150} // Staggered delay - 150ms between each card
+            />
+          ))}
+        </Box>
+      </Box>
+    );
+  }
+
+  if (error) {
     return (
       <Box
         height="200px"
         display="flex"
         justifyContent="center"
         alignItems="center"
+        flexDirection="column"
+        gap={2}
       >
-        <Text>Loading events...</Text>
+        <Text color="red.500">Failed to load events</Text>
+        <Text fontSize="sm" color="gray.500">{error}</Text>
       </Box>
     );
+  }
 
-  if (!events.length)
+  if (!events.length) {
     return (
       <Box
         height="200px"
@@ -176,12 +327,12 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
         <Text>No events found for today</Text>
       </Box>
     );
+  }
 
-  // Calculate if we need navigation arrows
   const showNavigation = events.length > cardsPerView;
   const maxIndex = Math.max(0, events.length - cardsPerView);
 
- return (
+  return (
     <Box
       position="relative"
       width="100%"
@@ -190,7 +341,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
       pt={4}
       pb={6}
     >
-      {/* Navigation Arrows - keep existing */}
+      {/* Navigation Arrows */}
       {showNavigation && (
         <>
           <IconButton
@@ -243,9 +394,9 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
         }}
         justifyContent={events.length < cardsPerView ? "center" : "flex-start"}
       >
-        {events.map((event) => (
+        {events.map((event, eventIndex) => (
           <Box
-            key={event.id}
+            key={`${event.id}-${event.city}`} // Better key
             flex="none"
             width={{
               base: events.length === 1 ? "80%" : `calc(50% - 8px)`,
@@ -264,12 +415,16 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
             }}
             cursor="pointer"
             maxWidth={{ base: "300px", md: "350px" }}
+            // Add entrance animation
+            opacity={showCards ? 1 : 0}
+            transform={showCards ? "translateY(0)" : "translateY(30px)"}
+            transition={`all 0.6s ease-out ${eventIndex * 100}ms`} // Staggered entrance
           >
             <Box
               borderRadius="12px"
               overflow="hidden"
               bg="white"
-              height={{ base: "320px", md: "380px" }}
+              height={{ base: "auto", md: "380px" }}
               border="1px solid #e2e8f0"
               boxShadow="sm"
               _hover={{
@@ -281,7 +436,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
               display="flex"
               flexDirection="column"
             >
-              {/* Event Image */}
+              {/* Event Image with lazy loading */}
               <Box
                 width="100%"
                 height={{ base: "240px", md: "280px" }}
@@ -294,6 +449,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                 <img
                   src={event.image}
                   alt={event.title}
+                  loading="lazy" // Add lazy loading
                   style={{
                     width: "100%",
                     height: "100%",
@@ -335,7 +491,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                 {/* Mobile Layout */}
                 {isMobile ? (
                   <Flex align="flex-start" justify="center" width="100%" gap={0.5} px={0}>
-                    {/* Icons column - unchanged */}
+                    {/* Icons column */}
                     <VStack spacing={1} align="center" mt="1px" width="12px" flexShrink={0} ml={0.5}>
                       <Box
                         color="#6366f1"
@@ -369,8 +525,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                     <VStack spacing={1} align="flex-start" width="100%" pr={0}>
                       {/* Date + Time Row */}
                       <Flex align="center" gap={1} flexWrap="nowrap" flex="1" flexShrink={1} width="100%">
-                        {/* Date */}
-                        <Flex align="center" gap={1} whiteSpace="nowrap" flexShrink={0} ml= "-3px">
+                        <Flex align="center" gap={1} whiteSpace="nowrap" flexShrink={0} ml="-3px">
                           <Text
                             fontSize={isVerySmallMobile ? "9px" : "10px"}
                             color="gray.600"
@@ -384,7 +539,6 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                             {event.day}, {event.shortDate}
                           </Text>
                         </Flex>
-                        {/* Time */}
                         <Flex align="center" gap={0.5} whiteSpace="nowrap" flexShrink={1} minWidth={0} ml="-3px">
                           <Box
                             flexShrink={0}
@@ -413,23 +567,21 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                         </Flex>
                       </Flex>
 
-                      {/* Location Row */}
+                      {/* Location Row - use pre-processed location */}
                       <Text
-  fontSize={isVerySmallMobile ? "9px" : "10px"}
-  color="gray.600"
-  fontWeight="600"
-  lineHeight="1.3"
-  wordBreak="break-word"
-  noOfLines={2}
-  ml="-2px"
->
-  {addFlagToCity(event.citybycountry)}
-</Text>
-
+                        fontSize={isVerySmallMobile ? "9px" : "10px"}
+                        color="gray.600"
+                        fontWeight="600"
+                        lineHeight="1.3"
+                        wordBreak="break-word"
+                        ml="-2px"
+                      >
+                        {event.processedLocation}
+                      </Text>
                     </VStack>
                   </Flex>
                 ) : (
-                  /* Desktop Layout - unchanged */
+                  /* Desktop Layout */
                   <>
                     <Flex
                       align="flex-start"
@@ -483,7 +635,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
                           textAlign="center"
                           wordBreak="break-word"
                         >
-                          {addFlagToCity(event.citybycountry)}
+                          {event.processedLocation}
                         </Text>
                       </Flex>
                     </Flex>
@@ -495,7 +647,7 @@ const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
         ))}
       </Box>
 
-      {/* Dots Navigation - keep existing */}
+      {/* Dots Navigation */}
       {showNavigation && (
         <HStack justify="center" mt={2} spacing={2}>
           {Array.from({ length: maxIndex + 1 }).map((_, i) => (

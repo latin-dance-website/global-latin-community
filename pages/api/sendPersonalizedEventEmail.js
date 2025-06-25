@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'; // Make sure to install: npm install node-fetch
-
+import nodemailer from "nodemailer";
 // Function to generate event card HTML
 const generateEventCardHTML = (event) => {
   return `
@@ -293,78 +293,59 @@ const generateEmailHTML = (events, city, userDetails) => {
 
 // Main function to send email using Brevo API
 export async function sendPersonalizedEventEmail(events, city, userDetails) {
-  try {
-    const htmlContent = generateEmailHTML(events, city, userDetails);
-    
-    // Prepare the email data for Brevo
-    const emailData = {
-      sender: {
-        name: "Global Latin Dance Community",
-        email: process.env.BREVO_FROM_EMAIL
-      },
-      to: [
-        {
-          email: userDetails.email,
-          name: userDetails.name || "Dance Enthusiast"
-        }
-      ],
-      subject: `🎉 Your Personalized Latin Dance Events in ${city} - Global Latin Dance Community`,
-      htmlContent: htmlContent,
-      textContent: `
-        Thanks for registering for Global Latin Dance Community!
-        
-        Here are your personalized upcoming events in ${city}:
-        
-        ${events.map(event => `
-        Event: ${event.title}
-        Date: ${event.formattedDate || event.day + ', ' + event.shortDate}
-        Time: ${event.startTime} - ${event.endTime}
-        Location: ${event.location}
-        ---
-        `).join('')}
-        
-        Get ready to dance!
-        
-        Your registration details:
-        Email: ${userDetails.email}
-        ${userDetails.phone ? `Phone: ${userDetails.phone}` : ''}
-        ${userDetails.instagram ? `Instagram: @${userDetails.instagram}` : ''}
-      `,
-      tags: ["latin-dance", "events", "personalized"],
-      headers: {
-        "X-Mailin-custom": "custom_header_1:custom_value_1|custom_header_2:custom_value_2"
-      }
-    };
+  const htmlContent = generateEmailHTML(events, city, userDetails);
 
-    // Send email via Brevo API
-    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'api-key': process.env.BREVO_API_KEY
+  const textContent = `
+Thanks for registering for Global Latin Dance Community!
+
+Here are your personalized upcoming events in ${city}:
+
+${events
+  .map(
+    (event) => `
+Event: ${event.title}
+Date: ${event.formattedDate || event.day + ', ' + event.shortDate}
+Time: ${event.startTime} - ${event.endTime}
+Location: ${event.location}
+---`
+  )
+  .join('')}
+
+Get ready to dance!
+
+Your registration details:
+Email: ${userDetails.email}
+${userDetails.phone ? `Phone: ${userDetails.phone}` : ''}
+${userDetails.instagram ? `Instagram: @${userDetails.instagram}` : ''}
+`;
+
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.BREVO_EMAIL,
+        pass: process.env.BREVO_SMTP_PASSWORD,
       },
-      body: JSON.stringify(emailData)
     });
 
-    const result = await response.json();
-
-    if (response.ok) {
-      return { 
-        success: true, 
-        messageId: result.messageId,
-        data: result
-      };
-    } else {
-      throw new Error(result.message || 'Failed to send email via Brevo');
-    }
-
-  } catch (error) {
-    console.error('Error sending email via Brevo:', error);
-    return { 
-      success: false, 
-      error: error.message 
+    const mailOptions = {
+      from: process.env.BREVO_FROM_EMAIL,
+      to: userDetails.email,
+      subject: `🎉 Your Personalized Latin Dance Events in ${city} - Global Latin Dance Community`,
+      text: textContent,
+      html: htmlContent,
     };
+
+    console.log("Sending email with options:", mailOptions);
+    await transporter.sendMail(mailOptions);
+    console.log("✅ Email sent successfully via SMTP");
+
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Error sending email via Nodemailer:", error);
+    return { success: false, error: error.message };
   }
 }
 

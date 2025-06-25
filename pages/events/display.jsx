@@ -351,7 +351,7 @@ export default function EventsDisplayPage({ allEvents }) {
                           color="gray.600"
                           fontWeight="600"
                         >
-                          {event.startTime} - {event.endTime}
+                          {event.startTime} - {event.endTime} hrs
                         </Text>
                       </Flex>
 

@@ -349,7 +349,7 @@ export default function EventsHomePage({ cities }) {
 
          <Heading
   as="h3"
-  fontSize={{ base: "lg", md: "xl" }}
+  fontSize={{ base: "xl", md: "2xl" }}
   color="#a23cf6"
   fontWeight="bold"
   mb={1}
@@ -695,6 +695,7 @@ export async function getStaticProps() {
       throw new Error(`Failed to fetch events: ${res.status}`);
     }
     const events = await res.json();
+console.log("Fetched Events:", events);
 
     const uniqueCities = new Set();
     events.forEach((event) => {

@@ -56,6 +56,7 @@ export default function EventsHomePage({ cities }) {
   const router = useRouter();
   const [selectedCity, setSelectedCity] = useState("");
   const [dateRange, setDateRange] = useState(null); // [dayjs, dayjs]
+  const [showDateSelectionPopup, setShowDateSelectionPopup] = useState(false); // New state for date selection popup
   const { RangePicker } = DatePicker;
 
   // Keyframes for animations
@@ -122,6 +123,19 @@ export default function EventsHomePage({ cities }) {
     }
   };
 
+  // Handle city selection with popup
+  const handleCityChange = (selectedValue) => {
+    setSelectedCity(selectedValue);
+    if (selectedValue) {
+      // Show popup to prompt date selection
+      setShowDateSelectionPopup(true);
+      // Auto-hide the popup after 4 seconds
+      setTimeout(() => {
+        setShowDateSelectionPopup(false);
+      }, 4000);
+    }
+  };
+
   const handleGetEvents = () => {
     if (!selectedCity) {
       alert("Please select a city first!");
@@ -180,6 +194,91 @@ export default function EventsHomePage({ cities }) {
 
       <LayerBlur2 />
       <Caraousel />
+
+      {/* Date Selection Popup */}
+      {showDateSelectionPopup && (
+        <Box
+          position="fixed"
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          bg="white"
+          p={6}
+          borderRadius="xl"
+          boxShadow="2xl"
+          zIndex={10000}
+          border="3px solid #9c3cf6"
+          minW={{ base: "300px", md: "400px" }}
+          animation="slideInScale 0.3s ease-out"
+          sx={{
+            "@keyframes slideInScale": {
+              "0%": {
+                opacity: 0,
+                transform: "translate(-50%, -50%) scale(0.8)"
+              },
+              "100%": {
+                opacity: 1,
+                transform: "translate(-50%, -50%) scale(1)"
+              }
+            }
+          }}
+        >
+          <VStack spacing={4} textAlign="center">
+            <Box fontSize="2xl">🎉</Box>
+            <Text
+              fontSize={{ base: "lg", md: "xl" }}
+              fontWeight="bold"
+              color="#9c3cf6"
+            >
+              Great choice! {selectedCity} has amazing events!
+            </Text>
+            <Text
+              fontSize={{ base: "md", md: "lg" }}
+              color="#333"
+              fontWeight="medium"
+            >
+              Now select your travel dates below to get personalized recommendations
+            </Text>
+            <Box
+              display="flex"
+              alignItems="center"
+              fontSize="2xl"
+              animation="bounce 1s infinite ease-in-out"
+              sx={{
+                "@keyframes bounce": {
+                  "0%, 100%": { transform: "translateY(0)" },
+                  "50%": { transform: "translateY(-8px)" }
+                }
+              }}
+            >
+              ↓
+            </Box>
+            <Button
+              size="sm"
+              variant="outline"
+              colorScheme="purple"
+              onClick={() => setShowDateSelectionPopup(false)}
+            >
+              Got it!
+            </Button>
+          </VStack>
+        </Box>
+      )}
+
+      {/* Backdrop for popup */}
+      {showDateSelectionPopup && (
+        <Box
+          position="fixed"
+          top="0"
+          left="0"
+          width="100vw"
+          height="100vh"
+          backgroundColor="rgba(0, 0, 0, 0.3)"
+          backdropFilter="blur(2px)"
+          zIndex={9999}
+          onClick={() => setShowDateSelectionPopup(false)}
+        />
+      )}
 
       {/* Main Control Box */}
       <Box
@@ -345,7 +444,7 @@ export default function EventsHomePage({ cities }) {
             <Select
               value={selectedCity}
               onChange={(e) => {
-                setSelectedCity(e.target.value);
+                handleCityChange(e.target.value); // Use the new handler
               }}
               placeholder="Select a City"
               border="2px solid #9c3cf6"
@@ -402,6 +501,7 @@ export default function EventsHomePage({ cities }) {
             bg="white"
             position="relative"
             border="2px solid #9c3cf6"
+            animation={selectedCity && !dateRange ? `${blink} 1.5s ease-in-out infinite` : "none"}
           >
             <Flex align="center" height={{ base: "44px", md: "48px" }}>
               {/* Set Travel Dates Label */}

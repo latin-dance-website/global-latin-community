@@ -1,18 +1,27 @@
 import fetch from 'node-fetch'; // Make sure to install: npm install node-fetch
 import nodemailer from "nodemailer";
-// Function to generate event card HTML
-const generateEventCardHTML = (event) => {
+import fs from 'fs';
+
+function saveEmailPreview(html, filename = 'preview.html') {
+  fs.writeFileSync(filename, html, 'utf8');
+  console.log(`✅ Email preview saved as ${filename}. Open it in your browser.`);
+}
+
+// Function to generate event card HTML (matches your display page design)
+const generateEventCardHTML = (event, isBlurred = false) => {
   return `
     <div style="
-      width: 300px;
-      margin: 16px;
-      border-radius: 12px;
+      width: 280px;
+      margin: 12px;
+      border-radius: 16px;
       overflow: hidden;
       background: white;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      border: 2px solid #e2e8f0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       display: inline-block;
       vertical-align: top;
+      transition: all 0.3s ease;
+      ${isBlurred ? 'filter: blur(4px); opacity: 0.6;' : ''}
     ">
       <!-- Event Image -->
       <div style="
@@ -20,6 +29,7 @@ const generateEventCardHTML = (event) => {
         height: 200px;
         overflow: hidden;
         background: #f8f9fa;
+        position: relative;
       ">
         <img 
           src="${event.image}" 
@@ -33,15 +43,15 @@ const generateEventCardHTML = (event) => {
       </div>
       
       <!-- Event Details -->
-      <div style="padding: 12px;">
+      <div style="padding: 16px;">
         <!-- Title -->
         <h3 style="
-          font-size: 14px;
+          font-size: 15px;
           font-weight: 700;
           line-height: 1.2;
-          color: #E53E3E;
+          color: #2d3748;
           text-align: center;
-          margin: 0 0 8px 0;
+          margin: 0 0 12px 0;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -49,46 +59,82 @@ const generateEventCardHTML = (event) => {
           ${event.title}
         </h3>
         
-        <!-- Date and Time -->
+        <!-- Date, Time, and Price - First Line -->
+        <div style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 8px;
+          gap: 8px;
+          flex-wrap: wrap;
+        ">
+          <div style="display: flex; align-items: center; gap: 4px; flex: 0 0 auto;">
+            <span style="color: #6366f1; font-size: 12px;">📅</span>
+            <span style="
+              font-size: 11px;
+              color: #666;
+              font-weight: 700;
+            ">
+              ${event.formattedDate || event.day + ', ' + event.shortDate}
+            </span>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 4px; flex: 0 0 auto;">
+            <span style="color: #6366f1; font-size: 12px;">🕒</span>
+            <span style="
+              font-size: 11px;
+              color: #666;
+              font-weight: 600;
+            ">
+              ${event.startTime}-${event.endTime}hrs
+            </span>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 4px; flex: 0 0 auto;">
+            <span style="color: #6366f1; font-size: 12px;">💰</span>
+            <span style="
+              font-size: 11px;
+              color: #666;
+              font-weight: 600;
+            ">
+              ${event.fees || 'Free'}
+            </span>
+          </div>
+        </div>
+        
+        <!-- Music Ratio - Second Line -->
         <div style="
           display: flex;
           align-items: center;
           justify-content: flex-start;
-          margin-bottom: 6px;
-          gap: 8px;
+          margin-bottom: 8px;
+          gap: 4px;
         ">
-          <span style="color: #6366f1; font-size: 12px;">📅</span>
+          <span style="color: #6366f1; font-size: 12px;">🎵</span>
           <span style="
-            font-size: 12px;
+            font-size: 11px;
             color: #666;
             font-weight: 600;
           ">
-            ${event.formattedDate || event.day + ', ' + event.shortDate}
-          </span>
-          <span style="color: #6366f1; font-size: 12px;">🕒</span>
-          <span style="
-            font-size: 12px;
-            color: #666;
-            font-weight: 600;
-          ">
-            ${event.startTime} - ${event.endTime}
+            ${event.musicRatio || 'Mixed'}
           </span>
         </div>
         
-        <!-- Location -->
+        <!-- Location - Third Line -->
         <div style="
           display: flex;
           align-items: flex-start;
-          gap: 8px;
+          gap: 4px;
         ">
-          <span style="color: #6366f1; font-size: 12px; margin-top: 2px;">📍</span>
+          <span style="color: #6366f1; font-size: 12px; margin-top: 1px;">📍</span>
           <span style="
-            font-size: 12px;
+            font-size: 11px;
             color: #666;
             font-weight: 600;
             line-height: 1.3;
             flex: 1;
             word-break: break-word;
+            text-align: left;
           ">
             ${event.location}
           </span>
@@ -100,7 +146,12 @@ const generateEventCardHTML = (event) => {
 
 // Function to generate the complete email HTML
 const generateEmailHTML = (events, city, userDetails) => {
-  const eventsHTML = events.map(event => generateEventCardHTML(event)).join('');
+  // Show only first 2 events normally, blur the 3rd if it exists
+  const visibleEvents = events.slice(0, 2);
+  const blurredEvent = events.length > 2 ? events[2] : null;
+  
+  const visibleEventsHTML = visibleEvents.map(event => generateEventCardHTML(event)).join('');
+  const blurredEventHTML = blurredEvent ? generateEventCardHTML(blurredEvent, true) : '';
   
   return `
     <!DOCTYPE html>
@@ -109,12 +160,25 @@ const generateEmailHTML = (events, city, userDetails) => {
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Your Personalized Latin Dance Events</title>
+      <style>
+        @media only screen and (max-width: 600px) {
+          .events-container {
+            text-align: center !important;
+          }
+          .event-card {
+            width: 260px !important;
+            margin: 8px auto !important;
+            display: block !important;
+          }
+        }
+      </style>
     </head>
     <body style="
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: #f8f9fa;
+      line-height: 1.6;
     ">
       <div style="
         max-width: 800px;
@@ -126,45 +190,46 @@ const generateEmailHTML = (events, city, userDetails) => {
         <div style="
           background: linear-gradient(135deg, #9c3cf6, #ff6b35);
           color: white;
-          padding: 40px 20px;
+          padding: 30px 20px;
           text-align: center;
         ">
           <h1 style="
-            margin: 0 0 10px 0;
-            font-size: 28px;
-            font-weight: bold;
-          ">
-            Thanks for registering for Global Latin Dance Community! 🎉
-          </h1>
+  margin: 0 0 15px 0;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.4;
+  text-align: center;
+">
+  Thanks for registering for<br/>
+  <span style="display: inline-block; margin-top: 4px;">
+    Global Latin Dance Community!
+  </span>
+</h1>
+
+
           <p style="
             margin: 0;
-            font-size: 18px;
+            font-size: 16px;
             opacity: 0.9;
+            font-style: italic;
           ">
-            Here are your personalized upcoming events in ${city}
+            Here are your personalized upcoming events calendar in ${city}
           </p>
         </div>
         
         <!-- Welcome Message -->
         <div style="
-          padding: 30px 20px;
+          padding: 25px 20px;
           text-align: center;
           background: #fff;
         ">
-          <h2 style="
-            color: #333;
-            margin: 0 0 15px 0;
-            font-size: 24px;
-          ">
-            Get ready to dance! 💃🕺
-          </h2>
           <p style="
             color: #666;
             font-size: 16px;
             line-height: 1.6;
-            margin: 0 0 20px 0;
+            margin: 0;
           ">
-            We've curated the best <span style="color: #ff6b35; font-weight: bold;">Salsa</span>, 
+            We've curated <span style="color: #ff6b35; font-weight: bold;">verified Salsa</span>, 
             <span style="color: #9c3cf6; font-weight: bold;">Bachata</span>, 
             <span style="color: #10b981; font-weight: bold;">Kizomba</span> & 
             <span style="color: #f59e0b; font-weight: bold;">Zouk</span> events just for you!
@@ -173,113 +238,94 @@ const generateEmailHTML = (events, city, userDetails) => {
         
         <!-- Events Section -->
         <div style="
-          padding: 20px;
+          padding: 20px 15px;
           background: #f8f9fa;
         ">
           <h3 style="
             text-align: center;
             color: #333;
-            margin: 0 0 30px 0;
-            font-size: 22px;
+            margin: 0 0 25px 0;
+            font-size: 20px;
           ">
             Your Events in ${city} 🌟
           </h3>
           
           <!-- Events Container -->
-          <div style="
+          <div class="events-container" style="
             text-align: center;
             line-height: 0;
+            margin-bottom: 20px;
           ">
-            ${eventsHTML}
+            ${visibleEventsHTML}
+            ${blurredEventHTML}
           </div>
+          
+          ${blurredEvent ? `
+          <!-- More Events CTA -->
+          <div style="
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #9c3cf6, #ff6b35);
+            border-radius: 12px;
+            margin: 0 20px;
+          ">
+            <p style="
+              color: white;
+              font-size: 18px;
+              font-weight: bold;
+              margin: 0 0 15px 0;
+            ">
+              Checkout more events on Our website
+            </p>
+            <a href="#" style="
+              display: inline-block;
+              padding: 12px 24px;
+              background: white;
+              color: #9c3cf6;
+              text-decoration: none;
+              border-radius: 25px;
+              font-weight: bold;
+              font-size: 16px;
+            ">
+              Visit Website
+            </a>
+          </div>
+          ` : ''}
         </div>
         
-        <!-- Footer Message -->
+        <!-- Footer -->
         <div style="
-          padding: 30px 20px;
+          padding: 25px 20px;
           text-align: center;
           background: white;
           border-top: 2px solid #9c3cf6;
         ">
-          <h3 style="
-            color: #9c3cf6;
-            margin: 0 0 15px 0;
-            font-size: 20px;
-          ">
-            Ready to Dance? 🎵
-          </h3>
-          <p style="
-            color: #666;
-            font-size: 16px;
-            line-height: 1.6;
-            margin: 0 0 20px 0;
-          ">
-            Save this email and show up at any of these verified events. 
-            No need to worry about authenticity - we've got you covered!
-          </p>
-          
-          <!-- Contact Info Display -->
-          <div style="
-            background: #f8f4ff;
-            border: 2px solid #9c3cf6;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            display: inline-block;
-          ">
-            <h4 style="
-              color: #9c3cf6;
-              margin: 0 0 10px 0;
-              font-size: 16px;
-            ">
-              Your Registration Details:
-            </h4>
-            <p style="margin: 5px 0; color: #333; font-size: 14px;">
-              📧 Email: ${userDetails.email}
-            </p>
-            ${userDetails.phone ? `
-              <p style="margin: 5px 0; color: #333; font-size: 14px;">
-                📱 Phone: ${userDetails.phone}
-              </p>
-            ` : ''}
-            ${userDetails.instagram ? `
-              <p style="margin: 5px 0; color: #333; font-size: 14px;">
-                📸 Instagram: @${userDetails.instagram}
-              </p>
-            ` : ''}
-          </div>
-          
-          <p style="
-            color: #999;
-            font-size: 14px;
-            margin: 20px 0 0 0;
-          ">
-            Questions? Reply to this email or follow us on social media for updates!
-          </p>
-          
           <!-- Social Links -->
-          <div style="margin-top: 20px;">
+          <div style="margin-top: 15px;">
             <a href="#" style="
               display: inline-block;
               margin: 0 10px;
-              padding: 8px 16px;
+              padding: 10px 20px;
               background: #9c3cf6;
               color: white;
               text-decoration: none;
-              border-radius: 20px;
+              border-radius: 25px;
               font-size: 14px;
+              font-weight: 600;
             ">
               Follow Us
             </a>
             <a href="#" style="
               display: inline-block;
               margin: 0 10px;
-              padding: 8px 16px;
+              padding: 10px 20px;
               background: #ff6b35;
               color: white;
               text-decoration: none;
-              border-radius: 20px;
+              border-radius: 25px;
               font-size: 14px;
+              font-weight: 600;
             ">
               Visit Website
             </a>
@@ -294,29 +340,30 @@ const generateEmailHTML = (events, city, userDetails) => {
 // Main function to send email using Brevo API
 export async function sendPersonalizedEventEmail(events, city, userDetails) {
   const htmlContent = generateEmailHTML(events, city, userDetails);
-
+  saveEmailPreview(htmlContent);
+  
   const textContent = `
 Thanks for registering for Global Latin Dance Community!
 
-Here are your personalized upcoming events in ${city}:
+Here are your personalized upcoming events calendar in ${city}:
 
 ${events
+  .slice(0, 2) // Only show first 2 events in text version
   .map(
     (event) => `
 Event: ${event.title}
 Date: ${event.formattedDate || event.day + ', ' + event.shortDate}
 Time: ${event.startTime} - ${event.endTime}
 Location: ${event.location}
+Price: ${event.fees || 'Free'}
+Music: ${event.musicRatio || 'Mixed'}
 ---`
   )
   .join('')}
 
-Get ready to dance!
+${events.length > 2 ? 'Checkout more events on our website!' : ''}
 
-Your registration details:
-Email: ${userDetails.email}
-${userDetails.phone ? `Phone: ${userDetails.phone}` : ''}
-${userDetails.instagram ? `Instagram: @${userDetails.instagram}` : ''}
+We've curated verified Salsa, Bachata, Kizomba & Zouk events just for you!
 `;
 
   try {

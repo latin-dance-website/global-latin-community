@@ -87,6 +87,27 @@ body {
   font-weight: bold !important;
 }
 
+.custom-range-picker {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-weight: 600;
+  font-size: 16px;
+  color: #000;
+  display: flex;
+  align-items: center;
+  padding-left: 6px;
+}
+
+.custom-range-picker input {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0;
+  font-weight: 600;
+  color: #000;
+}
+
 @media (max-width: 504px) {
   .custom-range-picker:hover {
     position:absolute;

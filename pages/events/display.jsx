@@ -14,7 +14,7 @@ import {
   Button,
   Input
 } from "@chakra-ui/react";
-import { FaCalendar, FaClock, FaLocationDot } from "react-icons/fa6";
+import { FaCalendar, FaClock, FaLocationDot, FaDollarSign, FaMusic } from "react-icons/fa6";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import weekday from "dayjs/plugin/weekday";
@@ -141,21 +141,20 @@ export default function EventsDisplayPage({ allEvents }) {
     setShowPopup(true); // Show popup when events are displayed
   }, [city, startDate, endDate, allEvents]); // Re-run when query params or allEvents change
 
-
-  // Auto-scroll functionality
+  // Auto-scroll functionality for mobile
   useEffect(() => {
-    if (!filteredEvents.length || !isAutoScrolling) return;
+    if (!filteredEvents.length || !isAutoScrolling || !isMobile) return;
 
     const container = scrollContainerRef.current;
     if (!container) return;
 
     const scrollInterval = setInterval(() => {
-      if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
-        container.scrollTo({ left: 0, behavior: 'smooth' });
+      if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+        container.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
-        const cardWidth = isMobile ? 300 : 350;
-        const gap = isMobile ? 24 : 20;
-        container.scrollBy({ left: cardWidth + gap, behavior: 'smooth' });
+        const cardHeight = 350; // Height of each card
+        const gap = 24; // Gap between cards
+        container.scrollBy({ top: cardHeight + gap, behavior: 'smooth' });
       }
     }, 3000);
 
@@ -217,7 +216,7 @@ export default function EventsDisplayPage({ allEvents }) {
     );
   }
 
-  return (
+return (
     <Box
       minH="100vh"
       maxW="100vw"
@@ -234,7 +233,16 @@ export default function EventsDisplayPage({ allEvents }) {
         <Navbar />
       </Box>
 
-      <Box mt={{ base: "-2px", md: "-3px" }} mb={4} textAlign="center">
+      {/* Border line after navbar */}
+      <Box
+        w="100%"
+        h="3px"
+        bg="linear-gradient(90deg, transparent, #a0aec0, transparent)" 
+        mt={{ base: "4px", md: "6px" }}
+        mb={6}
+      />
+
+      <Box mt={{ base: "-14px", md: "6px" }} mb={6} textAlign="center">
         <Heading
           fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
           fontWeight="extrabold"
@@ -251,151 +259,228 @@ export default function EventsDisplayPage({ allEvents }) {
 
       {/* Events Display */}
       <Box width="100%" mt={0} mb={12} px={{ base: 4, md: 6 }}>
-        {/* Mobile: Vertical grid */}
+        {/* Mobile: Vertical scrolling grid */}
         <Box display={{ base: "block", md: "none" }}>
           <Box
+            ref={scrollContainerRef}
             display="grid"
             gridTemplateColumns="1fr"
             gap={6}
             pb={4}
+            maxHeight="70vh"
+            overflowY="auto"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            sx={{
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': {
+                display: 'none'
+              }
+            }}
           >
             {filteredEvents.map((event, index) => (
               <Box
                 key={`${event.id}-${index}`}
                 width="100%"
+                maxWidth="300px"
+                mx="auto"
                 onClick={() => handleExploreNow(event)}
                 cursor="pointer"
               >
-                 <Box
-                    borderRadius="12px"
+                <Box
+                  borderRadius="16px"
+                  overflow="hidden"
+                  bg="white"
+                  height="auto"
+                  minHeight="300px"
+                  border="2px solid transparent"
+                  boxShadow="0 4px 12px rgba(0, 0, 0, 0.1)"
+                  _hover={{
+                    transform: "translateY(-6px) scale(1.02)",
+                    boxShadow: "0 12px 24px rgba(246, 60, 128, 0.3)",
+                    borderColor: "#f63c80",
+                  }}
+                  transition="all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+                  display="flex"
+                  flexDirection="column"
+                  position="relative"
+                  _before={{
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    borderRadius: "16px",
+                    padding: "2px",
+                    background: "linear-gradient(135deg, #f63c80, #6366f1, #f63c80)",
+                    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    maskComposite: "exclude",
+                    opacity: 0,
+                    transition: "opacity 0.4s ease",
+                  }}
+                  _hover={{
+                    _before: {
+                      opacity: 1,
+                    }
+                  }}
+                >
+                  <Box
+                    width="100%"
+                    height="180px"
                     overflow="hidden"
-                    bg="white"
-                    height="320px"
-                    border="1px solid #e2e8f0"
-                    boxShadow="sm"
-                    _hover={{
-                      transform: "translateY(-4px)",
-                      boxShadow: "xl",
-                      borderColor: "#f63c80",
-                    }}
-                    transition="all 0.3s ease"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    bg="#f8f9fa"
+                    position="relative"
+                  >
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        transition: "transform 0.4s ease",
+                      }}
+                    />
+                  </Box>
+
+                  <Box
+                    p="12px"
+                    flex="1"
                     display="flex"
                     flexDirection="column"
+                    justifyContent="flex-start"
+                    gap={3}
                   >
-                    <Box
+                    {/* Title */}
+                    <Text
+                      fontSize="15px"
+                      fontWeight="700"
+                      noOfLines={1}
+                      lineHeight="1.2"
+                      color="gray.800"
                       width="100%"
-                      height="240px"
+                      textAlign="center"
                       overflow="hidden"
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      bg="#f8f9fa"
+                      textOverflow="ellipsis"
+                      whiteSpace="nowrap"
                     >
-                      <img
-                        src={event.image}
-                        alt={event.title}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
-                    </Box>
+                      {event.title}
+                    </Text>
 
-                    <Box
-                      p="6px"
-                      flex="1"
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="flex-start"
+                    {/* Date, Time, and Price - First Line */}
+                    <Flex
+                      align="center"
+  justify="flex-start"
+  width="100%"
+  gap={0}
                     >
-                      <Text
-                        fontSize="11px"
-                        fontWeight="700"
-                        noOfLines={1}
-                        lineHeight="1.2"
-                        color="gray.800"
-                        width="100%"
-                        textAlign="center"
-                        mb="4px"
-                        px={1}
-                        overflow="hidden"
-                        textOverflow="ellipsis"
-                        whiteSpace="nowrap"
-                      >
-                        {event.title}
-                      </Text>
-
-                      <Flex
-                        align="center"
-                        justify="flex-start"
-                        width="100%"
-                        mb="3px"
-                        gap={2}
-                      >
-                        <Box color="#6366f1" fontSize="11px">
+                      <Flex align="center" gap={1} flex="0 0 auto" justify="flex-start">
+                        <Box color="#6366f1" fontSize="12px" flexShrink={0}>
                           <FaCalendar />
                         </Box>
                         <Text
                           fontSize="11px"
                           color="gray.600"
-                          fontWeight="600"
+                          fontWeight="700"
                         >
                           {event.formattedDate}
                         </Text>
-                        <Box color="#6366f1" fontSize="11px">
+                      </Flex>
+                      
+                      <Flex align="center" gap={1} flex="0 0 auto" justify="center" mx={3}>
+                        <Box color="#6366f1" fontSize="12px" flexShrink={0}>
                           <FaClock />
                         </Box>
                         <Text
                           fontSize="11px"
                           color="gray.600"
                           fontWeight="600"
+                          noOfLines={1}
                         >
-                          {event.startTime} - {event.endTime} hrs
+                          {event.startTime}-{event.endTime}hrs
                         </Text>
                       </Flex>
-
-                      <Flex
-                        align="center"
-                        justify="flex-start"
-                        width="100%"
-                      >
-                        <Flex align="center" gap={2} width="100%">
-                          <Box
-                            flexShrink={0}
-                            color="#6366f1"
-                            fontSize="11px"
-                          >
-                            <FaLocationDot />
-                          </Box>
-                          <Text
-                            fontSize="11px"
-                            color="gray.600"
-                            fontWeight="600"
-                            noOfLines={2}
-                            lineHeight="1.3"
-                            textAlign="left"
-                            flex="1"
-                            wordBreak="break-word"
-                          >
-                            {event.citybycountry}
-                          </Text>
-                        </Flex>
+                      
+                      <Flex align="center" gap={1} flex="0 0 auto" justify="flex-end">
+                        <Box color="#6366f1" fontSize="12px">
+                          <FaDollarSign />
+                        </Box>
+                        <Text
+                          fontSize="11px"
+                          color="gray.600"
+                          fontWeight="600"
+                        >
+                          {event.fees || 'Free'}
+                        </Text>
                       </Flex>
-                    </Box>
+                    </Flex>
+
+                    {/* Music Ratio - Second Line */}
+                    <Flex
+                      align="center"
+                      justify="flex-start"
+                      width="100%"
+                      gap={1}
+                    >
+                      <Box color="#6366f1" fontSize="12px">
+                        <FaMusic />
+                      </Box>
+                      <Text
+                        fontSize="11px"
+                        color="gray.600"
+                        fontWeight="600"
+                      >
+                        {event.musicRatio || 'Mixed'}
+                      </Text>
+                    </Flex>
+
+                    {/* Location - Third Line */}
+                    <Flex
+  align="flex-start"
+  justify="flex-start"
+  width="100%"
+  gap={1}
+>
+  <Box
+    color="#6366f1"
+    fontSize="12px"
+    pt="1px" // small vertical alignment tweak
+  >
+    <FaLocationDot />
+  </Box>
+
+  <Text
+    fontSize="11px"
+    color="gray.600"
+    fontWeight="600"
+    lineHeight="1.3"
+    textAlign="left"
+    wordBreak="break-word"
+  >
+    {event.location}
+  </Text>
+</Flex>
+
                   </Box>
+                </Box>
               </Box>
             ))}
           </Box>
         </Box>
 
-        {/* Desktop: Vertical grid */}
+        {/* Desktop: 3 cards per row */}
         <Box display={{ base: "none", md: "block" }}>
           <Box
             display="grid"
-            gridTemplateColumns="repeat(auto-fit, minmax(350px, 1fr))"
-            gap={5}
+            gridTemplateColumns="repeat(3, 1fr)"
+            gap={6}
             pb={4}
+            maxWidth="1200px"
+            mx="auto"
           >
             {filteredEvents.map((event, index) => (
               <Box
@@ -404,124 +489,184 @@ export default function EventsDisplayPage({ allEvents }) {
                 onClick={() => handleExploreNow(event)}
                 cursor="pointer"
               >
-                 <Box
-                    borderRadius="12px"
+                <Box
+                  borderRadius="20px"
+                  overflow="hidden"
+                  bg="white"
+                  height="auto"
+                  minHeight="420px"
+                  border="2px solid transparent"
+                  boxShadow="0 6px 20px rgba(0, 0, 0, 0.1)"
+                  _hover={{
+                    transform: "translateY(-8px) scale(1.02)",
+                    boxShadow: "0 16px 32px rgba(246, 60, 128, 0.3)",
+                    borderColor: "#f63c80",
+                    _before: {
+                      opacity: 1,
+                    }
+                  }}
+                  transition="all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+                  display="flex"
+                  flexDirection="column"
+                  position="relative"
+                  _before={{
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    borderRadius: "20px",
+                    padding: "2px",
+                    background: "linear-gradient(135deg, #f63c80, #6366f1, #f63c80)",
+                    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    maskComposite: "exclude",
+                    opacity: 0,
+                    transition: "opacity 0.4s ease",
+                  }}
+                >
+                  <Box
+                    width="100%"
+                    height="280px"
                     overflow="hidden"
-                    bg="white"
-                    height="380px"
-                    border="1px solid #e2e8f0"
-                    boxShadow="sm"
-                    _hover={{
-                      transform: "translateY(-4px)",
-                      boxShadow: "xl",
-                      borderColor: "#f63c80",
-                    }}
-                    transition="all 0.3s ease"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    bg="#f8f9fa"
+                    position="relative"
+                  >
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        transition: "transform 0.4s ease",
+                      }}
+                    />
+                  </Box>
+
+                  <Box
+                    p="16px"
+                    flex="1"
                     display="flex"
                     flexDirection="column"
+                    justifyContent="flex-start"
+                    gap={4}
                   >
-                    <Box
+                    {/* Title */}
+                    <Text
+                      fontSize="18px"
+                      fontWeight="700"
+                      noOfLines={1}
+                      lineHeight="1.2"
+                      color="gray.800"
                       width="100%"
-                      height="280px"
+                      textAlign="center"
                       overflow="hidden"
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      bg="#f8f9fa"
+                      textOverflow="ellipsis"
+                      whiteSpace="nowrap"
                     >
-                      <img
-                        src={event.image}
-                        alt={event.title}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
-                    </Box>
+                      {event.title}
+                    </Text>
 
-                    <Box
-                      p="8px"
-                      flex="1"
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="flex-start"
+                    {/* Date, Time, and Price - First Line */}
+                    <Flex
+                      align="center"
+  justify="space-between"
+  width="100%"
+  gap={2}
+  wrap="wrap"
                     >
-                      <Text
-                        fontSize="13px"
-                        fontWeight="700"
-                        noOfLines={1}
-                        lineHeight="1.2"
-                        color="gray.800"
-                        width="100%"
-                        textAlign="center"
-                        mb="6px"
-                        px={1}
-                        overflow="hidden"
-                        textOverflow="ellipsis"
-                        whiteSpace="nowrap"
-                      >
-                        {event.title}
-                      </Text>
-
-                      <Flex
-                        align="center"
-                        justify="flex-start"
-                        width="100%"
-                        mb="4px"
-                        gap={2}
-                      >
-                        <Box color="#6366f1" fontSize="13px">
+                      <Flex align="center" gap={2} flex="0 0 auto" justify="flex-start">
+                        <Box color="#6366f1" fontSize="14px" flexShrink={0}>
                           <FaCalendar />
                         </Box>
                         <Text
-                          fontSize="12px"
+                          fontSize="13px"
                           color="gray.600"
-                          fontWeight="600"
+                          fontWeight="700"
                         >
                           {event.formattedDate}
                         </Text>
-                        <Box color="#6366f1" fontSize="13px">
+                      </Flex>
+                      
+                      <Flex align="center" gap={2} flex="0 0 auto" justify="center">
+                        <Box color="#6366f1" fontSize="14px" flexShrink={0}>
                           <FaClock />
                         </Box>
                         <Text
-                          fontSize="12px"
+                          fontSize="13px"
+                          color="gray.600"
+                          fontWeight="600"
+                          noOfLines={1}
+                        >
+                          {event.startTime}-{event.endTime}hrs
+                        </Text>
+                      </Flex>
+                      
+                      <Flex align="center" gap={2} flex="0 0 auto" justify="flex-end">
+                        <Box color="#6366f1" fontSize="14px">
+                          <FaDollarSign />
+                        </Box>
+                        <Text
+                          fontSize="13px"
                           color="gray.600"
                           fontWeight="600"
                         >
-                          {event.startTime} - {event.endTime}
+                          {event.fees || 'Free'}
                         </Text>
                       </Flex>
+                    </Flex>
 
-                      <Flex
-                        align="center"
-                        justify="flex-start"
-                        width="100%"
+                    {/* Music Ratio - Second Line */}
+                    <Flex
+                      align="center"
+                      justify="flex-start"
+                      width="100%"
+                      gap={2}
+                    >
+                      <Box color="#6366f1" fontSize="14px">
+                        <FaMusic />
+                      </Box>
+                      <Text
+                        fontSize="13px"
+                        color="gray.600"
+                        fontWeight="600"
                       >
-                        <Flex align="center" gap={2} width="100%">
-                          <Box
-                            flexShrink={0}
-                            color="#6366f1"
-                            fontSize="13px"
-                          >
-                            <FaLocationDot />
-                          </Box>
-                          <Text
-                            fontSize="12px"
-                            color="gray.600"
-                            fontWeight="600"
-                            noOfLines={2}
-                            lineHeight="1.3"
-                            textAlign="left"
-                            flex="1"
-                            wordBreak="break-word"
-                          >
-                            {event.citybycountry}
-                          </Text>
-                        </Flex>
-                      </Flex>
-                    </Box>
+                        {event.musicRatio || 'Mixed'}
+                      </Text>
+                    </Flex>
+
+                    {/* Location - Third Line */}
+                    <Flex
+                      align="center"
+                      justify="flex-start"
+                      width="100%"
+                      gap={2}
+                    >
+                      <Box
+                        flexShrink={0}
+                        color="#6366f1"
+                        fontSize="14px"
+                      >
+                        <FaLocationDot />
+                      </Box>
+                      <Text
+                        fontSize="13px"
+                        color="gray.600"
+                        fontWeight="600"
+                        noOfLines={1}
+                        lineHeight="1.3"
+                        textAlign="left"
+                        wordBreak="break-word"
+                      >
+                        {event.location}
+                      </Text>
+                    </Flex>
                   </Box>
+                </Box>
               </Box>
             ))}
           </Box>
@@ -579,7 +724,7 @@ export default function EventsDisplayPage({ allEvents }) {
               textAlign="center"
               mb={4}
             >
-              Hey, Hope you have a great time  dancing  in {city}.
+              Hey, Hope you have a great time dancing in {city}.
             </Text>
 
             {/* Input fields */}
@@ -621,19 +766,16 @@ export default function EventsDisplayPage({ allEvents }) {
 
             <Text fontSize="md" textAlign="center" mt={4} color="gray.600">
               Get verified schedule sent to your contacts.  
-           
             </Text>
-            <Text fontSize="md" textAlign="center" mt={4} color="gray.600" mt>
-           
+            <Text fontSize="md" textAlign="center" mt={4} color="gray.600">
               We handle the plan. You handle the dancing.
             </Text>
 
             <Flex justify="center" mt={6}>
-              
               <Button
                 width="200px"
-                 h="50px"
-                 fontSize="lg" 
+                h="50px"
+                fontSize="lg" 
                 colorScheme="pink"
                 isLoading={isSending}
                 onClick={handleSend}

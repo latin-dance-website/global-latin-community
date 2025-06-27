@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node --openssl-legacy-provider ./node_modules/next/dist/bin/next dev",
     "build": "next build",
     "start": "next start",
     "apollo:download-schema": "apollo client:download-schema schema.graphql",
@@ -55,7 +55,8 @@
     "sharp": "^0.34.2",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.1.15",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.20.0",

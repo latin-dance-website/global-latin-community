@@ -3,5 +3,13 @@ const nextConfig = {
     reactStrictMode: true,
   }
   
-  module.exports = nextConfig;
-  
+  module.exports = {
+  api: {
+    bodyParser: {
+      sizeLimit: '1mb',
+    },
+  },
+  serverRuntimeConfig: {
+    PROJECT_ROOT: __dirname,
+  }
+};

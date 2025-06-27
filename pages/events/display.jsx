@@ -1,5 +1,3 @@
-// pages/events/display.js
-
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "@components/Navbar";
 import { useRouter } from "next/router";
@@ -169,45 +167,68 @@ export default function EventsDisplayPage({ allEvents }) {
     router.push("/events/social"); // This navigates to the event detail page
   };
 
-  const handleSend = async () => {
-    setIsSending(true);
-    try {
-      const response = await fetch('/api/send-events-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+const handleSend = async () => {
+  setIsSending(true);
+  try {
+    // First, send the email
+    const emailResponse = await fetch('/api/send-events-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        events: filteredEvents,
+        city: city,
+        userDetails: {
+          email: toEmail,
+          phone: phoneNumber,
+          instagram: instagramId,
         },
-        body: JSON.stringify({
-          events: filteredEvents, // Send the actual filtered events
-          city: city,
-          userDetails: {
-            email: toEmail,
-            phone: phoneNumber,
-            instagram: instagramId,
-          },
-        }),
-      });
+      }),
+    });
 
-      const result = await response.json();
+    const emailResult = await emailResponse.json();
 
-      if (response.ok) {
-        alert('Event details sent successfully! Check your email.');
-        setShowPopup(false);
-        // Reset form
-        setToEmail("");
-        setPhoneNumber("");
-        setInstagramId("");
-      } else {
-        alert(`Failed to send email: ${result.message}`);
-      }
-    } catch (error) {
-      console.error("Error sending details:", error);
-      alert('Failed to send email. Please try again.');
-    } finally {
-      setIsSending(false);
+    if (!emailResponse.ok) {
+      throw new Error(`Failed to send email: ${emailResult.message}`);
     }
-  };
 
+    // Then, store the user details in Google Sheets
+    const storeResponse = await fetch('/api/store-user-details', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: toEmail,
+        phone: phoneNumber,
+        instagram: instagramId,
+      }),
+    });
+
+    const storeResult = await storeResponse.json();
+
+    if (!storeResponse.ok) {
+      throw new Error(`Failed to store user details: ${storeResult.message}`);
+    }
+
+    alert('Event details sent successfully! Check your email.');
+    setShowPopup(false);
+    // Reset form
+    setToEmail("");
+    setPhoneNumber("");
+    setInstagramId("");
+  } catch (error) {
+    console.error("Detailed error:", {
+      message: error.message,
+      response: await error.response?.json(),
+      stack: error.stack
+    });
+    alert(`Error: ${error.message}`);
+  } finally {
+    setIsSending(false);
+  }
+};
   if (!city) {
     return (
       <Center minH="100vh">
@@ -740,19 +761,27 @@ return (
               />
 
               <PhoneInput
-                country={'in'}
-                value={phoneNumber}
-                onChange={setPhoneNumber}
-                inputStyle={{
-                  width: '100%',
-                  borderRadius: '9999px',
-                  border: '1px solid #E2E8F0',
-                  paddingLeft: '48px',
-                }}
-                containerStyle={{
-                  width: '100%',
-                }}
-              />
+  country={'in'}
+  value={phoneNumber}
+  onChange={(value) => {
+    // Ensure it includes '+'
+    if (!value.startsWith('+')) {
+      setPhoneNumber('+' + value);
+    } else {
+      setPhoneNumber(value);
+    }
+  }}
+  inputStyle={{
+    width: '100%',
+    borderRadius: '9999px',
+    border: '1px solid #E2E8F0',
+    paddingLeft: '48px',
+  }}
+  containerStyle={{
+    width: '100%',
+  }}
+/>
+
 
               <Input
                 placeholder="Instagram username"
@@ -762,6 +791,7 @@ return (
                 borderColor="gray.300"
                 px={4}
               />
+              
             </Stack>
 
             <Text fontSize="md" textAlign="center" mt={4} color="gray.600">

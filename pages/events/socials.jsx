@@ -3,8 +3,7 @@ import Navbar from "@components/Navbar";
 import { useRouter } from "next/router";
 import Caraousel from "../.././components/carousel";
 import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+import CustomCalendar from "./CustomCalendar"; // Import the custom calendar
 import {
   Box,
   Button,
@@ -40,7 +39,6 @@ import {
   Popover,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import weekday from "dayjs/plugin/weekday";
@@ -54,10 +52,7 @@ export default function EventsHomePage({ cities }) {
   const router = useRouter();
   const [selectedCity, setSelectedCity] = useState("");
   const [dateRange, setDateRange] = useState(null); // [dayjs, dayjs]
-  // const [showDateSelectionPopup, setShowDateSelectionPopup] = useState(false); // Commented out - date selection popup
-  const [datePickerOpen, setDatePickerOpen] = useState(false); // New state for controlling date picker
-  const datePickerRef = useRef(null); // Ref to access the date picker
-  const { RangePicker } = DatePicker;
+  const { isOpen: isCalendarOpen, onOpen: onCalendarOpen, onClose: onCalendarClose } = useDisclosure();
 
   // Keyframes for animations
   const blink = keyframes`
@@ -76,25 +71,17 @@ export default function EventsHomePage({ cities }) {
     }
   `;
 
-  // Handle city selection - simplified without popup
-  const handleCityChange = (selectedValue) => {
-    setSelectedCity(selectedValue);
-    if (selectedValue) {
-      // Directly open the date picker without showing popup
-      setTimeout(() => {
-        setDatePickerOpen(true);
-        // Focus on the date picker to trigger the calendar
-        if (datePickerRef.current) {
-          datePickerRef.current.focus();
-        }
-      }, 500); // Reduced delay since no popup
-    }
-  };
+ const handleCityChange = (selectedValue) => {
+  setSelectedCity(selectedValue);
+  setDateRange(null); // Reset the selected dates
+  if (selectedValue) {
+    // Open calendar after city selection
+    setTimeout(() => {
+      onCalendarOpen();
+    }, 500);
+  }
+};
 
-  // Handle date picker open/close
-  const handleDatePickerOpenChange = (open) => {
-    setDatePickerOpen(open);
-  };
 
   const handleGetEvents = () => {
     if (!selectedCity) {
@@ -110,10 +97,9 @@ export default function EventsHomePage({ cities }) {
       queryParams.startDate = dateRange[0].format("YYYY-MM-DD");
       queryParams.endDate = dateRange[1].format("YYYY-MM-DD");
       router.push({
-        pathname: "/events/display", // Navigate to the new display page
+        pathname: "/events/display",
         query: queryParams,
       });
-      // setShowPopup(true); // Commented out - popup moved to display page
     } else {
       if (
         window.confirm(
@@ -123,13 +109,14 @@ export default function EventsHomePage({ cities }) {
         )
       ) {
         router.push({
-          pathname: "/events/display", // Navigate to the new display page
+          pathname: "/events/display",
           query: queryParams,
         });
-        // setShowPopup(true); // Commented out - popup moved to display page
       }
     }
   };
+
+
 
   return (
   <Box
@@ -164,8 +151,8 @@ export default function EventsHomePage({ cities }) {
     {/* Main Control Box - Increased width */}
     <Box
       width="fit-content"
-      maxWidth={{ base: "95%", md: "650px" }} // 🔥 Increased from 550px to 650px
-      minWidth="320px" // Slightly increased minimum width too
+      maxWidth={{ base: "95%", md: "650px" }}
+      minWidth="320px"
       display="flex"
       flexDirection="column"
       alignItems="center"
@@ -175,7 +162,7 @@ export default function EventsHomePage({ cities }) {
       boxShadow="xl"
       border="2px solid #9c3cf6"
       py={{ base: 6, md: 8 }}
-      px={{ base: 6, md: 8 }} // 🔥 Increased padding to accommodate wider content
+      px={{ base: 6, md: 8 }}
       mt={{ base: "-8px", md: "20px" }}
       position="relative"
       mx="auto"
@@ -215,7 +202,7 @@ export default function EventsHomePage({ cities }) {
         },
       }}
     >
-      {/* Inner content remains the same */}
+      {/* Inner content */}
       <VStack
         spacing={0.5}
         mb={4}
@@ -297,7 +284,7 @@ export default function EventsHomePage({ cities }) {
         {/* City Selector */}
         <Box
           width={{ base: "89%", md: "100%" }}
-          maxWidth={{ base: "300px", md: "420px" }} // 🔥 Increased width to match container
+          maxWidth={{ base: "300px", md: "420px" }}
           borderRadius={{ base: "10px", md: "12px" }}
           animation={
             !selectedCity
@@ -358,10 +345,10 @@ export default function EventsHomePage({ cities }) {
           </Select>
         </Box>
 
-        {/* Date Range Picker */}
+        {/* Custom Date Range Selector */}
         <Box
           width={{ base: "90%", md: "100%" }}
-          maxWidth={{ base: "300px", md: "350px" }} // 🔥 Increased width
+          maxWidth={{ base: "300px", md: "350px" }}
           borderRadius={{ base: "10px", md: "12px" }}
           overflow="hidden"
           bg="white"
@@ -372,6 +359,11 @@ export default function EventsHomePage({ cities }) {
               ? `${blink} 1.5s ease-in-out infinite`
               : "none"
           }
+          cursor="pointer"
+          onClick={onCalendarOpen}
+          _hover={{
+            borderColor: "#8a2be2",
+          }}
         >
           <Flex align="center" height={{ base: "44px", md: "48px" }}>
             {/* Set Travel Dates Label */}
@@ -393,81 +385,99 @@ export default function EventsHomePage({ cities }) {
               Set Travel Dates
             </Box>
 
-            {/* Responsive Date Range Picker with current month start */}
-            <Box flex="1" height="100%">
-              <RangePicker
-  ref={datePickerRef}
-  format="DD MMM"
-  value={dateRange}
-  onChange={setDateRange}
-  onCalendarChange={(dates) => {
-    if (dates && dates.length === 2) {
-      setDateRange(dates);
-    }
-  }}
-  open={datePickerOpen}
-  onOpenChange={handleDatePickerOpenChange}
-  placeholder={["Start", "End"]}
-  defaultPickerValue={[dayjs(), dayjs()]}
-  allowEmpty={[false, false]}
-  disabledDate={(current) => current && current < dayjs().startOf("day")}
-  inputReadOnly={true}
-  suffixIcon={null}
-  className="custom-range-picker calendar-transition"
-  dropdownClassName="calendar-slide-popup"
-  transitionName="" // disables AntD built-in animation
-  separator={
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      px={1}
-      fontSize="14px"
-      color="#9c3cf6"
-      fontWeight="bold"
-    >
-      ⇌
-    </Box>
-  }
-  popupStyle={{
-    position: 'absolute',
-    top: '420px', // Adjust this to fine-tune vertical position
-    left: '50%',
-    transform: 'translateX(-50%)',
-    zIndex: 9999
-  }}
-  getPopupContainer={() => document.body}
-  panelRender={(panelNode) => (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      {/* ✅ Only show 1 calendar, hiding header + second month */}
-      {panelNode.props.children[1]}
-    </div>
-  )}
-  style={{
-    width: "100%",
-    border: "none",
-    height: "100%",
-    backgroundColor: "transparent",
-    padding: "0 4px",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-  }}
-/>
-
-            </Box>
+            {/* Date Display with Start ⇌ End format */}
+            <Flex 
+              flex="1" 
+              height="100%" 
+              align="center"
+              justify="space-between"
+              px={2}
+              color={dateRange ? "#333" : "#999"}
+              fontWeight="500"
+              fontSize={{ base: "14px", md: "16px" }}
+            >
+              {dateRange && dateRange[0] && dateRange[1] ? (
+                <>
+                  {/* Start Date - Centered in left section */}
+                  <Box 
+                    flex="1" 
+                    display="flex" 
+                    justifyContent="center" 
+                    alignItems="center"
+                  >
+                    {dateRange[0].format("DD MMM")}
+                  </Box>
+                  
+                  {/* Arrow - Centered */}
+                  <Box 
+                    display="flex" 
+                    justifyContent="center" 
+                    alignItems="center"
+                    px={2}
+                    color="#9c3cf6"
+                    fontWeight="bold"
+                  >
+                    ⇌
+                  </Box>
+                  
+                  {/* End Date - Centered in right section */}
+                  <Box 
+                    flex="1" 
+                    display="flex" 
+                    justifyContent="center" 
+                    alignItems="center"
+                  >
+                    {dateRange[1].format("DD MMM")}
+                  </Box>
+                </>
+              ) : (
+                <>
+                  {/* Start - Centered in left section */}
+                  <Box 
+                    flex="1" 
+                    display="flex" 
+                    justifyContent="center" 
+                    alignItems="center"
+                  >
+                    Start
+                  </Box>
+                  
+                  {/* Arrow - Centered */}
+                  <Box 
+                    display="flex" 
+                    justifyContent="center" 
+                    alignItems="center"
+                    px={2}
+                    color="#9c3cf6"
+                    fontWeight="bold"
+                  >
+                    ⇌
+                  </Box>
+                  
+                  {/* End - Centered in right section */}
+                  <Box 
+                    flex="1" 
+                    display="flex" 
+                    justifyContent="center" 
+                    alignItems="center"
+                  >
+                    End
+                  </Box>
+                </>
+              )}
+            </Flex>
           </Flex>
         </Box>
 
-        {/* Get Events Button - Enhanced with popup effect */}
+        {/* Get Events Button */}
         <Box
           width={{ base: "85%", md: "100%" }}
-          maxWidth={{ base: "300px", md: "380px" }} // 🔥 Increased width
+          maxWidth={{ base: "300px", md: "380px" }}
           mb={-3}
         >
           <Button
   onClick={handleGetEvents}
-  bg={selectedCity && dateRange ? "#9c3cf6" : "#ff6b35"}
+  bg="#ff6b35"
   color="white"
   borderRadius={{ base: "12px", md: "14px" }}
   fontWeight="700"
@@ -478,37 +488,29 @@ export default function EventsHomePage({ cities }) {
   py={3}
   mx={{ base: "-5%", md: "-2.5%" }}
   position="relative"
-  boxShadow={
-    selectedCity && dateRange
-      ? "0 0 12px #9c3cf6, 0 0 24px #c084fc"
-      : "0 0 15px rgba(255, 107, 53, 0.6)"
-  }
+  boxShadow="0 0 15px rgba(255, 107, 53, 0.6)"
   _hover={{
-    bg: selectedCity && dateRange ? "#8a2be2" : "#ff5722",
+    bg: "#ff5722",
     transform: "translateY(-2px) scale(1.02)",
-    boxShadow:
-      selectedCity && dateRange
-        ? "0 0 20px #9c3cf6, 0 0 30px #c084fc"
-        : "0 0 20px rgba(255, 107, 53, 0.8)",
+    boxShadow: "0 0 20px rgba(255, 107, 53, 0.8)",
   }}
   _active={{
-    bg: selectedCity && dateRange ? "#7b1fa2" : "#e64a19",
+    bg: "#e64a19",
     transform: "translateY(0px) scale(1.0)",
   }}
   transition="all 0.3s ease-in-out"
   sx={{
-    ...(selectedCity && dateRange && {
-      animation: "borderGlow 1.8s infinite ease-in-out",
-    }),
-    "@keyframes borderGlow": {
+    animation: "glowPulse 1.5s infinite ease-in-out",
+    "@keyframes glowPulse": {
       "0%": {
-        boxShadow: "0 0 6px #9c3cf6, 0 0 12px #9c3cf6",
+        boxShadow: "0 0 0px rgba(255, 107, 53, 0.6)",
       },
       "50%": {
-        boxShadow: "0 0 20px #c084fc, 0 0 30px #c084fc",
+        boxShadow:
+          "0 0 12px rgba(255, 107, 53, 0.9), 0 0 24px rgba(255, 107, 53, 0.6)",
       },
       "100%": {
-        boxShadow: "0 0 6px #9c3cf6, 0 0 12px #9c3cf6",
+        boxShadow: "0 0 0px rgba(255, 107, 53, 0.6)",
       },
     },
   }}
@@ -519,6 +521,14 @@ export default function EventsHomePage({ cities }) {
         </Box>
       </VStack>
     </Box>
+
+    {/* Custom Calendar Modal */}
+    <CustomCalendar
+      dateRange={dateRange}
+      setDateRange={setDateRange}
+      isOpen={isCalendarOpen}
+      onClose={onCalendarClose}
+    />
   </Box>
 );
 }
@@ -536,7 +546,7 @@ export async function getStaticProps() {
 
     const uniqueCities = new Set();
     events.forEach((event) => {
-      const city = event.city?.trim(); // Use optional chaining for safety
+      const city = event.city?.trim();
       if (city) {
         uniqueCities.add(city);
       }
@@ -546,7 +556,7 @@ export async function getStaticProps() {
       props: {
         cities: Array.from(uniqueCities).sort(),
       },
-      revalidate: 60, // Revalidate every 60 seconds
+      revalidate: 60,
     };
   } catch (err) {
     console.error("Error fetching cities:", err);

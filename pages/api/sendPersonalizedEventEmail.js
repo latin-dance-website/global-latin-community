@@ -3,10 +3,19 @@ import nodemailer from "nodemailer";
 import fs from 'fs';
 import dayjs from 'dayjs';
 
+// Modified saveEmailPreview function
 function saveEmailPreview(html, filename = 'preview.html') {
-  fs.writeFileSync(filename, html, 'utf8');
-  console.log(`✅ Email preview saved as ${filename}. Open it in your browser.`);
+  if (process.env.NODE_ENV === 'development') {
+    // Only write files in development
+    const fs = require('fs');
+    fs.writeFileSync(filename, html, 'utf8');
+    console.log(`✅ Email preview saved as ${filename}. Open it in your browser.`);
+  } else {
+    // In production, just log that we would have saved a preview
+    console.log('📧 Email preview generated (not saved in production)');
+  }
 }
+
 
 // Function to generate event card HTML with improved dance community design
 const generateEventCardHTML = (event, isBlurred = false) => {

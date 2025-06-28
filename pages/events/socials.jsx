@@ -143,7 +143,7 @@ export default function EventsHomePage({ cities }) {
         <Navbar />
       </Box>
 
-      <Box mt={{ base: 4, md: 6 }} mb={-2} mt={2} textAlign="center">
+      <Box mt={{ base: 2, md: 6 }} mb={-2}  textAlign="center">
   <Heading
     fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
     fontWeight="extrabold"

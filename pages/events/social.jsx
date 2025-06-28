@@ -163,7 +163,7 @@ export default function Social() {
           /* Mobile Layout - Following BookMyShow Structure */
           <Box>
             {/* Back Button and Share */}
-            <Flex justify="space-between" align="center" mb={-2}>
+            <Flex justify="space-between" align="center" mb={2}>
               {/* <Button
                 variant="ghost"
                 size="sm"

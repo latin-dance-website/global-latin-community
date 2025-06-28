@@ -9,6 +9,7 @@ import {
   useMediaQuery,
   Skeleton,
   SkeletonText,
+  Image, // ✅ Import Image component
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
@@ -18,40 +19,43 @@ import { FaCalendar, FaClock, FaLocationDot } from "react-icons/fa6";
 
 // Move this outside component to avoid recreation
 const weekdays = [
-  "Sunday", "Monday", "Tuesday", "Wednesday", 
+  "Sunday", "Monday", "Tuesday", "Wednesday",
   "Thursday", "Friday", "Saturday"
 ];
 
-const flagMap = {
-  India: "🇮🇳",
-  Vietnam: "🇻🇳",
-  Thailand: "🇹🇭",
-  USA: "🇺🇸",
-  Japan: "🇯🇵",
-  Germany: "🇩🇪",
-  France: "🇫🇷",
-  Singapore: "🇸🇬",
-  UAE: "🇦🇪",
+// ✅ Modified flagMap to map country names to ISO alpha-2 codes
+const countryCodeMap = {
+  India: "IN",
+  Vietnam: "VN",
+  Thailand: "TH",
+  USA: "US",
+  Japan: "JP",
+  Germany: "DE",
+  France: "FR",
+  Singapore: "SG",
+  UAE: "AE",
 };
 
-// Memoized flag function
+// ✅ Modified flag function to return image source
 const addFlagToCity = (citybycountry) => {
-  if (!citybycountry) return { text: "", flag: "" };
+  if (!citybycountry) return { text: "", flagImageSrc: "" };
 
   const parts = citybycountry.split(",");
   const city = parts[0]?.trim();
   const country = parts[1]?.trim();
 
-  const flag = flagMap[country] || "";
+  // Get country code and construct image path
+  const countryCode = countryCodeMap[country];
+  // Assuming flags are in /flags/ and named by lowercase country code with .svg extension
+  const flagImageSrc = countryCode ? `/flags/${countryCode.toLowerCase()}.svg` : "";
 
   const cleanLocation = city && country ? `${city}, ${country}` : citybycountry;
 
   return {
-    text: cleanLocation, // clean version without code
-    flag: flag,          // just the flag emoji
+    text: cleanLocation,
+    flagImageSrc: flagImageSrc, // Now returns the image source path
   };
 };
-
 
 // Enhanced loading skeleton component with shimmer and staggered animation
 const EventCardSkeleton = ({ isMobile, isVerySmallMobile, delay = 0 }) => (
@@ -126,7 +130,7 @@ export default function Carousel() {
   const [isScrolling, setIsScrolling] = useState(false);
   const [autoPlay, setAutoPlay] = useState(true);
   const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
-  
+
   const cardsPerView = isMobile ? 2 : 4;
 
   // Memoize today's calculations
@@ -142,7 +146,7 @@ export default function Carousel() {
   // Memoized event processing function
   const processEvents = useCallback((data) => {
     const { today, todayFullDay, todayIndex } = todayInfo;
-    
+
     return data
       .filter((e) => e.id && weekdays.includes(e.day))
       .map((e) => {
@@ -152,18 +156,19 @@ export default function Carousel() {
 
         const targetDate = today.add(offset, "day");
 
-        const { text: processedLocation, flag: countryFlag } = addFlagToCity(e.citybycountry);
+        // ✅ Destructure `flagImageSrc` from the modified `addFlagToCity`
+        const { text: processedLocation, flagImageSrc } = addFlagToCity(e.citybycountry);
 
-return {
-  ...e,
-  originalDay: e.day,
-  date: targetDate.format("ddd, DD MMM"),
-  shortDate: targetDate.format("DD MMM"),
-  day: targetDate.format("ddd"),
-  title: e.title?.replace(/\s+/g, " ").trim() || "",
-  processedLocation,
-  countryFlag, // ✅ now properly scoped
-};
+        return {
+          ...e,
+          originalDay: e.day,
+          date: targetDate.format("ddd, DD MMM"),
+          shortDate: targetDate.format("DD MMM"),
+          day: targetDate.format("ddd"),
+          title: e.title?.replace(/\s+/g, " ").trim() || "",
+          processedLocation,
+          countryFlagImage: flagImageSrc, // ✅ Store the image source here
+        };
 
       })
       .filter((e) => e.originalDay === todayFullDay);
@@ -195,35 +200,35 @@ return {
   // Enhanced fetch with 1.5 second minimum loading time
   useEffect(() => {
     const abortController = new AbortController();
-    
+
     async function load() {
       try {
         setLoading(true);
         setShowCards(false); // Reset show cards
         setError(null);
-        
+
         const startTime = Date.now();
-        
+
         const res = await fetch("/api/events", {
           signal: abortController.signal,
           headers: {
             'Cache-Control': 'public, max-age=300' // 5 minute cache
           }
         });
-        
+
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);
         }
-        
+
         const data = await res.json();
         const processedEvents = processEvents(data);
-        
+
         setEvents(processedEvents);
-        
+
         // Ensure minimum 1.5 second loading time
         const elapsedTime = Date.now() - startTime;
         const remainingTime = Math.max(0, 1500 - elapsedTime);
-        
+
         setTimeout(() => {
           setLoading(false);
           // Small delay then show cards with animation
@@ -231,7 +236,7 @@ return {
             setShowCards(true);
           }, 100);
         }, remainingTime);
-        
+
       } catch (e) {
         if (e.name !== 'AbortError') {
           console.error("Fetch error:", e);
@@ -243,9 +248,9 @@ return {
         }
       }
     }
-    
+
     load();
-    
+
     return () => {
       abortController.abort();
     };
@@ -254,7 +259,7 @@ return {
   // Optimized scroll function
   const scrollTo = useCallback((idx) => {
     if (!scrollRef.current || isScrolling || events.length === 0) return;
-    
+
     setIsScrolling(true);
     const container = scrollRef.current;
     const cardWidth = container.children[0]?.offsetWidth || 0;
@@ -299,9 +304,9 @@ return {
           justifyContent="flex-start"
         >
           {Array.from({ length: cardsPerView }).map((_, i) => (
-            <EventCardSkeleton 
-              key={i} 
-              isMobile={isMobile} 
+            <EventCardSkeleton
+              key={i}
+              isMobile={isMobile}
               isVerySmallMobile={isVerySmallMobile}
               delay={i * 150} // Staggered delay - 150ms between each card
             />
@@ -479,10 +484,10 @@ return {
               >
                 {/* Title */}
                 <Text
-                  fontSize={{ 
-                    base: isVerySmallMobile ? "10px" : "11px", 
-                    sm: "12px", 
-                    md: "13px" 
+                  fontSize={{
+                    base: isVerySmallMobile ? "10px" : "11px",
+                    sm: "12px",
+                    md: "13px"
                   }}
                   fontWeight="700"
                   noOfLines={1}
@@ -568,7 +573,7 @@ return {
                             fontSize={isVerySmallMobile ? "9px" : "10px"}
                             color="gray.600"
                             fontWeight="600"
-                            lineHeight="1.3"  
+                            lineHeight="1.3"
                             overflow="hidden"
                             textOverflow="ellipsis"
                             whiteSpace="nowrap"
@@ -579,25 +584,28 @@ return {
                       </Flex>
 
                       {/* Location Row - use pre-processed location */}
-                     <Flex align="center" gap="4px" ml="-2px" wrap="nowrap">
-  <Text
-    fontSize={isVerySmallMobile ? "9px" : "10px"}
-    color="gray.600"
-    fontWeight="600"
-    lineHeight="1.3"
-    wordBreak="break-word"
-    noOfLines={1}
-  >
-    {event.processedLocation}
-  </Text>
-  {event.countryFlag && (
-    <Text fontSize="12px" lineHeight="1.3">
-      {event.countryFlag}
-    </Text>
-  )}
-</Flex>
-
-
+                      <Flex align="center" gap="4px" ml="-2px" wrap="nowrap">
+                        <Text
+                          fontSize={isVerySmallMobile ? "9px" : "10px"}
+                          color="gray.600"
+                          fontWeight="600"
+                          lineHeight="1.3"
+                          wordBreak="break-word"
+                          noOfLines={1}
+                        >
+                          {event.processedLocation}
+                        </Text>
+                        {/* ✅ Display flag image for mobile */}
+                        {event.countryFlagImage && (
+                          <Image
+                            src={event.countryFlagImage}
+                            alt={`${event.processedLocation} flag`}
+                            boxSize={isVerySmallMobile ? "10px" : "12px"} // Adjust size for small mobile
+                            objectFit="contain"
+                            ml="1px" // Adjust margin as needed
+                          />
+                        )}
+                      </Flex>
                     </VStack>
                   </Flex>
                 ) : (
@@ -605,7 +613,7 @@ return {
                   <>
                     <Flex
                       align="flex-start"
-                      justify="center" 
+                      justify="center"
                       width="100%"
                       mb={{ base: "3px", md: "4px" }}
                     >
@@ -633,41 +641,39 @@ return {
                       </Flex>
                     </Flex>
 
-                    <Flex 
-                      align="center" 
-                      justify="center" 
+                    <Flex
+                      align="center"
+                      justify="center"
                       width="100%"
                     >
                       <Flex align="center" gap={2}>
-  <Box flexShrink={0} color="#6366f1" fontSize="13px">
-    <FaLocationDot />
-  </Box>
-  <Flex align="center" gap="4px" wrap="nowrap">
-    <Text
-    fontSize="12px"
-    color="gray.600"
-    fontWeight="600"
-    noOfLines={2}
-    lineHeight="1.3"
-    textAlign="left"
-    wordBreak="break-word"
-    flexShrink={1}
-  >
-    {event.processedLocation}
-  </Text>
-
-  {/* Country flag emoji */}
-  {event.countryFlag && (
-    <Text 
-      fontSize="14px" 
-      lineHeight="1.3" 
-      flexShrink={0}
-    >
-      {event.countryFlag}
-    </Text>
-    )}
-  </Flex>
-</Flex>
+                        <Box flexShrink={0} color="#6366f1" fontSize="13px">
+                          <FaLocationDot />
+                        </Box>
+                        <Flex align="center" gap="4px" wrap="nowrap">
+                          <Text
+                            fontSize="12px"
+                            color="gray.600"
+                            fontWeight="600"
+                            noOfLines={2}
+                            lineHeight="1.3"
+                            textAlign="center"
+                            wordBreak="break-word"
+                          >
+                            {event.processedLocation}
+                          </Text>
+                          {/* ✅ Display flag image for desktop */}
+                          {event.countryFlagImage && (
+                            <Image
+                              src={event.countryFlagImage}
+                              alt={`${event.processedLocation} flag`}
+                              boxSize="16px" // Adjust size for desktop
+                              objectFit="contain"
+                              ml="4px" // Adjust margin as needed
+                            />
+                          )}
+                        </Flex>
+                      </Flex>
                     </Flex>
                   </>
                 )}

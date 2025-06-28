@@ -143,15 +143,19 @@ export default function EventsHomePage({ cities }) {
         <Navbar />
       </Box>
 
-      <Box mt={{ base: 1, md: 4 }} mb={-3} textAlign="center">
-        <Heading
-          fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
-          fontWeight="extrabold"
-          color="#000100"
-        >
-          Today's Social Nights
-        </Heading>
-      </Box>
+      <Box mt={{ base: 4, md: 6 }} mb={-2} mt={2} textAlign="center">
+  <Heading
+    fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
+    fontWeight="extrabold"
+    bgGradient="linear(to-r, #FF416C, #FF4B2B)"
+    bgClip="text"
+    lineHeight="1.3"
+  >
+    Today's Social Nights
+  </Heading>
+       
+</Box>
+
 
       <LayerBlur2 />
       <Caraousel />
@@ -229,14 +233,19 @@ export default function EventsHomePage({ cities }) {
           >
             <Box mt={-4}>
               <Heading
-                fontSize={{ base: "xl", md: "2xl" }}
-                fontWeight="extrabold"
-                color="#000001"
-                lineHeight="1.1"
-                mb={1}
-              >
-                Find Latin Events in your City
-              </Heading>
+  fontSize={{ base: "xl", md: "2xl" }}
+  fontWeight="extrabold"
+  color="#000001"
+  lineHeight="1.3"
+  mb={1}
+  isTruncated
+  whiteSpace="nowrap"
+  overflow="hidden"
+  textOverflow="ellipsis"
+>
+  Find Latin Events in your City
+</Heading>
+
             </Box>
 
             <Heading
@@ -266,14 +275,16 @@ export default function EventsHomePage({ cities }) {
             <Box textAlign="center" maxW="100%">
               <VStack spacing={1}>
                 <Text
-                  fontWeight="medium"
-                  fontSize={{ base: "xs", md: "sm" }}
-                  color="#555"
-                  whiteSpace="nowrap"
-                  mt={-0.5}
-                >
-                  Discover verified Global Latin Dance Events
-                </Text>
+  fontWeight="medium"
+  fontSize={{ base: "xs", md: "sm" }}
+  color="#555"
+  whiteSpace="nowrap"
+  mt={-0.5}
+  fontStyle="italic"
+>
+  Discover verified Global Latin Dance Events
+</Text>
+
 
                 <Text
                   fontWeight="bold"
@@ -615,16 +626,18 @@ export default function EventsHomePage({ cities }) {
             {/* Description */}
             <VStack spacing={2}>
               <Text
-                fontWeight="medium"
-                fontSize={{ base: "sm", md: "md" }}
-                color="#555"
-                textAlign="center"
-                lineHeight="1.4"
-              >
-                Host your own Latin dance event and connect with the community
-              </Text>
+  fontWeight="medium"
+  fontSize={{ base: "sm", md: "md" }}
+  color="#555"
+  textAlign="center"
+  lineHeight="1.4"
+  fontStyle="italic"
+>
+  Host your own Latin dance event and connect with the community
+</Text>
 
-              <Text
+
+              {/* <Text
                 fontWeight="bold"
                 fontSize={{ base: "sm", md: "md" }}
                 color="#ff6b35"
@@ -632,7 +645,7 @@ export default function EventsHomePage({ cities }) {
                 lineHeight="1.2"
               >
                 Workshops • Social Nights • Festivals
-              </Text>
+              </Text> */}
             </VStack>
 
             {/* Create Event Button */}

@@ -15,14 +15,25 @@ import {
   Container,
   Grid,
   GridItem,
+  AspectRatio,
 } from "@chakra-ui/react";
 import { CalendarIcon, TimeIcon } from "@chakra-ui/icons";
-import { MdLocationOn, MdAttachMoney, MdStar, MdLink } from "react-icons/md";
+import {
+  MdLocationOn,
+  MdAttachMoney,
+  MdStar,
+  MdLink,
+  MdAccessTime,
+  MdLanguage,
+  MdTimer,
+} from "react-icons/md";
 import {
   FaInstagram,
   FaCalendar,
   FaClock,
   FaLocationDot,
+  FaUsers,
+  FaTheaterMasks,
 } from "react-icons/fa6";
 import Navbar from "@components/Navbar";
 import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
@@ -89,6 +100,35 @@ export default function Social() {
     }
   };
 
+  // Fixed duration calculation
+  const calculateDuration = (startTime, endTime) => {
+    if (!startTime || !endTime) return "1 hour 30 minutes";
+
+    try {
+      let start = dayjs(`2000-01-01 ${startTime}`);
+      let end = dayjs(`2000-01-01 ${endTime}`);
+
+      // If end time is earlier than start time, it means it crosses midnight
+      if (end.isBefore(start)) {
+        end = end.add(1, "day");
+      }
+
+      const duration = end.diff(start, "minute");
+      const hours = Math.floor(duration / 60);
+      const minutes = duration % 60;
+
+      if (hours > 0 && minutes > 0) {
+        return `${hours} hour${hours > 1 ? "s" : ""} ${minutes} minutes`;
+      } else if (hours > 0) {
+        return `${hours} hour${hours > 1 ? "s" : ""}`;
+      } else {
+        return `${minutes} minutes`;
+      }
+    } catch (e) {
+      return "1 hour 30 minutes";
+    }
+  };
+
   const currencies = event.currencySymbols
     ? event.currencySymbols.split(",")
     : ["₹", "₫", "฿"];
@@ -113,184 +153,246 @@ export default function Social() {
       <LayerBlur2 />
 
       <Container
-        maxW="container.lg"
+        maxW="container.xl"
         w="full"
         mt="80px"
         pb={10}
-        px={{ base: 4, md: 4 }}
+        px={{ base: 4, md: 6 }}
       >
         {isMobile ? (
-          /* Mobile Layout - Title, Image, Details, Description */
+          /* Mobile Layout - Following BookMyShow Structure */
           <Box>
-            {/* Event Title */}
-            <Box mb={3}>
-              <Heading
-                fontSize="2xl"
-                fontWeight="bold"
-                mb={2}
-                textAlign="center"
+            {/* Back Button and Share */}
+            <Flex justify="space-between" align="center" mb={-2}>
+              {/* <Button
+                variant="ghost"
+                size="sm"
+                leftIcon={<Icon as={MdLink} />}
+                onClick={() => router.back()}
               >
-                {event.title}
-              </Heading>
-            </Box>
+                Back
+              </Button> */}
+              {/* <Button variant="ghost" size="sm">
+                Share
+              </Button> */}
+            </Flex>
 
-            {/* Hero Image - Right after title */}
-            <Box display="flex" justifyContent="center" mb={4}>
-              <Box
-                width="280px"
-                height="350px"
-                borderRadius="12px"
-                overflow="hidden"
-                boxShadow="lg"
-                border="1px solid #e2e8f0"
-              >
+            {/* Event Title */}
+            <Heading
+              fontSize="2xl"
+              fontWeight="bold"
+              mb={2}
+              textAlign="center"
+              color="gray.800"
+            >
+              {event.title}
+            </Heading>
+
+            {/* Hero Image with Aspect Ratio */}
+            <Box mb={4} display="flex" justifyContent="center">
+              <Box width="280px" height="400px">
                 <Image
                   src={event.image || "/assets/images/hero.jpg"}
                   alt={event.title || "Event"}
                   objectFit="cover"
                   w="full"
                   h="full"
+                  borderRadius="12px"
+                  border="1px solid #e2e8f0"
+                  boxShadow="lg"
                 />
               </Box>
             </Box>
 
-            {/* Mobile Info Cards - Same style as carousel cards */}
-            <VStack spacing={3} mb={5}>
-              {/* Date */}
-              <Box
-                bg="white"
-                p={4}
-                borderRadius="12px"
-                boxShadow="sm"
-                border="1px solid #e2e8f0"
-                w="full"
+            {/* Interest Counter */}
+            <Flex align="center" justify="center" mb={4}>
+              <Icon as={FaUsers} color="green.500" mr={2} />
+              <Text fontSize="sm" color="gray.600">
+                309 are interested
+              </Text>
+              <Button
+                size="sm"
+                variant="outline"
+                colorScheme="pink"
+                ml={4}
+                borderRadius="full"
               >
-                <Flex align="center" gap={3}>
-                  <Box color="#6366f1" fontSize="16px">
-                    <FaCalendar />
-                  </Box>
-                  <Text fontSize="14px" color="gray.600" fontWeight="600">
+                Interested?
+              </Button>
+            </Flex>
+
+            {/* Event Details Card */}
+            <Box
+              bg="white"
+              borderRadius="12px"
+              boxShadow="sm"
+              border="1px solid #e2e8f0"
+              p={4}
+              mb={4}
+            >
+              <VStack spacing={4} align="stretch">
+                {/* Date */}
+                <Flex align="center">
+                  <Icon as={FaCalendar} color="#6366f1" boxSize={4} mr={3} />
+                  <Text fontSize="sm" color="gray.700" fontWeight="500">
                     {formatDateWithDay(event.date)}
                   </Text>
                 </Flex>
-              </Box>
 
-              {/* Time */}
-              <Box
-                bg="white"
-                p={4}
-                borderRadius="12px"
-                boxShadow="sm"
-                border="1px solid #e2e8f0"
-                w="full"
-              >
-                <Flex align="center" gap={3}>
-                  <Box color="#6366f1" fontSize="16px">
-                    <FaClock />
-                  </Box>
-                  <Text fontSize="14px" color="gray.600" fontWeight="600">
-                    {event.startTime} - {event.endTime}
+                {/* Time */}
+                <Flex align="center">
+                  <Icon as={FaClock} color="#6366f1" boxSize={4} mr={3} />
+                  <Text fontSize="sm" color="gray.700" fontWeight="500">
+                    {event.startTime} - {event.endTime} hrs
                   </Text>
                 </Flex>
-              </Box>
 
-              {/* Location */}
-              <Box
-                bg="white"
-                p={4}
-                borderRadius="12px"
-                boxShadow="sm"
-                border="1px solid #e2e8f0"
-                w="full"
-              >
-                <Flex align="flex-start" gap={3}>
-                  <Box flexShrink={0} color="#6366f1" fontSize="16px" mt="1px">
-                    <FaLocationDot />
-                  </Box>
+                {/* Duration */}
+                <Flex align="center">
+                  <Icon as={MdTimer} color="#6366f1" boxSize={4} mr={3} />
+                  <Text fontSize="sm" color="gray.700" fontWeight="500">
+                    {calculateDuration(event.startTime, event.endTime)}
+                  </Text>
+                </Flex>
+
+                {/* Language */}
+                {/* <Flex align="center">
+                  <Icon as={MdLanguage} color="#6366f1" boxSize={4} mr={3} />
+                  <Text fontSize="sm" color="gray.700" fontWeight="500">
+                    Tamil, English
+                  </Text>
+                </Flex> */}
+
+                {/* Location */}
+                <Flex align="flex-start">
+                  <Icon
+                    as={FaLocationDot}
+                    color="#6366f1"
+                    boxSize={4}
+                    mr={3}
+                    mt={0.5}
+                  />
                   <Text
-                    fontSize="14px"
-                    color="gray.600"
-                    fontWeight="600"
+                    fontSize="sm"
+                    color="gray.700"
+                    fontWeight="500"
                     lineHeight="1.4"
                   >
                     {event.location}
                   </Text>
                 </Flex>
-              </Box>
+              </VStack>
+            </Box>
 
-              {/* Price */}
-              <Box
-                bg="white"
-                p={4}
-                borderRadius="12px"
-                boxShadow="sm"
-                border="1px solid #e2e8f0"
-                w="full"
-              >
-                <Flex align="center" gap={3}>
-                  <Icon as={MdAttachMoney} color="#6366f1" boxSize={4} />
-                  <Text fontSize="14px" color="gray.600" fontWeight="600">
-                    {event.fees} {currencies[0] || ""}
+            {/* Booking Alert */}
+            <Box
+              bg="orange.50"
+              border="1px solid"
+              borderColor="orange.200"
+              borderRadius="8px"
+              p={3}
+              mb={4}
+            >
+              <Text fontSize="sm" color="orange.800" fontWeight="500">
+                ⚠️ Bookings are filling fast for{" "}
+                {event?.CitybyCountry?.split(",")[0]?.trim() || "this city"}!
+              </Text>
+            </Box>
+            {/* Price and Book Now */}
+            <Box
+              bg="white"
+              borderRadius="12px"
+              boxShadow="sm"
+              border="1px solid #e2e8f0"
+              p={4}
+              mb={6}
+            >
+              <Flex align="center" justify="space-between">
+                <Box>
+                  <Text fontSize="lg" fontWeight="bold" color="#276749">
+                    <Box as="span" color="#38a169" display="inline">
+                      {currencies[0]}
+                    </Box>{" "}
+                    {event.fees} onwards
                   </Text>
-                </Flex>
-              </Box>
-            </VStack>
 
-            {/* Action Buttons - Side by side */}
-            <HStack spacing={3} mb={5} justify="center">
-              {event.instagramHandle && (
-                <Button
-                  as="a"
-                  href={event.instagramHandle}
-                  target="_blank"
-                  size="md"
-                  colorScheme="pink"
-                  borderRadius="full"
-                  leftIcon={<FaInstagram />}
-                  flex="1"
-                  maxW="160px"
-                >
-                  Event Page
+                  <Text fontSize="sm" color="orange.500" fontWeight="500">
+                    Filling Fast
+                  </Text>
+                </Box>
+                <Button size="lg" colorScheme="red" borderRadius="8px" px={8}>
+                  Book Now
                 </Button>
-              )}
-              <Button
-                as={event.googleMapsLink ? "a" : "button"}
-                href={event.googleMapsLink || "#"}
-                target={event.googleMapsLink ? "_blank" : undefined}
-                size="md"
-                colorScheme="orange"
-                borderRadius="full"
-                leftIcon={<MdLink />}
-                flex="1"
-                maxW="160px"
-                onClick={
-                  !event.googleMapsLink ? (e) => e.preventDefault() : undefined
-                }
-                cursor={event.googleMapsLink ? "pointer" : "not-allowed"}
-                opacity={!event.googleMapsLink ? 0.7 : 1}
-              >
-                View Map
-              </Button>
-            </HStack>
+              </Flex>
+            </Box>
+
+            <HStack spacing={3} mb={6}>
+  {event.instagramHandle && (
+    <Button
+      as="a"
+      href={event.instagramHandle}
+      target="_blank"
+      flex="1"
+      bg="#4f46e5"  // Solid purple color similar to the image
+      color="white"
+      borderRadius="8px"  // Slightly less rounded than before
+      leftIcon={<FaInstagram />}
+      _hover={{
+        bg: "#4338ca",  // Darker shade for hover
+        transform: "translateY(-2px)",
+        boxShadow: "lg",
+      }}
+      boxShadow="md"
+      fontWeight="600"
+      py={6}
+    >
+      Event Page
+    </Button>
+  )}
+  <Button
+    as={event.googleMapsLink ? "a" : "button"}
+    href={event.googleMapsLink || "#"}
+    target={event.googleMapsLink ? "_blank" : undefined}
+    flex="1"
+    bg="#4f46e5"  // Matching purple color
+    color="white"
+    borderRadius="8px"
+    leftIcon={<MdLink />}
+    onClick={
+      !event.googleMapsLink ? (e) => e.preventDefault() : undefined
+    }
+    cursor={event.googleMapsLink ? "pointer" : "not-allowed"}
+    opacity={!event.googleMapsLink ? 0.7 : 1}
+    _hover={{
+      bg: event.googleMapsLink ? "#4338ca" : "#4f46e5",  // Only change on hover if link exists
+      transform: event.googleMapsLink ? "translateY(-2px)" : "none",
+      boxShadow: event.googleMapsLink ? "lg" : "md",
+    }}
+    boxShadow="md"
+    fontWeight="600"
+    py={6}
+  >
+    View Map
+  </Button>
+</HStack>
 
             {/* About Section */}
             <Box
               bg="white"
-              p={6}
               borderRadius="12px"
               boxShadow="sm"
               border="1px solid #e2e8f0"
-              mb={4}
+              p={4}
             >
-              <Heading fontSize="xl" mb={4} color="gray.800">
-                About the Event
+              <Heading fontSize="lg" mb={3} color="gray.800">
+                About The Event
               </Heading>
-              <Text fontSize="md" color="gray.700" lineHeight="1.7" mb={4}>
+              <Text fontSize="sm" color="gray.700" lineHeight="1.6" mb={3}>
                 {event.description || "No description available."}
               </Text>
               {event.musicRatio && (
-                <Box mt={4}>
-                  <Text fontWeight="semibold" mb={2}>
+                <Box>
+                  <Text fontWeight="semibold" fontSize="sm" mb={1}>
                     Music Ratio:
                   </Text>
                   <Text fontSize="sm" color="gray.600">
@@ -298,147 +400,277 @@ export default function Social() {
                   </Text>
                 </Box>
               )}
-            </Box>
-
-            {/* Reviews Section */}
-            <Box
-              bg="white"
-              p={6}
-              borderRadius="12px"
-              boxShadow="sm"
-              border="1px solid #e2e8f0"
-            >
-              <Heading fontSize="xl" mb={4} color="gray.800">
-                Reviews
-              </Heading>
-              <Text color="gray.500" fontStyle="italic">
-                Coming soon...
-              </Text>
+              <Button
+                variant="link"
+                colorScheme="red"
+                fontSize="sm"
+                p={0}
+                mt={2}
+              >
+                Read More
+              </Button>
             </Box>
           </Box>
         ) : (
-          /* Desktop Layout - Split image and content */
+          /* Desktop Layout */
           <Box>
-            <Grid templateColumns="repeat(2, 1fr)" gap={8} alignItems="start">
-              {/* Image Column */}
+            {/* Back Button and Share */}
+            <Flex justify="space-between" align="center" mb={0}>
+              {/* <Button
+                variant="ghost"
+                leftIcon={<Icon as={MdLink} />}
+                onClick={() => router.back()}
+              >
+                Back
+              </Button> */}
+              {/* <Button variant="ghost">
+                Share
+              </Button> */}
+            </Flex>
+
+            {/* Event Title */}
+            <Heading
+              fontSize="4xl"
+              fontWeight="bold"
+              mb={6}
+              color="gray.800"
+              textAlign="center"
+            >
+              {event.title}
+            </Heading>
+
+            <Grid templateColumns="2fr 1fr" gap={8}>
+              {/* Left Column - Image and About */}
               <GridItem>
-                <Image
-                  src={event.image || "/assets/images/hero.jpg"}
-                  alt={event.title || "Event"}
-                  objectFit="cover"
-                  w="full"
-                  h="600px"
+                {/* Hero Image - Changed to vertical aspect ratio */}
+                <GridItem>
+                  <Box
+                    width="350px"
+                    height="500px"
+                    position="sticky"
+                    top="120px" /* Adjust this value based on your navbar height */
+                  >
+                    <Image
+                      src={event.image || "/assets/images/hero.jpg"}
+                      alt={event.title || "Event"}
+                      objectFit="cover"
+                      w="full"
+                      h="full"
+                      borderRadius="12px"
+                      border="1px solid #e2e8f0"
+                      boxShadow="lg"
+                    />
+                  </Box>
+                </GridItem>
+
+                {/* Removed Event Tags - STAND UP COMEDY AND COMEDY SHOWS */}
+
+                {/* Interest Counter */}
+                <Flex align="center" mb={6}>
+                  <Icon as={FaUsers} color="green.500" mr={2} />
+                  <Text color="gray.600" mr={4}>
+                    309 are interested
+                  </Text>
+                  <Button
+                    variant="outline"
+                    colorScheme="pink"
+                    borderRadius="full"
+                    size="sm"
+                  >
+                    I'm Interested
+                  </Button>
+                </Flex>
+
+                {/* About Section */}
+                <Box
+                  bg="white"
                   borderRadius="12px"
+                  boxShadow="sm"
                   border="1px solid #e2e8f0"
-                  boxShadow="lg"
-                />
+                  p={6}
+                >
+                  <Heading fontSize="xl" mb={4} color="gray.800">
+                    About The Event
+                  </Heading>
+                  <Text color="gray.700" lineHeight="1.6" mb={4}>
+                    {event.description || "No description available."}
+                  </Text>
+                  {event.musicRatio && (
+                    <Box>
+                      <Text fontWeight="semibold" mb={2}>
+                        Music Ratio:
+                      </Text>
+                      <Text color="gray.600">{event.musicRatio}</Text>
+                    </Box>
+                  )}
+                  <Button variant="link" colorScheme="red" p={0} mt={3}>
+                    Read More
+                  </Button>
+                </Box>
               </GridItem>
 
-              {/* Content Column */}
+              {/* Right Column - Event Details and Booking */}
               <GridItem>
-                <Heading fontSize="3xl" fontWeight="bold" mb={6}>
-                  {event.title}
-                </Heading>
-
-                {/* Desktop Info Cards - Same style as carousel cards */}
-                <VStack spacing={4} mb={6}>
-                  {/* Date */}
-                  <Box
-                    bg="white"
-                    p={4}
-                    borderRadius="12px"
-                    boxShadow="sm"
-                    border="1px solid #e2e8f0"
-                    w="full"
-                  >
-                    <Flex align="center" gap={3}>
-                      <Box color="#6366f1" fontSize="18px">
-                        <FaCalendar />
-                      </Box>
-                      <Text fontSize="16px" color="gray.600" fontWeight="600">
+                {/* Event Details Card */}
+                <Box
+                  bg="white"
+                  borderRadius="12px"
+                  boxShadow="sm"
+                  border="1px solid #e2e8f0"
+                  p={6}
+                  mb={4}
+                >
+                  <VStack spacing={4} align="stretch">
+                    {/* Date */}
+                    <Flex align="center">
+                      <Icon
+                        as={FaCalendar}
+                        color="#6366f1"
+                        boxSize={5}
+                        mr={4}
+                      />
+                      <Text color="gray.700" fontWeight="500">
                         {formatDateWithDay(event.date)}
                       </Text>
                     </Flex>
-                  </Box>
 
-                  {/* Time */}
-                  <Box
-                    bg="white"
-                    p={4}
-                    borderRadius="12px"
-                    boxShadow="sm"
-                    border="1px solid #e2e8f0"
-                    w="full"
-                  >
-                    <Flex align="center" gap={3}>
-                      <Box color="#6366f1" fontSize="18px">
-                        <FaClock />
-                      </Box>
-                      <Text fontSize="16px" color="gray.600" fontWeight="600">
-                        {event.startTime} - {event.endTime}
+                    {/* Time */}
+                    <Flex align="center">
+                      <Icon as={FaClock} color="#6366f1" boxSize={5} mr={4} />
+                      <Text color="gray.700" fontWeight="500">
+                        {event.startTime} - {event.endTime} hrs
                       </Text>
                     </Flex>
-                  </Box>
 
-                  {/* Location */}
-                  <Box
-                    bg="white"
-                    p={4}
-                    borderRadius="12px"
-                    boxShadow="sm"
-                    border="1px solid #e2e8f0"
-                    w="full"
-                  >
-                    <Flex align="flex-start" gap={3}>
-                      <Box
-                        flexShrink={0}
-                        color="#6366f1"
-                        fontSize="18px"
-                        mt="1px"
-                      >
-                        <FaLocationDot />
-                      </Box>
-                      <Text
-                        fontSize="16px"
-                        color="gray.600"
-                        fontWeight="600"
-                        lineHeight="1.4"
-                      >
-                        {event.location}
+                    {/* Duration */}
+                    <Flex align="center">
+                      <Icon as={MdTimer} color="#6366f1" boxSize={5} mr={4} />
+                      <Text color="gray.700" fontWeight="500">
+                        {calculateDuration(event.startTime, event.endTime)}
                       </Text>
                     </Flex>
-                  </Box>
 
-                  {/* Price */}
-                  <Box
-                    bg="white"
-                    p={4}
-                    borderRadius="12px"
-                    boxShadow="sm"
-                    border="1px solid #e2e8f0"
-                    w="full"
-                  >
-                    <Flex align="center" gap={3}>
-                      <Icon as={MdAttachMoney} color="#6366f1" boxSize={5} />
-                      <Text fontSize="16px" color="gray.600" fontWeight="600">
-                        {event.fees} {currencies[0] || ""}
+                    {/* Language */}
+                    {/* <Flex align="center">
+                      <Icon as={MdLanguage} color="#6366f1" boxSize={5} mr={4} />
+                      <Text color="gray.700" fontWeight="500">
+                        Tamil, English
                       </Text>
-                    </Flex>
-                  </Box>
-                </VStack>
+                    </Flex> */}
 
-                {/* Action Buttons - Side by side */}
-                <HStack spacing={4} justify="flex-start">
+                    {/* Location */}
+                    <Flex align="flex-start">
+  <Icon
+    as={FaLocationDot}
+    color="#6366f1"
+    boxSize={5}
+    mr={4}
+    mt={0.5}
+  />
+  <Box display="inline-block" position="relative">
+    <Text color="gray.700" fontWeight="500" lineHeight="1.4" display="inline">
+      {event.location}
+    </Text>
+    {event.googleMapsLink && (
+      <Box 
+        as="a"
+        href={event.googleMapsLink}
+        target="_blank"
+        cursor="pointer"
+        _hover={{ opacity: 0.8 }}
+        display="inline-block"
+        position="absolute"
+        right="-24px"
+        top="0"
+        ml={2}
+      >
+        <Box
+          as="img"
+          src="https://assets-in.bmscdn.com/nmcms/synopsis/navigate_icon.png"
+          alt="Navigate"
+          width="20px"
+          height="20px"
+          pointerEvents="none"
+          mb={8}
+          onContextMenu={(e) => e.preventDefault()}
+          style={{
+            userSelect: 'none',
+            WebkitUserDrag: 'none',
+            verticalAlign: 'middle'
+          }}
+        />
+      </Box>
+    )}
+  </Box>
+</Flex>
+                  </VStack>
+                </Box>
+
+                {/* Booking Alert */}
+                <Box
+                  bg="orange.50"
+                  border="1px solid"
+                  borderColor="orange.200"
+                  borderRadius="8px"
+                  p={4}
+                  mb={4}
+                >
+                  <Text color="orange.800" fontWeight="500">
+                    ⚠️ Bookings are filling fast for Chennai!
+                  </Text>
+                </Box>
+
+                {/* Price and Book Now */}
+                <Box
+                  bg="white"
+                  borderRadius="12px"
+                  boxShadow="sm"
+                  border="1px solid #e2e8f0"
+                  p={6}
+                  mb={4}
+                >
+                  <VStack spacing={4}>
+                    <Box textAlign="center">
+                      <Text fontSize="2xl" fontWeight="bold" color="gray.800">
+                        {currencies[0]}
+                        {event.fees} onwards
+                      </Text>
+                      <Text color="orange.500" fontWeight="500">
+                        Filling Fast
+                      </Text>
+                    </Box>
+                    <Button
+                      size="lg"
+                      colorScheme="red"
+                      borderRadius="8px"
+                      w="full"
+                      py={6}
+                      fontSize="lg"
+                    >
+                      Book Now
+                    </Button>
+                  </VStack>
+                </Box>
+
+                {/* Action Buttons */}
+                <VStack spacing={3}>
                   {event.instagramHandle && (
                     <Button
                       as="a"
                       href={event.instagramHandle}
                       target="_blank"
-                      size="lg"
-                      colorScheme="pink"
-                      borderRadius="full"
+                      w="full"
+                      bg="linear-gradient(45deg, #f093fb 0%, #f5576c 100%)"
+                      color="white"
+                      borderRadius="12px"
                       leftIcon={<FaInstagram />}
-                      px={6}
+                      _hover={{
+                        transform: "translateY(-2px)",
+                        boxShadow: "lg",
+                      }}
+                      boxShadow="md"
+                      fontWeight="600"
+                      py={6}
                     >
                       Event Page
                     </Button>
@@ -447,11 +679,11 @@ export default function Social() {
                     as={event.googleMapsLink ? "a" : "button"}
                     href={event.googleMapsLink || "#"}
                     target={event.googleMapsLink ? "_blank" : undefined}
-                    size="lg"
-                    colorScheme="orange"
-                    borderRadius="full"
+                    w="full"
+                    bg="linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%)"
+                    color="white"
+                    borderRadius="12px"
                     leftIcon={<MdLink />}
-                    px={6}
                     onClick={
                       !event.googleMapsLink
                         ? (e) => e.preventDefault()
@@ -459,56 +691,21 @@ export default function Social() {
                     }
                     cursor={event.googleMapsLink ? "pointer" : "not-allowed"}
                     opacity={!event.googleMapsLink ? 0.7 : 1}
+                    _hover={{
+                      transform: event.googleMapsLink
+                        ? "translateY(-2px)"
+                        : "none",
+                      boxShadow: event.googleMapsLink ? "lg" : "md",
+                    }}
+                    boxShadow="md"
+                    fontWeight="600"
+                    py={6}
                   >
                     View Map
                   </Button>
-                </HStack>
+                </VStack>
               </GridItem>
             </Grid>
-
-            {/* About Section - Below the image and info cards on desktop */}
-            <Box
-              bg="white"
-              p={6}
-              borderRadius="12px"
-              boxShadow="sm"
-              border="1px solid #e2e8f0"
-              mt={8}
-              mb={6}
-            >
-              <Heading fontSize="2xl" mb={4} color="gray.800">
-                About the Event
-              </Heading>
-              <Text fontSize="md" color="gray.700" lineHeight="1.7" mb={4}>
-                {event.description || "No description available."}
-              </Text>
-              {event.musicRatio && (
-                <Box mt={4}>
-                  <Text fontWeight="semibold" mb={2}>
-                    Music Ratio:
-                  </Text>
-                  <Text fontSize="sm" color="gray.600">
-                    {event.musicRatio}
-                  </Text>
-                </Box>
-              )}
-            </Box>
-
-            {/* Reviews Section */}
-            <Box
-              bg="white"
-              p={6}
-              borderRadius="12px"
-              boxShadow="sm"
-              border="1px solid #e2e8f0"
-            >
-              <Heading fontSize="2xl" mb={4} color="gray.800">
-                Reviews
-              </Heading>
-              <Text color="gray.500" fontStyle="italic">
-                Coming soon...
-              </Text>
-            </Box>
           </Box>
         )}
       </Container>

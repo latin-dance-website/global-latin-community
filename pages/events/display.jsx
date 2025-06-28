@@ -426,13 +426,15 @@ return (
                     </Flex>
 
                     <Flex align="center" gap={1} flex="0 0 auto" justify="flex-end">
-                      <Box color="#38a169" fontSize="13px">
-                        <FaDollarSign />
-                      </Box>
-                      <Text fontSize="12px" color="#276749" fontWeight="600">
-                        {event.fees || 'Free'}
-                      </Text>
-                    </Flex>
+  <Text fontSize="15px" color="#38a169" lineHeight="1">
+    {event.currencySymbols || '₫'}
+  </Text>
+  <Text fontSize="14px" color="#276749" fontWeight="600">
+    {event.fees || 'Free'}
+  </Text>
+</Flex>
+
+
                   </Flex>
 
                   {/* Music Ratio */}
@@ -594,14 +596,21 @@ return (
                       </Text>
                     </Flex>
 
-                    <Flex align="center" gap={2} flex="0 0 auto" justify="flex-end">
-                      <Box color="#38a169" fontSize="15px">
-                        <FaDollarSign />
-                      </Box>
-                      <Text fontSize="14px" color="#276749" fontWeight="600">
-                        {event.fees || 'Free'}
-                      </Text>
-                    </Flex>
+                    <Flex align="center" gap={1} flex="0 0 auto" justify="flex-end">
+  <Text 
+    fontSize="14px" 
+    color="#276749" 
+    fontWeight="600"
+    display="flex"
+    alignItems="center"
+    gap={1}
+  >
+    <Box as="span" color="#38a169">
+      {event.currencySymbols || '₫'}
+    </Box>
+    {event.fees || 'Free'}
+  </Text>
+</Flex>
                   </Flex>
 
                   {/* Music Ratio */}

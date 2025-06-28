@@ -106,7 +106,7 @@ export default async function handler(req, res) {
           googleMapsLink: row[9] || "",
           image: row[10] || null,
           musicRatio: row[11] || "Ratio not specified",
-          currencySymbols: row[12] || "Symbols not specified",
+          currencySymbol: row[12] || '₫',
           instagramHandle: row[13] || null,
           day: row[14] || null,
           citybycountry: row[15] || null,

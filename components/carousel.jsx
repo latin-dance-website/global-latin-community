@@ -36,15 +36,22 @@ const flagMap = {
 
 // Memoized flag function
 const addFlagToCity = (citybycountry) => {
-  if (!citybycountry) return "";
-  
+  if (!citybycountry) return { text: "", flag: "" };
+
   const parts = citybycountry.split(",");
+  const city = parts[0]?.trim();
   const country = parts[1]?.trim();
+
   const flag = flagMap[country] || "";
-  
-  if (citybycountry.includes(flag)) return citybycountry;
-  return `${citybycountry} ${flag}`;
+
+  const cleanLocation = city && country ? `${city}, ${country}` : citybycountry;
+
+  return {
+    text: cleanLocation, // clean version without code
+    flag: flag,          // just the flag emoji
+  };
 };
+
 
 // Enhanced loading skeleton component with shimmer and staggered animation
 const EventCardSkeleton = ({ isMobile, isVerySmallMobile, delay = 0 }) => (
@@ -145,15 +152,19 @@ export default function Carousel() {
 
         const targetDate = today.add(offset, "day");
 
-        return {
-          ...e,
-          originalDay: e.day,
-          date: targetDate.format("ddd, DD MMM"),
-          shortDate: targetDate.format("DD MMM"),
-          day: targetDate.format("ddd"),
-          title: e.title?.replace(/\s+/g, " ").trim() || "",
-          processedLocation: addFlagToCity(e.citybycountry), // Pre-process flag
-        };
+        const { text: processedLocation, flag: countryFlag } = addFlagToCity(e.citybycountry);
+
+return {
+  ...e,
+  originalDay: e.day,
+  date: targetDate.format("ddd, DD MMM"),
+  shortDate: targetDate.format("DD MMM"),
+  day: targetDate.format("ddd"),
+  title: e.title?.replace(/\s+/g, " ").trim() || "",
+  processedLocation,
+  countryFlag, // ✅ now properly scoped
+};
+
       })
       .filter((e) => e.originalDay === todayFullDay);
   }, [todayInfo]);
@@ -568,16 +579,25 @@ export default function Carousel() {
                       </Flex>
 
                       {/* Location Row - use pre-processed location */}
-                      <Text
-                        fontSize={isVerySmallMobile ? "9px" : "10px"}
-                        color="gray.600"
-                        fontWeight="600"
-                        lineHeight="1.3"
-                        wordBreak="break-word"
-                        ml="-2px"
-                      >
-                        {event.processedLocation}
-                      </Text>
+                     <Flex align="center" gap="4px" ml="-2px" wrap="nowrap">
+  <Text
+    fontSize={isVerySmallMobile ? "9px" : "10px"}
+    color="gray.600"
+    fontWeight="600"
+    lineHeight="1.3"
+    wordBreak="break-word"
+    noOfLines={1}
+  >
+    {event.processedLocation}
+  </Text>
+  {event.countryFlag && (
+    <Text fontSize="12px" lineHeight="1.3">
+      {event.countryFlag}
+    </Text>
+  )}
+</Flex>
+
+
                     </VStack>
                   </Flex>
                 ) : (
@@ -619,25 +639,35 @@ export default function Carousel() {
                       width="100%"
                     >
                       <Flex align="center" gap={2}>
-                        <Box
-                          flexShrink={0}
-                          color="#6366f1"
-                          fontSize="13px"
-                        >
-                          <FaLocationDot />
-                        </Box>
-                        <Text
-                          fontSize="12px"
-                          color="gray.600"
-                          fontWeight="600"
-                          noOfLines={2}
-                          lineHeight="1.3"
-                          textAlign="center"
-                          wordBreak="break-word"
-                        >
-                          {event.processedLocation}
-                        </Text>
-                      </Flex>
+  <Box flexShrink={0} color="#6366f1" fontSize="13px">
+    <FaLocationDot />
+  </Box>
+  <Flex align="center" gap="4px" wrap="nowrap">
+    <Text
+    fontSize="12px"
+    color="gray.600"
+    fontWeight="600"
+    noOfLines={2}
+    lineHeight="1.3"
+    textAlign="left"
+    wordBreak="break-word"
+    flexShrink={1}
+  >
+    {event.processedLocation}
+  </Text>
+
+  {/* Country flag emoji */}
+  {event.countryFlag && (
+    <Text 
+      fontSize="14px" 
+      lineHeight="1.3" 
+      flexShrink={0}
+    >
+      {event.countryFlag}
+    </Text>
+    )}
+  </Flex>
+</Flex>
                     </Flex>
                   </>
                 )}

@@ -121,7 +121,7 @@ export default function EventsHomePage({ cities }) {
 
   const handleCreateEvent = () => {
     // Replace with your actual event creation form URL
-    router.push("/events/socials");
+    router.push("/events/CreateEvent");
     // Or open external link:
     // window.open("https://your-event-form-link.com", "_blank");
   };

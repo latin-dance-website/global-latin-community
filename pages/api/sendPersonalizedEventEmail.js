@@ -1,33 +1,26 @@
-import fetch from 'node-fetch';
+import fetch from "node-fetch";
 import nodemailer from "nodemailer";
-import fs from 'fs';
-import dayjs from 'dayjs';
+import fs from "fs";
+import dayjs from "dayjs";
 
-function saveEmailPreview(html, filename = 'preview.html') {
-  if (process.env.NODE_ENV === 'development') {
-    const fs = require('fs');
-    fs.writeFileSync(filename, html, 'utf8');
-    console.log(`✅ Email preview saved as ${filename}. Open it in your browser.`);
+function saveEmailPreview(html, filename = "preview.html") {
+  if (process.env.NODE_ENV === "development") {
+    const fs = require("fs");
+    fs.writeFileSync(filename, html, "utf8");
+    console.log(
+      `✅ Email preview saved as ${filename}. Open it in your browser.`
+    );
   } else {
-    console.log('📧 Email preview generated (not saved in production)');
+    console.log("📧 Email preview generated (not saved in production)");
   }
 }
-
-// Using the card design from the original code but with email-compatible icons
-
-// Gmail-optimized event card HTML generator
-// Uses tables for better email client compatibility and removes problematic spacing
-
-// Gmail-optimized event card HTML generator
-// Uses tables for better email client compatibility and removes problematic spacing
-
-// Gmail-optimized event card HTML generator
-// Uses tables for better email client compatibility and removes problematic spacing
 
 const generateEventCardHTML = (event) => {
   const formattedDate = event.formattedDate || `${event.day}, ${event.shortDate}`;
   const formattedTime = `${event.startTime}-${event.endTime}`;
-  const formattedPrice = event.fees ? `${event.currencySymbols || '₫'}${event.fees.toLocaleString()}` : 'FREE';
+  const formattedPrice = event.fees 
+    ? `${event.currencySymbols || "₫"}${event.fees.toLocaleString()}`
+    : "FREE";
 
   return `
     <table cellpadding="0" cellspacing="0" border="0" style="
@@ -58,6 +51,7 @@ const generateEventCardHTML = (event) => {
                   width: 100%;
                   height: 200px;
                   object-fit: cover;
+                  object-position: center top;
                   display: block;
                   border: 0;
                   outline: none;
@@ -69,135 +63,109 @@ const generateEventCardHTML = (event) => {
 
             <!-- CONTENT ROW -->
             <tr>
-              <td style="padding: 16px 20px 20px 20px;">
+              <td style="padding: 12px 15px 15px 15px;">
                 
                 <!-- TITLE -->
-                <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-collapse: collapse;">
-                  <tr>
-                    <td style="
-                      font-size: 22px;
-                      font-weight: 800;
-                      color: #000000;
-                      line-height: 1.3;
-                      padding: 0 0 16px 0;
-                      text-align: center;
-                    ">
-                      ${event.title || 'Event Title'}
-                    </td>
-                  </tr>
-                </table>
+                <div style="
+                  font-size: 16px;
+                  font-weight: 800;
+                  color: #000000;
+                  line-height: 1.3;
+                  margin: 0 0 10px 0;
+                  text-align: center;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                ">
+                  ${event.title || "Event Title"}
+                </div>
 
-                <!-- DETAILS TABLE -->
-                <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-collapse: collapse;">
+                <!-- DETAILS - Using spans instead of table for better Gmail compatibility -->
+                <div style="text-align: left;">
                   
                   <!-- Date Row -->
-                  <tr>
-                    <td style="
-                      width: 25px;
-                      font-size: 18px;
-                      text-align: left;
+                  <div style="margin-bottom: 5px; line-height: 1.2;">
+                    <span style="
+                      font-size: 14px;
+                      margin-right: 6px;
+                      display: inline-block;
                       vertical-align: top;
-                      padding: 0 8px 12px 0;
-                    ">📅</td>
-                    <td style="
-                      font-size: 15px;
+                    ">📅</span><span style="
+                      font-size: 13px;
                       color: #2c3e50;
                       font-weight: 700;
                       vertical-align: top;
-                      padding: 0 0 12px 0;
-                      text-align: left;
-                    ">${formattedDate}</td>
-                  </tr>
+                    ">${formattedDate}</span>
+                  </div>
 
                   <!-- Time Row -->
-                  <tr>
-                    <td style="
-                      width: 25px;
-                      font-size: 18px;
-                      text-align: left;
+                  <div style="margin-bottom: 5px; line-height: 1.2;">
+                    <span style="
+                      font-size: 14px;
+                      margin-right: 6px;
+                      display: inline-block;
                       vertical-align: top;
-                      padding: 0 8px 12px 0;
-                    ">⏰</td>
-                    <td style="
-                      font-size: 15px;
+                    ">⏰</span><span style="
+                      font-size: 13px;
                       color: #2c3e50;
                       font-weight: 700;
                       vertical-align: top;
-                      padding: 0 0 12px 0;
-                      text-align: left;
-                    ">${formattedTime}</td>
-                  </tr>
+                    ">${formattedTime}</span>
+                  </div>
 
                   <!-- Music Ratio Row -->
-                  <tr>
-                    <td style="
-                      width: 25px;
-                      font-size: 18px;
-                      text-align: left;
+                  <div style="margin-bottom: 5px; line-height: 1.2;">
+                    <span style="
+                      font-size: 14px;
+                      margin-right: 6px;
+                      display: inline-block;
                       vertical-align: top;
-                      padding: 0 8px 12px 0;
-                    ">🎵</td>
-                    <td style="
-                      font-size: 15px;
+                    ">🎵</span><span style="
+                      font-size: 13px;
                       color: #2c3e50;
                       font-weight: 700;
                       vertical-align: top;
-                      padding: 0 0 12px 0;
-                      text-align: left;
-                    ">${event.musicRatio || '1:1'}</td>
-                  </tr>
+                    ">${event.musicRatio || "1:1"}</span>
+                  </div>
 
                   <!-- Price Row -->
-                  <tr>
-                    <td style="
-                      width: 25px;
-                      font-size: 18px;
-                      text-align: left;
+                  <div style="margin-bottom: 5px; line-height: 1.2;">
+                    <span style="
+                      font-size: 14px;
+                      margin-right: 6px;
+                      display: inline-block;
                       vertical-align: top;
-                      padding: 0 8px 12px 0;
-                    ">💰</td>
-                    <td style="
+                    ">💰</span><span style="
+                      font-size: 12px;
+                      color: ${event.fees ? "#e74c3c" : "#27ae60"};
+                      font-weight: 700;
+                      background: ${event.fees ? "rgba(231, 76, 60, 0.1)" : "rgba(39, 174, 96, 0.1)"};
+                      padding: 2px 8px;
+                      border-radius: 10px;
+                      display: inline-block;
                       vertical-align: top;
-                      padding: 0 0 12px 0;
-                      text-align: left;
-                    ">
-                      <span style="
-                        font-size: 14px;
-                        color: ${event.fees ? '#e74c3c' : '#27ae60'};
-                        font-weight: 700;
-                        background: ${event.fees ? 'rgba(231, 76, 60, 0.1)' : 'rgba(39, 174, 96, 0.1)'};
-                        padding: 4px 10px;
-                        border-radius: 12px;
-                        display: inline-block;
-                      ">
-                        ${formattedPrice}
-                      </span>
-                    </td>
-                  </tr>
+                    ">${formattedPrice}</span>
+                  </div>
 
                   <!-- Location Row -->
-                  <tr>
-                    <td style="
-                      width: 25px;
-                      font-size: 18px;
-                      text-align: left;
+                  <div style="margin-bottom: 0; line-height: 1.2;">
+                    <span style="
+                      font-size: 14px;
+                      margin-right: 6px;
+                      display: inline-block;
                       vertical-align: top;
-                      padding: 0 8px 0 0;
-                    ">📍</td>
-                    <td style="
-                      font-size: 15px;
+                    ">📍</span><span style="
+                      font-size: 13px;
                       color: #2c3e50;
                       font-weight: 700;
-                      line-height: 1.4;
                       vertical-align: top;
-                      padding: 0;
-                      text-align: left;
-                    ">
-                      ${event.location}
-                    </td>
-                  </tr>
+                      word-wrap: break-word;
+                      display: inline-block;
+                      max-width: 280px;
+                    ">${event.location.replace(/,/g, ", ")}</span>
+                  </div>
 
-                </table>
+                </div>
               </td>
             </tr>
           </table>
@@ -206,59 +174,39 @@ const generateEventCardHTML = (event) => {
     </table>
   `;
 };
-// Using the "Explore more events" button from the second code
-const generateMoreEventsButton = (city, userDetails) => {
-  const exploreUrl = `https://www.globallatindancecommunity.com/events/display?city=${encodeURIComponent(city)}&startDate=${userDetails.startDate}&endDate=${userDetails.endDate}`;
-  
-  return `
-    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 300px; margin: 0 auto 15px auto;">
-      <tr>
-        <td style="text-align: center; padding: 20px 0;">
-          <a href="${exploreUrl}" style="text-decoration: none;">
-            <table cellpadding="0" cellspacing="0" border="0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); display: inline-table; transition: transform 0.3s ease;">
-              <tr>
-                <td style="padding: 25px 30px; text-align: center;">
-                  <div style="font-size: 28px; margin-bottom: 10px;">🎉</div>
-                  <h3 style="color: white; font-size: 16px; font-weight: 700; margin: 0 0 8px 0; font-family: Arial, sans-serif;">
-                    Discover More Events!
-                  </h3>
-                  <p style="color: rgba(255,255,255,0.9); font-size: 12px; margin: 0 0 15px 0; font-family: Arial, sans-serif;">
-                    Join our community for exclusive access to all events
-                  </p>
-                  <div style="background: white; color: #667eea; padding: 10px 20px; border-radius: 25px; font-weight: 700; font-size: 13px; display: inline-block; font-family: Arial, sans-serif;">
-                    🚀 Explore All Events
-                  </div>
-                </td>
-              </tr>
-            </table>
-          </a>
-        </td>
-      </tr>
-    </table>
-  `;
-};
 
-// Using the email structure from the second code with side-by-side cards
 const generateEmailHTML = (events, city, userDetails, startDate, endDate) => {
   const visibleEvents = events.slice(0, 2);
   const hasMoreEvents = events.length > 2;
-  
-  // Generate cards HTML with proper side-by-side layout
-  const eventsHTML = `
-    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 600px; margin: 0 auto;">
-      <tr>
-        ${visibleEvents.map((event, index) => `
-          <td style="width: 50%; padding: 0 10px; vertical-align: top;">
-            ${generateEventCardHTML(event)}
-          </td>
-        `).join('')}
-        ${visibleEvents.length === 1 ? '<td style="width: 50%;"></td>' : ''}
-      </tr>
-    </table>
-  `;
-  
-  const moreEventsButtonHTML = hasMoreEvents ? generateMoreEventsButton(city, userDetails) : '';
-  
+
+  const generateMoreEventsButton = (city, userDetails) => {
+    const exploreUrl = `https://www.globallatindancecommunity.com/events/display?city=${encodeURIComponent(
+    city
+  )}&startDate=${userDetails.startDate}&endDate=${userDetails.endDate}`;
+    return `
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="${exploreUrl}"
+           style="
+             background-color: #f63c80;
+             color: white;
+             text-decoration: none;
+             padding: 12px 24px;
+             border-radius: 30px;
+             font-size: 14px;
+             font-weight: bold;
+             display: inline-block;
+             font-family: Arial, sans-serif;
+           ">
+           🔥 Explore More Events
+        </a>
+      </div>
+    `;
+  };
+
+  const moreEventsButtonHTML = hasMoreEvents
+    ? generateMoreEventsButton(city, userDetails)
+    : "";
+
   return `
     <!DOCTYPE html>
     <html>
@@ -282,6 +230,15 @@ const generateEmailHTML = (events, city, userDetails, startDate, endDate) => {
           .event-card-container img {
             height: 120px !important;
           }
+          .header-title {
+            font-size: 20px !important;
+            line-height: 1.2 !important;
+            margin-bottom: 5px !important;
+          }
+          .header-subtitle {
+            margin-top: 5px !important;
+            margin-bottom: 10px !important;
+          }
         }
       </style>
     </head>
@@ -292,26 +249,22 @@ const generateEmailHTML = (events, city, userDetails, startDate, endDate) => {
         
         <!-- Header -->
         <tr>
-          <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px 20px; text-align: center; color: white;">
+          <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px 20px 15px; text-align: center; color: white;">
             <table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
               <tr>
                 <td style="text-align: center;">
-                  <h1 style="margin: 0 0 10px 0; font-size: 22px; font-weight: 700; line-height: 1.3; color: white; font-family: Arial, sans-serif;">
+                  <h1 style="margin: 0; font-size: 22px; font-weight: 700; line-height: 1.2; color: white; font-family: Arial, sans-serif;" class="header-title">
                     Thanks for registering to
                   </h1>
-                  <h1 style="margin: 0 0 10px 0; font-size: 22px; font-weight: 700; line-height: 1.3; color: white; font-family: Arial, sans-serif;">
+                  <h1 style="margin: 0; font-size: 22px; font-weight: 700; line-height: 1.2; color: white; font-family: Arial, sans-serif;" class="header-title">
                     Global Latin Dance Community!
                   </h1>
-                  <p style="margin: 0 0 15px 0; font-size: 14px; color: rgba(255,255,255,0.9); font-family: Arial, sans-serif; font-style: italic;">
-  Your personalised latin dance events for ${city} ✨
-</p>
-
-                  
-                  <!-- Compact Dance Styles -->
-                  <div style="background: rgba(255,255,255,0.15); padding: 12px 15px; border-radius: 20px; display: inline-block; max-width: 90%;">
+                  <p style="margin: 8px 0 12px 0; font-size: 14px; color: rgba(255,255,255,0.9); font-family: Arial, sans-serif; font-style: italic;" class="header-subtitle">
+                    Your personalised latin dance events for ${city} ✨
+                  </p>
+                  <div style="background: rgba(255,255,255,0.15); padding: 10px 15px; border-radius: 20px; display: inline-block; max-width: 90%;">
                     <p style="margin: 0; font-size: 14px; font-weight: 600; font-family: Arial, sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                       Curated just for you from ${startDate} - ${endDate}
-                      
                     </p>
                   </div>
                 </td>
@@ -319,38 +272,37 @@ const generateEmailHTML = (events, city, userDetails, startDate, endDate) => {
             </table>
           </td>
         </tr>
-        
+
         <!-- Events Section -->
         <tr>
           <td style="padding: 20px 15px; background: white;">
-            <!-- Events Header -->
             <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; margin-bottom: 20px;">
-              <tr>
-                <td style="text-align: center;">
-                  
-                </td>
-              </tr>
+              <tr><td style="text-align: center;"></td></tr>
             </table>
-            
+
             <!-- Events Grid (2 cards side by side) -->
             <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 600px; margin: 0 auto;">
               <tr class="event-cards-row">
-                ${visibleEvents.map((event, index) => `
-                  <td style="width: 50%; padding: 0 10px; vertical-align: top;">
-                    <div class="event-card-container">
-                      ${generateEventCardHTML(event)}
-                    </div>
-                  </td>
-                `).join('')}
-                ${visibleEvents.length === 1 ? '<td style="width: 50%;"></td>' : ''}
+                ${visibleEvents
+                  .map(
+                    (event, index) => `
+                      <td style="width: 50%; padding: 0 10px; vertical-align: top;">
+                        <div class="event-card-container">
+                          ${generateEventCardHTML(event)}
+                        </div>
+                      </td>
+                    `
+                  )
+                  .join("")}
+                ${visibleEvents.length === 1 ? '<td style="width: 50%;"></td>' : ""}
               </tr>
             </table>
-            
+
             <!-- Explore More Events Button -->
             ${moreEventsButtonHTML}
           </td>
         </tr>
-        
+
         <!-- Footer -->
         <tr>
           <td style="padding: 20px; text-align: center; background: #2d3748; color: white;">
@@ -365,8 +317,7 @@ const generateEmailHTML = (events, city, userDetails, startDate, endDate) => {
                   </p>
                 </td>
               </tr>
-              
-              <!-- Social Buttons -->
+
               <tr>
                 <td style="text-align: center;">
                   <table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
@@ -386,8 +337,7 @@ const generateEmailHTML = (events, city, userDetails, startDate, endDate) => {
                   </table>
                 </td>
               </tr>
-              
-              <!-- Footer Text -->
+
               <tr>
                 <td style="text-align: center; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
                   <p style="margin: 0; font-size: 11px; color: rgba(255,255,255,0.7); line-height: 1.4; font-family: Arial, sans-serif;">
@@ -405,14 +355,19 @@ const generateEmailHTML = (events, city, userDetails, startDate, endDate) => {
   `;
 };
 
+
 export async function sendPersonalizedEventEmail(events, city, userDetails) {
   const { startDate, endDate } = userDetails;
-  const start = userDetails.startDate ? dayjs(userDetails.startDate).format("DD MMMM") : '';
-  const end = userDetails.endDate ? dayjs(userDetails.endDate).format("DD MMMM") : '';
+  const start = userDetails.startDate
+    ? dayjs(userDetails.startDate).format("DD MMMM")
+    : "";
+  const end = userDetails.endDate
+    ? dayjs(userDetails.endDate).format("DD MMMM")
+    : "";
   const htmlContent = generateEmailHTML(events, city, userDetails, start, end);
 
   saveEmailPreview(htmlContent);
-  
+
   const textContent = `
 🎉 Welcome to Global Latin Dance Community!
 
@@ -422,17 +377,17 @@ ${events
   .slice(0, 2)
   .map(
     (event) => `
-🎵 Event: ${event.title || 'Latin Dance Event'}
-📅 Date: ${event.formattedDate || event.day + ', ' + event.shortDate}
+🎵 Event: ${event.title || "Latin Dance Event"}
+📅 Date: ${event.formattedDate || event.day + ", " + event.shortDate}
 ⏰ Time: ${event.startTime}:${event.endTime}hrs
-💰 Price: ${event.fees ? `₫${event.fees.toLocaleString()}` : 'Free'}
-🎶 Music: ${event.musicRatio || 'Mixed'}
+💰 Price: ${event.fees ? `₫${event.fees.toLocaleString()}` : "Free"}
+🎶 Music: ${event.musicRatio || "Mixed"}
 📍 Location: ${event.location}
 ---`
   )
-  .join('')}
+  .join("")}
 
-${events.length > 2 ? '🚀 Discover more amazing events on our website!' : ''}
+${events.length > 2 ? "🚀 Discover more amazing events on our website!" : ""}
 
 We've curated verified Salsa 💃, Bachata 🎵, Kizomba 🎶 & Zouk 🎼 events just for you!
 
@@ -451,7 +406,10 @@ Stay connected with the dance community!
     });
 
     if (!userDetails.email || !userDetails.email.trim()) {
-      console.error("❌ Email not sent: userDetails.email is missing or empty", userDetails);
+      console.error(
+        "❌ Email not sent: userDetails.email is missing or empty",
+        userDetails
+      );
       return { success: false, error: "Recipient email is missing" };
     }
 
@@ -468,11 +426,11 @@ Stay connected with the dance community!
     console.log("✅ Email sent successfully via SMTP");
 
     return { success: true };
-   } catch (error) {
+  } catch (error) {
     console.error("❌ Error sending email via Nodemailer:", {
       message: error.message,
       stack: error.stack,
-      full: error
+      full: error,
     });
     return { success: false, error: error.message };
   }

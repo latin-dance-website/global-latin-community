@@ -1,6 +1,7 @@
 // pages/events/display.js
 
 import React, { useEffect, useRef, useState } from "react";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import Navbar from "@components/Navbar";
 import { useRouter } from "next/router";
 import {
@@ -12,7 +13,8 @@ import {
   Center,
   Stack,
   Button,
-  Input
+  Input,
+  useToast
 } from "@chakra-ui/react";
 import { FaCalendar, FaClock, FaLocationDot, FaDollarSign, FaMusic } from "react-icons/fa6";
 import dayjs from "dayjs";
@@ -35,6 +37,7 @@ export default function EventsDisplayPage({ allEvents }) {
   const scrollContainerRef = useRef(null);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
   const [filteredEvents, setFilteredEvents] = useState([]);
+  const toast = useToast();
 
   // State for the email popup
   const [showPopup, setShowPopup] = useState(false);
@@ -42,7 +45,17 @@ export default function EventsDisplayPage({ allEvents }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [instagramId, setInstagramId] = useState("");
   const [isSending, setIsSending] = useState(false);
-
+const theme = extendTheme({
+  components: {
+    Toast: {
+      baseStyle: {
+        container: {
+          zIndex: 10000, // 👈 Must be higher than your popup (9999)
+        },
+      },
+    },
+  },
+});
   const dayNameToNumber = {
     sunday: 0,
     monday: 1,
@@ -169,70 +182,139 @@ export default function EventsDisplayPage({ allEvents }) {
     router.push("/events/social"); // This navigates to the event detail page
   };
 
-const handleSend = async () => {
-  setIsSending(true);
-  try {
-    // First, send the email
-    const emailResponse = await fetch('/api/send-events-email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        events: filteredEvents,
-        city: city,
-        userDetails: {
-          email: toEmail,
-          phone: phoneNumber,
-          instagram: instagramId,
-          startDate: startDate,
-          endDate: endDate
+  // Validation function
+  const validateFields = () => {
+    const missingFields = [];
+    
+    if (!toEmail || !toEmail.trim()) {
+      missingFields.push("Email ID");
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(toEmail.trim())) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top"
+      });
+      return false;
+    }
+    
+    if (!phoneNumber || !phoneNumber.trim()) {
+      missingFields.push("Mobile Number");
+    }
+    
+    if (!instagramId || !instagramId.trim()) {
+      missingFields.push("Instagram ID");
+    }
+
+    if (missingFields.length > 0) {
+      const fieldText = missingFields.length === 1 
+        ? missingFields[0] 
+        : missingFields.length === 2 
+          ? missingFields.join(" and ") 
+          : missingFields.slice(0, -1).join(", ") + " and " + missingFields.slice(-1);
+      
+      toast({
+        title: "Missing Required Fields",
+        description: `Please enter ${fieldText}`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top"
+      });
+      return false;
+    }
+    
+    return true;
+  };
+
+  const handleSend = async () => {
+    // Validate fields before proceeding
+    if (!validateFields()) {
+      return;
+    }
+
+    setIsSending(true);
+    try {
+      // First, send the email
+      const emailResponse = await fetch('/api/send-events-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      }),
-    });
+        body: JSON.stringify({
+          events: filteredEvents,
+          city: city,
+          userDetails: {
+            email: toEmail.trim(),
+            phone: phoneNumber.trim(),
+            instagram: instagramId.trim(),
+            startDate: startDate,
+            endDate: endDate
+          },
+        }),
+      });
 
-    const emailResult = await emailResponse.json();
+      const emailResult = await emailResponse.json();
 
-    if (!emailResponse.ok) {
-      throw new Error(`Failed to send email: ${emailResult.message}`);
+      if (!emailResponse.ok) {
+        throw new Error(`Failed to send email: ${emailResult.message}`);
+      }
+
+      // Then, store the user details in Google Sheets
+      const storeResponse = await fetch('/api/store-user-details', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: toEmail.trim(),
+          phone: phoneNumber.trim(),
+          instagram: instagramId.trim(),
+        }),
+      });
+
+      const storeResult = await storeResponse.json();
+
+      if (!storeResponse.ok) {
+        throw new Error(`Failed to store user details: ${storeResult.message}`);
+      }
+
+      toast({
+        title: "Success!",
+        description: "Event details sent successfully! Check your email.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top"
+      });
+      
+      setShowPopup(false);
+      // Reset form
+      setToEmail("");
+      setPhoneNumber("");
+      setInstagramId("");
+    } catch (error) {
+      console.error("Detailed error:", {
+        message: error.message,
+        response: await error.response?.json(),
+        stack: error.stack
+      });
+      
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top"
+      });
+    } finally {
+      setIsSending(false);
     }
+  };
 
-    // Then, store the user details in Google Sheets
-    const storeResponse = await fetch('/api/store-user-details', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: toEmail,
-        phone: phoneNumber,
-        instagram: instagramId,
-      }),
-    });
-
-    const storeResult = await storeResponse.json();
-
-    if (!storeResponse.ok) {
-      throw new Error(`Failed to store user details: ${storeResult.message}`);
-    }
-
-    alert('Event details sent successfully! Check your email.');
-    setShowPopup(false);
-    // Reset form
-    setToEmail("");
-    setPhoneNumber("");
-    setInstagramId("");
-  } catch (error) {
-    console.error("Detailed error:", {
-      message: error.message,
-      response: await error.response?.json(),
-      stack: error.stack
-    });
-    alert(`Error: ${error.message}`);
-  } finally {
-    setIsSending(false);
-  }
-};
   if (!city) {
     return (
       <Center minH="100vh">
@@ -242,6 +324,7 @@ const handleSend = async () => {
   }
 
 return (
+  <ChakraProvider theme={theme}>
   <Box
     minH="100vh"
     maxW="100vw"
@@ -426,15 +509,13 @@ return (
                     </Flex>
 
                     <Flex align="center" gap={1} flex="0 0 auto" justify="flex-end">
-  <Text fontSize="15px" color="#38a169" lineHeight="1">
-    {event.currencySymbols || '₫'}
-  </Text>
-  <Text fontSize="14px" color="#276749" fontWeight="600">
-    {event.fees || 'Free'}
-  </Text>
-</Flex>
-
-
+                      <Text fontSize="15px" color="#38a169" lineHeight="1">
+                        {event.currencySymbols || '₫'}
+                      </Text>
+                      <Text fontSize="14px" color="#276749" fontWeight="600">
+                        {event.fees || 'Free'}
+                      </Text>
+                    </Flex>
                   </Flex>
 
                   {/* Music Ratio */}
@@ -597,20 +678,20 @@ return (
                     </Flex>
 
                     <Flex align="center" gap={1} flex="0 0 auto" justify="flex-end">
-  <Text 
-    fontSize="14px" 
-    color="#276749" 
-    fontWeight="600"
-    display="flex"
-    alignItems="center"
-    gap={1}
-  >
-    <Box as="span" color="#38a169">
-      {event.currencySymbols || '₫'}
-    </Box>
-    {event.fees || 'Free'}
-  </Text>
-</Flex>
+                      <Text 
+                        fontSize="14px" 
+                        color="#276749" 
+                        fontWeight="600"
+                        display="flex"
+                        alignItems="center"
+                        gap={1}
+                      >
+                        <Box as="span" color="#38a169">
+                          {event.currencySymbols || '₫'}
+                        </Box>
+                        {event.fees || 'Free'}
+                      </Text>
+                    </Flex>
                   </Flex>
 
                   {/* Music Ratio */}
@@ -677,7 +758,7 @@ return (
           display="flex"
           justifyContent="center"
           alignItems="center"
-          zIndex={9999}
+          zIndex={2000}
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setShowPopup(false);
@@ -762,6 +843,7 @@ return (
         </Box>
       )}
     </Box>
+    </ChakraProvider>
   );
 }
 

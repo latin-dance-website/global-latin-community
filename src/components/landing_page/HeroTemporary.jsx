@@ -1,3 +1,4 @@
+import { useRouter } from "next/router"; // ✅ Add this at the top
 import {
   Box,
   Button,
@@ -28,6 +29,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 function HeroTemporary({isSelectedTileEvent}) {
+  const router = useRouter(); // ✅ Initialize here
   const [textIndex, setTextIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const words = ["Movement", "Community", "Revolution"];
@@ -47,8 +49,8 @@ function HeroTemporary({isSelectedTileEvent}) {
       clearTimeout(changeText);
     };
   }, [textIndex]);
- const handleEventsBannerClick = () => {
-    router.push('/events/socials');
+  const handleEventsBannerClick = () => {
+    router.push("/events/socials"); // ✅ Now router will be defined
   };
   return (
     <>

@@ -354,7 +354,7 @@ export default function Carousel() {
       width="100%"
       overflow="hidden"
       px={{ base: 4, md: 6 }}
-      pt={0}
+      pt={1}
       pb={6}
     >
       {/* Navigation Arrows */}

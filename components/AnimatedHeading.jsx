@@ -23,18 +23,19 @@ const AnimatedHeading = () => {
   };
 
  const containerStyle = {
-  width: '100%',
+  width: '95%', // ⬅ increased from 100% to give room for horizontal margin
+  maxWidth: '1200px', // ⬅ ensures it grows wider on large screens
   overflow: 'hidden',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  margin: '1.5rem auto 0.5rem',
+  margin: '2rem auto 0.5rem', // ⬅ reduced top margin slightly
   position: 'relative',
-  border: '1px solid rgba(0, 0, 0, 0.06)', // very light border
+  border: '1px solid rgba(0, 0, 0, 0.06)',
   borderRadius: '12px',
-  backgroundColor: 'rgba(255, 255, 255, 0.03)', // soft transparent white
-  boxShadow: '0 1px 4px rgba(0, 0, 0, 0.05)', // subtle shadow
-  padding: '0.25rem 0.5rem',  // slight internal spacing
+  backgroundColor: 'rgba(255, 255, 255, 0.03)',
+  boxShadow: '0 1px 4px rgba(0, 0, 0, 0.05)',
+  padding: '0.2rem 1.5rem', // ⬅ reduced vertical padding, increased horizontal
 };
 
 

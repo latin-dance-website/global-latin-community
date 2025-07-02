@@ -99,8 +99,8 @@ function HeroTemporary({isSelectedTileEvent}) {
         xl: "3rem",
         "2xl": "4rem"
       }}
-      lineHeight="1" // Tighter line height
-  mb={0} // Remove bottom margin
+      lineHeight="1.2" // Tighter line height
+  mb={1} // Remove bottom margin
     >
       The Latin Dance <br />{" "}
       <SlideFade
@@ -111,22 +111,26 @@ function HeroTemporary({isSelectedTileEvent}) {
         offsetY="10px" // Reduced offset for tighter animation
       >
         <Text
-          fontSize={{
-            base: "2.6rem",
-            sm:"3rem",
-            md: "3rem",
-            lg: "4.5rem",
-            xl: "4.5rem",
-            "2xl": "6rem"
-          }}
-          color={"black"}
-          fontWeight={{base:"bold", sm:"bold"}}
-          lineHeight="0.9" // Even tighter line height
-      my={1} // Remove vertical margins
-      display="inline-block" // Helps with tighter spacing
-        >
-          {words[textIndex]}
-        </Text>
+  fontSize={{
+    base: "2.6rem",
+    sm: "3rem",
+    md: "3rem",
+    lg: "4.5rem",
+    xl: "4.5rem",
+    "2xl": "6rem",
+  }}
+  fontWeight={{ base: "bold", sm: "bold" }}
+  lineHeight="0.9"
+  my={3}
+  display="inline-block"
+  letterSpacing="0.05em"
+  mx="0.5rem"
+  bgGradient="linear(to-r, #7928CA, #FF0080)" // 🔥 Gorgeous gradient
+  bgClip="text"
+>
+  {words[textIndex]}
+</Text>
+
       </SlideFade>
       Begins Here{" "}
     </Heading>
@@ -142,7 +146,7 @@ function HeroTemporary({isSelectedTileEvent}) {
   whiteSpace="nowrap"
   width="100%"
   position="relative"
-  marginTop={{ base: "1.2rem", md: "1.5rem" }}
+  marginTop={{ base: "0.2rem", md: "1.5rem" }}
   marginBottom={{ base: "1.2rem", md: "1.5rem" }}
 >
   <Box
@@ -151,20 +155,37 @@ function HeroTemporary({isSelectedTileEvent}) {
   >
     {[...Array(2)].map((_, i) => (
       <Text
-        key={i}
-        fontSize={{
-          base: "1rem",
-          md: "1.3rem",
-          xl: "1.3rem",
-          "2xl": "1.5rem",
-        }}
-        fontFamily="montserrat"
-        fontWeight="medium"
-        display="inline-block"
-        marginRight="5rem"
-      >
-        Get <Text as="span" fontWeight="700">Free</Text> Personalised Feedback & Insights of your dancing journey!
-      </Text>
+  key={i}
+  fontSize={{
+    base: "1rem",
+    md: "1.3rem",
+    xl: "1.3rem",
+    "2xl": "1.5rem",
+  }}
+  fontFamily="montserrat"
+  fontWeight="medium"
+  display="inline-block"
+  marginRight="5rem"
+>
+  Get{" "}
+  <Text as="span" fontWeight="700">
+    Free
+  </Text>{" "}
+  Personalised{" "}
+  <Text as="span" fontWeight="700">
+    Feedback
+  </Text>
+  ,{" "}
+  <Text as="span" fontWeight="700">
+    Insights
+  </Text>{" "}
+  &amp;{" "}
+  <Text as="span" fontWeight="700">
+    Roadmap
+  </Text>{" "}
+  of your dancing journey!
+</Text>
+
     ))}
   </Box>
 
@@ -182,7 +203,7 @@ function HeroTemporary({isSelectedTileEvent}) {
 
         <Link href="/video-upload">
   <Button
-  bgGradient="linear(to-br, #3f2b96, #a8c0ff)" // purple-blue gradient like iMovie
+   bgGradient="linear(to-br, #1a237e, #0d1b4c, #1a237e)" // purple-blue gradient like iMovie
   textColor="white"
   size={{ base: "xl", md: "lg", lg: "xl" }}
   alignSelf="center"
@@ -193,7 +214,7 @@ function HeroTemporary({isSelectedTileEvent}) {
   border="2px solid rgba(255, 255, 255, 0.3)"
   borderRadius="xl"
   className="box-pulse-button"
-  marginTop={{ base: "-0.2rem", md: "0.5rem" }}
+  marginTop={{ base: "-0.8rem", md: "0.5rem" }}
   marginBottom={{ base: "2.6rem", md: "1.5rem" }}
   _hover={{ transform: "scale(1.08)", borderColor: "white" }}
   _active={{ transform: "scale(0.96)" }}
@@ -220,6 +241,7 @@ function HeroTemporary({isSelectedTileEvent}) {
           position="relative"
           overflow="hidden"
           boxShadow="lg"
+          height={{ base: "auto", md: "300px", lg: "320px", xl: "350px" }}
         >
           {/* Background decoration */}
           <Box
@@ -244,65 +266,113 @@ function HeroTemporary({isSelectedTileEvent}) {
           />
           
           <Flex
-            alignItems="center"
-            justifyContent="space-between"
-            flexDirection={{ base: "column", md: "row" }}
-            gap={{ base: "1rem", md: "2rem" }}
-            position="relative"
-            zIndex="1"
+  direction="column"
+  justifyContent="space-between" // push button to bottom
+  height="100%" // ensure full height container
+  position="relative"
+  zIndex="1"
+>
+  <VStack
+    alignItems={{ base: "center", md: "flex-start" }}
+    spacing="0.5rem"
+    flex="1"
+  >
+    <HStack spacing="0.5rem">
+      <FiCalendar size="20px" color="white" />
+      <Heading
+        as="h3"
+        fontSize={{ base: "1.2rem", md: "1.4rem", lg: "1.6rem" }}
+        color="white"
+        fontFamily="montserrat"
+        fontWeight="bold"
+        textAlign={{ base: "center", md: "left" }}
+      >
+        Our New Feature Release
+      </Heading>
+    </HStack>
+
+    <Text
+      color="white"
+      fontSize={{ base: "1rem", md: "1.1rem" }}
+      fontFamily="montserrat"
+      lineHeight="1.5"
+      textAlign={{ base: "center", md: "left" }}
+    >
+      Discover verified Global Social Nights
+    </Text>
+  </VStack>
+
+  <VStack spacing="1rem" width="100%" mt="1.5rem">
+    <HStack 
+      spacing="1.5rem"
+      justifyContent={{ base: "center", md: "flex-start" }}
+      width="100%"
+    >
+      {["Hanoi", "Bangkok", "Bangalore"].map((city) => (
+        <HStack key={city} spacing="0.1rem">
+          <FiMapPin size="18px" color="white" />
+          <Text
+            color="white"
+            fontSize={{ base: "1rem", md: "1.15rem" }}
+            fontFamily="montserrat"
+            fontWeight="bold"
           >
-            <VStack
-              alignItems={{ base: "center", md: "flex-start" }}
-              spacing="0.5rem"
-              flex="1"
-            >
-              <HStack spacing="0.5rem">
-                <FiCalendar size="20px" color="white" />
-                <Heading
-                  as="h3"
-                  fontSize={{ base: "1.2rem", md: "1.4rem", lg: "1.6rem" }}
-                  color="white"
-                  fontFamily="montserrat"
-                  fontWeight="bold"
-                  textAlign={{ base: "center", md: "left" }}
-                >
-                  Live Social Events
-                </Heading>
-              </HStack>
-              
-              <HStack spacing="0.5rem" opacity="0.9" alignItems="flex-start">
-                <FiMapPin size="28px" color="white" />
-                <Text
-                  color="white"
-                  fontSize={{ base: "0.9rem", md: "1rem" }}
-                  fontFamily="montserrat"
-                  textAlign={{ base: "center", md: "left" }}
-                  lineHeight="1.2"
-                >
-                  Discover verified Global Social Nights in Hanoi • Bangkok • Bangalore
-                </Text>
-              </HStack>
-            </VStack>
-            
-            <Button
-              bg="whiteAlpha.200"
-              color="white"
-              border="2px solid"
-              borderColor="whiteAlpha.300"
-              _hover={{
-                bg: "white",
-                color: "brand.purple",
-                borderColor: "white",
-              }}
-              size={{ base: "md", md: "lg" }}
-              fontFamily="montserrat"
-              fontWeight="bold"
-              borderRadius="lg"
-              px="2rem"
-            >
-              Explore Events
-            </Button>
-          </Flex>
+            {city}
+          </Text>
+        </HStack>
+      ))}
+    </HStack>
+
+    <Button
+  bg="whiteAlpha.200"
+  color="white"
+  border="2px solid"
+  borderColor="whiteAlpha.300"
+  size={{ base: "xl", md: "xl" }}
+  fontSize={{ base: "1.1rem", md: "1.3rem", lg: "1.4rem" }}
+  fontFamily="montserrat"
+  fontWeight="bold"
+  letterSpacing="0.05em"
+  borderRadius="xl"
+  px="3rem"
+  py="1.6rem"
+  mt={{ base: "0", md: "0" }}
+  alignSelf={{ base: "center", md: "flex-start" }}
+  transform="perspective(500px)"
+  _hover={{
+    bg: "white",
+    color: "brand.purple",
+    borderColor: "white",
+    transform: "perspective(500px) scale(1.05) translateZ(20px)",
+    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)"
+  }}
+  _active={{
+    transform: "perspective(500px) scale(0.98) translateZ(10px)"
+  }}
+  transition="all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+>
+  <Text
+    as="span"
+    display="inline-block"
+    animation="pulse 1.5s ease-in-out infinite"
+  >
+    Explore Events
+  </Text>
+  
+  <style jsx global>{`
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+  `}</style>
+</Button>
+  </VStack>
+</Flex>
+
         </Box>
       </Box>
         <chakra.svg

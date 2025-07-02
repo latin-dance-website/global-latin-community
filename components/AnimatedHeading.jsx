@@ -2,25 +2,22 @@ import React from 'react';
 
 const AnimatedHeading = () => {
   const headingStyle = {
-    fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-    fontWeight: '800',
-    background: 'linear-gradient(90deg, #ff4d4d 0%, #f9cb28 25%, #25d366 50%, #4a6cf7 75%, #c643fc 100%)',
-    backgroundSize: '400% 100%',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text',
-    lineHeight: '1.3',
-    letterSpacing: '-0.01em',
-    textShadow: '0 2px 10px rgba(0,0,0,0.2)',
-    animation: 'gradientShift 6s ease-in-out infinite, glow 2s ease-in-out infinite alternate, scrollLeft 5s linear infinite',
-    transition: 'all 0.4s ease',
-    cursor: 'default',
-    position: 'relative',
-    padding: '0.25rem 0.5rem',
-    borderRadius: '8px',
-    display: 'inline-block',
-    whiteSpace: 'nowrap',
-  };
+  fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+  fontWeight: '800',
+  color: '#c643fc',
+  textShadow: '0 0 10px #c643fc, 0 0 20px #c643fc',
+  lineHeight: '1.3',
+  letterSpacing: '-0.01em',
+  animation: 'purpleGlow 2s ease-in-out infinite alternate',
+  transition: 'all 0.4s ease',
+  cursor: 'default',
+  position: 'relative',
+  padding: '0.25rem 0.5rem',
+  borderRadius: '8px',
+  display: 'inline-block',
+  whiteSpace: 'nowrap',
+};
+
 
  const containerStyle = {
   width: '95%', // ⬅ increased from 100% to give room for horizontal margin
@@ -46,6 +43,11 @@ const AnimatedHeading = () => {
     filter: 'blur(2px)',
     animation: 'float 5s ease-in-out infinite',
   };
+const scrollWrapperStyle = {
+  display: 'inline-block',
+  whiteSpace: 'nowrap',
+  animation: 'scrollLeft 5s linear infinite',
+};
 
   const particle1Style = {
     ...particleBaseStyle,
@@ -99,17 +101,15 @@ const AnimatedHeading = () => {
           }
         }
 
-        @keyframes glow {
-          0% {
-            filter: drop-shadow(0 6px 25px rgba(255, 77, 77, 0.4));
-          }
-          50% {
-            filter: drop-shadow(0 8px 35px rgba(74, 108, 247, 0.5));
-          }
-          100% {
-            filter: drop-shadow(0 6px 25px rgba(198, 67, 252, 0.4));
-          }
-        }
+        @keyframes purpleGlow {
+  0% {
+    text-shadow: 0 0 8px #c643fc, 0 0 14px #c643fc;
+  }
+  100% {
+    text-shadow: 0 0 16px #c643fc, 0 0 28px #c643fc;
+  }
+}
+
 
         @keyframes float {
           0%, 100% {
@@ -121,24 +121,28 @@ const AnimatedHeading = () => {
         }
 
         @keyframes scrollLeft {
-          0% {
-            transform: translateX(100%);
-          }
-          100% {
-            transform: translateX(-100%);
-          }
-        }
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
       `}</style>
 
       <div style={containerStyle}>
-        <div className="animated-heading" style={headingStyle}>
-          Today's Social Nights
-        </div>
-        <div style={particle1Style} />
-        <div style={particle2Style} />
-        <div style={particle3Style} />
-        <div style={particle4Style} />
-      </div>
+  <div style={scrollWrapperStyle}>
+    <div className="animated-heading" style={headingStyle}>
+      Today's Social Nights
+    </div>
+  </div>
+  <div style={particle1Style} />
+  <div style={particle2Style} />
+  <div style={particle3Style} />
+  <div style={particle4Style} />
+</div>
+
     </>
   );
 };

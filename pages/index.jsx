@@ -23,14 +23,13 @@ const Home = () => {
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [isSelectedTileEvent, setIsSelectedTileEvent] = useState(false);
   const eventCards = [
+     {
+      text: "Global Social Nights",
+      href: "/events/socials",
+    },
     {
       text: "Our Initiatives / Events",
       href: "/events/our-events",
-    },
-
-    {
-      text: "Global Social Nights",
-      href: "/events/socials",
     },
     {
       text: "Global Dance Festivals",

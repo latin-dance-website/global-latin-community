@@ -321,7 +321,7 @@ const HeroComingSoon = ({isToastVisible, setIsToastVisible}) => {
                 </Swiper>
               </Box>
               <Link href="/video-upload">
-                    <Button
+                    {/* <Button
                       // bgGradient="linear(to-br, #8EA3F4, #3C71FF)"
                       bg="black"
                       textColor="white"
@@ -337,7 +337,7 @@ const HeroComingSoon = ({isToastVisible, setIsToastVisible}) => {
                       marginTop={{base:"1rem", sm:"0rem", md:"0rem", lg:"0rem"}}
                     >
                       Start Here
-                  </Button>
+                  </Button> */}
               </Link>
               {/* <Upload /> */}
             </Box>

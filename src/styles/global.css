@@ -108,6 +108,21 @@ body {
   color: #000;
 }
 
+@keyframes boxPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(63, 43, 150, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(168, 192, 255, 0.6);
+  }
+}
+
+.box-pulse-button {
+  animation: boxPulse 2s ease-in-out infinite;
+}
+
 @media (max-width: 504px) {
   .custom-range-picker:hover {
     position:absolute;

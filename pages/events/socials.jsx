@@ -3,7 +3,9 @@ import Navbar from "@components/Navbar";
 import { useRouter } from "next/router";
 import Caraousel from "../.././components/carousel";
 import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
+import BreakingNewsHeading from "../../components/AnimatedHeading";
 import CustomCalendar from "./CustomCalendar"; // Import the custom calendar
+import { motion } from "framer-motion";
 import {
   Box,
   Button,
@@ -43,6 +45,7 @@ import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import weekday from "dayjs/plugin/weekday";
 import weekOfYear from "dayjs/plugin/weekOfYear";
+import AnimatedHeading from "../../components/AnimatedHeading";
 
 dayjs.extend(isBetween);
 dayjs.extend(weekday);
@@ -143,17 +146,8 @@ export default function EventsHomePage({ cities }) {
         <Navbar />
       </Box>
 
-      <Box mt={{ base: 2, md: 6 }} mb={-2}  textAlign="center">
-  <Heading
-    fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
-    fontWeight="extrabold"
-    bgGradient="linear(to-r, #FF416C, #FF4B2B)"
-    bgClip="text"
-    lineHeight="1.3"
-  >
-    Today's Social Nights
-  </Heading>
-       
+     <Box mt={{ base: -7, md: 0 }} mb={-2} textAlign="center">
+  <AnimatedHeading/>
 </Box>
 
 
@@ -169,7 +163,7 @@ export default function EventsHomePage({ cities }) {
         width="100%"
         maxWidth="1400px"
         px={{ base: 4, lg: 6 }}
-        mt={{ base: "-8px", md: "20px" }}
+        mt={{ base: "-16px", md: "20px" }}
       >
         {/* Main Control Box - Find Events */}
         <Box
@@ -551,156 +545,131 @@ export default function EventsHomePage({ cities }) {
 
         {/* Create Your Own Event Box */}
         <Box
-          width={{ base: "fit-content", lg: "450px" }}
-          maxWidth={{ base: "95%", lg: "450px" }}
-          minWidth="300px"
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          borderRadius="16px"
-          bg="white"
-          boxShadow="xl"
-          border="2px solid #ff6b35"
-          py={{ base: 6, md: 8 }}
-          px={{ base: 6, md: 8 }}
-          position="relative"
-          _hover={{
-            "&::before": {
-              opacity: 1,
-            },
-            borderColor: "#ff5722",
-          }}
-          sx={{
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              top: "-2px",
-              left: "-2px",
-              right: "-2px",
-              bottom: "-2px",
-              borderRadius: "18px",
-              border: "2px solid transparent",
-              background:
-                "linear-gradient(90deg, #ff6b35, #9c3cf6, #ff6b35) border-box",
-              backgroundSize: "200% 100%",
-              animation: "borderGradient 3s linear infinite",
-              opacity: 0,
-              transition: "opacity 0.3s ease",
-              zIndex: -1,
-            },
-            "@keyframes borderGradient": {
-              "0%": { backgroundPosition: "0% 50%" },
-              "100%": { backgroundPosition: "200% 50%" },
-            },
-          }}
-        >
-          <VStack spacing={4} textAlign="center" position="relative" zIndex={1}>
-            {/* Icon/Emoji */}
-            {/* <Box
-              fontSize={{ base: "3xl", md: "4xl" }}
-              mb={2}
-              sx={{
-                animation: "float 2s ease-in-out infinite",
-                "@keyframes float": {
-                  "0%, 100%": { transform: "translateY(0px)" },
-                  "50%": { transform: "translateY(-8px)" },
-                },
-              }}
-            >
-              🎉
-            </Box> */}
-
-            {/* Heading */}
-            <Heading
-              fontSize={{ base: "xl", md: "2xl" }}
-              fontWeight="extrabold"
-              color="#000001"
-              lineHeight="1.1"
-              mb={-2}
-              mt={-3}
-            >
-              Create Your Own Event
-            </Heading>
-
-            {/* Description */}
-            <VStack spacing={2}>
-              <Text
-  fontWeight="medium"
-  fontSize={{ base: "sm", md: "md" }}
-  color="#555"
-  textAlign="center"
-  lineHeight="1.4"
-  fontStyle="italic"
+  width={{ base: "fit-content", lg: "450px" }}
+  maxWidth={{ base: "95%", lg: "450px" }}
+  minWidth="300px"
+  display="flex"
+  flexDirection="column"
+  alignItems="center"
+  justifyContent="center"
+  borderRadius="16px"
+  bg="white"
+  boxShadow="xl"
+  border="2px solid #ff6b35"
+  py={{ base: 4, md: 8 }} // Reduced vertical padding on mobile
+  px={{ base: 4, md: 8 }} // Reduced horizontal padding on mobile
+  position="relative"
+  _hover={{
+    "&::before": {
+      opacity: 1,
+    },
+    borderColor: "#ff5722",
+  }}
+  sx={{
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: "-2px",
+      left: "-2px",
+      right: "-2px",
+      bottom: "-2px",
+      borderRadius: "18px",
+      border: "2px solid transparent",
+      background:
+        "linear-gradient(90deg, #ff6b35, #9c3cf6, #ff6b35) border-box",
+      backgroundSize: "200% 100%",
+      animation: "borderGradient 3s linear infinite",
+      opacity: 0,
+      transition: "opacity 0.3s ease",
+      zIndex: -1,
+    },
+    "@keyframes borderGradient": {
+      "0%": { backgroundPosition: "0% 50%" },
+      "100%": { backgroundPosition: "200% 50%" },
+    },
+  }}
 >
-  Host your own Latin dance event and connect with the community
-</Text>
+  <VStack spacing={{ base: 3, md: 4 }} textAlign="center" position="relative" zIndex={1}>
+    {/* Heading */}
+    <Heading
+      fontSize={{ base: "lg", md: "2xl" }} // Slightly smaller on mobile
+      fontWeight="extrabold"
+      color="#000001"
+      lineHeight="1.1"
+      mb={{ base: -1, md: -2 }}
+      mt={{ base: -2, md: -3 }}
+    >
+      Create Your Own Event
+    </Heading>
 
+    {/* Description */}
+    <VStack spacing={1}>
+      <Text
+        fontWeight="medium"
+        fontSize={{ base: "sm", md: "md" }}
+        color="#555"
+        textAlign="center"
+        lineHeight="1.3"
+        fontStyle="italic"
+      >
+        Host your own Latin dance event and connect with the community
+      </Text>
+    </VStack>
 
-              {/* <Text
-                fontWeight="bold"
-                fontSize={{ base: "sm", md: "md" }}
-                color="#ff6b35"
-                textAlign="center"
-                lineHeight="1.2"
-              >
-                Workshops • Social Nights • Festivals
-              </Text> */}
-            </VStack>
+    {/* Create Event Button */}
+    <Button
+      onClick={handleCreateEvent}
+      bg="linear-gradient(135deg, #ff6b35, #ff5722)"
+      color="white"
+      borderRadius={{ base: "10px", md: "14px" }}
+      fontWeight="700"
+      fontSize={{ base: "15px", md: "18px" }}
+      height={{ base: "46px", md: "54px" }}
+      width="100%"
+      maxWidth="280px"
+      px={5}
+      py={2}
+      position="relative"
+      boxShadow="0 0 12px rgba(255, 107, 53, 0.35)"
+      _hover={{
+        bg: "linear-gradient(135deg, #ff5722, #e64a19)",
+        transform: "translateY(-2px) scale(1.02)",
+        boxShadow: "0 0 20px rgba(255, 107, 53, 0.5)",
+      }}
+      _active={{
+        transform: "translateY(0px) scale(1.0)",
+      }}
+      transition="all 0.3s ease-in-out"
+      sx={{
+        animation: "gentleGlow 2s infinite ease-in-out",
+        "@keyframes gentleGlow": {
+          "0%": {
+            boxShadow: "0 0 5px rgba(255, 107, 53, 0.4)",
+          },
+          "50%": {
+            boxShadow: "0 0 15px rgba(255, 107, 53, 0.6)",
+          },
+          "100%": {
+            boxShadow: "0 0 5px rgba(255, 107, 53, 0.4)",
+          },
+        },
+      }}
+    >
+      Start Creating Event
+    </Button>
 
-            {/* Create Event Button */}
-            <Button
-              onClick={handleCreateEvent}
-              bg="linear-gradient(135deg, #ff6b35, #ff5722)"
-              color="white"
-              borderRadius={{ base: "12px", md: "14px" }}
-              fontWeight="700"
-              fontSize={{ base: "16px", md: "18px" }}
-              height={{ base: "50px", md: "54px" }}
-              width="100%"
-              maxWidth="280px"
-              px={6}
-              py={3}
-              position="relative"
-              boxShadow="0 0 15px rgba(255, 107, 53, 0.4)"
-              _hover={{
-                bg: "linear-gradient(135deg, #ff5722, #e64a19)",
-                transform: "translateY(-2px) scale(1.02)",
-                boxShadow: "0 0 20px rgba(255, 107, 53, 0.6)",
-              }}
-              _active={{
-                transform: "translateY(0px) scale(1.0)",
-              }}
-              transition="all 0.3s ease-in-out"
-              sx={{
-                animation: "gentleGlow 2s infinite ease-in-out",
-                "@keyframes gentleGlow": {
-                  "0%": {
-                    boxShadow: "0 0 5px rgba(255, 107, 53, 0.4)",
-                  },
-                  "50%": {
-                    boxShadow: "0 0 15px rgba(255, 107, 53, 0.6)",
-                  },
-                  "100%": {
-                    boxShadow: "0 0 5px rgba(255, 107, 53, 0.4)",
-                  },
-                },
-              }}
-            >
-              Start Creating Event
-            </Button>
+    {/* Additional Info */}
+    <Text
+      fontSize={{ base: "xs", md: "sm" }}
+      color="#666"
+      textAlign="center"
+      mt={{ base: 1, md: 2 }} // Slightly reduced margin on mobile
+    >
+      Free to list • Reach thousands of dancers
+    </Text>
+  </VStack>
+</Box>
 
-            {/* Additional Info */}
-            <Text
-              fontSize={{ base: "xs", md: "sm" }}
-              color="#666"
-              textAlign="center"
-              mt={2}
-            >
-              Free to list • Reach thousands of dancers
-            </Text>
-          </VStack>
-        </Box>
       </Flex>
 
       {/* Custom Calendar Modal */}

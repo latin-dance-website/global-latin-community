@@ -46,76 +46,81 @@ function HeroTemporary({isSelectedTileEvent}) {
   return (
     <>
       <VStack
-        filter={isSelectedTileEvent ? "blur(100px)" : ""}
-        alignItems="center"
-        position="relative"
-        width="100%"
-        minHeight={{
-          base: "62vh",
-          sm: "70vh",
-          md: "50vh",
-          lg: "50vh",
-          xl: "80vh",
-          "2xl": "84vh",
+  filter={isSelectedTileEvent ? "blur(100px)" : ""}
+  alignItems="center"
+  position="relative"
+  width="100%"
+  minHeight={{
+    base: "62vh",
+    sm: "70vh", 
+    md: "50vh",
+    lg: "50vh",
+    xl: "80vh",
+    "2xl": "84vh"
+  }}
+  paddingX={{
+    base: "2rem",
+    md: "3rem",
+    lg: "4rem",
+    xl: "6rem",
+    "2xl": "8rem"
+  }}
+  paddingY={{
+    base: "4rem", // Reduced from 4rem
+    xl: "2rem"    // Reduced from 4rem
+  }}
+  justifyContent="flex-start" // Changed from "space-around" to "flex-start"
+  id="hello"
+>
+  <VStack
+    alignItems="center" 
+    gap={{ base: "1rem", xl: "2rem" }}
+    width="100%"
+    mt={{ base: "-2rem", md: "-1rem" }} // Added negative margin to pull up
+  >
+    <Heading
+      color="black"
+      textAlign={{ base: "center" }}
+      fontFamily="montserrat"
+      width="100%"
+      fontSize={{
+        base: "2rem",
+        md: "2rem", 
+        lg: "3rem",
+        xl: "3rem",
+        "2xl": "4rem"
+      }}
+      lineHeight="1" // Tighter line height
+  mb={0} // Remove bottom margin
+    >
+      The Latin Dance <br />{" "}
+      <SlideFade
+        transition={{
+          enter: { duration: 0.1 },
         }}
-        paddingX={{
-          base: "2rem",
-          md: "3rem",
-          lg: "4rem",
-          xl: "6rem",
-          "2xl": "8rem",
-        }}
-        paddingY={{
-          base: "4rem",
-          xl: "4rem",
-        }}
-        justifyContent="space-around"
-        id="hello"
+        in={isVisible}
+        offsetY="10px" // Reduced offset for tighter animation
       >
-        <VStack
-          alignItems="center"
-          gap={{ base: "1rem", xl: "2rem" }}
-          width="100%"
+        <Text
+          fontSize={{
+            base: "2.6rem",
+            sm:"3rem",
+            md: "3rem",
+            lg: "4.5rem",
+            xl: "4.5rem",
+            "2xl": "6rem"
+          }}
+          color={"black"}
+          fontWeight={{base:"bold", sm:"bold"}}
+          lineHeight="0.9" // Even tighter line height
+      my={1} // Remove vertical margins
+      display="inline-block" // Helps with tighter spacing
         >
-          <Heading
-            color="black"
-            textAlign={{ base: "center" }}
-            fontFamily="montserrat"
-            width="100%"
-            fontSize={{
-              base: "2rem",
-              md: "2rem",
-              lg: "3rem",
-              xl: "3rem",
-              "2xl": "4rem",
-            }}
-          >
-            The Latin Dance <br />{" "}
-            <SlideFade
-              transition={{
-                enter: { duration: 0.1 },
-              }}
-              onAnimationEnd={() => console.log("done")}
-              in={isVisible}
-              offsetY="20px"
-            >
-              <Text
-                fontSize={{
-                  base: "2.6rem",
-                  sm:"3rem",
-                  md: "3rem",
-                  lg: "4.5rem",
-                  xl: "4.5rem",
-                  "2xl": "6rem",
-                }}
-                color={"black"}
-                fontWeight={{base:"bold", sm:"bold"}}
-              >
-                {words[textIndex]}
-              </Text>
-            </SlideFade>
-            Begins Here{" "}
-          </Heading>
+          {words[textIndex]}
+        </Text>
+      </SlideFade>
+      Begins Here{" "}
+    </Heading>
           <Box
             height={{ base: "0.5rem", md: "0.5rem", lg: "0.75rem" }}
             width={{ base: "50%", xl: "25%" }}
@@ -123,35 +128,71 @@ function HeroTemporary({isSelectedTileEvent}) {
             alignSelf={{ base: "center" }}
           />
         </VStack>
-        <Text
-          fontSize={{
-            base: "1rem",
-            md: "1.3rem",
-            xl: "1.3rem",
-            "2xl": "1.5rem",
-          }}
-          textAlign={{ base: "center" }}
-          width="100%"
-          fontFamily="montserrat"
-          // marginTop={{ base: "2rem", md: "1rem" }}
-        >
-          Get <Text as="span" fontWeight="700">Free</Text> Personalised Feedback & Insights of your dancing journey!
-        </Text>
+        <Box
+  overflow="hidden"
+  whiteSpace="nowrap"
+  width="100%"
+  position="relative"
+  marginTop={{ base: "1.2rem", md: "1.5rem" }}
+  marginBottom={{ base: "1.2rem", md: "1.5rem" }}
+>
+  <Box
+    display="inline-flex"
+    animation="scrollTicker 12s linear infinite"
+  >
+    {[...Array(2)].map((_, i) => (
+      <Text
+        key={i}
+        fontSize={{
+          base: "1rem",
+          md: "1.3rem",
+          xl: "1.3rem",
+          "2xl": "1.5rem",
+        }}
+        fontFamily="montserrat"
+        fontWeight="medium"
+        display="inline-block"
+        marginRight="5rem"
+      >
+        Get <Text as="span" fontWeight="700">Free</Text> Personalised Feedback & Insights of your dancing journey!
+      </Text>
+    ))}
+  </Box>
+
+  <style jsx global>{`
+    @keyframes scrollTicker {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+  `}</style>
+</Box>
+
         <Link href="/video-upload">
-          <Button
-            bgGradient="linear(to-br, #8EA3F4, #3C71FF)"
-            textColor="white"
-            size={{ base: "xl", md: "lg", lg: "xl" }}
-            alignSelf={{ base: "center" }}
-            fontFamily="montserrat"
-            // blur={"2xl"}
-            _hover={{
-              opacity: "70%",
-            }}
-          >
-            Start Here
-          </Button>
-        </Link>
+  <Button
+  bgGradient="linear(to-br, #3f2b96, #a8c0ff)" // purple-blue gradient like iMovie
+  textColor="white"
+  size={{ base: "xl", md: "lg", lg: "xl" }}
+  alignSelf="center"
+  fontFamily="montserrat"
+  fontWeight="bold"
+  px="2.5rem"
+  py="1.25rem"
+  border="2px solid rgba(255, 255, 255, 0.3)"
+  borderRadius="xl"
+  className="box-pulse-button"
+  marginTop={{ base: "-0.2rem", md: "1.5rem" }}
+  marginBottom={{ base: "2.6rem", md: "1.5rem" }}
+  _hover={{ transform: "scale(1.08)", borderColor: "white" }}
+  _active={{ transform: "scale(0.96)" }}
+>
+  Start Here
+</Button>
+
+</Link>
         <chakra.svg
           position="absolute"
           top={{ base: "-5rem", md: "-10rem" }}

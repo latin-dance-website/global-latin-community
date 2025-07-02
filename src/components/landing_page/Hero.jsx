@@ -7,10 +7,10 @@ import {
   chakra,
   Flex,
   Icon,
-  // ScaleFade,
   ScaleFade,
   Stack,
   Fade,
+  HStack,
 } from "@chakra-ui/react";
 
 import {
@@ -19,15 +19,19 @@ import {
   FiMusic,
   FiPlay,
   FiShoppingCart,
+  FiCalendar,
+  FiMapPin,
 } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import heroImage from "../../../public/assets/images/hero.jpg";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function Hero() {
   const [visibleBlobs, setVisibleBlobs] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     let timer;
@@ -38,6 +42,10 @@ function Hero() {
 
     return () => clearTimeout(timer); // Cleanup on unmount
   }, [visibleBlobs]);
+
+  const handleEventsBannerClick = () => {
+    router.push('/events/socials');
+  };
 
   return (
     <>
@@ -55,7 +63,7 @@ function Hero() {
         width="100%"
         minHeight={{ base: "80vh", md: "50vh", lg: "50vh", xl: "84vh" }}
         paddingX={{
-          base: "3rem",
+          base: "1.5rem",
           md: "3rem",
           lg: "4rem",
           xl: "6rem",
@@ -66,7 +74,7 @@ function Hero() {
       >
         <VStack
           width={{ md: "50%", lg: "50%", xl: "40%" }}
-          gap={{ base: "2rem", md: "1rem", lg: "2rem", xl: "2rem" }}
+          gap={{ base: "1.5rem", md: "0.8rem", lg: "1.5rem", xl: "1.5rem" }}
           background={"transparent"}
         >
           <Heading
@@ -113,24 +121,113 @@ function Hero() {
             textAlign={{ base: "center", md: "left" }}
             width="100%"
             fontFamily="montserrat"
+            mb={{ base: "0.5rem", md: "0rem" }}
           >
             Get a 360 degree view of your dance journey with personalised
             insights
           </Text>
-          <Link href="/video-upload">
-            <Button
-              bgGradient="linear(to-br, #8EA3F4, #3C71FF)"
-              textColor="white"
-              size={{ base: "xl", md: "lg", lg: "xl" }}
-              alignSelf={{ base: "center", md: "start" }}
-              fontFamily="montserrat"
-              _hover={{
-                opacity: "70%",
-              }}
+          
+          {/* Events Banner */}
+          <Box
+            width="100%"
+            maxWidth={{ base: "400px", md: "500px" }}
+            cursor="pointer"
+            onClick={handleEventsBannerClick}
+            _hover={{ transform: "translateY(-2px)" }}
+            transition="all 0.3s ease"
+            alignSelf={{ base: "center", md: "start" }}
+          >
+            <Box
+              bgGradient="linear(135deg, brand.purple 0%, brand.pink 100%)"
+              borderRadius="xl"
+              p={{ base: "1.5rem", md: "2rem" }}
+              position="relative"
+              overflow="hidden"
+              boxShadow="lg"
             >
-              Start Here
-            </Button>
-          </Link>
+              {/* Background decoration */}
+              <Box
+                position="absolute"
+                top="-50%"
+                right="-10%"
+                width="200px"
+                height="200px"
+                borderRadius="full"
+                bg="whiteAlpha.200"
+                opacity="0.3"
+              />
+              <Box
+                position="absolute"
+                bottom="-30%"
+                left="-5%"
+                width="150px"
+                height="150px"
+                borderRadius="full"
+                bg="whiteAlpha.100"
+                opacity="0.4"
+              />
+              
+              <Flex
+                alignItems="center"
+                justifyContent="space-between"
+                flexDirection={{ base: "column", md: "row" }}
+                gap={{ base: "1rem", md: "1.5rem" }}
+                position="relative"
+                zIndex="1"
+              >
+                <VStack
+                  alignItems={{ base: "center", md: "flex-start" }}
+                  spacing="0.5rem"
+                  flex="1"
+                >
+                  <HStack spacing="0.5rem">
+                    <FiCalendar size="18px" color="white" />
+                    <Heading
+                      as="h3"
+                      fontSize={{ base: "1.1rem", md: "1.2rem", lg: "1.3rem" }}
+                      color="white"
+                      fontFamily="montserrat"
+                      fontWeight="bold"
+                      textAlign={{ base: "center", md: "left" }}
+                    >
+                      Live Social Events
+                    </Heading>
+                  </HStack>
+                  
+                  <HStack spacing="0.5rem" opacity="0.9">
+                    <FiMapPin size="14px" color="white" />
+                    <Text
+                      color="white"
+                      fontSize={{ base: "0.8rem", md: "0.9rem" }}
+                      fontFamily="montserrat"
+                      textAlign={{ base: "center", md: "left" }}
+                    >
+                      Discover verified events in Hanoi • Bangkok • Bangalore
+                    </Text>
+                  </HStack>
+                </VStack>
+                
+                <Button
+                  bg="whiteAlpha.200"
+                  color="white"
+                  border="2px solid"
+                  borderColor="whiteAlpha.300"
+                  _hover={{
+                    bg: "white",
+                    color: "brand.purple",
+                    borderColor: "white",
+                  }}
+                  size={{ base: "sm", md: "md" }}
+                  fontFamily="montserrat"
+                  fontWeight="bold"
+                  borderRadius="lg"
+                  px="1.5rem"
+                >
+                  Explore Events
+                </Button>
+              </Flex>
+            </Box>
+          </Box>
         </VStack>
         <Flex
           justifyContent="center"

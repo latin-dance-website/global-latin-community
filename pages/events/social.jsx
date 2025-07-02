@@ -49,6 +49,28 @@ export default function Social() {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Enhanced color palette with gradients
+  const colors = {
+    primary: "#e53e3e",
+    primaryDark: "#c53030",
+    primaryGradient: "linear(to-r, #e53e3e, #c53030)",
+    secondary: "#4f46e5",
+    secondaryDark: "#4338ca",
+    secondaryGradient: "linear(to-r, #6366f1, #4f46e5)",
+    accent: "#6366f1",
+    success: "#38a169",
+    warning: "#ed8936",
+    background: "#f7fafc",
+    cardBg: "white",
+    textPrimary: "#2d3748",
+    textSecondary: "#4a5568",
+    textLight: "#718096",
+    border: "#e2e8f0",
+    shadowSm: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+    shadowMd: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+    shadowLg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+  };
+
   useEffect(() => {
     const eventData = sessionStorage.getItem("currentEvent");
 
@@ -100,7 +122,6 @@ export default function Social() {
     }
   };
 
-  // Fixed duration calculation
   const calculateDuration = (startTime, endTime) => {
     if (!startTime || !endTime) return "1 hour 30 minutes";
 
@@ -108,7 +129,6 @@ export default function Social() {
       let start = dayjs(`2000-01-01 ${startTime}`);
       let end = dayjs(`2000-01-01 ${endTime}`);
 
-      // If end time is earlier than start time, it means it crosses midnight
       if (end.isBefore(start)) {
         end = end.add(1, "day");
       }
@@ -144,7 +164,7 @@ export default function Social() {
       px={{ base: 0, md: 8 }}
       overflowX="clip"
       opacity={isToastVisible ? "0.2" : "1"}
-      bg="gray.50"
+      bg={colors.background}
     >
       {/* Fixed Navbar at Top */}
       <Box position="fixed" top="0" left="0" w="100%" zIndex="1000">
@@ -155,286 +175,345 @@ export default function Social() {
       <Container
         maxW="container.xl"
         w="full"
-        mt="80px"
-        pb={10}
-        px={{ base: 4, md: 6 }}
+        mt={{ base: "60px", md: "80px" }}
+        pb={{ base: 6, md: 10 }}
+        px={{ base: 3, md: 6 }}
       >
         {isMobile ? (
-          /* Mobile Layout - Following BookMyShow Structure */
+          /* Mobile Layout - Enhanced with modern design */
           <Box>
-            {/* Back Button and Share */}
-            <Flex justify="space-between" align="center" mb={2}>
-              {/* <Button
-                variant="ghost"
-                size="sm"
-                leftIcon={<Icon as={MdLink} />}
-                onClick={() => router.back()}
-              >
-                Back
-              </Button> */}
-              {/* <Button variant="ghost" size="sm">
-                Share
-              </Button> */}
-            </Flex>
-
             {/* Event Title */}
             <Heading
-              fontSize="2xl"
+              fontSize={{ base: "xl", sm: "2xl" }}
               fontWeight="bold"
-              mb={2}
+              mb={3}
+              mt={6}
               textAlign="center"
-              color="gray.800"
+              color={colors.textPrimary}
+              bgGradient={colors.primaryGradient}
+              bgClip="text"
             >
               {event.title}
             </Heading>
 
-            {/* Hero Image with Aspect Ratio */}
-            <Box mb={4} display="flex" justifyContent="center">
-              <Box width="280px" height="400px">
+            {/* Hero Image with Enhanced Styling */}
+            <Box mb={3} display="flex" justifyContent="center">
+              <Box 
+                width={{ base: "240px", sm: "280px" }} 
+                height={{ base: "340px", sm: "400px" }}
+                position="relative"
+                boxShadow={colors.shadowLg}
+                borderRadius="16px"
+                overflow="hidden"
+              >
                 <Image
                   src={event.image || "/assets/images/hero.jpg"}
                   alt={event.title || "Event"}
                   objectFit="cover"
                   w="full"
                   h="full"
-                  borderRadius="12px"
-                  border="1px solid #e2e8f0"
-                  boxShadow="lg"
+                />
+                <Box
+                  position="absolute"
+                  top="0"
+                  left="0"
+                  right="0"
+                  bottom="0"
+                  bgGradient="linear(to-t, rgba(0,0,0,0.3), transparent)"
+                  pointerEvents="none"
                 />
               </Box>
             </Box>
 
-            {/* Interest Counter */}
-            <Flex align="center" justify="center" mb={4}>
-              <Icon as={FaUsers} color="green.500" mr={2} />
-              <Text fontSize="sm" color="gray.600">
+            {/* Interest Counter with Animation */}
+            <Flex align="center" justify="center" mb={3}>
+              <Icon as={FaUsers} color={colors.success} mr={2} boxSize={4} />
+              <Text fontSize="sm" color={colors.textSecondary}>
                 309 are interested
               </Text>
               <Button
                 size="sm"
                 variant="outline"
-                colorScheme="pink"
-                ml={4}
+                colorScheme="red"
+                ml={3}
                 borderRadius="full"
+                borderColor={colors.primary}
+                color={colors.primary}
+                transition="all 0.2s"
+                _hover={{
+                  bg: colors.primary,
+                  color: "white",
+                  transform: "scale(1.05)",
+                  boxShadow: colors.shadowMd,
+                }}
               >
                 Interested?
               </Button>
             </Flex>
 
-            {/* Event Details Card */}
+            {/* Event Details Card with Modern Styling */}
             <Box
-              bg="white"
-              borderRadius="12px"
-              boxShadow="sm"
-              border="1px solid #e2e8f0"
-              p={4}
-              mb={4}
+              bg={colors.cardBg}
+              borderRadius="16px"
+              boxShadow={colors.shadowMd}
+              border={`1px solid ${colors.border}`}
+              p={3}
+              mb={3}
+              transition="all 0.3s"
             >
-              <VStack spacing={4} align="stretch">
-                {/* Date */}
-                <Flex align="center">
-                  <Icon as={FaCalendar} color="#6366f1" boxSize={4} mr={3} />
-                  <Text fontSize="sm" color="gray.700" fontWeight="500">
-                    {formatDateWithDay(event.date)}
-                  </Text>
-                </Flex>
+             <VStack spacing={2} align="stretch"> {/* 🔽 spacing reduced from 4 to 2 */}
+  {/* Date */}
+  <Flex align="center">
+    <Box p={1.5} borderRadius="8px" bg="purple.50" mr={2}> {/* 🔽 tighter padding & margin */}
+      <Icon as={FaCalendar} color={colors.accent} boxSize={4} />
+    </Box>
+    <Text
+      fontSize="sm"
+      color="gray.800"
+      fontWeight="600"
+      lineHeight="1.4"
+      letterSpacing="0.2px"
+    >
+      {formatDateWithDay(event.date)}
+    </Text>
+  </Flex>
 
-                {/* Time */}
-                <Flex align="center">
-                  <Icon as={FaClock} color="#6366f1" boxSize={4} mr={3} />
-                  <Text fontSize="sm" color="gray.700" fontWeight="500">
-                    {event.startTime} - {event.endTime} hrs
-                  </Text>
-                </Flex>
+  {/* Time */}
+  <Flex align="center">
+    <Box p={1.5} borderRadius="8px" bg="blue.50" mr={2}>
+      <Icon as={FaClock} color="#3182ce" boxSize={4} />
+    </Box>
+    <Text
+      fontSize="sm"
+      color="gray.800"
+      fontWeight="600"
+      lineHeight="1.4"
+      letterSpacing="0.2px"
+    >
+      {event.startTime} - {event.endTime} hrs
+    </Text>
+  </Flex>
 
-                {/* Duration */}
-                <Flex align="center">
-                  <Icon as={MdTimer} color="#6366f1" boxSize={4} mr={3} />
-                  <Text fontSize="sm" color="gray.700" fontWeight="500">
-                    {calculateDuration(event.startTime, event.endTime)}
-                  </Text>
-                </Flex>
+  {/* Duration */}
+  {/* <Flex align="center">
+    <Box p={1.5} borderRadius="8px" bg="orange.50" mr={2}>
+      <Icon as={MdTimer} color={colors.warning} boxSize={4} />
+    </Box>
+    <Text
+      fontSize="sm"
+      color="gray.800"
+      fontWeight="600"
+      lineHeight="1.4"
+      letterSpacing="0.2px"
+    >
+      {calculateDuration(event.startTime, event.endTime)}
+    </Text>
+  </Flex> */}
 
-                {/* Language */}
-                {/* <Flex align="center">
-                  <Icon as={MdLanguage} color="#6366f1" boxSize={4} mr={3} />
-                  <Text fontSize="sm" color="gray.700" fontWeight="500">
-                    Tamil, English
-                  </Text>
-                </Flex> */}
-
-                {/* Location */}
-                <Flex align="flex-start">
-                  <Icon
-                    as={FaLocationDot}
-                    color="#6366f1"
-                    boxSize={4}
-                    mr={3}
-                    mt={0.5}
-                  />
-                  <Text
-                    fontSize="sm"
-                    color="gray.700"
-                    fontWeight="500"
-                    lineHeight="1.4"
-                  >
-                    {event.location}
-                  </Text>
-                </Flex>
-              </VStack>
+  {/* Location */}
+  <Flex align="center">
+    <Box p={1.5} borderRadius="8px" bg="green.50" mr={2}>
+      <Icon as={FaLocationDot} color={colors.success} boxSize={4} />
+    </Box>
+    <Text
+      fontSize="sm"
+      color="gray.800"
+      fontWeight="600"
+      lineHeight="1.4"
+      letterSpacing="0.2px"
+    >
+      {event.location}
+    </Text>
+  </Flex>
+</VStack>
             </Box>
 
-            {/* Booking Alert */}
+            {/* Booking Alert with Enhanced Styling */}
             <Box
               bg="orange.50"
-              border="1px solid"
+              border="2px solid"
               borderColor="orange.200"
-              borderRadius="8px"
-              p={3}
-              mb={4}
+              borderRadius="12px"
+              p={2.5}
+              mb={3}
+              position="relative"
+              overflow="hidden"
             >
-              <Text fontSize="sm" color="orange.800" fontWeight="500">
+              <Box
+                position="absolute"
+                top="-20px"
+                right="-20px"
+                w="60px"
+                h="60px"
+                bg="orange.100"
+                borderRadius="full"
+                opacity={0.5}
+              />
+              <Text fontSize="sm" color={colors.warning} fontWeight="600" position="relative">
                 ⚠️ Bookings are filling fast for{" "}
                 {event?.CitybyCountry?.split(",")[0]?.trim() || "this city"}!
               </Text>
             </Box>
-            {/* Price and Book Now */}
+
+            {/* Price and Book Now with Gradient */}
             <Box
-              bg="white"
-              borderRadius="12px"
-              boxShadow="sm"
-              border="1px solid #e2e8f0"
-              p={4}
-              mb={6}
+              bg={colors.cardBg}
+              borderRadius="16px"
+              boxShadow={colors.shadowLg}
+              border={`1px solid ${colors.border}`}
+              p={3}
+              mb={4}
+              position="relative"
+              overflow="hidden"
             >
-              <Flex align="center" justify="space-between">
+              <Box
+                position="absolute"
+                top="-30px"
+                right="-30px"
+                w="100px"
+                h="100px"
+                bgGradient="radial(purple.200, transparent)"
+                opacity={0.3}
+              />
+              <Flex align="center" justify="space-between" position="relative">
                 <Box>
-                  <Text fontSize="lg" fontWeight="bold" color="#276749">
-                    <Box as="span" color="#38a169" display="inline">
+                  <Text fontSize={{ base: "md", sm: "lg" }} fontWeight="bold" color={colors.textPrimary}>
+                    <Box as="span" color={colors.success} display="inline" fontSize="xl">
                       {currencies[0]}
                     </Box>{" "}
                     {event.fees} onwards
                   </Text>
-
-                  <Text fontSize="sm" color="orange.500" fontWeight="500">
+                  <Text fontSize="xs" color={colors.warning} fontWeight="600">
                     Filling Fast
                   </Text>
                 </Box>
-                <Button size="lg" colorScheme="red" borderRadius="8px" px={8}>
+                <Button 
+                  size={{ base: "md", sm: "lg" }}
+                  bgGradient={colors.primaryGradient}
+                  color="white"
+                  borderRadius="12px" 
+                  px={{ base: 6, sm: 8 }}
+                  boxShadow={colors.shadowMd}
+                  transition="all 0.2s"
+                  _hover={{
+                    transform: "translateY(-2px)",
+                    boxShadow: colors.shadowLg,
+                  }}
+                  _active={{
+                    transform: "translateY(0)",
+                  }}
+                >
                   Book Now
                 </Button>
               </Flex>
             </Box>
 
-            <HStack spacing={3} mb={6}>
-  {event.instagramHandle && (
-    <Button
-      as="a"
-      href={event.instagramHandle}
-      target="_blank"
-      flex="1"
-      bg="#4f46e5"  // Solid purple color similar to the image
-      color="white"
-      borderRadius="8px"  // Slightly less rounded than before
-      leftIcon={<FaInstagram />}
-      _hover={{
-        bg: "#4338ca",  // Darker shade for hover
-        transform: "translateY(-2px)",
-        boxShadow: "lg",
-      }}
-      boxShadow="md"
-      fontWeight="600"
-      py={6}
-    >
-      Event Page
-    </Button>
-  )}
-  <Button
-    as={event.googleMapsLink ? "a" : "button"}
-    href={event.googleMapsLink || "#"}
-    target={event.googleMapsLink ? "_blank" : undefined}
-    flex="1"
-    bg="#4f46e5"  // Matching purple color
-    color="white"
-    borderRadius="8px"
-    leftIcon={<MdLink />}
-    onClick={
-      !event.googleMapsLink ? (e) => e.preventDefault() : undefined
-    }
-    cursor={event.googleMapsLink ? "pointer" : "not-allowed"}
-    opacity={!event.googleMapsLink ? 0.7 : 1}
-    _hover={{
-      bg: event.googleMapsLink ? "#4338ca" : "#4f46e5",  // Only change on hover if link exists
-      transform: event.googleMapsLink ? "translateY(-2px)" : "none",
-      boxShadow: event.googleMapsLink ? "lg" : "md",
-    }}
-    boxShadow="md"
-    fontWeight="600"
-    py={6}
-  >
-    View Map
-  </Button>
-</HStack>
+            {/* Action Buttons with Modern Style */}
+            <HStack spacing={2} mb={4}>
+              {event.instagramHandle && (
+                <Button
+                  as="a"
+                  href={event.instagramHandle}
+                  target="_blank"
+                  flex="1"
+                  bgGradient={colors.secondaryGradient}
+                  color="white"
+                  borderRadius="12px"
+                  leftIcon={<FaInstagram />}
+                  boxShadow={colors.shadowMd}
+                  transition="all 0.2s"
+                  _hover={{
+                    transform: "translateY(-2px)",
+                    boxShadow: colors.shadowLg,
+                  }}
+                  fontWeight="600"
+                  py={5}
+                  fontSize="sm"
+                >
+                  Event Page
+                </Button>
+              )}
+              <Button
+                as={event.googleMapsLink ? "a" : "button"}
+                href={event.googleMapsLink || "#"}
+                target={event.googleMapsLink ? "_blank" : undefined}
+                flex="1"
+                bgGradient={event.googleMapsLink ? colors.secondaryGradient : "linear(to-r, gray.400, gray.500)"}
+                color="white"
+                borderRadius="12px"
+                leftIcon={<MdLink />}
+                onClick={
+                  !event.googleMapsLink ? (e) => e.preventDefault() : undefined
+                }
+                cursor={event.googleMapsLink ? "pointer" : "not-allowed"}
+                opacity={!event.googleMapsLink ? 0.7 : 1}
+                boxShadow={colors.shadowMd}
+                transition="all 0.2s"
+                _hover={{
+                  transform: event.googleMapsLink ? "translateY(-2px)" : "none",
+                  boxShadow: event.googleMapsLink ? colors.shadowLg : colors.shadowMd,
+                }}
+                fontWeight="600"
+                py={5}
+                fontSize="sm"
+              >
+                View Map
+              </Button>
+            </HStack>
 
-            {/* About Section */}
+            {/* About Section with Enhanced Design */}
             <Box
-              bg="white"
-              borderRadius="12px"
-              boxShadow="sm"
-              border="1px solid #e2e8f0"
-              p={4}
+              bg={colors.cardBg}
+              borderRadius="16px"
+              boxShadow={colors.shadowMd}
+              border={`1px solid ${colors.border}`}
+              p={3}
             >
-              <Heading fontSize="lg" mb={3} color="gray.800">
+              <Heading fontSize="lg" mb={2} color={colors.textPrimary}>
                 About The Event
               </Heading>
-              <Text fontSize="sm" color="gray.700" lineHeight="1.6" mb={3}>
+              <Text fontSize="sm" color={colors.textSecondary} lineHeight="1.6" mb={2}>
                 {event.description || "No description available."}
               </Text>
               {event.musicRatio && (
-                <Box>
-                  <Text fontWeight="semibold" fontSize="sm" mb={1}>
+                <Box
+                  bg="purple.50"
+                  borderRadius="8px"
+                  p={2}
+                  mb={2}
+                >
+                  <Text fontWeight="semibold" fontSize="sm" mb={1} color={colors.textPrimary}>
                     Music Ratio:
                   </Text>
-                  <Text fontSize="sm" color="gray.600">
+                  <Text fontSize="sm" color={colors.textSecondary}>
                     {event.musicRatio}
                   </Text>
                 </Box>
               )}
               <Button
                 variant="link"
-                colorScheme="red"
+                color={colors.primary}
                 fontSize="sm"
                 p={0}
                 mt={2}
+                _hover={{ color: colors.primaryDark, textDecoration: "underline" }}
               >
                 Read More
               </Button>
             </Box>
           </Box>
         ) : (
-          /* Desktop Layout */
+          /* Desktop Layout - Enhanced with modern design */
           <Box>
-            {/* Back Button and Share */}
-            <Flex justify="space-between" align="center" mb={0}>
-              {/* <Button
-                variant="ghost"
-                leftIcon={<Icon as={MdLink} />}
-                onClick={() => router.back()}
-              >
-                Back
-              </Button> */}
-              {/* <Button variant="ghost">
-                Share
-              </Button> */}
-            </Flex>
-
             {/* Event Title */}
             <Heading
               fontSize="4xl"
               fontWeight="bold"
               mb={6}
-              color="gray.800"
+              color={colors.textPrimary}
               textAlign="center"
+              bgGradient={colors.primaryGradient}
+              bgClip="text"
             >
               {event.title}
             </Heading>
@@ -442,40 +521,57 @@ export default function Social() {
             <Grid templateColumns="2fr 1fr" gap={8}>
               {/* Left Column - Image and About */}
               <GridItem>
-                {/* Hero Image - Changed to vertical aspect ratio */}
-                <GridItem>
+                <Box
+                  width="350px"
+                  height="500px"
+                  position="sticky"
+                  top="120px"
+                  borderRadius="20px"
+                  overflow="hidden"
+                  boxShadow={colors.shadowLg}
+                  transition="all 0.3s"
+                  _hover={{
+                    transform: "scale(1.02)",
+                    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                  }}
+                >
+                  <Image
+                    src={event.image || "/assets/images/hero.jpg"}
+                    alt={event.title || "Event"}
+                    objectFit="cover"
+                    w="full"
+                    h="full"
+                  />
                   <Box
-                    width="350px"
-                    height="500px"
-                    position="sticky"
-                    top="120px" /* Adjust this value based on your navbar height */
-                  >
-                    <Image
-                      src={event.image || "/assets/images/hero.jpg"}
-                      alt={event.title || "Event"}
-                      objectFit="cover"
-                      w="full"
-                      h="full"
-                      borderRadius="12px"
-                      border="1px solid #e2e8f0"
-                      boxShadow="lg"
-                    />
-                  </Box>
-                </GridItem>
-
-                {/* Removed Event Tags - STAND UP COMEDY AND COMEDY SHOWS */}
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    right="0"
+                    bottom="0"
+                    bgGradient="linear(to-t, rgba(0,0,0,0.4), transparent)"
+                    pointerEvents="none"
+                  />
+                </Box>
 
                 {/* Interest Counter */}
-                <Flex align="center" mb={6}>
-                  <Icon as={FaUsers} color="green.500" mr={2} />
-                  <Text color="gray.600" mr={4}>
+                <Flex align="center" mb={6} mt={6}>
+                  <Icon as={FaUsers} color={colors.success} mr={2} />
+                  <Text color={colors.textSecondary} mr={4}>
                     309 are interested
                   </Text>
                   <Button
                     variant="outline"
-                    colorScheme="pink"
+                    borderColor={colors.primary}
+                    color={colors.primary}
                     borderRadius="full"
                     size="sm"
+                    transition="all 0.2s"
+                    _hover={{
+                      bg: colors.primary,
+                      color: "white",
+                      transform: "scale(1.05)",
+                      boxShadow: colors.shadowMd,
+                    }}
                   >
                     I'm Interested
                   </Button>
@@ -483,27 +579,42 @@ export default function Social() {
 
                 {/* About Section */}
                 <Box
-                  bg="white"
-                  borderRadius="12px"
-                  boxShadow="sm"
-                  border="1px solid #e2e8f0"
+                  bg={colors.cardBg}
+                  borderRadius="20px"
+                  boxShadow={colors.shadowMd}
+                  border={`1px solid ${colors.border}`}
                   p={6}
+                  transition="all 0.3s"
+                  _hover={{
+                    boxShadow: colors.shadowLg,
+                  }}
                 >
-                  <Heading fontSize="xl" mb={4} color="gray.800">
+                  <Heading fontSize="xl" mb={4} color={colors.textPrimary}>
                     About The Event
                   </Heading>
-                  <Text color="gray.700" lineHeight="1.6" mb={4}>
+                  <Text color={colors.textSecondary} lineHeight="1.6" mb={4}>
                     {event.description || "No description available."}
                   </Text>
                   {event.musicRatio && (
-                    <Box>
-                      <Text fontWeight="semibold" mb={2}>
+                    <Box
+                      bg="purple.50"
+                      borderRadius="12px"
+                      p={3}
+                      mb={3}
+                    >
+                      <Text fontWeight="semibold" mb={2} color={colors.textPrimary}>
                         Music Ratio:
                       </Text>
-                      <Text color="gray.600">{event.musicRatio}</Text>
+                      <Text color={colors.textSecondary}>{event.musicRatio}</Text>
                     </Box>
                   )}
-                  <Button variant="link" colorScheme="red" p={0} mt={3}>
+                  <Button 
+                    variant="link" 
+                    color={colors.primary} 
+                    p={0} 
+                    mt={3}
+                    _hover={{ color: colors.primaryDark, textDecoration: "underline" }}
+                  >
                     Read More
                   </Button>
                 </Box>
@@ -513,139 +624,188 @@ export default function Social() {
               <GridItem>
                 {/* Event Details Card */}
                 <Box
-                  bg="white"
-                  borderRadius="12px"
-                  boxShadow="sm"
-                  border="1px solid #e2e8f0"
+                  bg={colors.cardBg}
+                  borderRadius="20px"
+                  boxShadow={colors.shadowMd}
+                  border={`1px solid ${colors.border}`}
                   p={6}
                   mb={4}
+                  transition="all 0.3s"
+                  _hover={{
+                    boxShadow: colors.shadowLg,
+                  }}
                 >
                   <VStack spacing={4} align="stretch">
                     {/* Date */}
                     <Flex align="center">
-                      <Icon
-                        as={FaCalendar}
-                        color="#6366f1"
-                        boxSize={5}
+                      <Box
+                        p={3}
+                        borderRadius="12px"
+                        bg="purple.50"
                         mr={4}
-                      />
-                      <Text color="gray.700" fontWeight="500">
+                      >
+                        <Icon as={FaCalendar} color={colors.accent} boxSize={5} />
+                      </Box>
+                      <Text color={colors.textSecondary} fontWeight="500">
                         {formatDateWithDay(event.date)}
                       </Text>
                     </Flex>
 
                     {/* Time */}
                     <Flex align="center">
-                      <Icon as={FaClock} color="#6366f1" boxSize={5} mr={4} />
-                      <Text color="gray.700" fontWeight="500">
+                      <Box
+                        p={3}
+                        borderRadius="12px"
+                        bg="blue.50"
+                        mr={4}
+                      >
+                        <Icon as={FaClock} color="#3182ce" boxSize={5} />
+                      </Box>
+                      <Text color={colors.textSecondary} fontWeight="500">
                         {event.startTime} - {event.endTime} hrs
                       </Text>
                     </Flex>
 
                     {/* Duration */}
-                    <Flex align="center">
-                      <Icon as={MdTimer} color="#6366f1" boxSize={5} mr={4} />
-                      <Text color="gray.700" fontWeight="500">
-                        {calculateDuration(event.startTime, event.endTime)}
-                      </Text>
-                    </Flex>
-
-                    {/* Language */}
                     {/* <Flex align="center">
-                      <Icon as={MdLanguage} color="#6366f1" boxSize={5} mr={4} />
-                      <Text color="gray.700" fontWeight="500">
-                        Tamil, English
+                      <Box
+                        p={3}
+                        borderRadius="12px"
+                        bg="orange.50"
+                        mr={4}
+                      >
+                        <Icon as={MdTimer} color={colors.warning} boxSize={5} />
+                      </Box>
+                      <Text color={colors.textSecondary} fontWeight="500">
+                        {calculateDuration(event.startTime, event.endTime)}
                       </Text>
                     </Flex> */}
 
                     {/* Location */}
                     <Flex align="flex-start">
-  <Icon
-    as={FaLocationDot}
-    color="#6366f1"
-    boxSize={5}
-    mr={4}
-    mt={0.5}
-  />
-  <Box display="inline-block" position="relative">
-    <Text color="gray.700" fontWeight="500" lineHeight="1.4" display="inline">
-      {event.location}
-    </Text>
-    {event.googleMapsLink && (
-      <Box 
-        as="a"
-        href={event.googleMapsLink}
-        target="_blank"
-        cursor="pointer"
-        _hover={{ opacity: 0.8 }}
-        display="inline-block"
-        position="absolute"
-        right="-24px"
-        top="0"
-        ml={2}
-      >
-        <Box
-          as="img"
-          src="https://assets-in.bmscdn.com/nmcms/synopsis/navigate_icon.png"
-          alt="Navigate"
-          width="20px"
-          height="20px"
-          pointerEvents="none"
-          mb={8}
-          onContextMenu={(e) => e.preventDefault()}
-          style={{
-            userSelect: 'none',
-            WebkitUserDrag: 'none',
-            verticalAlign: 'middle'
-          }}
-        />
-      </Box>
-    )}
-  </Box>
-</Flex>
+                      <Box
+                        p={3}
+                        borderRadius="12px"
+                        bg="green.50"
+                        mr={4}
+                        mt={0.5}
+                      >
+                        <Icon as={FaLocationDot} color={colors.success} boxSize={5} />
+                      </Box>
+                      <Box display="inline-block" position="relative">
+                        <Text color={colors.textSecondary} fontWeight="500" lineHeight="1.4" display="inline">
+                          {event.location}
+                        </Text>
+                        {event.googleMapsLink && (
+                          <Box 
+                            as="a"
+                            href={event.googleMapsLink}
+                            target="_blank"
+                            cursor="pointer"
+                            _hover={{ opacity: 0.8 }}
+                            display="inline-block"
+                            position="absolute"
+                            right="-24px"
+                            top="0"
+                            ml={2}
+                          >
+                            {/* <Box
+                              as="img"
+                              src="https://assets-in.bmscdn.com/nmcms/synopsis/navigate_icon.png"
+                              alt="Navigate"
+                              width="20px"
+                              height="20px"
+                              pointerEvents="none"
+                              mb={8}
+                              onContextMenu={(e) => e.preventDefault()}
+                              style={{
+                                userSelect: 'none',
+                                WebkitUserDrag: 'none',
+                                verticalAlign: 'middle'
+                              }}
+                            /> */}
+                          </Box>
+                        )}
+                      </Box>
+                    </Flex>
                   </VStack>
                 </Box>
 
                 {/* Booking Alert */}
                 <Box
                   bg="orange.50"
-                  border="1px solid"
+                  border="2px solid"
                   borderColor="orange.200"
-                  borderRadius="8px"
+                  borderRadius="12px"
                   p={4}
                   mb={4}
+                  position="relative"
+                  overflow="hidden"
                 >
-                  <Text color="orange.800" fontWeight="500">
-                    ⚠️ Bookings are filling fast for Chennai!
+                  <Box
+                    position="absolute"
+                    top="-20px"
+                    right="-20px"
+                    w="80px"
+                    h="80px"
+                    bg="orange.100"
+                    borderRadius="full"
+                    opacity={0.5}
+                  />
+                  <Text color={colors.warning} fontWeight="600" position="relative">
+                    ⚠️ Bookings are filling fast for {event?.CitybyCountry?.split(",")[0]?.trim() || "this city"}!
                   </Text>
                 </Box>
 
                 {/* Price and Book Now */}
                 <Box
-                  bg="white"
-                  borderRadius="12px"
-                  boxShadow="sm"
-                  border="1px solid #e2e8f0"
+                  bg={colors.cardBg}
+                  borderRadius="20px"
+                  boxShadow={colors.shadowLg}
+                  border={`1px solid ${colors.border}`}
                   p={6}
                   mb={4}
+                  position="relative"
+                  overflow="hidden"
                 >
-                  <VStack spacing={4}>
+                  <Box
+                    position="absolute"
+                    top="-40px"
+                    right="-40px"
+                    w="120px"
+                    h="120px"
+                    bgGradient="radial(purple.200, transparent)"
+                    opacity={0.3}
+                  />
+                  <VStack spacing={4} position="relative">
                     <Box textAlign="center">
-                      <Text fontSize="2xl" fontWeight="bold" color="gray.800">
-                        {currencies[0]}
+                      <Text fontSize="2xl" fontWeight="bold" color={colors.textPrimary}>
+                        <Box as="span" color={colors.success} display="inline" fontSize="3xl">
+                          {currencies[0]}
+                        </Box>
                         {event.fees} onwards
                       </Text>
-                      <Text color="orange.500" fontWeight="500">
+                      <Text color={colors.warning} fontWeight="600">
                         Filling Fast
                       </Text>
                     </Box>
                     <Button
                       size="lg"
-                      colorScheme="red"
-                      borderRadius="8px"
+                      bgGradient={colors.primaryGradient}
+                      color="white"
+                      borderRadius="12px"
                       w="full"
                       py={6}
                       fontSize="lg"
+                      boxShadow={colors.shadowMd}
+                      transition="all 0.2s"
+                      _hover={{
+                        transform: "translateY(-2px)",
+                        boxShadow: colors.shadowLg,
+                      }}
+                      _active={{
+                        transform: "translateY(0)",
+                      }}
                     >
                       Book Now
                     </Button>
@@ -660,15 +820,16 @@ export default function Social() {
                       href={event.instagramHandle}
                       target="_blank"
                       w="full"
-                      bg="linear-gradient(45deg, #f093fb 0%, #f5576c 100%)"
+                      bgGradient={colors.secondaryGradient}
                       color="white"
-                      borderRadius="12px"
+                      borderRadius="16px"
                       leftIcon={<FaInstagram />}
+                      boxShadow={colors.shadowMd}
+                      transition="all 0.2s"
                       _hover={{
                         transform: "translateY(-2px)",
-                        boxShadow: "lg",
+                        boxShadow: colors.shadowLg,
                       }}
-                      boxShadow="md"
                       fontWeight="600"
                       py={6}
                     >
@@ -680,9 +841,9 @@ export default function Social() {
                     href={event.googleMapsLink || "#"}
                     target={event.googleMapsLink ? "_blank" : undefined}
                     w="full"
-                    bg="linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%)"
+                    bgGradient={event.googleMapsLink ? colors.secondaryGradient : "linear(to-r, gray.400, gray.500)"}
                     color="white"
-                    borderRadius="12px"
+                    borderRadius="16px"
                     leftIcon={<MdLink />}
                     onClick={
                       !event.googleMapsLink
@@ -691,13 +852,12 @@ export default function Social() {
                     }
                     cursor={event.googleMapsLink ? "pointer" : "not-allowed"}
                     opacity={!event.googleMapsLink ? 0.7 : 1}
+                    boxShadow={colors.shadowMd}
+                    transition="all 0.2s"
                     _hover={{
-                      transform: event.googleMapsLink
-                        ? "translateY(-2px)"
-                        : "none",
-                      boxShadow: event.googleMapsLink ? "lg" : "md",
+                      transform: event.googleMapsLink ? "translateY(-2px)" : "none",
+                      boxShadow: event.googleMapsLink ? colors.shadowLg : colors.shadowMd,
                     }}
-                    boxShadow="md"
                     fontWeight="600"
                     py={6}
                   >

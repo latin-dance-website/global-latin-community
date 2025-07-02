@@ -354,7 +354,7 @@ export default function Carousel() {
       width="100%"
       overflow="hidden"
       px={{ base: 4, md: 6 }}
-      pt={4}
+      pt={0}
       pb={6}
     >
       {/* Navigation Arrows */}
@@ -636,7 +636,7 @@ export default function Carousel() {
                           flex="none"
                           wordBreak="break-word"
                         >
-                          {event.day}, {event.shortDate} {event.startTime}-{event.endTime}
+                          {event.day}, {event.shortDate} {event.startTime}-{event.endTime}hrs
                         </Text>
                       </Flex>
                     </Flex>
@@ -685,7 +685,7 @@ export default function Carousel() {
 
       {/* Dots Navigation */}
       {showNavigation && (
-        <HStack justify="center" mt={4} spacing={2}>
+        <HStack justify="center" mt={2} spacing={2}>
           {Array.from({ length: maxIndex + 1 }).map((_, i) => (
             <Box
               key={`dot-${i}`}

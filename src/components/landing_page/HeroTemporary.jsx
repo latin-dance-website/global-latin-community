@@ -4,11 +4,16 @@ import {
   Heading,
   Text,
   VStack,
+  Flex,
+  HStack,
   chakra,
   SlideFade,
   Stack,
   Fade,
 } from "@chakra-ui/react";
+
+import { FiCalendar, FiMapPin } from "react-icons/fi"; // ✅ Properly imported here
+
 
 import {
   FiActivity,
@@ -42,7 +47,9 @@ function HeroTemporary({isSelectedTileEvent}) {
       clearTimeout(changeText);
     };
   }, [textIndex]);
-
+ const handleEventsBannerClick = () => {
+    router.push('/events/socials');
+  };
   return (
     <>
       <VStack
@@ -184,7 +191,7 @@ function HeroTemporary({isSelectedTileEvent}) {
   border="2px solid rgba(255, 255, 255, 0.3)"
   borderRadius="xl"
   className="box-pulse-button"
-  marginTop={{ base: "-0.2rem", md: "1.5rem" }}
+  marginTop={{ base: "-0.2rem", md: "0.5rem" }}
   marginBottom={{ base: "2.6rem", md: "1.5rem" }}
   _hover={{ transform: "scale(1.08)", borderColor: "white" }}
   _active={{ transform: "scale(0.96)" }}
@@ -193,6 +200,109 @@ function HeroTemporary({isSelectedTileEvent}) {
 </Button>
 
 </Link>
+{/* Events Banner */}
+      <Box
+        width="100%"
+        maxWidth="900px"
+        mb={{ base: "2rem", md: "3rem" }}
+         mt={{ base: "-1rem", md: "0rem" }}
+        cursor="pointer"
+        onClick={handleEventsBannerClick}
+        _hover={{ transform: "translateY(-2px)" }}
+        transition="all 0.3s ease"
+      >
+        <Box
+          bgGradient="linear(135deg, brand.purple 0%, brand.pink 100%)"
+          borderRadius="xl"
+          p={{ base: "1.5rem", md: "2rem" }}
+          position="relative"
+          overflow="hidden"
+          boxShadow="lg"
+        >
+          {/* Background decoration */}
+          <Box
+            position="absolute"
+            top="-50%"
+            right="-10%"
+            width="200px"
+            height="200px"
+            borderRadius="full"
+            bg="whiteAlpha.200"
+            opacity="0.3"
+          />
+          <Box
+            position="absolute"
+            bottom="-30%"
+            left="-5%"
+            width="150px"
+            height="150px"
+            borderRadius="full"
+            bg="whiteAlpha.100"
+            opacity="0.4"
+          />
+          
+          <Flex
+            alignItems="center"
+            justifyContent="space-between"
+            flexDirection={{ base: "column", md: "row" }}
+            gap={{ base: "1rem", md: "2rem" }}
+            position="relative"
+            zIndex="1"
+          >
+            <VStack
+              alignItems={{ base: "center", md: "flex-start" }}
+              spacing="0.5rem"
+              flex="1"
+            >
+              <HStack spacing="0.5rem">
+                <FiCalendar size="20px" color="white" />
+                <Heading
+                  as="h3"
+                  fontSize={{ base: "1.2rem", md: "1.4rem", lg: "1.6rem" }}
+                  color="white"
+                  fontFamily="montserrat"
+                  fontWeight="bold"
+                  textAlign={{ base: "center", md: "left" }}
+                >
+                  Live Social Events
+                </Heading>
+              </HStack>
+              
+              <HStack spacing="0.5rem" opacity="0.9" alignItems="flex-start">
+                <FiMapPin size="28px" color="white" />
+                <Text
+                  color="white"
+                  fontSize={{ base: "0.9rem", md: "1rem" }}
+                  fontFamily="montserrat"
+                  textAlign={{ base: "center", md: "left" }}
+                  lineHeight="1.2"
+                >
+                  Discover verified Global Social Nights in Hanoi • Bangkok • Bangalore
+                </Text>
+              </HStack>
+            </VStack>
+            
+            <Button
+              bg="whiteAlpha.200"
+              color="white"
+              border="2px solid"
+              borderColor="whiteAlpha.300"
+              _hover={{
+                bg: "white",
+                color: "brand.purple",
+                borderColor: "white",
+              }}
+              size={{ base: "md", md: "lg" }}
+              fontFamily="montserrat"
+              fontWeight="bold"
+              borderRadius="lg"
+              px="2rem"
+            >
+              Explore Events
+            </Button>
+          </Flex>
+        </Box>
+      </Box>
         <chakra.svg
           position="absolute"
           top={{ base: "-5rem", md: "-10rem" }}

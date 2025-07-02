@@ -201,26 +201,26 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
       </VStack> */}
 
       {/* Events Banner */}
-      <Box
+      {/* <Box
         width="100%"
         maxWidth="900px"
         mb={{ base: "2rem", md: "3rem" }}
-        mt={{ base: "-3rem", md: "-2rem" }}
+         mt={{ base: "-6rem", md: "-2rem" }}
         cursor="pointer"
         onClick={handleEventsBannerClick}
         _hover={{ transform: "translateY(-2px)" }}
         transition="all 0.3s ease"
-      >
-        <Box
+      > */}
+        {/* <Box
           bgGradient="linear(135deg, brand.purple 0%, brand.pink 100%)"
           borderRadius="xl"
           p={{ base: "1.5rem", md: "2rem" }}
           position="relative"
           overflow="hidden"
           boxShadow="lg"
-        >
+        > */}
           {/* Background decoration */}
-          <Box
+          {/* <Box
             position="absolute"
             top="-50%"
             right="-10%"
@@ -229,8 +229,8 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
             borderRadius="full"
             bg="whiteAlpha.200"
             opacity="0.3"
-          />
-          <Box
+          /> */}
+          {/* <Box
             position="absolute"
             bottom="-30%"
             left="-5%"
@@ -239,22 +239,22 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
             borderRadius="full"
             bg="whiteAlpha.100"
             opacity="0.4"
-          />
+          /> */}
           
-          <Flex
+          {/* <Flex
             alignItems="center"
             justifyContent="space-between"
             flexDirection={{ base: "column", md: "row" }}
             gap={{ base: "1rem", md: "2rem" }}
             position="relative"
             zIndex="1"
-          >
-            <VStack
+          > */}
+            {/* <VStack
               alignItems={{ base: "center", md: "flex-start" }}
               spacing="0.5rem"
               flex="1"
-            >
-              <HStack spacing="0.5rem">
+            > */}
+              {/* <HStack spacing="0.5rem">
                 <FiCalendar size="20px" color="white" />
                 <Heading
                   as="h3"
@@ -266,9 +266,9 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
                 >
                   Live Social Events
                 </Heading>
-              </HStack>
+              </HStack> */}
               
-              <HStack spacing="0.5rem" opacity="0.9" alignItems="flex-start">
+              {/* <HStack spacing="0.5rem" opacity="0.9" alignItems="flex-start">
                 <FiMapPin size="28px" color="white" />
                 <Text
                   color="white"
@@ -279,10 +279,10 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
                 >
                   Discover verified Global Social Nights in Hanoi • Bangkok • Bangalore
                 </Text>
-              </HStack>
-            </VStack>
+              </HStack> */}
+            {/* </VStack> */}
             
-            <Button
+            {/* <Button
               bg="whiteAlpha.200"
               color="white"
               border="2px solid"
@@ -299,10 +299,10 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
               px="2rem"
             >
               Explore Events
-            </Button>
-          </Flex>
-        </Box>
-      </Box>
+            </Button> */}
+          {/* </Flex> */}
+        {/* </Box> */}
+      {/* </Box> */}
 
       {/* Start Here Button */}
       {/* <Button

@@ -281,7 +281,7 @@ function HeroTemporary({isSelectedTileEvent}) {
       <FiCalendar size="20px" color="white" />
       <Heading
         as="h3"
-        fontSize={{ base: "1.2rem", md: "1.4rem", lg: "1.6rem" }}
+        fontSize={{ base: "1.3676rem", md: "1.6rem", lg: "1.8rem" }}
         color="white"
         fontFamily="montserrat"
         fontWeight="bold"
@@ -293,10 +293,13 @@ function HeroTemporary({isSelectedTileEvent}) {
 
     <Text
       color="white"
-      fontSize={{ base: "1rem", md: "1.1rem" }}
-      fontFamily="montserrat"
-      lineHeight="1.5"
-      textAlign={{ base: "center", md: "left" }}
+  fontSize={{ base: "1rem", md: "1.1rem" }}
+  fontFamily="montserrat"
+  fontWeight="bold"         // ✅ Bold text
+  lineHeight="1.6"
+  textAlign={{ base: "center", md: "left" }}
+  mt="0.3rem"               // ✅ Push slightly below the heading
+  mb="-0.6rem"               // ✅ Add spacing before the city list
     >
       Discover verified Global Social Nights
     </Text>
@@ -375,6 +378,52 @@ function HeroTemporary({isSelectedTileEvent}) {
 
         </Box>
       </Box>
+      <VStack
+  spacing="0.3rem"
+  mb={{ base: "1rem", md: "1.5rem" }}
+  alignItems="center"
+  mt={{ base: "-1.8rem", md: "-2rem" }}
+>
+  {/* <Text
+    fontFamily="montserrat"
+    fontWeight="bold"
+    fontSize={{ base: "1.1rem", md: "1.4rem" }}
+    color="gray.700"
+    textTransform="uppercase"
+    letterSpacing="0.05em"
+  >
+    Coming Soon
+  </Text> */}
+
+  {/* <Text
+    fontSize={{ base: "1.8rem", md: "2rem" }}
+    color="brand.purple"
+    lineHeight="1"
+    animation="bounce 2s infinite"
+  >
+    ↓
+  </Text> */}
+
+  <Text
+  fontFamily="montserrat"
+  fontWeight="semibold"
+  fontSize={{ base: "1rem", md: "1.2rem" }}
+  color="gray.600"
+  textAlign="center"
+  whiteSpace="nowrap"
+  animation="flashyPulse 1.6s ease-in-out infinite"
+  textShadow="0 0 6px rgba(128, 128, 128, 0.4)"
+  letterSpacing="0.01em"
+>
+  Upcoming Updates:{" "}
+  <chakra.span fontWeight="bold" color="brand.pink">
+    100+ Cities
+  </chakra.span>{" "}
+  by this August
+</Text>
+
+</VStack>
+
         <chakra.svg
           position="absolute"
           top={{ base: "-5rem", md: "-10rem" }}

@@ -364,7 +364,7 @@ export default function EventsDisplayPage({ allEvents }) {
           mb={0}
         />
 
-        <Box mt={{ base: "-14px", md: "6px" }} mb={6} textAlign="center">
+        <Box mt={{ base: "-2px", md: "6px" }} mb={8} textAlign="center">
           <Heading
             fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
             fontWeight="extrabold"
@@ -373,14 +373,14 @@ export default function EventsDisplayPage({ allEvents }) {
             Social Nights in {city}
           </Heading>
           {startDate && endDate && (
-            <Text fontSize="lg" color="#4a5568" mt={1} mb={-4}>
+            <Text fontSize="lg" color="#4a5568" mt={1} mb={-2}>
               From {dayjs(startDate).format("MMM D")} to{" "}
               {dayjs(endDate).format("MMM D, YYYY")}
             </Text>
           )}
         </Box>
 {/* Events Display */}
-<Box width="100%" mt={-12} mb={12} px={{ base: 4, md: 6 }}>
+<Box width="100%" mt={-2} mb={4} px={{ base: 4, md: 6 }}>
   {/* Mobile: Vertical scrolling grid */}
   <Box display={{ base: "block", md: "none" }}>
     <Box

@@ -138,12 +138,15 @@ function HeroTemporary({ isSelectedTileEvent }) {
         
         {/* Right side - Cards Component (desktop only) */}
         <Box 
-          flex="1" 
-          minWidth="0" 
-          display={{ base: "none", lg: "block" }} // Hidden on mobile, visible on lg+
-        >
-          <CardsComponent />
-        </Box>
+  flex="1" 
+  minWidth="0" 
+  display={{ base: "none", lg: "block" }} // Hidden on mobile, visible on lg+
+  onClick={() => window.location.href = '/video-upload'}
+  cursor="pointer"
+>
+  <CardsComponent />
+</Box>
+
       </Flex>
 
       {/* Scrolling text */}
@@ -210,26 +213,28 @@ function HeroTemporary({ isSelectedTileEvent }) {
 
       {/* CTA Button */}
       <Link href="/video-upload">
-        <Button
-          bgGradient="linear(to-br, #1a237e, #0d1b4c, #1a237e)"
-          textColor="white"
-          size={{ base: "xl", md: "lg", lg: "xl" }}
-          alignSelf="center"
-          fontFamily="montserrat"
-          fontWeight="bold"
-          px="2.5rem"
-          py="1.25rem"
-          border="2px solid rgba(255, 255, 255, 0.3)"
-          borderRadius="xl"
-          className="box-pulse-button"
-          marginTop={{ base: "-0.8rem", md: "0.5rem" }}
-          marginBottom={{ base: "2.6rem", md: "1.5rem" }}
-          _hover={{ transform: "scale(1.08)", borderColor: "white" }}
-          _active={{ transform: "scale(0.96)" }}
-        >
-          Start Here
-        </Button>
-      </Link>
+  <Button
+    display={{ base: "flex", lg: "none" }} // ✅ Hidden on lg and above
+    bgGradient="linear(to-br, #1a237e, #0d1b4c, #1a237e)"
+    textColor="white"
+    size={{ base: "xl", md: "lg" }}
+    alignSelf="center"
+    fontFamily="montserrat"
+    fontWeight="bold"
+    px="2.5rem"
+    py="1.25rem"
+    border="2px solid rgba(255, 255, 255, 0.3)"
+    borderRadius="xl"
+    className="box-pulse-button"
+    marginTop={{ base: "-0.8rem", md: "0.5rem" }}
+    marginBottom={{ base: "2.6rem", md: "1.5rem" }}
+    _hover={{ transform: "scale(1.08)", borderColor: "white" }}
+    _active={{ transform: "scale(0.96)" }}
+  >
+    Start Here
+  </Button>
+</Link>
+
       
       {/* Events Banner */}
       <Box

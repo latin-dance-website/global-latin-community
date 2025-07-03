@@ -190,17 +190,18 @@ export default function Social() {
           <Box>
             {/* Event Title */}
             <Heading
-              fontSize={{ base: "xl", sm: "2xl" }}
-              fontWeight="bold"
-              mb={3}
-              mt={6}
-              textAlign="center"
-              color={colors.textPrimary}
-              bgGradient={colors.primaryGradient}
-              bgClip="text"
-            >
-              {event.title}
-            </Heading>
+  fontSize={{ base: "xl", sm: "2xl" }}
+  fontWeight="bold"
+  mb={3}
+  mt={{ base: 8, sm: 8 }}  // ✅ consistent spacing for mobile breakpoints
+  textAlign="center"
+  color={colors.textPrimary}
+  bgGradient={colors.primaryGradient}
+  bgClip="text"
+>
+  {event.title}
+</Heading>
+
 
             {/* Hero Image with Enhanced Styling */}
             <Box mb={3} display="flex" justifyContent="center">
@@ -279,7 +280,7 @@ export default function Social() {
       <Icon as={FaCalendar} color={colors.accent} boxSize={4} />
     </Box>
     <Text
-      fontSize={{ base: "xs", sm: "sm" }} // smaller on mobile
+      fontSize="sm" // smaller on mobile
       color="gray.800"
       fontWeight="600"
       lineHeight="1.4"
@@ -294,7 +295,7 @@ export default function Social() {
       <Icon as={FaClock} color="#3182ce" boxSize={4} />
     </Box>
     <Text
-      fontSize={{ base: "xs", sm: "sm" }}
+      fontSize="sm"
       color="gray.800"
       fontWeight="600"
       lineHeight="1.4"

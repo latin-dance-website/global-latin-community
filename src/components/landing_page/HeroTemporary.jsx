@@ -37,9 +37,9 @@ function HeroTemporary({ isSelectedTileEvent }) {
     };
   }, [textIndex]);
   
-  const handleEventsBannerClick = () => {
-    router.push("/events/socials");
-  };
+  // const handleEventsBannerClick = () => {
+  //   router.push("/events/socials");
+  // };
   
   return (
    <VStack
@@ -238,7 +238,7 @@ function HeroTemporary({ isSelectedTileEvent }) {
         mb={{ base: "2rem", md: "3rem" }}
         mt={{ base: "-1rem", md: "0rem" }}
         cursor="pointer"
-        onClick={handleEventsBannerClick}
+        // onClick={handleEventsBannerClick}
         _hover={{ transform: "translateY(-2px)" }}
         transition="all 0.3s ease"
       >
@@ -343,49 +343,51 @@ function HeroTemporary({ isSelectedTileEvent }) {
                 ))}
               </HStack>
 
-              <Button
-  bg="whiteAlpha.200"
-  color="white"
-  border="2px solid"
-  borderColor="whiteAlpha.300"
-  size={{ base: "lg", md: "xl" }}
-  fontSize={{ base: "1rem", md: "1.3rem", lg: "1.4rem" }}
-  fontFamily="montserrat"
-  fontWeight="bold"
-  letterSpacing="0.05em"
-  borderRadius="xl"
-  px={{ base: "2rem", md: "3rem" }}
-  py={{ base: "1.2rem", md: "1.6rem" }}
-  mt="0"
-  alignSelf="center"
-  w="auto"
-  maxW="100%"
-  transform="perspective(500px)"
-  _hover={{
-    bg: "white",
-    color: "brand.purple",
-    borderColor: "white",
-    transform: "perspective(500px) scale(1.05) translateZ(20px)",
-    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)",
-  }}
-  _active={{
-    bg: "whiteAlpha.200",  // Keep original background when clicked
-    color: "white",       // Keep original text color when clicked
-    borderColor: "whiteAlpha.300", // Keep original border when clicked
-    transform: "perspective(500px)", // Remove any transform changes
-    boxShadow: "none",    // Remove shadow when clicked
-  }}
-  transition="all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
->
-  <Text
-    as="span"
-    display="inline-block"
-    animation="expandText 1.5s ease-in-out infinite"
-    transformOrigin="center"
+              <Link href="/events/socials">
+  <Button
+    bg="whiteAlpha.200"
+    color="white"
+    border="2px solid"
+    borderColor="whiteAlpha.300"
+    size={{ base: "lg", md: "xl" }}
+    fontSize={{ base: "1rem", md: "1.3rem", lg: "1.4rem" }}
+    fontFamily="montserrat"
+    fontWeight="bold"
+    letterSpacing="0.05em"
+    borderRadius="xl"
+    px={{ base: "2rem", md: "3rem" }}
+    py={{ base: "1.2rem", md: "1.6rem" }}
+    mt="0"
+    alignSelf="center"
+    w="auto"
+    maxW="100%"
+    transform="perspective(500px)"
+    _hover={{
+      transform: "perspective(500px) scale(1.05) translateZ(20px)",
+      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)",
+      bg: "whiteAlpha.200",       // 👈 maintain background
+      color: "white",             // 👈 maintain text color
+      borderColor: "whiteAlpha.300", // 👈 maintain border
+    }}
+    // _active={{
+    //   transform: "perspective(500px)",
+    //   boxShadow: "none",
+    //   bg: "whiteAlpha.200",       // 👈 maintain background
+    //   color: "white",             // 👈 maintain text color
+    //   borderColor: "whiteAlpha.300", // 👈 maintain border
+    // }}
+    // transition="all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
   >
-    Explore Events
-  </Text>
-</Button>
+    <Text
+      as="span"
+      display="inline-block"
+      animation="expandText 1.5s ease-in-out infinite"
+      transformOrigin="center"
+    >
+      Explore Events
+    </Text>
+  </Button>
+</Link>
 
             </VStack>
           </Flex>

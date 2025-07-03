@@ -81,7 +81,7 @@ const EventCardSkeleton = ({ isMobile, isVerySmallMobile, delay = 0 }) => (
       borderRadius="12px"
       overflow="hidden"
       bg="white"
-      height={{ base: "auto", md: "380px" }}
+      height={{ base: "auto", md: "300px" }} 
       border="1px solid #e2e8f0"
       boxShadow="sm"
       display="flex"
@@ -127,6 +127,8 @@ export default function Carousel() {
   const [autoPlay, setAutoPlay] = useState(true);
   const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
   const cardsPerView = isMobile ? 2 : 4;
+  const [touchPosition, setTouchPosition] = useState(null);
+  const [touchStartX, setTouchStartX] = useState(0);
   const todayInfo = useMemo(() => {
     const today = dayjs();
     return {
@@ -167,21 +169,21 @@ export default function Carousel() {
     [todayInfo]
   );
   const prev = useCallback(() => {
-    if (!isScrolling && events.length > 0) {
-      setIndex((prev) => Math.max(0, prev - 1));
-      setAutoPlay(false);
-      setTimeout(() => setAutoPlay(true), 10000);
-    }
-  }, [isScrolling, events.length]);
+  if (events.length > 0) {
+    setIndex((prev) => Math.max(0, prev - 1));
+    setAutoPlay(false);
+    setTimeout(() => setAutoPlay(true), 10000);
+  }
+}, [events.length]);
 
-  const next = useCallback(() => {
-    if (!isScrolling && events.length > 0) {
-      const maxIndex = Math.max(0, events.length - cardsPerView);
-      setIndex((prev) => Math.min(maxIndex, prev + 1));
-      setAutoPlay(false);
-      setTimeout(() => setAutoPlay(true), 10000);
-    }
-  }, [isScrolling, events.length, cardsPerView]);
+const next = useCallback(() => {
+  if (events.length > 0) {
+    const maxIndex = Math.max(0, events.length - cardsPerView);
+    setIndex((prev) => Math.min(maxIndex, prev + 1));
+    setAutoPlay(false);
+    setTimeout(() => setAutoPlay(true), 10000);
+  }
+}, [events.length, cardsPerView]);
 
   const handleCardClick = useCallback(
     (event) => {
@@ -243,25 +245,31 @@ export default function Carousel() {
     };
   }, [processEvents]);
   const scrollTo = useCallback(
-    (idx) => {
-      if (!scrollRef.current || isScrolling || events.length === 0) return;
+  (idx) => {
+    if (!scrollRef.current || events.length === 0) return;
 
-      setIsScrolling(true);
-      const container = scrollRef.current;
-      const cardWidth = container.children[0]?.offsetWidth || 0;
-      const gap = isMobile ? 16 : 20;
-      const scrollAmount = (cardWidth + gap) * idx;
+    setIsScrolling(true);
+    const container = scrollRef.current;
+    const card = container.children[0];
+    if (!card) return;
 
-      container.scrollTo({
-        left: scrollAmount,
-        behavior: "smooth",
-        duration: 800,
-      });
+    const cardWidth = card.offsetWidth;
+    const gap = isMobile ? 16 : 20;
+    const scrollAmount = (cardWidth + gap) * idx;
 
-      setTimeout(() => setIsScrolling(false), 800);
-    },
-    [isScrolling, events.length, isMobile]
-  );
+    container.scrollTo({
+      left: scrollAmount,
+      behavior: "smooth",
+    });
+
+    const timeout = setTimeout(() => {
+      setIsScrolling(false);
+    }, 800);
+
+    return () => clearTimeout(timeout);
+  },
+  [isMobile, events.length]
+);
 
   useEffect(() => scrollTo(index), [index, scrollTo]);
   useEffect(() => {
@@ -352,78 +360,112 @@ export default function Carousel() {
     >
       {/* Navigation Arrows */}
       {showNavigation && (
-        <>
-          <IconButton
-            icon={<ChevronLeftIcon boxSize={6} />}
-            aria-label="Previous"
-            position="absolute"
-            top="50%"
-            left={2}
-            transform="translateY(-50%)"
-            zIndex={10}
-            onClick={prev}
-            bg="rgba(255,255,255,0.9)"
-            color="black"
-            _hover={{ bg: "rgba(255,255,255,1)" }}
-            borderRadius="full"
-            size="md"
-            boxShadow="lg"
-            isDisabled={index === 0}
-          />
-          <IconButton
-            icon={<ChevronRightIcon boxSize={6} />}
-            aria-label="Next"
-            position="absolute"
-            top="50%"
-            right={2}
-            transform="translateY(-50%)"
-            zIndex={10}
-            onClick={next}
-            bg="rgba(255,255,255,0.9)"
-            color="black"
-            _hover={{ bg: "rgba(255,255,255,1)" }}
-            borderRadius="full"
-            size="md"
-            boxShadow="lg"
-            isDisabled={index >= maxIndex}
-          />
-        </>
-      )}
+  <>
+    <IconButton
+      icon={<ChevronLeftIcon boxSize={6} />}
+      aria-label="Previous"
+      position="absolute"
+      top="50%"
+      left={2}
+      transform="translateY(-50%)"
+      zIndex={10}
+      onClick={prev}
+      bg="rgba(255,255,255,0.9)"
+      color="black"
+      _hover={{ bg: "rgba(255,255,255,1)" }}
+      borderRadius="full"
+      size="md"
+      boxShadow="lg"
+      isDisabled={index === 0}
+      display={isMobile ? "none" : "flex"} // Only show on desktop
+    />
+    <IconButton
+      icon={<ChevronRightIcon boxSize={6} />}
+      aria-label="Next"
+      position="absolute"
+      top="50%"
+      right={2}
+      transform="translateY(-50%)"
+      zIndex={10}
+      onClick={next}
+      bg="rgba(255,255,255,0.9)"
+      color="black"
+      _hover={{ bg: "rgba(255,255,255,1)" }}
+      borderRadius="full"
+      size="md"
+      boxShadow="lg"
+      isDisabled={index >= maxIndex}
+      display={isMobile ? "none" : "flex"} // Only show on desktop
+    />
+  </>
+)}
 
       {/* Cards Container */}
-      <Box
-        ref={scrollRef}
-        display="flex"
-        overflowX="hidden"
-        gap={{ base: 4, md: 5 }}
-        sx={{
-          "&::-webkit-scrollbar": { display: "none" },
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-        }}
-        justifyContent={events.length < cardsPerView ? "center" : "flex-start"}
-      >
+     <Box
+  ref={scrollRef}
+  display="flex"
+  overflowX="hidden"
+  gap={{ base: 4, md: 5 }}
+  sx={{
+    "&::-webkit-scrollbar": { display: "none" },
+    scrollbarWidth: "none",
+    msOverflowStyle: "none",
+  }}
+  justifyContent={{
+    base: "flex-start", // Always left-aligned on mobile
+    md: events.length < 5 ? "center" : "flex-start" // Centered on desktop if <5 cards
+  }}
+  onTouchStart={(e) => {
+    const touchDown = e.touches[0].clientX;
+    setTouchPosition(touchDown);
+  }}
+  onTouchMove={(e) => {
+    const touchDown = touchPosition;
+    
+    if (touchDown === null) {
+      return;
+    }
+    
+    const currentTouch = e.touches[0].clientX;
+    const diff = touchDown - currentTouch;
+    
+    if (diff > 5) {
+      // Swipe left - go next
+      next();
+      setTouchPosition(null);
+    }
+    
+    if (diff < -5) {
+      // Swipe right - go previous
+      prev();
+      setTouchPosition(null);
+    }
+  }}
+  onTouchEnd={() => {
+    setTouchPosition(null);
+  }}
+>
         {events.map((event, eventIndex) => (
           <Box
             key={`${event.id}-${event.city}`}
             flex="none"
             width={{
-              base: events.length === 1 ? "80%" : `calc(50% - 8px)`,
-              md:
-                events.length === 1
-                  ? "300px"
-                  : events.length === 2
-                  ? "calc(50% - 10px)"
-                  : events.length === 3
-                  ? "calc(33.333% - 14px)"
-                  : "calc(25% - 15px)",
-            }}
+  base: events.length === 1 ? "80%" : `calc(50% - 8px)`,
+  md:
+    events.length === 1
+      ? "260px"
+      : events.length === 2
+      ? "calc(48% - 10px)"
+      : events.length === 3
+      ? "calc(30% - 12px)"
+      : "calc(22% - 10px)", // 🔽 reduce card width for 4+ cards
+}}
             onClick={() => {
               handleCardClick(event);
               setAutoPlay(false);
             }}
             cursor="pointer"
-            maxWidth={{ base: "300px", md: "350px" }}
+            maxWidth={{ base: "300px", md: "280px" }} // 🔽 narrower on desktop
             opacity={showCards ? 1 : 0}
             transform={showCards ? "translateY(0)" : "translateY(30px)"}
             transition={`all 0.8s ease-out ${eventIndex * 100}ms`}
@@ -432,7 +474,7 @@ export default function Carousel() {
               borderRadius="12px"
               overflow="hidden"
               bg="white"
-              height={{ base: "auto", md: "380px" }}
+              height={{ base: "auto", md: "350px" }}
               border="1px solid #e2e8f0"
               boxShadow="sm"
               _hover={{
@@ -639,39 +681,49 @@ export default function Carousel() {
                   /* Desktop Layout */
                   <>
                     <Flex
-                      align="flex-start"
-                      justify="center"
-                      width="100%"
-                      mb={{ base: "3px", md: "4px" }}
-                    >
-                      <Flex
-                        align="flex-start"
-                        gap={{ base: 0.5, md: 2 }}
-                        justify="center"
-                      >
-                        <Box
-                          flexShrink={0}
-                          color="#6366f1"
-                          fontSize="13px"
-                          mt="1px"
-                        >
-                          <FaCalendar />
-                        </Box>
-                        <Text
-                          fontSize="12px"
-                          color="gray.600"
-                          fontWeight="600"
-                          noOfLines={1}
-                          lineHeight="1.3"
-                          textAlign="center"
-                          flex="none"
-                          wordBreak="break-word"
-                        >
-                          {event.day}, {event.shortDate} {event.startTime}-
-                          {event.endTime}hrs
-                        </Text>
-                      </Flex>
-                    </Flex>
+  align="center"
+  justify="center"
+  width="100%"
+  gap={{ base: 4, md: 6 }}
+  mb={{ base: "3px", md: "4px" }}
+>
+  {/* Date */}
+  <Flex align="center" gap={1}>
+    <Box color="#6366f1" fontSize="13px">
+      <FaCalendar />
+    </Box>
+    <Text
+      fontSize="12px"
+      color="gray.600"
+      fontWeight="600"
+      noOfLines={1}
+      lineHeight="1.3"
+      textAlign="center"
+      wordBreak="break-word"
+    >
+      {event.day}, {event.shortDate}
+    </Text>
+  </Flex>
+
+  {/* Time */}
+  <Flex align="center" gap={1}>
+    <Box color="#6366f1" fontSize="13px">
+      <FaClock />
+    </Box>
+    <Text
+      fontSize="12px"
+      color="gray.600"
+      fontWeight="600"
+      noOfLines={1}
+      lineHeight="1.3"
+      textAlign="center"
+      wordBreak="break-word"
+    >
+      {event.startTime} - {event.endTime === "0:00" ? "00:00" : event.endTime} hrs
+    </Text>
+  </Flex>
+</Flex>
+
 
                     <Flex align="center" justify="center" width="100%">
                       <Flex align="center" gap={2}>

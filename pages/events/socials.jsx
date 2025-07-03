@@ -140,9 +140,11 @@ export default function EventsHomePage({ cities }) {
         <Navbar />
       </Box>
 
-      <Box mt={{ base: -7, md: 0 }} mb={-2} textAlign="center">
-        <AnimatedHeading />
-      </Box>
+      <Box mt={{ base: -7, md: -11 }} mb={-2} textAlign="center">
+  <AnimatedHeading />
+</Box>
+
+
 
       <LayerBlur2 />
       <Caraousel />
@@ -154,12 +156,13 @@ export default function EventsHomePage({ cities }) {
         align={{ base: "center", lg: "flex-start" }}
         gap={{ base: 6, lg: 8 }}
         width="100%"
-        maxWidth="1400px"
+        maxWidth="800px"
         px={{ base: 4, lg: 6 }}
         mt={{ base: "-16px", md: "20px" }}
       >
         {/* Main Control Box - Find Events */}
         <Box
+         mt={{ base: 0, md: -9 }}
           width={{ base: "fit-content", lg: "650px" }}
           maxWidth={{ base: "95%", lg: "650px" }}
           minWidth="320px"
@@ -537,9 +540,9 @@ export default function EventsHomePage({ cities }) {
         </Box>
 
         {/* Create Your Own Event Box */}
-        {/* Create Your Own Event Box */}
 <Box
-  width={{ base: "fit-content", lg: "450px" }}
+mt={{ base: 0, md: -9 }}
+  width={{ base: "fit-content", lg: "600px" }}  
   maxWidth={{ base: "95%", lg: "450px" }}
   minWidth="300px"
   display="flex"

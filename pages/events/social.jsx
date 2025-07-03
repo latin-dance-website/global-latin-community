@@ -67,8 +67,10 @@ export default function Social() {
     textLight: "#718096",
     border: "#e2e8f0",
     shadowSm: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
-    shadowMd: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-    shadowLg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+    shadowMd:
+      "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+    shadowLg:
+      "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
   };
 
   useEffect(() => {
@@ -198,8 +200,8 @@ export default function Social() {
 
             {/* Hero Image with Enhanced Styling */}
             <Box mb={3} display="flex" justifyContent="center">
-              <Box 
-                width={{ base: "240px", sm: "280px" }} 
+              <Box
+                width={{ base: "240px", sm: "280px" }}
                 height={{ base: "340px", sm: "400px" }}
                 position="relative"
                 boxShadow={colors.shadowLg}
@@ -261,18 +263,22 @@ export default function Social() {
               mb={3}
               transition="all 0.3s"
             >
-             <VStack spacing={2} align="stretch"> {/* 🔽 spacing reduced from 4 to 2 */}
+              <VStack spacing={2} align="stretch">
+                {" "}
+                {/* 🔽 spacing reduced from 4 to 2 */}
+                {/* Date */}
+                {/* Date + Time in one row on mobile */}
+<Flex align="center" justify="space-between">
   {/* Date */}
-  <Flex align="center">
-    <Box p={1.5} borderRadius="8px" bg="purple.50" mr={2}> {/* 🔽 tighter padding & margin */}
+  <Flex align="center" mr={2}>
+    <Box p={1.5} borderRadius="8px" bg="purple.50" mr={2}>
       <Icon as={FaCalendar} color={colors.accent} boxSize={4} />
     </Box>
     <Text
-      fontSize="sm"
+      fontSize={{ base: "xs", sm: "sm" }} // smaller on mobile
       color="gray.800"
       fontWeight="600"
       lineHeight="1.4"
-      letterSpacing="0.2px"
     >
       {formatDateWithDay(event.date)}
     </Text>
@@ -284,48 +290,34 @@ export default function Social() {
       <Icon as={FaClock} color="#3182ce" boxSize={4} />
     </Box>
     <Text
-      fontSize="sm"
+      fontSize={{ base: "xs", sm: "sm" }}
       color="gray.800"
       fontWeight="600"
       lineHeight="1.4"
-      letterSpacing="0.2px"
     >
       {event.startTime} - {event.endTime} hrs
     </Text>
   </Flex>
+</Flex>
 
-  {/* Duration */}
-  {/* <Flex align="center">
-    <Box p={1.5} borderRadius="8px" bg="orange.50" mr={2}>
-      <Icon as={MdTimer} color={colors.warning} boxSize={4} />
-    </Box>
-    <Text
-      fontSize="sm"
-      color="gray.800"
-      fontWeight="600"
-      lineHeight="1.4"
-      letterSpacing="0.2px"
-    >
-      {calculateDuration(event.startTime, event.endTime)}
-    </Text>
-  </Flex> */}
+                {/* Duration */}
+                {/* Location */}
+                {/* Location */}
+<Flex align="center">
+  <Box p={1.5} borderRadius="8px" bg="green.50" mr={2}>
+    <Icon as={FaLocationDot} color={colors.success} boxSize={4} />
+  </Box>
+  <Text
+    fontSize={{ base: "xs", sm: "sm" }} // smaller on mobile
+    color="gray.800"
+    fontWeight="600"
+    lineHeight="1.4"
+  >
+    {event.location}
+  </Text>
+</Flex>
 
-  {/* Location */}
-  <Flex align="center">
-    <Box p={1.5} borderRadius="8px" bg="green.50" mr={2}>
-      <Icon as={FaLocationDot} color={colors.success} boxSize={4} />
-    </Box>
-    <Text
-      fontSize="sm"
-      color="gray.800"
-      fontWeight="600"
-      lineHeight="1.4"
-      letterSpacing="0.2px"
-    >
-      {event.location}
-    </Text>
-  </Flex>
-</VStack>
+              </VStack>
             </Box>
 
             {/* Booking Alert with Enhanced Styling */}
@@ -349,7 +341,12 @@ export default function Social() {
                 borderRadius="full"
                 opacity={0.5}
               />
-              <Text fontSize="sm" color={colors.warning} fontWeight="600" position="relative">
+              <Text
+                fontSize="sm"
+                color={colors.warning}
+                fontWeight="600"
+                position="relative"
+              >
                 ⚠️ Bookings are filling fast for{" "}
                 {event?.CitybyCountry?.split(",")[0]?.trim() || "this city"}!
               </Text>
@@ -377,8 +374,17 @@ export default function Social() {
               />
               <Flex align="center" justify="space-between" position="relative">
                 <Box>
-                  <Text fontSize={{ base: "md", sm: "lg" }} fontWeight="bold" color={colors.textPrimary}>
-                    <Box as="span" color={colors.success} display="inline" fontSize="xl">
+                  <Text
+                    fontSize={{ base: "md", sm: "lg" }}
+                    fontWeight="bold"
+                    color={colors.textPrimary}
+                  >
+                    <Box
+                      as="span"
+                      color={colors.success}
+                      display="inline"
+                      fontSize="xl"
+                    >
                       {currencies[0]}
                     </Box>{" "}
                     {event.fees} onwards
@@ -387,11 +393,11 @@ export default function Social() {
                     Filling Fast
                   </Text>
                 </Box>
-                <Button 
+                <Button
                   size={{ base: "md", sm: "lg" }}
                   bgGradient={colors.primaryGradient}
                   color="white"
-                  borderRadius="12px" 
+                  borderRadius="12px"
                   px={{ base: 6, sm: 8 }}
                   boxShadow={colors.shadowMd}
                   transition="all 0.2s"
@@ -438,7 +444,11 @@ export default function Social() {
                 href={event.googleMapsLink || "#"}
                 target={event.googleMapsLink ? "_blank" : undefined}
                 flex="1"
-                bgGradient={event.googleMapsLink ? colors.secondaryGradient : "linear(to-r, gray.400, gray.500)"}
+                bgGradient={
+                  event.googleMapsLink
+                    ? colors.secondaryGradient
+                    : "linear(to-r, gray.400, gray.500)"
+                }
                 color="white"
                 borderRadius="12px"
                 leftIcon={<MdLink />}
@@ -451,7 +461,9 @@ export default function Social() {
                 transition="all 0.2s"
                 _hover={{
                   transform: event.googleMapsLink ? "translateY(-2px)" : "none",
-                  boxShadow: event.googleMapsLink ? colors.shadowLg : colors.shadowMd,
+                  boxShadow: event.googleMapsLink
+                    ? colors.shadowLg
+                    : colors.shadowMd,
                 }}
                 fontWeight="600"
                 py={5}
@@ -472,17 +484,22 @@ export default function Social() {
               <Heading fontSize="lg" mb={2} color={colors.textPrimary}>
                 About The Event
               </Heading>
-              <Text fontSize="sm" color={colors.textSecondary} lineHeight="1.6" mb={2}>
+              <Text
+                fontSize="sm"
+                color={colors.textSecondary}
+                lineHeight="1.6"
+                mb={2}
+              >
                 {event.description || "No description available."}
               </Text>
               {event.musicRatio && (
-                <Box
-                  bg="purple.50"
-                  borderRadius="8px"
-                  p={2}
-                  mb={2}
-                >
-                  <Text fontWeight="semibold" fontSize="sm" mb={1} color={colors.textPrimary}>
+                <Box bg="purple.50" borderRadius="8px" p={2} mb={2}>
+                  <Text
+                    fontWeight="semibold"
+                    fontSize="sm"
+                    mb={1}
+                    color={colors.textPrimary}
+                  >
                     Music Ratio:
                   </Text>
                   <Text fontSize="sm" color={colors.textSecondary}>
@@ -496,7 +513,10 @@ export default function Social() {
                 fontSize="sm"
                 p={0}
                 mt={2}
-                _hover={{ color: colors.primaryDark, textDecoration: "underline" }}
+                _hover={{
+                  color: colors.primaryDark,
+                  textDecoration: "underline",
+                }}
               >
                 Read More
               </Button>
@@ -532,7 +552,8 @@ export default function Social() {
                   transition="all 0.3s"
                   _hover={{
                     transform: "scale(1.02)",
-                    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                    boxShadow:
+                      "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
                   }}
                 >
                   <Image
@@ -596,24 +617,28 @@ export default function Social() {
                     {event.description || "No description available."}
                   </Text>
                   {event.musicRatio && (
-                    <Box
-                      bg="purple.50"
-                      borderRadius="12px"
-                      p={3}
-                      mb={3}
-                    >
-                      <Text fontWeight="semibold" mb={2} color={colors.textPrimary}>
+                    <Box bg="purple.50" borderRadius="12px" p={3} mb={3}>
+                      <Text
+                        fontWeight="semibold"
+                        mb={2}
+                        color={colors.textPrimary}
+                      >
                         Music Ratio:
                       </Text>
-                      <Text color={colors.textSecondary}>{event.musicRatio}</Text>
+                      <Text color={colors.textSecondary}>
+                        {event.musicRatio}
+                      </Text>
                     </Box>
                   )}
-                  <Button 
-                    variant="link" 
-                    color={colors.primary} 
-                    p={0} 
+                  <Button
+                    variant="link"
+                    color={colors.primary}
+                    p={0}
                     mt={3}
-                    _hover={{ color: colors.primaryDark, textDecoration: "underline" }}
+                    _hover={{
+                      color: colors.primaryDark,
+                      textDecoration: "underline",
+                    }}
                   >
                     Read More
                   </Button>
@@ -638,13 +663,12 @@ export default function Social() {
                   <VStack spacing={4} align="stretch">
                     {/* Date */}
                     <Flex align="center">
-                      <Box
-                        p={3}
-                        borderRadius="12px"
-                        bg="purple.50"
-                        mr={4}
-                      >
-                        <Icon as={FaCalendar} color={colors.accent} boxSize={5} />
+                      <Box p={3} borderRadius="12px" bg="purple.50" mr={4}>
+                        <Icon
+                          as={FaCalendar}
+                          color={colors.accent}
+                          boxSize={5}
+                        />
                       </Box>
                       <Text color={colors.textSecondary} fontWeight="500">
                         {formatDateWithDay(event.date)}
@@ -653,33 +677,13 @@ export default function Social() {
 
                     {/* Time */}
                     <Flex align="center">
-                      <Box
-                        p={3}
-                        borderRadius="12px"
-                        bg="blue.50"
-                        mr={4}
-                      >
+                      <Box p={3} borderRadius="12px" bg="blue.50" mr={4}>
                         <Icon as={FaClock} color="#3182ce" boxSize={5} />
                       </Box>
                       <Text color={colors.textSecondary} fontWeight="500">
                         {event.startTime} - {event.endTime} hrs
                       </Text>
                     </Flex>
-
-                    {/* Duration */}
-                    {/* <Flex align="center">
-                      <Box
-                        p={3}
-                        borderRadius="12px"
-                        bg="orange.50"
-                        mr={4}
-                      >
-                        <Icon as={MdTimer} color={colors.warning} boxSize={5} />
-                      </Box>
-                      <Text color={colors.textSecondary} fontWeight="500">
-                        {calculateDuration(event.startTime, event.endTime)}
-                      </Text>
-                    </Flex> */}
 
                     {/* Location */}
                     <Flex align="flex-start">
@@ -690,14 +694,23 @@ export default function Social() {
                         mr={4}
                         mt={0.5}
                       >
-                        <Icon as={FaLocationDot} color={colors.success} boxSize={5} />
+                        <Icon
+                          as={FaLocationDot}
+                          color={colors.success}
+                          boxSize={5}
+                        />
                       </Box>
                       <Box display="inline-block" position="relative">
-                        <Text color={colors.textSecondary} fontWeight="500" lineHeight="1.4" display="inline">
+                        <Text
+                          color={colors.textSecondary}
+                          fontWeight="500"
+                          lineHeight="1.4"
+                          display="inline"
+                        >
                           {event.location}
                         </Text>
                         {event.googleMapsLink && (
-                          <Box 
+                          <Box
                             as="a"
                             href={event.googleMapsLink}
                             target="_blank"
@@ -708,23 +721,7 @@ export default function Social() {
                             right="-24px"
                             top="0"
                             ml={2}
-                          >
-                            {/* <Box
-                              as="img"
-                              src="https://assets-in.bmscdn.com/nmcms/synopsis/navigate_icon.png"
-                              alt="Navigate"
-                              width="20px"
-                              height="20px"
-                              pointerEvents="none"
-                              mb={8}
-                              onContextMenu={(e) => e.preventDefault()}
-                              style={{
-                                userSelect: 'none',
-                                WebkitUserDrag: 'none',
-                                verticalAlign: 'middle'
-                              }}
-                            /> */}
-                          </Box>
+                          ></Box>
                         )}
                       </Box>
                     </Flex>
@@ -752,8 +749,14 @@ export default function Social() {
                     borderRadius="full"
                     opacity={0.5}
                   />
-                  <Text color={colors.warning} fontWeight="600" position="relative">
-                    ⚠️ Bookings are filling fast for {event?.CitybyCountry?.split(",")[0]?.trim() || "this city"}!
+                  <Text
+                    color={colors.warning}
+                    fontWeight="600"
+                    position="relative"
+                  >
+                    ⚠️ Bookings are filling fast for{" "}
+                    {event?.CitybyCountry?.split(",")[0]?.trim() || "this city"}
+                    !
                   </Text>
                 </Box>
 
@@ -779,8 +782,17 @@ export default function Social() {
                   />
                   <VStack spacing={4} position="relative">
                     <Box textAlign="center">
-                      <Text fontSize="2xl" fontWeight="bold" color={colors.textPrimary}>
-                        <Box as="span" color={colors.success} display="inline" fontSize="3xl">
+                      <Text
+                        fontSize="2xl"
+                        fontWeight="bold"
+                        color={colors.textPrimary}
+                      >
+                        <Box
+                          as="span"
+                          color={colors.success}
+                          display="inline"
+                          fontSize="3xl"
+                        >
                           {currencies[0]}
                         </Box>
                         {event.fees} onwards
@@ -841,7 +853,11 @@ export default function Social() {
                     href={event.googleMapsLink || "#"}
                     target={event.googleMapsLink ? "_blank" : undefined}
                     w="full"
-                    bgGradient={event.googleMapsLink ? colors.secondaryGradient : "linear(to-r, gray.400, gray.500)"}
+                    bgGradient={
+                      event.googleMapsLink
+                        ? colors.secondaryGradient
+                        : "linear(to-r, gray.400, gray.500)"
+                    }
                     color="white"
                     borderRadius="16px"
                     leftIcon={<MdLink />}
@@ -855,8 +871,12 @@ export default function Social() {
                     boxShadow={colors.shadowMd}
                     transition="all 0.2s"
                     _hover={{
-                      transform: event.googleMapsLink ? "translateY(-2px)" : "none",
-                      boxShadow: event.googleMapsLink ? colors.shadowLg : colors.shadowMd,
+                      transform: event.googleMapsLink
+                        ? "translateY(-2px)"
+                        : "none",
+                      boxShadow: event.googleMapsLink
+                        ? colors.shadowLg
+                        : colors.shadowMd,
                     }}
                     fontWeight="600"
                     py={6}

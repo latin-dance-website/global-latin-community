@@ -1,4 +1,4 @@
-import { useRouter } from "next/router"; // ✅ Add this at the top
+import { useRouter } from "next/router";
 import {
   Box,
   Button,
@@ -9,39 +9,26 @@ import {
   HStack,
   chakra,
   SlideFade,
-  Stack,
-  Fade,
 } from "@chakra-ui/react";
-
-import { FiCalendar, FiMapPin } from "react-icons/fi"; // ✅ Properly imported here
-
-
-import {
-  FiActivity,
-  FiGlobe,
-  FiMusic,
-  FiPlay,
-  FiShoppingCart,
-} from "react-icons/fi";
-import { useCallback, useEffect, useState } from "react";
-import heroImage from "../../../public/assets/images/hero.jpg";
-import Image from "next/image";
+import { FiCalendar, FiMapPin } from "react-icons/fi";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import CardsComponent from "../../components/video_upload/CardsComponent";
 
-function HeroTemporary({isSelectedTileEvent}) {
-  const router = useRouter(); // ✅ Initialize here
+function HeroTemporary({ isSelectedTileEvent }) {
+  const router = useRouter();
   const [textIndex, setTextIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const words = ["Movement", "Community", "Revolution"];
 
   useEffect(() => {
     const exit = setTimeout(() => {
-      setIsVisible(false); // Trigger exit animation
+      setIsVisible(false);
     }, 2000);
 
     const changeText = setTimeout(() => {
-      setTextIndex((prevIndex) => (prevIndex + 1) % words.length); // Update text
-      setIsVisible(true); // Trigger re-enter animation
+      setTextIndex((prevIndex) => (prevIndex + 1) % words.length);
+      setIsVisible(true);
     }, 2300);
 
     return () => {
@@ -49,186 +36,207 @@ function HeroTemporary({isSelectedTileEvent}) {
       clearTimeout(changeText);
     };
   }, [textIndex]);
+  
   const handleEventsBannerClick = () => {
-    router.push("/events/socials"); // ✅ Now router will be defined
+    router.push("/events/socials");
   };
+  
   return (
-    <>
-      <VStack
-  filter={isSelectedTileEvent ? "blur(100px)" : ""}
-  alignItems="center"
-  position="relative"
-  width="100%"
-  minHeight={{
-    base: "62vh",
-    sm: "70vh", 
-    md: "50vh",
-    lg: "50vh",
-    xl: "80vh",
-    "2xl": "84vh"
-  }}
-  paddingX={{
-    base: "2rem",
-    md: "3rem",
-    lg: "4rem",
-    xl: "6rem",
-    "2xl": "8rem"
-  }}
-  paddingY={{
-    base: "4rem", // Reduced from 4rem
-    xl: "2rem"    // Reduced from 4rem
-  }}
-  justifyContent="flex-start" // Changed from "space-around" to "flex-start"
-  id="hello"
->
-  <VStack
-    alignItems="center" 
-    gap={{ base: "1rem", xl: "2rem" }}
-    width="100%"
-    mt={{ base: "-2rem", md: "-1rem" }} // Added negative margin to pull up
-  >
-    <Heading
-      color="black"
-      textAlign={{ base: "center" }}
-      fontFamily="montserrat"
+   <VStack
+      filter={isSelectedTileEvent ? "blur(100px)" : ""}
+      alignItems="center"
+      position="relative"
       width="100%"
-      fontSize={{
-        base: "2rem",
-        md: "2rem", 
-        lg: "3rem",
-        xl: "3rem",
-        "2xl": "4rem"
+      minHeight={{
+        base: "62vh",
+        sm: "70vh",
+        md: "50vh",
+        lg: "50vh",
+        xl: "80vh",
+        "2xl": "84vh",
       }}
-      lineHeight="1.2" // Tighter line height
-  mb={1} // Remove bottom margin
+      paddingX={{
+        base: "2rem",
+        md: "3rem",
+        lg: "4rem",
+        xl: "6rem",
+        "2xl": "8rem",
+      }}
+      paddingY={{
+        base: "4rem",
+        xl: "2rem",
+      }}
+      justifyContent="flex-start"
+      id="hello"
     >
-      The Latin Dance <br />{" "}
-      <SlideFade
-        transition={{
-          enter: { duration: 0.1 },
-        }}
-        in={isVisible}
-        offsetY="10px" // Reduced offset for tighter animation
+      {/* Main content row - heading on left, cards on right (desktop only) */}
+      <Flex
+        direction={{ base: "column", lg: "row" }}
+        width="100%"
+        alignItems="center"
+        justifyContent="space-between"
+        gap={{ base: "2rem", lg: "4rem" }}
+        mb={{ base: "2rem", md: "3rem" }}
       >
-        <Text
-  fontSize={{
-    base: "2.6rem",
-    sm: "3rem",
-    md: "3rem",
-    lg: "4.5rem",
-    xl: "4.5rem",
-    "2xl": "6rem",
-  }}
-  fontWeight={{ base: "bold", sm: "bold" }}
-  lineHeight="0.9"
-  my={3}
-  display="inline-block"
-  letterSpacing="0.05em"
-  mx="0.5rem"
-  bgGradient="linear(to-r, #7928CA, #FF0080)" // 🔥 Gorgeous gradient
-  bgClip="text"
->
-  {words[textIndex]}
-</Text>
+        {/* Left side - Heading */}
+        <Box flex="1" minWidth="0" display="flex" flexDirection="column" alignItems={{ base: "center", lg: "flex-start" }}>
+  <Heading
+    color="black"
+    textAlign={{ base: "center", lg: "center" }} // Changed to center for desktop
+    fontFamily="montserrat"
+    width="100%"
+    fontSize={{
+      base: "2rem",
+      md: "2rem",
+      lg: "3rem",
+      xl: "3rem",
+      "2xl": "4rem",
+    }}
+    lineHeight="1.2"
+    mb={1}
+    mt={-8}
+  >
+    The Latin Dance <br />{" "}
+    <SlideFade
+      transition={{
+        enter: { duration: 0.1 },
+      }}
+      in={isVisible}
+      offsetY="10px"
+    >
+      <Text
+        fontSize={{
+          base: "2.6rem",
+          sm: "3rem",
+          md: "3rem",
+          lg: "4.5rem",
+          xl: "4.5rem",
+          "2xl": "6rem",
+        }}
+        fontWeight={{ base: "bold", sm: "bold" }}
+        lineHeight="1.1"
+        my={3}
+        display="inline-block"
+        letterSpacing="0.05em"
+        mx="0.5rem"
+        bgGradient="linear(to-r, #7928CA, #FF0080)"
+        bgClip="text"
+      >
+        {words[textIndex]}
+      </Text>
+    </SlideFade>
+    Begins Here{" "}
+  </Heading>
+  <Box
+    height={{ base: "0.5rem", md: "0.5rem", lg: "0.75rem" }}
+    width={{ base: "50%", xl: "25%" }}
+    backgroundColor="brand.darkblue"
+    alignSelf={{ base: "center", lg: "center" }} // Changed to center for desktop
+    mt={2} // Add some margin top if needed
+  />
+</Box>
+        
+        {/* Right side - Cards Component (desktop only) */}
+        <Box 
+          flex="1" 
+          minWidth="0" 
+          display={{ base: "none", lg: "block" }} // Hidden on mobile, visible on lg+
+        >
+          <CardsComponent />
+        </Box>
+      </Flex>
 
-      </SlideFade>
-      Begins Here{" "}
-    </Heading>
-          <Box
-            height={{ base: "0.5rem", md: "0.5rem", lg: "0.75rem" }}
-            width={{ base: "50%", xl: "25%" }}
-            backgroundColor={"brand.darkblue"}
-            alignSelf={{ base: "center" }}
-          />
-        </VStack>
-        <Box
+      {/* Scrolling text */}
+      <Box
   overflow="hidden"
   whiteSpace="nowrap"
   width="100%"
   position="relative"
-  marginTop={{ base: "0.2rem", md: "1.5rem" }}
+  marginTop={{ base: "-1.6rem", md: "0rem", lg: "-1.3rem", xl: "-1.5rem" }}
   marginBottom={{ base: "1.2rem", md: "1.5rem" }}
 >
-  <Box
-    display="inline-flex"
-    animation="scrollTicker 12s linear infinite"
-  >
-    {[...Array(2)].map((_, i) => (
-      <Text
-  key={i}
-  fontSize={{
-    base: "1rem",
-    md: "1.3rem",
-    xl: "1.3rem",
-    "2xl": "1.5rem",
-  }}
-  fontFamily="montserrat"
-  fontWeight="medium"
-  display="inline-block"
-  marginRight="5rem"
->
-  Get{" "}
-  <Text as="span" fontWeight="700">
-    Free
-  </Text>{" "}
-  Personalised{" "}
-  <Text as="span" fontWeight="700">
-    Feedback
-  </Text>
-  ,{" "}
-  <Text as="span" fontWeight="700">
-    Insights
-  </Text>{" "}
-  &amp;{" "}
-  <Text as="span" fontWeight="700">
-    Roadmap
-  </Text>{" "}
-  of your dancing journey!
-</Text>
 
-    ))}
-  </Box>
+        <Box
+          display="inline-flex"
+          animation="scrollTicker 12s linear infinite"
+        >
+          {[...Array(2)].map((_, i) => (
+            <Text
+              key={i}
+              fontSize={{
+                base: "1rem",
+                md: "1.3rem",
+                xl: "1.3rem",
+                "2xl": "1.5rem",
+              }}
+              fontFamily="montserrat"
+              fontWeight="medium"
+              display="inline-block"
+              marginRight="5rem"
+              letterSpacing="0.05em"
+            >
+              Get{" "}
+              <Text as="span" fontWeight="700">
+                Free
+              </Text>{" "}
+              Personalised{" "}
+              <Text as="span" fontWeight="700">
+                Feedback
+              </Text>
+              ,{" "}
+              <Text as="span" fontWeight="700">
+                Insights
+              </Text>{" "}
+              and{" "}
+              <Text as="span" fontWeight="700">
+                Roadmap
+              </Text>{" "}
+              of your dancing journey!
+            </Text>
+          ))}
+        </Box>
 
-  <style jsx global>{`
-    @keyframes scrollTicker {
-      0% {
-        transform: translateX(0%);
-      }
-      100% {
-        transform: translateX(-50%);
-      }
-    }
-  `}</style>
-</Box>
+        <style jsx global>{`
+          @keyframes scrollTicker {
+            0% {
+              transform: translateX(0%);
+            }
+            100% {
+              transform: translateX(-50%);
+            }
+          }
+        `}</style>
+      </Box>
 
-        <Link href="/video-upload">
-  <Button
-   bgGradient="linear(to-br, #1a237e, #0d1b4c, #1a237e)" // purple-blue gradient like iMovie
-  textColor="white"
-  size={{ base: "xl", md: "lg", lg: "xl" }}
-  alignSelf="center"
-  fontFamily="montserrat"
-  fontWeight="bold"
-  px="2.5rem"
-  py="1.25rem"
-  border="2px solid rgba(255, 255, 255, 0.3)"
-  borderRadius="xl"
-  className="box-pulse-button"
-  marginTop={{ base: "-0.8rem", md: "0.5rem" }}
-  marginBottom={{ base: "2.6rem", md: "1.5rem" }}
-  _hover={{ transform: "scale(1.08)", borderColor: "white" }}
-  _active={{ transform: "scale(0.96)" }}
->
-  Start Here
-</Button>
-
-</Link>
-{/* Events Banner */}
+      {/* CTA Button */}
+      <Link href="/video-upload">
+        <Button
+          bgGradient="linear(to-br, #1a237e, #0d1b4c, #1a237e)"
+          textColor="white"
+          size={{ base: "xl", md: "lg", lg: "xl" }}
+          alignSelf="center"
+          fontFamily="montserrat"
+          fontWeight="bold"
+          px="2.5rem"
+          py="1.25rem"
+          border="2px solid rgba(255, 255, 255, 0.3)"
+          borderRadius="xl"
+          className="box-pulse-button"
+          marginTop={{ base: "-0.8rem", md: "0.5rem" }}
+          marginBottom={{ base: "2.6rem", md: "1.5rem" }}
+          _hover={{ transform: "scale(1.08)", borderColor: "white" }}
+          _active={{ transform: "scale(0.96)" }}
+        >
+          Start Here
+        </Button>
+      </Link>
+      
+      {/* Events Banner */}
       <Box
         width="100%"
-        maxWidth="900px"
+        maxWidth={{ base: "100%", md: "90%", lg: "800px", xl: "750px" }}
         mb={{ base: "2rem", md: "3rem" }}
-         mt={{ base: "-1rem", md: "0rem" }}
+        mt={{ base: "-1rem", md: "0rem" }}
         cursor="pointer"
         onClick={handleEventsBannerClick}
         _hover={{ transform: "translateY(-2px)" }}
@@ -241,7 +249,7 @@ function HeroTemporary({isSelectedTileEvent}) {
           position="relative"
           overflow="hidden"
           boxShadow="lg"
-          height={{ base: "auto", md: "300px", lg: "320px", xl: "350px" }}
+          height={{ base: "auto", md: "300px", lg: "250px", xl: "270px" }} // Reduced height for desktop
         >
           {/* Background decoration */}
           <Box
@@ -264,212 +272,199 @@ function HeroTemporary({isSelectedTileEvent}) {
             bg="whiteAlpha.100"
             opacity="0.4"
           />
-          
+
           <Flex
-  direction="column"
-  justifyContent="space-between" // push button to bottom
-  height="100%" // ensure full height container
-  position="relative"
-  zIndex="1"
->
-  <VStack
-    alignItems={{ base: "center", md: "flex-start" }}
-    spacing="0.5rem"
-    flex="1"
-  >
-    <HStack spacing="0.5rem">
-      <FiCalendar size="20px" color="white" />
-      <Heading
-        as="h3"
-        fontSize={{ base: "1.3676rem", md: "1.6rem", lg: "1.8rem" }}
-        color="white"
-        fontFamily="montserrat"
-        fontWeight="bold"
-        textAlign={{ base: "center", md: "left" }}
-      >
-        Our New Feature Release
-      </Heading>
-    </HStack>
-
-    <Text
-      color="white"
-  fontSize={{ base: "1rem", md: "1.1rem" }}
-  fontFamily="montserrat"
-  fontWeight="bold"         // ✅ Bold text
-  lineHeight="1.6"
-  textAlign={{ base: "center", md: "left" }}
-  mt="0.3rem"               // ✅ Push slightly below the heading
-  mb="-0.6rem"               // ✅ Add spacing before the city list
-    >
-      Discover verified Global Social Nights
-    </Text>
-  </VStack>
-
-  <VStack spacing="1rem" width="100%" mt="1.5rem">
-    <HStack 
-      spacing="1.5rem"
-      justifyContent={{ base: "center", md: "flex-start" }}
-      width="100%"
-    >
-      {["Hanoi", "Bangkok", "Bangalore"].map((city) => (
-        <HStack key={city} spacing="0.1rem">
-          <FiMapPin size="18px" color="white" />
-          <Text
-            color="white"
-            fontSize={{ base: "1rem", md: "1.15rem" }}
-            fontFamily="montserrat"
-            fontWeight="bold"
+            direction="column"
+            justifyContent="space-between"
+            height="100%"
+            position="relative"
+            zIndex="1"
           >
-            {city}
-          </Text>
-        </HStack>
-      ))}
-    </HStack>
+            <VStack
+              alignItems="center" 
+              spacing="0.5rem"
+              flex="1"
+            >
+              <HStack spacing="0.5rem">
+                <FiCalendar size="20px" color="white" />
+                <Heading
+  as="h3"
+  fontSize={{ base: "1.15rem", sm: "1.2rem", md: "1.5rem", lg: "1.8rem" }}
+  color="white"
+  fontFamily="montserrat"
+  fontWeight="bold"
+  textAlign="center"
+  whiteSpace="nowrap"
+  overflow="hidden"
+  textOverflow="ellipsis"
+>
+  Our New Feature Release
+</Heading>
 
-    <Button
+
+              </HStack>
+
+              <Text
+  color="white"
+  fontSize={{ base: "0.85rem", sm: "1rem", md: "1.1rem" }}
+  fontFamily="montserrat"
+  fontWeight="bold"
+  lineHeight="1.5"
+  textAlign="center"
+  mt="0.3rem"
+  mb="-0.6rem"
+  whiteSpace="nowrap"
+  overflow="hidden"
+  textOverflow="ellipsis"
+>
+  Discover verified Global Social Nights
+</Text>
+
+            </VStack>
+
+            <VStack spacing="1rem" width="100%" mt="1.5rem">
+              <HStack
+                spacing="1.5rem"
+                justifyContent="center"
+                width="100%"
+              >
+                {["Hanoi", "Bangkok", "Bangalore"].map((city) => (
+                  <HStack key={city} spacing="0.1rem">
+                    <FiMapPin size="18px" color="white" />
+                    <Text
+                      color="white"
+                      fontSize={{ base: "0.9rem", md: "1.15rem" }}
+                      fontFamily="montserrat"
+                      fontWeight="bold"
+                    >
+                      {city}
+                    </Text>
+                  </HStack>
+                ))}
+              </HStack>
+
+              <Button
   bg="whiteAlpha.200"
   color="white"
   border="2px solid"
   borderColor="whiteAlpha.300"
-  size={{ base: "xl", md: "xl" }}
-  fontSize={{ base: "1.1rem", md: "1.3rem", lg: "1.4rem" }}
+  size={{ base: "lg", md: "xl" }}
+  fontSize={{ base: "1rem", md: "1.3rem", lg: "1.4rem" }}
   fontFamily="montserrat"
   fontWeight="bold"
   letterSpacing="0.05em"
   borderRadius="xl"
-  px="3rem"
-  py="1.6rem"
-  mt={{ base: "0", md: "0" }}
-  alignSelf={{ base: "center", md: "flex-start" }}
+  px={{ base: "2rem", md: "3rem" }}
+  py={{ base: "1.2rem", md: "1.6rem" }}
+  mt="0"
+  alignSelf="center"
+  w="auto"
+  maxW="100%"
   transform="perspective(500px)"
   _hover={{
     bg: "white",
     color: "brand.purple",
     borderColor: "white",
     transform: "perspective(500px) scale(1.05) translateZ(20px)",
-    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)"
+    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)",
   }}
   _active={{
-    transform: "perspective(500px) scale(0.98) translateZ(10px)"
+    bg: "whiteAlpha.200",  // Keep original background when clicked
+    color: "white",       // Keep original text color when clicked
+    borderColor: "whiteAlpha.300", // Keep original border when clicked
+    transform: "perspective(500px)", // Remove any transform changes
+    boxShadow: "none",    // Remove shadow when clicked
   }}
   transition="all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
 >
   <Text
     as="span"
     display="inline-block"
-    animation="pulse 1.5s ease-in-out infinite"
+    animation="expandText 1.5s ease-in-out infinite"
+    transformOrigin="center"
   >
     Explore Events
   </Text>
-  
-  <style jsx global>{`
-    @keyframes pulse {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.05);
-      }
-    }
-  `}</style>
 </Button>
-  </VStack>
-</Flex>
 
+            </VStack>
+          </Flex>
         </Box>
       </Box>
+      
+      {/* Upcoming updates text */}
       <VStack
   spacing="0.3rem"
   mb={{ base: "1rem", md: "1.5rem" }}
   alignItems="center"
   mt={{ base: "-1.8rem", md: "-2rem" }}
 >
-  {/* <Text
-    fontFamily="montserrat"
-    fontWeight="bold"
-    fontSize={{ base: "1.1rem", md: "1.4rem" }}
-    color="gray.700"
-    textTransform="uppercase"
-    letterSpacing="0.05em"
-  >
-    Coming Soon
-  </Text> */}
-
-  {/* <Text
-    fontSize={{ base: "1.8rem", md: "2rem" }}
-    color="brand.purple"
-    lineHeight="1"
-    animation="bounce 2s infinite"
-  >
-    ↓
-  </Text> */}
-
   <Text
-  fontFamily="montserrat"
-  fontWeight="semibold"
-  fontSize={{ base: "1rem", md: "1.2rem" }}
-  color="gray.600"
-  textAlign="center"
-  whiteSpace="nowrap"
-  animation="flashyPulse 1.6s ease-in-out infinite"
-  textShadow="0 0 6px rgba(128, 128, 128, 0.4)"
-  letterSpacing="0.01em"
->
-  Upcoming Updates:{" "}
-  <chakra.span fontWeight="bold" color="brand.pink">
-    100+ Cities
-  </chakra.span>{" "}
-  by this August
-</Text>
+    fontFamily="montserrat"
+    fontWeight="semibold"
+    fontSize={{ base: "0.85rem", sm: "1rem", md: "1.2rem" }} // Smaller on tiny devices
+    color="gray.600"
+    textAlign="center"
+    whiteSpace="nowrap" // Force single line
+    px="0.5rem" // Prevents edge touching
+    overflow="hidden" // Safety measure
+    textOverflow="ellipsis" // Adds "..." if text is cut off
+    animation="flashyPulse 1.6s ease-in-out infinite"
+    textShadow="0 0 6px rgba(128, 128, 128, 0.4)"
+    letterSpacing="0.01em"
+  >
+    Upcoming Updates:{" "}
+    <chakra.span fontWeight="bold" color="brand.pink">
+      100+ Cities
+    </chakra.span>{" "}
+    by this August
+  </Text>
+</VStack> 
 
-</VStack>
-
-        <chakra.svg
-          position="absolute"
-          top={{ base: "-5rem", md: "-10rem" }}
-          right={{ base: "-5rem", md: "-10rem" }}
-          width="60%"
-          viewBox="0 0 857 1099"
-          zIndex={"-1"}
-          // color
-          color="brand.purple"
-          borderRadius="full"
-          blendMode="multiply"
-          filter="auto"
-          blur={{ base: "6rem", md: "8rem" }}
-          opacity="50%"
-          xmlns="http://www.w3.org/2000/svg"
-          className="blob1" // Add animation sptyling here
-        >
-          <path
-            d="M448.073 111.864C565.986 110.817 686.361 -67.7775 783.357 28.4626C880.746 125.092 855.991 340.069 849.044 509.709C842.632 666.273 822.511 825.373 746.127 937.518C668.989 1050.77 558.309 1105.4 448.073 1098.4C342.341 1091.69 253.125 1004.17 175.279 901.26C93.0135 792.502 13.535 669.497 2.77642 509.709C-8.8994 336.298 13.8656 126.448 116.912 34.3824C215.62 -53.8076 331.806 112.897 448.073 111.864Z"
-            fill="currentColor"
-          />
-        </chakra.svg>
-        <chakra.svg
-          position="absolute"
-          top={{ base: "15rem", md: "10rem", lg: "30rem" }}
-          right={{ base: "5rem", md: "5rem", lg: "10rem" }}
-          width="50%"
-          viewBox="0 0 1046 1014"
-          zIndex={"-1"}
-          // color
-          color="brand.pink"
-          borderRadius="full"
-          blendMode="multiply"
-          filter="auto"
-          blur={{ base: "8rem", md: "10rem" }}
-          opacity={{ base: "100%", md: "50%" }}
-          xmlns="http://www.w3.org/2000/svg"
-          className="blob2" // Add animation styling here
-        >
-          <path
-            d="M783.283 308.121C854.01 399.673 1059.93 391.654 1044.97 522.473C1029.95 653.822 853.349 757.368 721.455 848.913C599.727 933.402 467.958 1008.63 338.184 1013.04C207.129 1017.5 100.329 962.231 40.218 872.077C-17.4367 785.608 -4.43895 665.858 26.9035 546.189C60.0253 419.726 105.532 287.297 219.503 187.546C343.192 79.29 514.754 -22.8796 645.219 5.02284C770.192 31.7506 713.543 217.847 783.283 308.121Z"
-            fill="currentColor"
-          />
-        </chakra.svg>
-      </VStack>
-    </>
+      {/* Background blobs */}
+      <chakra.svg
+        position="absolute"
+        top={{ base: "-5rem", md: "-10rem" }}
+        right={{ base: "-5rem", md: "-10rem" }}
+        width="60%"
+        viewBox="0 0 857 1099"
+        zIndex={"-1"}
+        color="brand.purple"
+        borderRadius="full"
+        blendMode="multiply"
+        filter="auto"
+        blur={{ base: "6rem", md: "8rem" }}
+        opacity="50%"
+        xmlns="http://www.w3.org/2000/svg"
+        className="blob1"
+      >
+        <path
+          d="M448.073 111.864C565.986 110.817 686.361 -67.7775 783.357 28.4626C880.746 125.092 855.991 340.069 849.044 509.709C842.632 666.273 822.511 825.373 746.127 937.518C668.989 1050.77 558.309 1105.4 448.073 1098.4C342.341 1091.69 253.125 1004.17 175.279 901.26C93.0135 792.502 13.535 669.497 2.77642 509.709C-8.8994 336.298 13.8656 126.448 116.912 34.3824C215.62 -53.8076 331.806 112.897 448.073 111.864Z"
+          fill="currentColor"
+        />
+      </chakra.svg>
+      <chakra.svg
+        position="absolute"
+        top={{ base: "15rem", md: "10rem", lg: "30rem" }}
+        right={{ base: "5rem", md: "5rem", lg: "10rem" }}
+        width="50%"
+        viewBox="0 0 1046 1014"
+        zIndex={"-1"}
+        color="brand.pink"
+        borderRadius="full"
+        blendMode="multiply"
+        filter="auto"
+        blur={{ base: "8rem", md: "10rem" }}
+        opacity={{ base: "100%", md: "50%" }}
+        xmlns="http://www.w3.org/2000/svg"
+        className="blob2"
+      >
+        <path
+          d="M783.283 308.121C854.01 399.673 1059.93 391.654 1044.97 522.473C1029.95 653.822 853.349 757.368 721.455 848.913C599.727 933.402 467.958 1008.63 338.184 1013.04C207.129 1017.5 100.329 962.231 40.218 872.077C-17.4367 785.608 -4.43895 665.858 26.9035 546.189C60.0253 419.726 105.532 287.297 219.503 187.546C343.192 79.29 514.754 -22.8796 645.219 5.02284C770.192 31.7506 713.543 217.847 783.283 308.121Z"
+          fill="currentColor"
+        />
+      </chakra.svg>
+    </VStack>
   );
 }
 

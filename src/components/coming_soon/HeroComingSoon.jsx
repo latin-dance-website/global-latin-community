@@ -146,7 +146,7 @@ const HeroComingSoon = ({ isToastVisible, setIsToastVisible }) => {
       backgroundColor: "rgb(147 51 234 / var(--tw-bg-opacity, 1))",
     },
     {
-      title: "Expert Analysis",
+      title: "Expert Analysi",
       description: "Reviewed by a trusted Subject Matter Expert.",
       imageSrc: "/assets/Group14.png",
       imageSize: "206px",

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Caraousel from "../.././components/carousel";
 import LayerBlur2 from "../../src/components/coming_soon/LayerBlur2";
 import BreakingNewsHeading from "../../components/AnimatedHeading";
-import CustomCalendar from "./CustomCalendar"; // Import the custom calendar
+import CustomCalendar from "./CustomCalendar";
 import { motion } from "framer-motion";
 import {
   Box,
@@ -54,14 +54,12 @@ dayjs.extend(weekOfYear);
 export default function EventsHomePage({ cities }) {
   const router = useRouter();
   const [selectedCity, setSelectedCity] = useState("");
-  const [dateRange, setDateRange] = useState(null); // [dayjs, dayjs]
+  const [dateRange, setDateRange] = useState(null);
   const {
     isOpen: isCalendarOpen,
     onOpen: onCalendarOpen,
     onClose: onCalendarClose,
   } = useDisclosure();
-
-  // Keyframes for animations
   const blink = keyframes`
     0% { box-shadow: 0 0 0px rgb(156, 60, 246); }
     50% { box-shadow: 0 0 10px rgb(156, 60, 246); }
@@ -80,9 +78,8 @@ export default function EventsHomePage({ cities }) {
 
   const handleCityChange = (selectedValue) => {
     setSelectedCity(selectedValue);
-    setDateRange(null); // Reset the selected dates
+    setDateRange(null);
     if (selectedValue) {
-      // Open calendar after city selection
       setTimeout(() => {
         onCalendarOpen();
       }, 500);
@@ -123,10 +120,7 @@ export default function EventsHomePage({ cities }) {
   };
 
   const handleCreateEvent = () => {
-    // Replace with your actual event creation form URL
     router.push("/events/CreateEvent");
-    // Or open external link:
-    // window.open("https://your-event-form-link.com", "_blank");
   };
 
   return (
@@ -146,10 +140,9 @@ export default function EventsHomePage({ cities }) {
         <Navbar />
       </Box>
 
-     <Box mt={{ base: -7, md: 0 }} mb={-2} textAlign="center">
-  <AnimatedHeading/>
-</Box>
-
+      <Box mt={{ base: -7, md: 0 }} mb={-2} textAlign="center">
+        <AnimatedHeading />
+      </Box>
 
       <LayerBlur2 />
       <Caraousel />
@@ -227,19 +220,18 @@ export default function EventsHomePage({ cities }) {
           >
             <Box mt={-4}>
               <Heading
-  fontSize={{ base: "xl", md: "2xl" }}
-  fontWeight="extrabold"
-  color="#000001"
-  lineHeight="1.3"
-  mb={1}
-  isTruncated
-  whiteSpace="nowrap"
-  overflow="hidden"
-  textOverflow="ellipsis"
->
-  Find Latin Events in your City
-</Heading>
-
+                fontSize={{ base: "xl", md: "2xl" }}
+                fontWeight="extrabold"
+                color="#000001"
+                lineHeight="1.3"
+                mb={1}
+                isTruncated
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+              >
+                Find Latin Events in your City
+              </Heading>
             </Box>
 
             <Heading
@@ -269,16 +261,15 @@ export default function EventsHomePage({ cities }) {
             <Box textAlign="center" maxW="100%">
               <VStack spacing={1}>
                 <Text
-  fontWeight="medium"
-  fontSize={{ base: "xs", md: "sm" }}
-  color="#555"
-  whiteSpace="nowrap"
-  mt={-0.5}
-  fontStyle="italic"
->
-  Discover verified Global Latin Dance Events
-</Text>
-
+                  fontWeight="medium"
+                  fontSize={{ base: "xs", md: "sm" }}
+                  color="#555"
+                  whiteSpace="nowrap"
+                  mt={-0.5}
+                  fontStyle="italic"
+                >
+                  Discover verified Global Latin Dance Events
+                </Text>
 
                 <Text
                   fontWeight="bold"
@@ -499,7 +490,7 @@ export default function EventsHomePage({ cities }) {
             >
               <Button
                 onClick={handleGetEvents}
-                bg="#ff6b35"
+                bgGradient="linear(135deg, brand.purple 0%, brand.pink 100%)"
                 color="white"
                 borderRadius={{ base: "12px", md: "14px" }}
                 fontWeight="700"
@@ -510,14 +501,16 @@ export default function EventsHomePage({ cities }) {
                 py={3}
                 mx={{ base: "-5%", md: "-2.5%" }}
                 position="relative"
-                boxShadow="0 0 15px rgba(255, 107, 53, 0.6)"
+                boxShadow="0 0 15px rgba(148, 53, 255, 0.5)"
                 _hover={{
-                  bg: "#ff5722",
+                  bgGradient:
+                    "linear(135deg, brand.purple 0%, brand.pink 100%)",
                   transform: "translateY(-2px) scale(1.02)",
-                  boxShadow: "0 0 20px rgba(255, 107, 53, 0.8)",
+                  boxShadow: "0 0 20px rgba(148, 53, 255, 0.7)",
                 }}
                 _active={{
-                  bg: "#e64a19",
+                  bgGradient:
+                    "linear(135deg, brand.purple 0%, brand.pink 100%)",
                   transform: "translateY(0px) scale(1.0)",
                 }}
                 transition="all 0.3s ease-in-out"
@@ -525,14 +518,14 @@ export default function EventsHomePage({ cities }) {
                   animation: "glowPulse 1.5s infinite ease-in-out",
                   "@keyframes glowPulse": {
                     "0%": {
-                      boxShadow: "0 0 0px rgba(255, 107, 53, 0.6)",
+                      boxShadow: "0 0 0px rgba(148, 53, 255, 0.4)",
                     },
                     "50%": {
                       boxShadow:
-                        "0 0 12px rgba(255, 107, 53, 0.9), 0 0 24px rgba(255, 107, 53, 0.6)",
+                        "0 0 12px rgba(148, 53, 255, 0.8), 0 0 24px rgba(148, 53, 255, 0.5)",
                     },
                     "100%": {
-                      boxShadow: "0 0 0px rgba(255, 107, 53, 0.6)",
+                      boxShadow: "0 0 0px rgba(148, 53, 255, 0.4)",
                     },
                   },
                 }}
@@ -544,7 +537,8 @@ export default function EventsHomePage({ cities }) {
         </Box>
 
         {/* Create Your Own Event Box */}
-        <Box
+        {/* Create Your Own Event Box */}
+<Box
   width={{ base: "fit-content", lg: "450px" }}
   maxWidth={{ base: "95%", lg: "450px" }}
   minWidth="300px"
@@ -555,15 +549,21 @@ export default function EventsHomePage({ cities }) {
   borderRadius="16px"
   bg="white"
   boxShadow="xl"
-  border="2px solid #ff6b35"
-  py={{ base: 4, md: 8 }} // Reduced vertical padding on mobile
-  px={{ base: 4, md: 8 }} // Reduced horizontal padding on mobile
+  border="2px solid #9c3cf6" // 🔄 Changed from #ff6b35
+  py={{ base: 4, md: 8 }}
+  px={{ base: 4, md: 8 }}
   position="relative"
   _hover={{
     "&::before": {
       opacity: 1,
     },
-    borderColor: "#ff5722",
+    borderColor: "#8a2be2", // 🔄 Match hover border color
+  }}
+  _focusWithin={{
+    "&::before": {
+      opacity: 1,
+      boxShadow: "0 0 10px 2px rgba(156, 60, 246, 0.6)",
+    },
   }}
   sx={{
     "&::before": {
@@ -576,11 +576,11 @@ export default function EventsHomePage({ cities }) {
       borderRadius: "18px",
       border: "2px solid transparent",
       background:
-        "linear-gradient(90deg, #ff6b35, #9c3cf6, #ff6b35) border-box",
+        "linear-gradient(90deg, #9c3cf6, #ff6b35, #9c3cf6) border-box", // 🔄 match gradient
       backgroundSize: "200% 100%",
       animation: "borderGradient 3s linear infinite",
       opacity: 0,
-      transition: "opacity 0.3s ease",
+      transition: "opacity 0.3s ease, box-shadow 0.3s ease",
       zIndex: -1,
     },
     "@keyframes borderGradient": {
@@ -589,87 +589,93 @@ export default function EventsHomePage({ cities }) {
     },
   }}
 >
-  <VStack spacing={{ base: 3, md: 4 }} textAlign="center" position="relative" zIndex={1}>
-    {/* Heading */}
-    <Heading
-      fontSize={{ base: "lg", md: "2xl" }} // Slightly smaller on mobile
-      fontWeight="extrabold"
-      color="#000001"
-      lineHeight="1.1"
-      mb={{ base: -1, md: -2 }}
-      mt={{ base: -2, md: -3 }}
-    >
-      Create Your Own Event
-    </Heading>
 
-    {/* Description */}
-    <VStack spacing={1}>
-      <Text
-        fontWeight="medium"
-        fontSize={{ base: "sm", md: "md" }}
-        color="#555"
-        textAlign="center"
-        lineHeight="1.3"
-        fontStyle="italic"
-      >
-        Host your own Latin dance event and connect with the community
-      </Text>
-    </VStack>
+          <VStack
+            spacing={{ base: 3, md: 4 }}
+            textAlign="center"
+            position="relative"
+            zIndex={1}
+          >
+            {/* Heading */}
+            <Heading
+              fontSize={{ base: "lg", md: "2xl" }}
+              fontWeight="extrabold"
+              color="#000001"
+              lineHeight="1.1"
+              mb={{ base: -1, md: -2 }}
+              mt={{ base: -2, md: -3 }}
+            >
+              Create Your Own Event
+            </Heading>
 
-    {/* Create Event Button */}
-    <Button
-      onClick={handleCreateEvent}
-      bg="linear-gradient(135deg, #ff6b35, #ff5722)"
-      color="white"
-      borderRadius={{ base: "10px", md: "14px" }}
-      fontWeight="700"
-      fontSize={{ base: "15px", md: "18px" }}
-      height={{ base: "46px", md: "54px" }}
-      width="100%"
-      maxWidth="280px"
-      px={5}
-      py={2}
-      position="relative"
-      boxShadow="0 0 12px rgba(255, 107, 53, 0.35)"
-      _hover={{
-        bg: "linear-gradient(135deg, #ff5722, #e64a19)",
-        transform: "translateY(-2px) scale(1.02)",
-        boxShadow: "0 0 20px rgba(255, 107, 53, 0.5)",
-      }}
-      _active={{
-        transform: "translateY(0px) scale(1.0)",
-      }}
-      transition="all 0.3s ease-in-out"
-      sx={{
-        animation: "gentleGlow 2s infinite ease-in-out",
-        "@keyframes gentleGlow": {
-          "0%": {
-            boxShadow: "0 0 5px rgba(255, 107, 53, 0.4)",
-          },
-          "50%": {
-            boxShadow: "0 0 15px rgba(255, 107, 53, 0.6)",
-          },
-          "100%": {
-            boxShadow: "0 0 5px rgba(255, 107, 53, 0.4)",
-          },
-        },
-      }}
-    >
-      Start Creating Event
-    </Button>
+            {/* Description */}
+            <VStack spacing={1}>
+              <Text
+                fontWeight="medium"
+                fontSize={{ base: "sm", md: "md" }}
+                color="#555"
+                textAlign="center"
+                lineHeight="1.3"
+                fontStyle="italic"
+              >
+                Host your own Latin dance event and connect with the community
+              </Text>
+            </VStack>
 
-    {/* Additional Info */}
-    <Text
-      fontSize={{ base: "xs", md: "sm" }}
-      color="#666"
-      textAlign="center"
-      mt={{ base: 1, md: 2 }} // Slightly reduced margin on mobile
-    >
-      Free to list • Reach thousands of dancers
-    </Text>
-  </VStack>
-</Box>
+            {/* Create Event Button */}
+            <Button
+              onClick={handleCreateEvent}
+              bgGradient="linear(135deg, brand.purple 0%, brand.pink 100%)"
+              color="white"
+              borderRadius={{ base: "10px", md: "14px" }}
+              fontWeight="700"
+              fontSize={{ base: "15px", md: "18px" }}
+              height={{ base: "46px", md: "54px" }}
+              width="100%"
+              maxWidth="280px"
+              px={5}
+              py={2}
+              position="relative"
+              boxShadow="0 0 12px rgba(148, 53, 255, 0.35)"
+              _hover={{
+                bgGradient: "linear(135deg, brand.purple 0%, brand.pink 100%)",
+                transform: "translateY(-2px) scale(1.02)",
+                boxShadow: "0 0 20px rgba(148, 53, 255, 0.5)",
+              }}
+              _active={{
+                bgGradient: "linear(135deg, brand.purple 0%, brand.pink 100%)",
+                transform: "translateY(0px) scale(1.0)",
+              }}
+              transition="all 0.3s ease-in-out"
+              sx={{
+                animation: "gentleGlow 2s infinite ease-in-out",
+                "@keyframes gentleGlow": {
+                  "0%": {
+                    boxShadow: "0 0 5px rgba(148, 53, 255, 0.4)",
+                  },
+                  "50%": {
+                    boxShadow: "0 0 15px rgba(148, 53, 255, 0.6)",
+                  },
+                  "100%": {
+                    boxShadow: "0 0 5px rgba(148, 53, 255, 0.4)",
+                  },
+                },
+              }}
+            >
+              Start Creating Event
+            </Button>
 
+            {/* Additional Info */}
+            <Text
+              fontSize={{ base: "xs", md: "sm" }}
+              color="#666"
+              textAlign="center"
+              mt={{ base: 1, md: 2 }}
+            >
+              Free to list • Reach thousands of dancers
+            </Text>
+          </VStack>
+        </Box>
       </Flex>
 
       {/* Custom Calendar Modal */}
@@ -682,8 +688,6 @@ export default function EventsHomePage({ cities }) {
     </Box>
   );
 }
-
-// Keep getStaticProps to fetch initial cities
 export async function getStaticProps() {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";

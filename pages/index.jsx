@@ -10,20 +10,18 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Navbar from "@components/Navbar";
-// import Hero from "@components/landing_page/Hero";
 import HeroTemporary from "@components/landing_page/HeroTemporary";
 import Features from "@components/landing_page/Features";
 import Bento from "@components/landing_page/Bento";
 import MarqueeComponent from "@components/landing_page/Marquee";
 import LayerBlur2 from "@components/coming_soon/LayerBlur2";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-// import Link from "next/link";
 
 const Home = () => {
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [isSelectedTileEvent, setIsSelectedTileEvent] = useState(false);
   const eventCards = [
-     {
+    {
       text: "Global Social Nights",
       href: "/events/socials",
     },

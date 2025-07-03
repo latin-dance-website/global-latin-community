@@ -26,7 +26,7 @@ import FeatureCard from "./FeatureCard";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 
-const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
+const Features = ({ isSelectedTileEvent, setIsSelectedTileEvent }) => {
   const router = useRouter();
   const [currentlySelectedCard, setCurrentlySelectedCard] =
     useState("Music & Culture");
@@ -34,8 +34,6 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
   const [dynamicText, setDynamicText] = useState(
     "Dive into the rhythm, instruments, and stories that define the soul of Latin music and dance culture."
   );
-
-
 
   const cardData = useMemo(
     () => [
@@ -112,10 +110,8 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
 
   let currentBreakpoint = useBreakpoint();
 
-
-
   const handleEventsBannerClick = () => {
-    router.push('/events/socials');
+    router.push("/events/socials");
   };
 
   return (
@@ -126,202 +122,6 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
       filter={isSelectedTileEvent ? "blur(500px)" : ""}
       marginTop={{ base: "-2rem", md: "0rem", xl: "0rem", "2xl": "0rem" }}
     >
-      {/* Top Header Section */}
-      {/* <VStack
-        alignItems="center"
-        spacing="0.25rem"
-        width="100%"
-        marginBottom={{ base: "2rem", md: "3rem" }}
-      > */}
-        {/* <Heading
-          as="h3"
-          fontSize={{
-            base: "1rem",
-            md: "1.1rem",
-            lg: "1.2rem",
-            xl: "1.3rem",
-          }}
-          fontFamily="montserrat"
-          fontWeight="bold"
-          lineHeight="1.1"
-          textAlign="center"
-        >
-          The Latin Dance
-        </Heading>
-        <Heading
-          as="h3"
-          fontSize={{
-            base: "1rem",
-            md: "1.1rem",
-            lg: "1.2rem",
-            xl: "1.3rem",
-          }}
-          fontFamily="montserrat"
-          fontWeight="bold"
-          lineHeight="1.1"
-          textAlign="center"
-        >
-          Movement
-        </Heading>
-        <Heading
-          as="h3"
-          fontSize={{
-            base: "1rem",
-            md: "1.1rem",
-            lg: "1.2rem",
-            xl: "1.3rem",
-          }}
-          fontFamily="montserrat"
-          fontWeight="bold"
-          lineHeight="1.1"
-          textAlign="center"
-        >
-          Begins Here
-        </Heading>
-        <Box
-          height="0.15rem"
-          width="6rem"
-          borderRadius={"1rem"}
-          backgroundColor={"brand.purple"}
-          marginTop="0.25rem"
-        />
-        <Text
-          fontSize={{
-            base: "0.7rem",
-            md: "0.75rem",
-            lg: "0.8rem",
-          }}
-          color="gray.600"
-          marginTop="0.5rem"
-          fontFamily="montserrat"
-          textAlign="center"
-        >
-          Get Free Personalised Feedback & Insights of your dancing journey!
-        </Text>
-      </VStack> */}
-
-      {/* Events Banner */}
-      {/* <Box
-        width="100%"
-        maxWidth="900px"
-        mb={{ base: "2rem", md: "3rem" }}
-         mt={{ base: "-6rem", md: "-2rem" }}
-        cursor="pointer"
-        onClick={handleEventsBannerClick}
-        _hover={{ transform: "translateY(-2px)" }}
-        transition="all 0.3s ease"
-      > */}
-        {/* <Box
-          bgGradient="linear(135deg, brand.purple 0%, brand.pink 100%)"
-          borderRadius="xl"
-          p={{ base: "1.5rem", md: "2rem" }}
-          position="relative"
-          overflow="hidden"
-          boxShadow="lg"
-        > */}
-          {/* Background decoration */}
-          {/* <Box
-            position="absolute"
-            top="-50%"
-            right="-10%"
-            width="200px"
-            height="200px"
-            borderRadius="full"
-            bg="whiteAlpha.200"
-            opacity="0.3"
-          /> */}
-          {/* <Box
-            position="absolute"
-            bottom="-30%"
-            left="-5%"
-            width="150px"
-            height="150px"
-            borderRadius="full"
-            bg="whiteAlpha.100"
-            opacity="0.4"
-          /> */}
-          
-          {/* <Flex
-            alignItems="center"
-            justifyContent="space-between"
-            flexDirection={{ base: "column", md: "row" }}
-            gap={{ base: "1rem", md: "2rem" }}
-            position="relative"
-            zIndex="1"
-          > */}
-            {/* <VStack
-              alignItems={{ base: "center", md: "flex-start" }}
-              spacing="0.5rem"
-              flex="1"
-            > */}
-              {/* <HStack spacing="0.5rem">
-                <FiCalendar size="20px" color="white" />
-                <Heading
-                  as="h3"
-                  fontSize={{ base: "1.2rem", md: "1.4rem", lg: "1.6rem" }}
-                  color="white"
-                  fontFamily="montserrat"
-                  fontWeight="bold"
-                  textAlign={{ base: "center", md: "left" }}
-                >
-                  Live Social Events
-                </Heading>
-              </HStack> */}
-              
-              {/* <HStack spacing="0.5rem" opacity="0.9" alignItems="flex-start">
-                <FiMapPin size="28px" color="white" />
-                <Text
-                  color="white"
-                  fontSize={{ base: "0.9rem", md: "1rem" }}
-                  fontFamily="montserrat"
-                  textAlign={{ base: "center", md: "left" }}
-                  lineHeight="1.2"
-                >
-                  Discover verified Global Social Nights in Hanoi • Bangkok • Bangalore
-                </Text>
-              </HStack> */}
-            {/* </VStack> */}
-            
-            {/* <Button
-              bg="whiteAlpha.200"
-              color="white"
-              border="2px solid"
-              borderColor="whiteAlpha.300"
-              _hover={{
-                bg: "white",
-                color: "brand.purple",
-                borderColor: "white",
-              }}
-              size={{ base: "md", md: "lg" }}
-              fontFamily="montserrat"
-              fontWeight="bold"
-              borderRadius="lg"
-              px="2rem"
-            >
-              Explore Events
-            </Button> */}
-          {/* </Flex> */}
-        {/* </Box> */}
-      {/* </Box> */}
-
-      {/* Start Here Button */}
-      {/* <Button
-        bg="brand.blue"
-        color="white"
-        _hover={{ bg: "blue.600" }}
-        size={{ base: "lg", md: "xl" }}
-        fontFamily="montserrat"
-        fontWeight="bold"
-        borderRadius="lg"
-        px="3rem"
-        py="1.5rem"
-        fontSize={{ base: "1rem", md: "1.2rem" }}
-        mb={{ base: "3rem", md: "4rem" }}
-        onClick={() => router.push('/video-upload')}
-      >
-        Start Here
-      </Button> */}
-
       {/* Main Content */}
       <VStack
         spacing={{
@@ -414,7 +214,7 @@ const Features = ({isSelectedTileEvent, setIsSelectedTileEvent}) => {
               link={card.link}
               href={card.href}
               setCurrentlySelectedCard={setCurrentlySelectedCard}
-              setIsSelectedTileEvent = {setIsSelectedTileEvent}
+              setIsSelectedTileEvent={setIsSelectedTileEvent}
             />
           </GridItem>
         ))}

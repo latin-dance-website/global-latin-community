@@ -9,21 +9,22 @@ import {
   useMediaQuery,
   Skeleton,
   SkeletonText,
-  Image, // ✅ Import Image component
+  Image,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { FaCalendar, FaClock, FaLocationDot } from "react-icons/fa6";
-
-// Move this outside component to avoid recreation
 const weekdays = [
-  "Sunday", "Monday", "Tuesday", "Wednesday",
-  "Thursday", "Friday", "Saturday"
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
 ];
-
-// ✅ Modified flagMap to map country names to ISO alpha-2 codes
 const countryCodeMap = {
   India: "IN",
   Vietnam: "VN",
@@ -35,29 +36,24 @@ const countryCodeMap = {
   Singapore: "SG",
   UAE: "AE",
 };
-
-// ✅ Modified flag function to return image source
 const addFlagToCity = (citybycountry) => {
   if (!citybycountry) return { text: "", flagImageSrc: "" };
 
   const parts = citybycountry.split(",");
   const city = parts[0]?.trim();
   const country = parts[1]?.trim();
-
-  // Get country code and construct image path
   const countryCode = countryCodeMap[country];
-  // Assuming flags are in /flags/ and named by lowercase country code with .svg extension
-  const flagImageSrc = countryCode ? `/flags/${countryCode.toLowerCase()}.svg` : "";
+  const flagImageSrc = countryCode
+    ? `/flags/${countryCode.toLowerCase()}.svg`
+    : "";
 
   const cleanLocation = city && country ? `${city}, ${country}` : citybycountry;
 
   return {
     text: cleanLocation,
-    flagImageSrc: flagImageSrc, // Now returns the image source path
+    flagImageSrc: flagImageSrc,
   };
 };
-
-// Enhanced loading skeleton component with shimmer and staggered animation
 const EventCardSkeleton = ({ isMobile, isVerySmallMobile, delay = 0 }) => (
   <Box
     flex="none"
@@ -69,16 +65,16 @@ const EventCardSkeleton = ({ isMobile, isVerySmallMobile, delay = 0 }) => (
     opacity={0}
     animation={`fadeInUp 0.6s ease-out ${delay}ms forwards`}
     sx={{
-      '@keyframes fadeInUp': {
-        '0%': {
+      "@keyframes fadeInUp": {
+        "0%": {
           opacity: 0,
-          transform: 'translateY(20px)'
+          transform: "translateY(20px)",
         },
-        '100%': {
+        "100%": {
           opacity: 1,
-          transform: 'translateY(0)'
-        }
-      }
+          transform: "translateY(0)",
+        },
+      },
     }}
   >
     <Box
@@ -103,10 +99,10 @@ const EventCardSkeleton = ({ isMobile, isVerySmallMobile, delay = 0 }) => (
         animation="shimmer 1.5s infinite"
         zIndex={1}
         sx={{
-          '@keyframes shimmer': {
-            '0%': { left: '-100%' },
-            '100%': { left: '100%' }
-          }
+          "@keyframes shimmer": {
+            "0%": { left: "-100%" },
+            "100%": { left: "100%" },
+          },
         }}
       />
       <Skeleton height={{ base: "240px", md: "280px" }} />
@@ -124,57 +120,52 @@ export default function Carousel() {
   const [index, setIndex] = useState(0);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showCards, setShowCards] = useState(false); // Add this new state
+  const [showCards, setShowCards] = useState(false);
   const [error, setError] = useState(null);
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [isScrolling, setIsScrolling] = useState(false);
   const [autoPlay, setAutoPlay] = useState(true);
   const [isVerySmallMobile] = useMediaQuery("(max-width: 350px)");
-
   const cardsPerView = isMobile ? 2 : 4;
-
-  // Memoize today's calculations
   const todayInfo = useMemo(() => {
     const today = dayjs();
     return {
       today,
       todayFullDay: today.format("dddd"),
-      todayIndex: today.day()
+      todayIndex: today.day(),
     };
   }, []);
+  const processEvents = useCallback(
+    (data) => {
+      const { today, todayFullDay, todayIndex } = todayInfo;
 
-  // Memoized event processing function
-  const processEvents = useCallback((data) => {
-    const { today, todayFullDay, todayIndex } = todayInfo;
+      return data
+        .filter((e) => e.id && weekdays.includes(e.day))
+        .map((e) => {
+          const targetDayIndex = weekdays.indexOf(e.day);
+          let offset = targetDayIndex - todayIndex;
+          if (offset < 0) offset += 7;
 
-    return data
-      .filter((e) => e.id && weekdays.includes(e.day))
-      .map((e) => {
-        const targetDayIndex = weekdays.indexOf(e.day);
-        let offset = targetDayIndex - todayIndex;
-        if (offset < 0) offset += 7;
+          const targetDate = today.add(offset, "day");
+          const { text: processedLocation, flagImageSrc } = addFlagToCity(
+            e.citybycountry
+          );
 
-        const targetDate = today.add(offset, "day");
-
-        // ✅ Destructure `flagImageSrc` from the modified `addFlagToCity`
-        const { text: processedLocation, flagImageSrc } = addFlagToCity(e.citybycountry);
-
-        return {
-          ...e,
-          originalDay: e.day,
-          date: targetDate.format("ddd, DD MMM"),
-          shortDate: targetDate.format("DD MMM"),
-          day: targetDate.format("ddd"),
-          title: e.title?.replace(/\s+/g, " ").trim() || "",
-          processedLocation,
-          countryFlagImage: flagImageSrc, // ✅ Store the image source here
-        };
-
-      })
-      .filter((e) => e.originalDay === todayFullDay);
-  }, [todayInfo]);
-
-  // Optimized navigation functions
+          return {
+            ...e,
+            originalDay: e.day,
+            date: targetDate.format("ddd, DD MMM"),
+            shortDate: targetDate.format("DD MMM"),
+            day: targetDate.format("ddd"),
+            title: e.title?.replace(/\s+/g, " ").trim() || "",
+            processedLocation,
+            countryFlagImage: flagImageSrc,
+          };
+        })
+        .filter((e) => e.originalDay === todayFullDay);
+    },
+    [todayInfo]
+  );
   const prev = useCallback(() => {
     if (!isScrolling && events.length > 0) {
       setIndex((prev) => Math.max(0, prev - 1));
@@ -192,19 +183,20 @@ export default function Carousel() {
     }
   }, [isScrolling, events.length, cardsPerView]);
 
-  const handleCardClick = useCallback((event) => {
-    sessionStorage.setItem("currentEvent", JSON.stringify(event));
-    router.push("/events/social");
-  }, [router]);
-
-  // Enhanced fetch with 1.5 second minimum loading time
+  const handleCardClick = useCallback(
+    (event) => {
+      sessionStorage.setItem("currentEvent", JSON.stringify(event));
+      router.push("/events/social");
+    },
+    [router]
+  );
   useEffect(() => {
     const abortController = new AbortController();
 
     async function load() {
       try {
         setLoading(true);
-        setShowCards(false); // Reset show cards
+        setShowCards(false);
         setError(null);
 
         const startTime = Date.now();
@@ -212,8 +204,8 @@ export default function Carousel() {
         const res = await fetch("/api/events", {
           signal: abortController.signal,
           headers: {
-            'Cache-Control': 'public, max-age=300' // 5 minute cache
-          }
+            "Cache-Control": "public, max-age=300",
+          },
         });
 
         if (!res.ok) {
@@ -224,24 +216,19 @@ export default function Carousel() {
         const processedEvents = processEvents(data);
 
         setEvents(processedEvents);
-
-        // Ensure minimum 1.5 second loading time
         const elapsedTime = Date.now() - startTime;
         const remainingTime = Math.max(0, 1500 - elapsedTime);
 
         setTimeout(() => {
           setLoading(false);
-          // Small delay then show cards with animation
           setTimeout(() => {
             setShowCards(true);
           }, 100);
         }, remainingTime);
-
       } catch (e) {
-        if (e.name !== 'AbortError') {
+        if (e.name !== "AbortError") {
           console.error("Fetch error:", e);
           setError(e.message);
-          // Still show loading for 1.5 seconds even on error
           setTimeout(() => {
             setLoading(false);
           }, 1500);
@@ -255,38 +242,42 @@ export default function Carousel() {
       abortController.abort();
     };
   }, [processEvents]);
+  const scrollTo = useCallback(
+    (idx) => {
+      if (!scrollRef.current || isScrolling || events.length === 0) return;
 
-  // Optimized scroll function
-  const scrollTo = useCallback((idx) => {
-    if (!scrollRef.current || isScrolling || events.length === 0) return;
+      setIsScrolling(true);
+      const container = scrollRef.current;
+      const cardWidth = container.children[0]?.offsetWidth || 0;
+      const gap = isMobile ? 16 : 20;
+      const scrollAmount = (cardWidth + gap) * idx;
 
-    setIsScrolling(true);
-    const container = scrollRef.current;
-    const cardWidth = container.children[0]?.offsetWidth || 0;
-    const gap = isMobile ? 16 : 20;
-    const scrollAmount = (cardWidth + gap) * idx;
+      container.scrollTo({
+        left: scrollAmount,
+        behavior: "smooth",
+        duration: 800,
+      });
 
-    container.scrollTo({ left: scrollAmount, behavior: "smooth" });
-    setTimeout(() => setIsScrolling(false), 300);
-  }, [isScrolling, events.length, isMobile]);
+      setTimeout(() => setIsScrolling(false), 800);
+    },
+    [isScrolling, events.length, isMobile]
+  );
 
   useEffect(() => scrollTo(index), [index, scrollTo]);
-
-  // Auto-play with cleanup
   useEffect(() => {
-    if (!autoPlay || events.length === 0 || events.length <= cardsPerView) return;
+    if (!autoPlay || events.length === 0 || events.length <= cardsPerView)
+      return;
 
     const interval = setInterval(() => {
       setIndex((prevIndex) => {
         const maxIndex = Math.max(0, events.length - cardsPerView);
         return prevIndex >= maxIndex ? 0 : prevIndex + 1;
       });
-    }, 3000);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [autoPlay, events.length, cardsPerView]);
 
-  // Loading state with staggered skeletons
   if (loading) {
     return (
       <Box
@@ -308,7 +299,7 @@ export default function Carousel() {
               key={i}
               isMobile={isMobile}
               isVerySmallMobile={isVerySmallMobile}
-              delay={i * 150} // Staggered delay - 150ms between each card
+              delay={i * 150}
             />
           ))}
         </Box>
@@ -327,7 +318,9 @@ export default function Carousel() {
         gap={2}
       >
         <Text color="red.500">Failed to load events</Text>
-        <Text fontSize="sm" color="gray.500">{error}</Text>
+        <Text fontSize="sm" color="gray.500">
+          {error}
+        </Text>
       </Box>
     );
   }
@@ -412,7 +405,7 @@ export default function Carousel() {
       >
         {events.map((event, eventIndex) => (
           <Box
-            key={`${event.id}-${event.city}`} // Better key
+            key={`${event.id}-${event.city}`}
             flex="none"
             width={{
               base: events.length === 1 ? "80%" : `calc(50% - 8px)`,
@@ -431,10 +424,9 @@ export default function Carousel() {
             }}
             cursor="pointer"
             maxWidth={{ base: "300px", md: "350px" }}
-            // Add entrance animation
             opacity={showCards ? 1 : 0}
             transform={showCards ? "translateY(0)" : "translateY(30px)"}
-            transition={`all 0.6s ease-out ${eventIndex * 100}ms`} // Staggered entrance
+            transition={`all 0.8s ease-out ${eventIndex * 100}ms`}
           >
             <Box
               borderRadius="12px"
@@ -465,7 +457,7 @@ export default function Carousel() {
                 <img
                   src={event.image}
                   alt={event.title}
-                  loading="lazy" // Add lazy loading
+                  loading="lazy"
                   style={{
                     width: "100%",
                     height: "100%",
@@ -487,7 +479,7 @@ export default function Carousel() {
                   fontSize={{
                     base: isVerySmallMobile ? "10px" : "11px",
                     sm: "12px",
-                    md: "13px"
+                    md: "13px",
                   }}
                   fontWeight="700"
                   noOfLines={1}
@@ -506,9 +498,22 @@ export default function Carousel() {
 
                 {/* Mobile Layout */}
                 {isMobile ? (
-                  <Flex align="flex-start" justify="center" width="100%" gap={0.5} px={0}>
+                  <Flex
+                    align="flex-start"
+                    justify="center"
+                    width="100%"
+                    gap={0.5}
+                    px={0}
+                  >
                     {/* Icons column */}
-                    <VStack spacing={1} align="center" mt="1px" width="12px" flexShrink={0} ml={0.5}>
+                    <VStack
+                      spacing={1}
+                      align="center"
+                      mt="1px"
+                      width="12px"
+                      flexShrink={0}
+                      ml={0.5}
+                    >
                       <Box
                         color="#6366f1"
                         fontSize="10px"
@@ -540,8 +545,21 @@ export default function Carousel() {
                     {/* Content column */}
                     <VStack spacing={1} align="flex-start" width="100%" pr={0}>
                       {/* Date + Time Row */}
-                      <Flex align="center" gap={1} flexWrap="nowrap" flex="1" flexShrink={1} width="100%">
-                        <Flex align="center" gap={1} whiteSpace="nowrap" flexShrink={0} ml="-3px">
+                      <Flex
+                        align="center"
+                        gap={1}
+                        flexWrap="nowrap"
+                        flex="1"
+                        flexShrink={1}
+                        width="100%"
+                      >
+                        <Flex
+                          align="center"
+                          gap={1}
+                          whiteSpace="nowrap"
+                          flexShrink={0}
+                          ml="-3px"
+                        >
                           <Text
                             fontSize={isVerySmallMobile ? "9px" : "10px"}
                             color="gray.600"
@@ -555,7 +573,14 @@ export default function Carousel() {
                             {event.day}, {event.shortDate}
                           </Text>
                         </Flex>
-                        <Flex align="center" gap={0.5} whiteSpace="nowrap" flexShrink={1} minWidth={0} ml="-3px">
+                        <Flex
+                          align="center"
+                          gap={0.5}
+                          whiteSpace="nowrap"
+                          flexShrink={1}
+                          minWidth={0}
+                          ml="-3px"
+                        >
                           <Box
                             flexShrink={0}
                             color="#6366f1"
@@ -578,7 +603,9 @@ export default function Carousel() {
                             textOverflow="ellipsis"
                             whiteSpace="nowrap"
                           >
-                            {event.startTime}-{event.endTime === '0:00' ? '00:00' : event.endTime} hrs
+                            {event.startTime}-
+                            {event.endTime === "0:00" ? "00:00" : event.endTime}{" "}
+                            hrs
                           </Text>
                         </Flex>
                       </Flex>
@@ -595,14 +622,14 @@ export default function Carousel() {
                         >
                           {event.processedLocation}
                         </Text>
-                        {/* ✅ Display flag image for mobile */}
+                        {/*  Display flag image for mobile */}
                         {event.countryFlagImage && (
                           <Image
                             src={event.countryFlagImage}
                             alt={`${event.processedLocation} flag`}
-                            boxSize={isVerySmallMobile ? "10px" : "12px"} // Adjust size for small mobile
+                            boxSize={isVerySmallMobile ? "10px" : "12px"}
                             objectFit="contain"
-                            ml="1px" // Adjust margin as needed
+                            ml="1px"
                           />
                         )}
                       </Flex>
@@ -617,7 +644,11 @@ export default function Carousel() {
                       width="100%"
                       mb={{ base: "3px", md: "4px" }}
                     >
-                      <Flex align="flex-start" gap={{ base: 0.5, md: 2 }} justify="center">
+                      <Flex
+                        align="flex-start"
+                        gap={{ base: 0.5, md: 2 }}
+                        justify="center"
+                      >
                         <Box
                           flexShrink={0}
                           color="#6366f1"
@@ -636,16 +667,13 @@ export default function Carousel() {
                           flex="none"
                           wordBreak="break-word"
                         >
-                          {event.day}, {event.shortDate} {event.startTime}-{event.endTime}hrs
+                          {event.day}, {event.shortDate} {event.startTime}-
+                          {event.endTime}hrs
                         </Text>
                       </Flex>
                     </Flex>
 
-                    <Flex
-                      align="center"
-                      justify="center"
-                      width="100%"
-                    >
+                    <Flex align="center" justify="center" width="100%">
                       <Flex align="center" gap={2}>
                         <Box flexShrink={0} color="#6366f1" fontSize="13px">
                           <FaLocationDot />
@@ -667,9 +695,9 @@ export default function Carousel() {
                             <Image
                               src={event.countryFlagImage}
                               alt={`${event.processedLocation} flag`}
-                              boxSize="16px" // Adjust size for desktop
+                              boxSize="16px"
                               objectFit="contain"
-                              ml="4px" // Adjust margin as needed
+                              ml="4px"
                             />
                           )}
                         </Flex>

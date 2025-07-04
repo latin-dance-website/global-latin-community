@@ -154,6 +154,17 @@ body {
   animation: boxPulse 2s ease-in-out infinite;
 }
 
+@media (max-width: 600px) {
+  div[style*="position: fixed"][style*="bottom: 20px"] {
+    right: 10px !important;
+    left: 10px !important;
+    max-width: none !important;
+    width: auto !important;
+    border-radius: 12px !important;
+  }
+}
+
+
 @media (max-width: 504px) {
   .custom-range-picker:hover {
     position:absolute;

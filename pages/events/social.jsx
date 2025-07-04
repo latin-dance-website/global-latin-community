@@ -189,15 +189,20 @@ export default function Social() {
           /* Mobile Layout - Enhanced with modern design */
           <Box>
             {/* Event Title */}
-            <Heading
-  fontSize={{ base: "xl", sm: "2xl" }}
-  fontWeight="bold"
+            {/* Event Title - Gradient Text Version */}
+{/* Event Title - Matching Social Nights Style */}
+<Heading
+  fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}  // Same responsive sizes
+  fontWeight="extrabold"                            // Same weight
+  color="#dc2626"                                   // Same red color
+  textShadow="0 1px 2px rgba(0,0,0,0.1)"           // Same shadow
   mb={3}
-  mt={{ base: 8, sm: 8 }}  // ✅ consistent spacing for mobile breakpoints
+  mt={{ base: 9, sm: 8 }}
   textAlign="center"
-  color={colors.textPrimary}
-  bgGradient={colors.primaryGradient}
-  bgClip="text"
+  sx={{
+    fontFamily: "inherit",                          // Ensures font consistency
+    lineHeight: "1.2",                              // Matches original heading
+  }}
 >
   {event.title}
 </Heading>
@@ -438,8 +443,40 @@ export default function Social() {
   </Flex>
 </Box>
 
-            {/* Action Buttons with Modern Style */}
-            <HStack spacing={2} mb={4}>
+           {/* About Section with Enhanced Design */}
+<Box mb={14}>
+  <Box
+    bg={colors.cardBg}
+    borderRadius="16px"
+    boxShadow={colors.shadowMd}
+    border={`1px solid ${colors.border}`}
+    p={3}
+    mb={4}
+  >
+    <Heading fontSize="lg" mb={3} color={colors.textPrimary}>
+      About The Event
+    </Heading>
+    <Text
+      fontSize="sm"
+      color={colors.textSecondary}
+      lineHeight="1.6"
+      mb={3}
+    >
+      {event.description || "No description available."}
+    </Text>
+    
+    {/* Music Ratio */}
+    {event.musicRatio && (
+      <Box mb={4}>
+        <Text fontWeight="bold" fontSize="sm" mb={2} color={colors.textPrimary}>
+          Music Ratio
+        </Text>
+        <Text fontSize="sm" color={colors.textSecondary}>
+          {event.musicRatio}
+        </Text>
+      </Box>
+    )}
+     <HStack spacing={2} mb={4}>
               {event.instagramHandle && (
                 <Button
                   as="a"
@@ -465,40 +502,7 @@ export default function Social() {
               )}
               
             </HStack>
-
-            {/* About Section with Enhanced Design */}
-            <Box mb={14}>
-            <Box
-    bg={colors.cardBg}
-    borderRadius="16px"
-    boxShadow={colors.shadowMd}
-    border={`1px solid ${colors.border}`}
-    p={3}
-    mb={4}
-  >
-    <Heading fontSize="lg" mb={3} color={colors.textPrimary}>
-      About The Event
-    </Heading>
-    <Text
-      fontSize="sm"
-      color={colors.textSecondary}
-      lineHeight="1.6"
-      mb={3}
-    >
-      {event.description || "No description available."}
-    </Text>
     
-    {/* Music Ratio (replacing Event Guide) */}
-    {event.musicRatio && (
-      <Box mb={4}>
-        <Text fontWeight="bold" fontSize="sm" mb={2} color={colors.textPrimary}>
-          Music Ratio
-        </Text>
-        <Text fontSize="sm" color={colors.textSecondary}>
-          {event.musicRatio}
-        </Text>
-      </Box>
-    )}
     
     <Button
       variant="link"
@@ -513,44 +517,7 @@ export default function Social() {
       Show more
     </Button>
   </Box>
-
-  {/* Venue Section */}
-  <Box
-  bg={colors.cardBg}
-  borderRadius="16px"
-  boxShadow={colors.shadowMd}
-  border={`1px solid ${colors.border}`}
-  p={2.5} // reduced padding
->
-  <Heading fontSize="lg" mb={2} color={colors.textPrimary}>
-    Venue
-  </Heading>
-  <Text
-    fontSize="sm"
-    color={colors.textSecondary}
-    fontWeight="600"
-    mb={2}
-    lineHeight="1.4" // tighter line spacing
-    whiteSpace="pre-line" // so `\n` works in fallback
-  >
-    {event.location ||
-      "Nojoto Creator Hub\nBasement Shop, Besides Ginger Brown Cafe, PVR Anupam Saket, Gali No. 1, Saket, New Delhi, Delhi 110017, India"}
-  </Text>
-  <Button
-    as="a"
-    href={event.googleMapsLink}
-    target="_blank"
-    rel="noopener noreferrer"
-    size="sm"
-    colorScheme="purple"
-    variant="outline"
-    rightIcon={<ExternalLinkIcon />}
-  >
-    GET DIRECTIONS
-  </Button>
 </Box>
-
-  </Box>
   </Box>
 
         ) : (

@@ -366,28 +366,53 @@ export default function EventsDisplayPage({ allEvents }) {
         </Box>
 
         <Box
-          w="100%"
-          h="3px"
-          bg="linear-gradient(90deg, transparent, #a0aec0, transparent)"
-          mt={{ base: "4px", md: "6px" }}
-          mb={0}
-        />
+  w="100%"
+  h="3px"
+  bg="linear-gradient(90deg, transparent, #a0aec0, transparent)"
+  mt={{ base: "4px", md: "6px" }}
+  mb={0}
+/>
 
-        <Box mt={{ base: "-2px", md: "6px" }} mb={8} textAlign="center">
-          <Heading
-            fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
-            fontWeight="extrabold"
-            color="#dc2626"
-          >
-            Social Nights in {city}
-          </Heading>
-          {startDate && endDate && (
-            <Text fontSize="lg" color="#4a5568" mt={1} mb={-2}>
-              From {dayjs(startDate).format("MMM D")} to{" "}
-              {dayjs(endDate).format("MMM D, YYYY")}
-            </Text>
-          )}
-        </Box>
+{/* Modified heading container with transparent background */}
+<Box 
+  mt={{ base: "-2px", md: "6px" }}
+  mb={{ base: 4, md: 8 }}
+  textAlign="center"
+  position={{ base: "sticky", md: "static" }}
+  top={{ base: "0", md: "auto" }}
+  zIndex={1}
+  py={{ base: 2, md: 0 }}
+  px={{ base: 4, md: 0 }}
+  bg="transparent" 
+>
+  <Box 
+    display="inline-block" 
+    bg="transparent"
+    px={{ base: 4, md: 0 }}
+    py={{ base: 2, md: 0 }}
+  >
+    <Heading
+      fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+      fontWeight="extrabold"
+      color="#dc2626"
+      textShadow="0 1px 2px rgba(0,0,0,0.1)" 
+    >
+      Social Nights in {city}
+    </Heading>
+    {startDate && endDate && (
+      <Text 
+        fontSize="lg" 
+        color="#4a5568" 
+        mt={1} 
+        mb={-2}
+        textShadow="0 1px 1px rgba(0,0,0,0.1)" 
+      >
+        From {dayjs(startDate).format("MMM D")} to{" "}
+        {dayjs(endDate).format("MMM D, YYYY")}
+      </Text>
+    )}
+  </Box>
+</Box>
 {/* Events Display */}
 <Box width="100%" mt={-2} mb={4} px={{ base: 4, md: 6 }}>
   {/* Mobile: Vertical scrolling grid */}
@@ -415,7 +440,7 @@ export default function EventsDisplayPage({ allEvents }) {
           scrollSnapAlign="start"
           onClick={() => handleExploreNow(event)}
           cursor="pointer"
-          mb={4} // Margin between cards
+          mb={6} // Margin between cards
           sx={{
             transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
@@ -536,34 +561,36 @@ export default function EventsDisplayPage({ allEvents }) {
               </Text>
 
               {/* Buy Tickets Button */}
-              <Box
-                as="button"
-                bg="#dc2626"
-                color="white"
-                fontSize="14px"
-                fontWeight="600"
-                px={4}
-                py={2}
-                borderRadius="8px"
-                border="none"
-                cursor="pointer"
-                textAlign="center"
-                width="100%"
-                mt={-1.5}
-                sx={{
-                  fontFamily: "inherit",
-                  transition: "all 0.3s ease",
-                }}
-                _hover={{
-                  bg: "#b91c1c",
-                  transform: "translateY(-2px)",
-                }}
-                _active={{
-                  transform: "translateY(0)",
-                }}
-              >
-                BOOK TICKETS
-              </Box>
+              {/* Buy Tickets Button */}
+<Box
+  as="button"
+  bgGradient="linear(135deg, #805AD5 0%, #D53F8C 100%)" // Purple to Pink gradient
+  color="white"
+  fontSize="14px"
+  fontWeight="600"
+  px={4}
+  py={2}
+  borderRadius="8px"
+  border="none"
+  cursor="pointer"
+  textAlign="center"
+  width="100%"
+  mt={-1.5}
+  sx={{
+    fontFamily: "inherit",
+    transition: "all 0.3s ease",
+  }}
+  _hover={{
+    bgGradient: "linear(135deg, #6B46C1 0%, #B83280 100%)", // Darker gradient on hover
+    transform: "translateY(-2px)",
+    boxShadow: "0 4px 12px rgba(214, 54, 140, 0.3)", // Optional: Adds glow effect
+  }}
+  _active={{
+    transform: "translateY(0)",
+  }}
+>
+  BOOK TICKETS
+</Box>
 
               {/* Event Details - New Layout */}
               <Box display="flex" flexDirection="column" gap={3}>
@@ -571,9 +598,9 @@ export default function EventsDisplayPage({ allEvents }) {
                 <Flex justify="space-between" align="center" width="100%">
                   {/* Date */}
                   <Flex align="center" gap={2}>
-                    <Box color="#dc2626" fontSize="14px">
-                      <FaCalendar />
-                    </Box>
+                    <Box color="#805AD5" fontSize="14px">  {/* Chakra purple.400 */}
+  <FaCalendar />
+</Box>
                     <Text
                       fontSize="13px"
                       color="black" // Changed to black
@@ -586,7 +613,7 @@ export default function EventsDisplayPage({ allEvents }) {
 
                   {/* Time */}
                   <Flex align="center" gap={2}>
-                    <Box color="#dc2626" fontSize="14px">
+                    <Box color="#805AD5" fontSize="14px">
                       <FaClock />
                     </Box>
                     <Text
@@ -601,7 +628,7 @@ export default function EventsDisplayPage({ allEvents }) {
 
                   {/* Fees */}
                   <Flex align="center" gap={2}>
-                    <Box color="#dc2626" fontSize="14px">
+                    <Box color="#805AD5" fontSize="14px">
                       {event.currencySymbols || "₫"}
                     </Box>
                     <Text
@@ -619,7 +646,7 @@ export default function EventsDisplayPage({ allEvents }) {
                 <Flex direction="column" gap={3} pl={1}>
   {/* Music Ratio */}
   <Flex align="center" gap={2} ml={-1}>
-    <Box color="#dc2626" fontSize="14px">
+    <Box color="#805AD5" fontSize="14px">
       <FaMusic />
     </Box>
     <Text
@@ -634,7 +661,7 @@ export default function EventsDisplayPage({ allEvents }) {
 
   {/* Location */}
   <Flex align="flex-start" gap={2} ml={-1} mb={-2}>
-    <Box color="#dc2626" fontSize="14px" pt="1px">
+    <Box color="#805AD5" fontSize="14px" pt="1px">
       <FaLocationDot />
     </Box>
     <Text
@@ -766,18 +793,34 @@ export default function EventsDisplayPage({ allEvents }) {
               </Text>
               {/* BOOK TICKETS button */}
               <Button
-                mt={2}
-                size="md"
-                bg="#e53e3e"
-                color="white"
-                _hover={{ bg: "#c53030" }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Add your booking logic here
-                }}
-              >
-                BOOK TICKETS
-              </Button>
+  mt={2}
+  size="md"
+  bgGradient="linear(135deg, #805AD5 0%, #D53F8C 100%)"
+  color="white"
+  fontSize="14px"
+  fontWeight="600"
+  px={4}
+  py={2}
+  borderRadius="8px"
+  width="100%"
+  textAlign="center"
+  fontFamily="inherit"
+  transition="all 0.3s ease"
+  _hover={{
+    bgGradient: "linear(135deg, #6B46C1 0%, #B83280 100%)",
+    transform: "translateY(-2px)",
+    boxShadow: "0 4px 12px rgba(214, 54, 140, 0.3)",
+  }}
+  _active={{
+    transform: "translateY(0)",
+  }}
+  onClick={(e) => {
+    e.stopPropagation();
+    // Add your booking logic here
+  }}
+>
+  BOOK TICKETS
+</Button>
             </Box>
 
             {/* Date, Time, and Price */}
@@ -794,7 +837,7 @@ export default function EventsDisplayPage({ allEvents }) {
                 flex="0 0 auto"
                 justify="flex-start"
               >
-                <Box color="#e53e3e" fontSize="15px" flexShrink={0}>
+                <Box color="#805AD5" fontSize="15px" flexShrink={0}>
                   <FaCalendar />
                 </Box>
                 <Text
@@ -812,7 +855,7 @@ export default function EventsDisplayPage({ allEvents }) {
                 flex="0 0 auto"
                 justify="center"
               >
-                <Box color="#e53e3e" fontSize="15px" flexShrink={0}>
+                <Box color="#805AD5" fontSize="15px" flexShrink={0}>
                   <FaClock />
                 </Box>
                 <Text
@@ -839,7 +882,7 @@ export default function EventsDisplayPage({ allEvents }) {
                   alignItems="center"
                   gap={1}
                 >
-                  <Box as="span" color="#e53e3e">
+                  <Box as="span" color="#805AD5">
                     {event.currencySymbols || "₫"}
                   </Box>
                   {event.fees || "Free"}
@@ -854,7 +897,7 @@ export default function EventsDisplayPage({ allEvents }) {
               width="100%"
               gap={2}
             >
-              <Box color="#e53e3e" fontSize="15px">
+              <Box color="#805AD5" fontSize="15px">
                 <FaMusic />
               </Box>
               <Text fontSize="14px" color="#000000" fontWeight="600">
@@ -869,7 +912,7 @@ export default function EventsDisplayPage({ allEvents }) {
               width="100%"
               gap={2}
             >
-              <Box flexShrink={0} color="#e53e3e" fontSize="15px">
+              <Box flexShrink={0} color="#805AD5" fontSize="15px">
                 <FaLocationDot />
               </Box>
               <Text

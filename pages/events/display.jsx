@@ -198,9 +198,10 @@ export default function EventsDisplayPage({ allEvents }) {
   const handleMouseLeave = () => setIsAutoScrolling(true);
 
   const handleExploreNow = (event) => {
-    sessionStorage.setItem("currentEvent", JSON.stringify(event));
-    router.push("/events/social");
-  };
+  const normalizedCity = event.city.trim().toLowerCase();
+  router.push(`/events/${normalizedCity}/${event.id}`);
+};
+
   const validateFields = () => {
     const missingFields = [];
 

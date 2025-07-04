@@ -22,6 +22,10 @@ const generateEventCardHTML = (event, index) => {
     ? `${event.currencySymbols || "₫"}${event.fees.toLocaleString()}`
     : "FREE";
 
+  // Generate event link - normalize city name to lowercase
+  const normalizedCity = event.city.trim().toLowerCase();
+  const eventLink = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://yourdomain.com'}/events/${normalizedCity}/${event.id}`;
+
   // Gradient colors - using solid fallbacks for email clients
   const gradients = [
     { background: '#667eea', fallback: '#667eea', text: '#764ba2' },
@@ -45,161 +49,199 @@ const generateEventCardHTML = (event, index) => {
       box-sizing: border-box;
       vertical-align: top;
     ">
-      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="
-        border-collapse: collapse; 
-        mso-table-lspace: 0pt; 
-        mso-table-rspace: 0pt; 
-        background: #ffffff; 
-        border-radius: 12px; 
-        box-shadow: 0 6px 20px rgba(0,0,0,0.12); 
-        border: 1px solid #e2e8f0;
-      ">
-        <!-- Event Image with Overlay -->
-        <tr>
-          <td style="position: relative;">
-            <!--[if (gte mso 9)|(IE)]>
-            <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:260px;height:160px;">
-            <v:fill type="tile" src="${event.image}" color="${cardColor.fallback}" />
-            <v:textbox inset="0,0,0,0">
-            <![endif]-->
-            <div>
-              <img src="${event.image}" width="260" style="
-                width: 100%; 
-                max-width: 260px; 
-                height: 160px; 
-                object-fit: cover; 
-                border: 0; 
-                outline: none; 
-                display: block;
-                border-radius: 12px 12px 0 0;
-              " alt="${event.title}" />
-              <div style="
-                position: absolute; 
-                top: 0; 
-                left: 0; 
-                right: 0; 
-                bottom: 0; 
-                background: ${cardColor.background}; 
-                opacity: 0.15;
-                border-radius: 12px 12px 0 0;
-              "></div>
-            </div>
-            <!--[if (gte mso 9)|(IE)]>
-            </v:textbox>
-            </v:rect>
-            <![endif]-->
-          </td>
-        </tr>
-        
-        <!-- Event Content -->
-        <tr>
-          <td style="padding: 16px 14px;">
-            <!-- Event Title -->
-            <h3 style="
-              margin: 0 0 12px 0; 
-              font-size: 15px; 
-              font-weight: 700; 
-              color: ${cardColor.text}; 
-              text-align: center; 
-              line-height: 1.3;
-            ">
-              ${event.title || "Event Title"}
-            </h3>
-            
-            <!-- Date, Time & Fees Row -->
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="
-              border-collapse: collapse; 
-              mso-table-lspace: 0pt; 
-              mso-table-rspace: 0pt; 
-              margin-bottom: 10px;
-            ">
-              <tr>
-                <td width="33.33%" style="padding-right: 2px; text-align: center;">
-                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td style="text-align: center; vertical-align: middle; white-space: nowrap;">
-                        <span style="font-size: 12px; margin-right: 2px;">📅</span>
-                        <span style="font-weight: 600; font-size: 9px; white-space: nowrap;">${formattedDate}</span>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-                <td width="33.33%" style="padding: 0 1px; text-align: center;">
-                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td style="text-align: center; vertical-align: middle; white-space: nowrap;">
-                        <span style="font-size: 12px; margin-right: 2px;">⏰</span>
-                        <span style="font-weight: 600; font-size: 9px; white-space: nowrap;">${formattedTime}</span>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-                <td width="33.33%" style="padding-left: 2px; text-align: center;">
-                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td style="text-align: center; vertical-align: middle; white-space: nowrap;">
-                        <span style="font-size: 12px; margin-right: 2px;">💰</span>
-                        <span style="font-weight: 600; font-size: 9px; color: ${event.fees ? '#ff6b6b' : '#00b894'}; white-space: nowrap;">${formattedPrice}</span>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-            
-            <!-- Music Ratio -->
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="
-              border-collapse: collapse; 
-              mso-table-lspace: 0pt; 
-              mso-table-rspace: 0pt; 
-              margin-bottom: 10px;
-            ">
-              <tr>
-                <td style="background: #fff5f5; padding: 8px 10px; border-radius: 6px;">
-                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td width="20" style="vertical-align: middle; padding-right: 6px;">
-                        <span style="font-size: 12px;">🎵</span>
-                      </td>
-                      <td style="vertical-align: middle;">
-                        <span style="font-weight: 600; font-size: 11px;">Music Ratio: ${event.musicRatio || "1:1"}</span>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-            
-            <!-- Location -->
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="
-              border-collapse: collapse; 
-              mso-table-lspace: 0pt; 
-              mso-table-rspace: 0pt;
-            ">
-              <tr>
-                <td style="background: #f0fff4; padding: 8px 10px; border-radius: 6px;">
-                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td width="20" style="vertical-align: top; padding-right: 6px;">
-                        <span style="font-size: 12px;">📍</span>
-                      </td>
-                      <td style="vertical-align: middle;">
-                        <span style="
-                          font-weight: 600; 
-                          line-height: 1.3; 
-                          word-break: break-word; 
-                          font-size: 10px; 
-                          display: inline-block;
-                        ">${event.location.replace(/,/g, ", ")}</span>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
+      <!-- Wrap entire card in a clickable link -->
+      <a href="${eventLink}" style="
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition: transform 0.2s ease;
+      " target="_blank">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="
+          border-collapse: collapse; 
+          mso-table-lspace: 0pt; 
+          mso-table-rspace: 0pt; 
+          background: #ffffff; 
+          border-radius: 12px; 
+          box-shadow: 0 6px 20px rgba(0,0,0,0.12); 
+          border: 1px solid #e2e8f0;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        ">
+          <!-- Event Image with Overlay -->
+          <tr>
+            <td style="position: relative;">
+              <!--[if (gte mso 9)|(IE)]>
+              <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:260px;height:160px;">
+              <v:fill type="tile" src="${event.image}" color="${cardColor.fallback}" />
+              <v:textbox inset="0,0,0,0">
+              <![endif]-->
+              <div>
+                <img src="${event.image}" width="260" style="
+                  width: 100%; 
+                  max-width: 260px; 
+                  height: 160px; 
+                  object-fit: cover; 
+                  border: 0; 
+                  outline: none; 
+                  display: block;
+                  border-radius: 12px 12px 0 0;
+                " alt="${event.title}" />
+                <div style="
+                  position: absolute; 
+                  top: 0; 
+                  left: 0; 
+                  right: 0; 
+                  bottom: 0; 
+                  background: ${cardColor.background}; 
+                  opacity: 0.15;
+                  border-radius: 12px 12px 0 0;
+                "></div>
+              </div>
+              <!--[if (gte mso 9)|(IE)]>
+              </v:textbox>
+              </v:rect>
+              <![endif]-->
+            </td>
+          </tr>
+          
+          <!-- Event Content -->
+          <tr>
+            <td style="padding: 16px 14px;">
+              <!-- Event Title -->
+              <h3 style="
+                margin: 0 0 12px 0; 
+                font-size: 15px; 
+                font-weight: 700; 
+                color: ${cardColor.text}; 
+                text-align: center; 
+                line-height: 1.3;
+              ">
+                ${event.title || "Event Title"}
+              </h3>
+              
+              <!-- Date, Time & Fees Row -->
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="
+                border-collapse: collapse; 
+                mso-table-lspace: 0pt; 
+                mso-table-rspace: 0pt; 
+                margin-bottom: 10px;
+              ">
+                <tr>
+                  <td width="33.33%" style="padding-right: 2px; text-align: center;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td style="text-align: center; vertical-align: middle; white-space: nowrap;">
+                          <span style="font-size: 12px; margin-right: 2px;">📅</span>
+                          <span style="font-weight: 600; font-size: 9px; white-space: nowrap;">${formattedDate}</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td width="33.33%" style="padding: 0 1px; text-align: center;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td style="text-align: center; vertical-align: middle; white-space: nowrap;">
+                          <span style="font-size: 12px; margin-right: 2px;">⏰</span>
+                          <span style="font-weight: 600; font-size: 9px; white-space: nowrap;">${formattedTime}</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td width="33.33%" style="padding-left: 2px; text-align: center;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td style="text-align: center; vertical-align: middle; white-space: nowrap;">
+                          <span style="font-size: 12px; margin-right: 2px;">💰</span>
+                          <span style="font-weight: 600; font-size: 9px; color: ${event.fees ? '#ff6b6b' : '#00b894'}; white-space: nowrap;">${formattedPrice}</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Music Ratio -->
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="
+                border-collapse: collapse; 
+                mso-table-lspace: 0pt; 
+                mso-table-rspace: 0pt; 
+                margin-bottom: 10px;
+              ">
+                <tr>
+                  <td style="background: #fff5f5; padding: 8px 10px; border-radius: 6px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td width="20" style="vertical-align: middle; padding-right: 6px;">
+                          <span style="font-size: 12px;">🎵</span>
+                        </td>
+                        <td style="vertical-align: middle;">
+                          <span style="font-weight: 600; font-size: 11px;">Music Ratio: ${event.musicRatio || "1:1"}</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Location -->
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="
+                border-collapse: collapse; 
+                mso-table-lspace: 0pt; 
+                mso-table-rspace: 0pt; 
+                margin-bottom: 12px;
+              ">
+                <tr>
+                  <td style="background: #f0fff4; padding: 8px 10px; border-radius: 6px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td width="20" style="vertical-align: top; padding-right: 6px;">
+                          <span style="font-size: 12px;">📍</span>
+                        </td>
+                        <td style="vertical-align: middle;">
+                          <span style="
+                            font-weight: 600; 
+                            line-height: 1.3; 
+                            word-break: break-word; 
+                            font-size: 10px; 
+                            display: inline-block;
+                          ">${event.location.replace(/,/g, ", ")}</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- View Details Button -->
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="
+                border-collapse: collapse; 
+                mso-table-lspace: 0pt; 
+                mso-table-rspace: 0pt;
+              ">
+                <tr>
+                  <td style="text-align: center; padding-top: 8px;">
+                    <div style="
+                      display: inline-block;
+                      background: ${cardColor.background};
+                      color: white;
+                      padding: 8px 16px;
+                      border-radius: 6px;
+                      font-size: 11px;
+                      font-weight: 700;
+                      text-decoration: none;
+                      border: none;
+                      cursor: pointer;
+                      transition: all 0.3s ease;
+                    ">
+                      VIEW DETAILS →
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </a>
     </div>
     <!--[if (gte mso 9)|(IE)]>
     </td>

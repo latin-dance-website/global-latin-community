@@ -186,12 +186,11 @@ const next = useCallback(() => {
 }, [events.length, cardsPerView]);
 
   const handleCardClick = useCallback(
-    (event) => {
-      sessionStorage.setItem("currentEvent", JSON.stringify(event));
-      router.push("/events/social");
-    },
-    [router]
-  );
+  (event) => {
+    router.push(`/events/${encodeURIComponent(event.city.toLowerCase())}/${event.id}`);
+  },
+  [router]
+);
   useEffect(() => {
     const abortController = new AbortController();
 

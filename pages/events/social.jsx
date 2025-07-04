@@ -516,31 +516,40 @@ export default function Social() {
 
   {/* Venue Section */}
   <Box
-    bg={colors.cardBg}
-    borderRadius="16px"
-    boxShadow={colors.shadowMd}
-    border={`1px solid ${colors.border}`}
-    p={3}
+  bg={colors.cardBg}
+  borderRadius="16px"
+  boxShadow={colors.shadowMd}
+  border={`1px solid ${colors.border}`}
+  p={2.5} // reduced padding
+>
+  <Heading fontSize="lg" mb={2} color={colors.textPrimary}>
+    Venue
+  </Heading>
+  <Text
+    fontSize="sm"
+    color={colors.textSecondary}
+    fontWeight="600"
+    mb={2}
+    lineHeight="1.4" // tighter line spacing
+    whiteSpace="pre-line" // so `\n` works in fallback
   >
-    <Heading fontSize="lg" mb={3} color={colors.textPrimary}>
-      Venue
-    </Heading>
-    <Text fontSize="sm" color={colors.textSecondary} mb={3}>
-      {event.location || "Nojoto Creator Hub\nBasement Shop, Besides Ginger Brown Cafe, PVR Anupam Saket, Gali No. 1, Saket, New Delhi, Delhi 110017, India"}
-    </Text>
-    <Button
-      as="a"
-      href={event.googleMapsLink}
-      target="_blank"
-      rel="noopener noreferrer"
-      size="sm"
-      colorScheme="purple"
-      variant="outline"
-      rightIcon={<ExternalLinkIcon />}
-    >
-      GET DIRECTIONS
-    </Button>
-  </Box>
+    {event.location ||
+      "Nojoto Creator Hub\nBasement Shop, Besides Ginger Brown Cafe, PVR Anupam Saket, Gali No. 1, Saket, New Delhi, Delhi 110017, India"}
+  </Text>
+  <Button
+    as="a"
+    href={event.googleMapsLink}
+    target="_blank"
+    rel="noopener noreferrer"
+    size="sm"
+    colorScheme="purple"
+    variant="outline"
+    rightIcon={<ExternalLinkIcon />}
+  >
+    GET DIRECTIONS
+  </Button>
+</Box>
+
   </Box>
   </Box>
 
@@ -578,95 +587,102 @@ export default function Social() {
             p={6}
             mb={4}
           >
-            <Heading fontSize="2xl" mb={4} color={colors.textPrimary}>
-              {event.title}
-            </Heading>
+            <Heading fontSize="2xl" mb={4} color="#dc2626">
+  {event.title}
+</Heading>
 
-            {/* Details with Chakra Icons */}
-            <VStack spacing={3} align="flex-start" mb={6}>
-              <HStack spacing={3}>
-                <Box p={1.5} borderRadius="8px" bg="purple.50">
-                  <Icon as={FaCalendar} color={colors.accent} boxSize={4} />
-                </Box>
-                <Text color={colors.textSecondary}>{event.date}</Text>
-              </HStack>
 
-              <HStack spacing={3}>
-                <Box p={1.5} borderRadius="8px" bg="blue.50">
-                  <Icon as={FaClock} color="#3182ce" boxSize={4} />
-                </Box>
-                <Text color={colors.textSecondary}>
-                  {event.startTime} - {event.endTime} hrs
-                </Text>
-              </HStack>
-
-              {/* <HStack spacing={3}>
-                <Box p={1.5} borderRadius="8px" bg="green.50">
-                  <Icon as={FaLocationDot} color={colors.success} boxSize={4} />
-                </Box>
-                <Text color={colors.textSecondary}>{event.location}</Text>
-              </HStack> */}
-
-              {event.location && (
+           {/* Details with Chakra Icons */}
+<VStack spacing={3} align="flex-start" mb={4}>
   <HStack spacing={3}>
-    <Box p={1.5} borderRadius="8px" bg="green.50">
-      <Icon as={FaLocationDot} color={colors.success} boxSize={4} />
+    <Box p={1.5} borderRadius="8px" bg="purple.50">
+      <Icon as={FaCalendar} color={colors.accent} boxSize={4} />
     </Box>
-    <Text color={colors.textSecondary}>
-      {event.location}{" "}
-      {event.googleMapsLink && (
-        <Link
-          href={event.googleMapsLink}
-          target="_blank"
-          ml={1}
-          display="inline-flex"
-          alignItems="center"
-        >
-          <Icon as={ExternalLinkIcon} color={colors.primary} boxSize={4} />
-        </Link>
-      )}
+    <Text color={colors.textSecondary} fontWeight="600">{event.date}</Text>
+  </HStack>
+
+  <HStack spacing={3}>
+    <Box p={1.5} borderRadius="8px" bg="blue.50">
+      <Icon as={FaClock} color="#3182ce" boxSize={4} />
+    </Box>
+    <Text color={colors.textSecondary} fontWeight="600">
+      {event.startTime} - {event.endTime} hrs
     </Text>
   </HStack>
-)}
 
-            </VStack>
+  {event.location && (
+    <HStack spacing={3}>
+      <Box p={1.5} borderRadius="8px" bg="green.50">
+        <Icon as={FaLocationDot} color={colors.success} boxSize={4} />
+      </Box>
+      <Text color={colors.textSecondary} fontWeight="600">
+        {event.location}{" "}
+        {event.googleMapsLink && (
+          <Link
+            href={event.googleMapsLink}
+            target="_blank"
+            ml={1}
+            display="inline-flex"
+            alignItems="center"
+          
+          >
+            <Icon as={ExternalLinkIcon} color={colors.primary} boxSize={4} />
+          </Link>
+        )}
+      </Text>
+    </HStack>
+  )}
+</VStack>
 
-            {/* Price and Book CTA */}
-            <Flex justify="space-between" align="center">
-              <Box>
-                <Text fontSize="sm" color={colors.textSecondary} mb={1}>
-                  Starts from
-                </Text>
-                <Text
-                  fontSize="2xl"
-                  fontWeight="bold"
-                  color={colors.textPrimary}
-                >
-                  <Box
-                    as="span"
-                    color={colors.success}
-                    display="inline"
-                    fontSize="2xl"
-                  >
-                    {currencies[0]}
-                  </Box>
-                  199
-                </Text>
-              </Box>
-              <Button
-                size="md"
-                bgGradient={colors.primaryGradient}
-                color="white"
-                borderRadius="12px"
-                px={6}
-                py={3}
-                fontSize="md"
-                fontWeight="bold"
-                boxShadow={colors.shadowMd}
-              >
-                BOOK TICKETS
-              </Button>
-            </Flex>
+{/* Horizontal line below location */}
+<Box
+  borderBottom="1px solid"
+  borderColor={colors.border}
+  mb={4}
+/>
+
+{/* Price and Book CTA */}
+<Flex justify="space-between" align="center">
+  {/* Price Section */}
+  <Box mt={-2}>
+    <Text fontSize="sm" color={colors.textSecondary} mb={0}>
+      Starts from
+    </Text>
+    <Text
+      fontSize="2xl"
+      fontWeight="bold"
+      color={colors.textPrimary}
+      lineHeight="1"
+    >
+      <Box
+        as="span"
+        color={colors.success}
+        display="inline"
+        fontSize="2xl"
+      >
+        {currencies[0]}
+      </Box>
+      199
+    </Text>
+  </Box>
+
+  {/* CTA Button */}
+  <Button
+    size="md"
+    bgGradient={colors.primaryGradient}
+    color="white"
+    borderRadius="12px"
+    px={6}
+    py={3}
+    fontSize="md"
+    fontWeight="bold"
+    boxShadow={colors.shadowMd}
+  >
+    BOOK TICKETS
+  </Button>
+</Flex>
+
+
           </Box>
 
           {/* People Interested */}
@@ -685,6 +701,7 @@ export default function Social() {
             borderRadius="16px"
             boxShadow={colors.shadowMd}
             border={`1px solid ${colors.border}`}
+            
             p={6}
           >
             <Heading fontSize="xl" mb={4} color={colors.textPrimary}>
@@ -696,10 +713,10 @@ export default function Social() {
 
             {event.musicRatio && (
               <Box mb={4}>
-                <Text fontWeight="bold" mb={2} color={colors.textPrimary}>
+                <Text fontWeight="bold" mb={2} color={colors.textPrimary} >
                   Music Ratio
                 </Text>
-                <Text color={colors.textSecondary}>{event.musicRatio}</Text>
+                <Text color={colors.textSecondary} fontWeight="600">{event.musicRatio}</Text>
               </Box>
             )}
 

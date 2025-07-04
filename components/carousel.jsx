@@ -655,15 +655,17 @@ const next = useCallback(() => {
                       {/* Location Row - use pre-processed location */}
                       <Flex align="center" gap="4px" ml="-2px" wrap="nowrap">
                         <Text
-                          fontSize={isVerySmallMobile ? "9px" : "10px"}
-                          color="gray.600"
-                          fontWeight="600"
-                          lineHeight="1.3"
-                          wordBreak="break-word"
-                          noOfLines={1}
-                        >
-                          {event.processedLocation}
-                        </Text>
+  fontSize={isVerySmallMobile ? "9px" : "10px"}
+  color="gray.600"
+  lineHeight="1.3"
+  noOfLines={1}
+>
+  <strong>{event.processedLocation.split(",")[0]}</strong>
+  {event.processedLocation.includes(",") && (
+    <span>, {event.processedLocation.split(",")[1]}</span>
+  )}
+</Text>
+
                         {/*  Display flag image for mobile */}
                         {event.countryFlagImage && (
                           <Image
@@ -732,16 +734,19 @@ const next = useCallback(() => {
                         </Box>
                         <Flex align="center" gap="4px" wrap="nowrap">
                           <Text
-                            fontSize="12px"
-                            color="gray.600"
-                            fontWeight="600"
-                            noOfLines={2}
-                            lineHeight="1.3"
-                            textAlign="center"
-                            wordBreak="break-word"
-                          >
-                            {event.processedLocation}
-                          </Text>
+  fontSize="12px"
+  color="gray.600"
+  lineHeight="1.3"
+  textAlign="center"
+  noOfLines={2}
+  wordBreak="break-word"
+>
+  <strong>{event.processedLocation.split(",")[0]}</strong>
+  {event.processedLocation.includes(",") && (
+    <span>, {event.processedLocation.split(",")[1]}</span>
+  )}
+</Text>
+
                           {/* ✅ Display flag image for desktop */}
                           {event.countryFlagImage && (
                             <Image

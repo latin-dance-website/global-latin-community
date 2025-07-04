@@ -123,7 +123,7 @@ export default function EventsHomePage({ cities }) {
     router.push("/events/CreateEvent");
   };
 
-  return (
+return (
     <Box
       minH="100vh"
       maxW="100vw"
@@ -140,11 +140,13 @@ export default function EventsHomePage({ cities }) {
         <Navbar />
       </Box>
 
-      <Box mt={{ base: -7, md: -11 }} mb={-2} textAlign="center">
-  <AnimatedHeading />
-</Box>
-
-
+      <Box
+        mt={{ base: 0, md: 4 }}
+        mb={{ base: -2, md: 2 }}
+        textAlign="center"
+      >
+        <AnimatedHeading />
+      </Box>
 
       <LayerBlur2 />
       <Caraousel />
@@ -154,17 +156,17 @@ export default function EventsHomePage({ cities }) {
         direction={{ base: "column", lg: "row" }}
         justify="center"
         align={{ base: "center", lg: "flex-start" }}
-        gap={{ base: 6, lg: 8 }}
+        gap={{ base: 6, lg: 4 }} // Reduced gap on desktop
         width="100%"
-        maxWidth="800px"
+        maxWidth={{ base: "800px", lg: "1400px" }} // Increased max width for desktop
         px={{ base: 4, lg: 6 }}
         mt={{ base: "-16px", md: "20px" }}
       >
         {/* Main Control Box - Find Events */}
         <Box
-         mt={{ base: 0, md: -9 }}
-          width={{ base: "fit-content", lg: "650px" }}
-          maxWidth={{ base: "95%", lg: "650px" }}
+          mt={{ base: 0, md: -9 }}
+          width={{ base: "fit-content", lg: "700px" }} // Increased width on desktop
+          maxWidth={{ base: "95%", lg: "700px" }} // Increased max width
           minWidth="320px"
           display="flex"
           flexDirection="column"
@@ -175,7 +177,7 @@ export default function EventsHomePage({ cities }) {
           boxShadow="xl"
           border="2px solid #9c3cf6"
           py={{ base: 6, md: 8 }}
-          px={{ base: 6, md: 8 }}
+          px={{ base: 6, md: 10 }} // Increased padding on desktop
           position="relative"
           _hover={{
             "&::before": {
@@ -221,7 +223,7 @@ export default function EventsHomePage({ cities }) {
             position="relative"
             zIndex={1}
           >
-            <Box mt={-4}>
+            <Box mt={{ base: -4, md: -6 }}>
               <Heading
                 fontSize={{ base: "xl", md: "2xl" }}
                 fontWeight="extrabold"
@@ -297,198 +299,208 @@ export default function EventsHomePage({ cities }) {
 
           {/* Controls Container */}
           <VStack spacing={3} width="100%" align="center" mt={-2}>
-            {/* City Selector */}
-            <Box
-              width={{ base: "89%", md: "100%" }}
-              maxWidth={{ base: "300px", md: "420px" }}
-              borderRadius={{ base: "10px", md: "12px" }}
-              animation={
-                !selectedCity
-                  ? `${flashBackgroundDark} 1.3s ease-in-out infinite`
-                  : "none"
-              }
+            {/* Desktop: City Selector and Date Range side by side, Mobile: Stacked */}
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              width="100%"
+              align="center"
+              justify="center"
+              gap={{ base: 3, md: 2 }}
+              maxWidth={{ base: "300px", md: "460px" }}
             >
-              <Select
-                value={selectedCity}
-                onChange={(e) => {
-                  handleCityChange(e.target.value);
-                }}
-                placeholder="Select  City"
-                border="2px solid #9c3cf6"
+              {/* City Selector */}
+              <Box
+                width={{ base: "89%", md: "50%" }}
+                flex={{ base: "none", md: "1" }}
                 borderRadius={{ base: "10px", md: "12px" }}
-                bg="transparent"
-                color="black"
-                fontWeight="600"
-                fontSize={{ base: "16px", md: "18px" }}
-                height={{ base: "46px", md: "50px" }}
-                width="100%"
-                _focus={{
-                  borderColor: "#9c3cf6",
-                  boxShadow: "0 0 0 1px #9c3cf6",
-                }}
+                animation={
+                  !selectedCity
+                    ? `${flashBackgroundDark} 1.3s ease-in-out infinite`
+                    : "none"
+                }
+              >
+                <Select
+                  value={selectedCity}
+                  onChange={(e) => {
+                    handleCityChange(e.target.value);
+                  }}
+                  placeholder="Select  City"
+                  border="2px solid #9c3cf6"
+                  borderRadius={{ base: "10px", md: "12px" }}
+                  bg="transparent"
+                  color="black"
+                  fontWeight="600"
+                  fontSize={{ base: "16px", md: "18px" }}
+                  height={{ base: "46px", md: "50px" }}
+                  width="100%"
+                  _focus={{
+                    borderColor: "#9c3cf6",
+                    boxShadow: "0 0 0 1px #9c3cf6",
+                  }}
+                  _hover={{
+                    borderColor: "#8a2be2",
+                  }}
+                  animation={
+                    selectedCity ? "none" : `${blink} 1.5s ease-in-out infinite`
+                  }
+                  sx={{
+                    "& option": {
+                      color: "#9c3cf6",
+                      backgroundColor: "white",
+                      fontWeight: "600",
+                      _hover: {
+                        backgroundColor: "#f8f4ff",
+                      },
+                      _selected: {
+                        backgroundColor: "#9c3cf6",
+                        color: "white",
+                      },
+                      animation: `${blink} 1.5s ease-in-out infinite`,
+                      animationDelay: "calc(var(--option-index) * 0.1s)",
+                    },
+                  }}
+                >
+                  {cities.map((city, index) => (
+                    <option
+                      key={city}
+                      value={city}
+                      style={{ "--option-index": index }}
+                    >
+                      {city.trim()}
+                    </option>
+                  ))}
+                </Select>
+              </Box>
+
+              {/* Custom Date Range Selector */}
+              <Box
+                width={{ base: "90%", md: "50%" }}
+                flex={{ base: "none", md: "1" }}
+                borderRadius={{ base: "10px", md: "12px" }}
+                overflow="hidden"
+                bg="white"
+                position="relative"
+                border="2px solid #9c3cf6"
+                animation={
+                  selectedCity && !dateRange
+                    ? `${blink} 1.5s ease-in-out infinite`
+                    : "none"
+                }
+                cursor="pointer"
+                onClick={onCalendarOpen}
                 _hover={{
                   borderColor: "#8a2be2",
                 }}
-                animation={
-                  selectedCity ? "none" : `${blink} 1.5s ease-in-out infinite`
-                }
-                sx={{
-                  "& option": {
-                    color: "#9c3cf6",
-                    backgroundColor: "white",
-                    fontWeight: "600",
-                    _hover: {
-                      backgroundColor: "#f8f4ff",
-                    },
-                    _selected: {
-                      backgroundColor: "#9c3cf6",
-                      color: "white",
-                    },
-                    animation: `${blink} 1.5s ease-in-out infinite`,
-                    animationDelay: "calc(var(--option-index) * 0.1s)",
-                  },
-                }}
               >
-                {cities.map((city, index) => (
-                  <option
-                    key={city}
-                    value={city}
-                    style={{ "--option-index": index }}
+                <Flex align="center" height={{ base: "44px", md: "48px" }}>
+                  {/* Set Travel Dates Label */}
+                  <Box
+                    bg="linear-gradient(135deg, #9c3cf6, #7c3aed)"
+                    color="white"
+                    px={{ base: 2, md: 2 }}
+                    py={0}
+                    height="100%"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    minWidth={{ base: "90px", md: "80px" }}
+                    fontWeight="600"
+                    fontSize={{ base: "14px", md: "14px" }}
+                    borderRight="1px solid #6b21a8"
+                    ml="0"
                   >
-                    {city.trim()}
-                  </option>
-                ))}
-              </Select>
-            </Box>
+                    Set Travel Dates
+                  </Box>
 
-            {/* Custom Date Range Selector */}
-            <Box
-              width={{ base: "90%", md: "100%" }}
-              maxWidth={{ base: "300px", md: "350px" }}
-              borderRadius={{ base: "10px", md: "12px" }}
-              overflow="hidden"
-              bg="white"
-              position="relative"
-              border="2px solid #9c3cf6"
-              animation={
-                selectedCity && !dateRange
-                  ? `${blink} 1.5s ease-in-out infinite`
-                  : "none"
-              }
-              cursor="pointer"
-              onClick={onCalendarOpen}
-              _hover={{
-                borderColor: "#8a2be2",
-              }}
-            >
-              <Flex align="center" height={{ base: "44px", md: "48px" }}>
-                {/* Set Travel Dates Label */}
-                <Box
-                  bg="linear-gradient(135deg, #9c3cf6, #7c3aed)"
-                  color="white"
-                  px={{ base: 2, md: 3 }}
-                  py={0}
-                  height="100%"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  minWidth={{ base: "90px", md: "120px" }}
-                  fontWeight="600"
-                  fontSize={{ base: "14px", md: "16px" }}
-                  borderRight="1px solid #6b21a8"
-                  ml="0"
-                >
-                  Set Travel Dates
-                </Box>
+                  {/* Date Display with Start ⇌ End format */}
+                  <Flex
+                    flex="1"
+                    height="100%"
+                    align="center"
+                    justify="space-between"
+                    px={1}
+                    color={dateRange ? "#333" : "#999"}
+                    fontWeight="500"
+                    fontSize={{ base: "14px", md: "14px" }}
+                  >
+                    {dateRange && dateRange[0] && dateRange[1] ? (
+                      <>
+                        {/* Start Date - Centered in left section */}
+                        <Box
+                          flex="1"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          {dateRange[0].format("DD MMM")}
+                        </Box>
 
-                {/* Date Display with Start ⇌ End format */}
-                <Flex
-                  flex="1"
-                  height="100%"
-                  align="center"
-                  justify="space-between"
-                  px={2}
-                  color={dateRange ? "#333" : "#999"}
-                  fontWeight="500"
-                  fontSize={{ base: "14px", md: "16px" }}
-                >
-                  {dateRange && dateRange[0] && dateRange[1] ? (
-                    <>
-                      {/* Start Date - Centered in left section */}
-                      <Box
-                        flex="1"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                      >
-                        {dateRange[0].format("DD MMM")}
-                      </Box>
+                        {/* Arrow - Centered */}
+                        <Box
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          px={1}
+                          color="#9c3cf6"
+                          fontWeight="bold"
+                        >
+                          ⇌
+                        </Box>
 
-                      {/* Arrow - Centered */}
-                      <Box
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        px={2}
-                        color="#9c3cf6"
-                        fontWeight="bold"
-                      >
-                        ⇌
-                      </Box>
+                        {/* End Date - Centered in right section */}
+                        <Box
+                          flex="1"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          {dateRange[1].format("DD MMM")}
+                        </Box>
+                      </>
+                    ) : (
+                      <>
+                        {/* Start - Centered in left section */}
+                        <Box
+                          flex="1"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          Start
+                        </Box>
 
-                      {/* End Date - Centered in right section */}
-                      <Box
-                        flex="1"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                      >
-                        {dateRange[1].format("DD MMM")}
-                      </Box>
-                    </>
-                  ) : (
-                    <>
-                      {/* Start - Centered in left section */}
-                      <Box
-                        flex="1"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                      >
-                        Start
-                      </Box>
+                        {/* Arrow - Centered */}
+                        <Box
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          px={1}
+                          color="#9c3cf6"
+                          fontWeight="bold"
+                        >
+                          ⇌
+                        </Box>
 
-                      {/* Arrow - Centered */}
-                      <Box
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        px={2}
-                        color="#9c3cf6"
-                        fontWeight="bold"
-                      >
-                        ⇌
-                      </Box>
-
-                      {/* End - Centered in right section */}
-                      <Box
-                        flex="1"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                      >
-                        End
-                      </Box>
-                    </>
-                  )}
+                        {/* End - Centered in right section */}
+                        <Box
+                          flex="1"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          End
+                        </Box>
+                      </>
+                    )}
+                  </Flex>
                 </Flex>
-              </Flex>
-            </Box>
+              </Box>
+            </Flex>
 
             {/* Get Events Button */}
             <Box
               width={{ base: "85%", md: "100%" }}
-              maxWidth={{ base: "300px", md: "380px" }}
+              maxWidth={{ base: "300px", md: "460px" }} // Increased max width for desktop
               mb={-3}
             >
               <Button
@@ -540,59 +552,58 @@ export default function EventsHomePage({ cities }) {
         </Box>
 
         {/* Create Your Own Event Box */}
-<Box
-mt={{ base: 0, md: -9 }}
-  width={{ base: "fit-content", lg: "600px" }}  
-  maxWidth={{ base: "95%", lg: "450px" }}
-  minWidth="300px"
-  display="flex"
-  flexDirection="column"
-  alignItems="center"
-  justifyContent="center"
-  borderRadius="16px"
-  bg="white"
-  boxShadow="xl"
-  border="2px solid #9c3cf6" // 🔄 Changed from #ff6b35
-  py={{ base: 4, md: 8 }}
-  px={{ base: 4, md: 8 }}
-  position="relative"
-  _hover={{
-    "&::before": {
-      opacity: 1,
-    },
-    borderColor: "#8a2be2", // 🔄 Match hover border color
-  }}
-  _focusWithin={{
-    "&::before": {
-      opacity: 1,
-      boxShadow: "0 0 10px 2px rgba(156, 60, 246, 0.6)",
-    },
-  }}
-  sx={{
-    "&::before": {
-      content: '""',
-      position: "absolute",
-      top: "-2px",
-      left: "-2px",
-      right: "-2px",
-      bottom: "-2px",
-      borderRadius: "18px",
-      border: "2px solid transparent",
-      background:
-        "linear-gradient(90deg, #9c3cf6, #ff6b35, #9c3cf6) border-box", // 🔄 match gradient
-      backgroundSize: "200% 100%",
-      animation: "borderGradient 3s linear infinite",
-      opacity: 0,
-      transition: "opacity 0.3s ease, box-shadow 0.3s ease",
-      zIndex: -1,
-    },
-    "@keyframes borderGradient": {
-      "0%": { backgroundPosition: "0% 50%" },
-      "100%": { backgroundPosition: "200% 50%" },
-    },
-  }}
->
-
+        <Box
+          mt={{ base: 0, md: -9 }}
+          width={{ base: "fit-content", lg: "650px" }} // Increased width on desktop
+          maxWidth={{ base: "95%", lg: "650px" }} // Increased max width
+          minWidth="300px"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          borderRadius="16px"
+          bg="white"
+          boxShadow="xl"
+          border="2px solid #9c3cf6"
+          py={{ base: 4, md: 8 }}
+          px={{ base: 4, md: 10 }} // Increased padding on desktop
+          position="relative"
+          _hover={{
+            "&::before": {
+              opacity: 1,
+            },
+            borderColor: "#8a2be2",
+          }}
+          _focusWithin={{
+            "&::before": {
+              opacity: 1,
+              boxShadow: "0 0 10px 2px rgba(156, 60, 246, 0.6)",
+            },
+          }}
+          sx={{
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: "-2px",
+              left: "-2px",
+              right: "-2px",
+              bottom: "-2px",
+              borderRadius: "18px",
+              border: "2px solid transparent",
+              background:
+                "linear-gradient(90deg, #9c3cf6, #ff6b35, #9c3cf6) border-box",
+              backgroundSize: "200% 100%",
+              animation: "borderGradient 3s linear infinite",
+              opacity: 0,
+              transition: "opacity 0.3s ease, box-shadow 0.3s ease",
+              zIndex: -1,
+            },
+            "@keyframes borderGradient": {
+              "0%": { backgroundPosition: "0% 50%" },
+              "100%": { backgroundPosition: "200% 50%" },
+            },
+          }}
+        >
           <VStack
             spacing={{ base: 3, md: 4 }}
             textAlign="center"
@@ -606,7 +617,7 @@ mt={{ base: 0, md: -9 }}
               color="#000001"
               lineHeight="1.1"
               mb={{ base: -1, md: -2 }}
-              mt={{ base: -2, md: -3 }}
+              mt={{ base: -2, md: -5 }}
             >
               Create Your Own Event
             </Heading>
@@ -635,7 +646,7 @@ mt={{ base: 0, md: -9 }}
               fontSize={{ base: "15px", md: "18px" }}
               height={{ base: "46px", md: "54px" }}
               width="100%"
-              maxWidth="280px"
+              maxWidth={{ base: "280px", md: "400px" }} // Increased max width for desktop
               px={5}
               py={2}
               position="relative"
@@ -673,7 +684,8 @@ mt={{ base: 0, md: -9 }}
               fontSize={{ base: "xs", md: "sm" }}
               color="#666"
               textAlign="center"
-              mt={{ base: 1, md: 2 }}
+              mt={{ base: 1, md: -2 }}
+              mb={{ base: 0, md: -4 }}
             >
               Free to list • Reach thousands of dancers
             </Text>

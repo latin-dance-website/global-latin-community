@@ -163,27 +163,36 @@ export default function EventsDisplayPage({ allEvents }) {
     setFilteredEvents(processedEvents);
     setShowPopup(true);
   }, [city, startDate, endDate, allEvents]);
-  useEffect(() => {
-    if (!filteredEvents.length || !isAutoScrolling || !isMobile) return;
+ useEffect(() => {
+  if (!filteredEvents.length || !isAutoScrolling || !isMobile) return;
 
-    const container = scrollContainerRef.current;
-    if (!container) return;
+  const container = scrollContainerRef.current;
+  if (!container) return;
 
-    const scrollInterval = setInterval(() => {
-      if (
-        container.scrollTop + container.clientHeight >=
-        container.scrollHeight
-      ) {
+  const scrollInterval = setInterval(() => {
+    const scrollPosition = container.scrollTop + container.clientHeight;
+    const scrollHeight = container.scrollHeight;
+    const cardHeight = 320; // Approximate height of your card with margin
+    
+    // If we're at or near the bottom
+    if (scrollPosition >= scrollHeight - 10) { // 10px threshold
+      // Scroll to show the full last card
+      container.scrollTo({
+        top: scrollHeight - container.clientHeight,
+        behavior: "smooth"
+      });
+      // Then reset to top after a delay
+      setTimeout(() => {
         container.scrollTo({ top: 0, behavior: "smooth" });
-      } else {
-        const cardHeight = 250;
-        const gap = 24;
-        container.scrollBy({ top: cardHeight + gap, behavior: "smooth" });
-      }
-    }, 5000);
+      }, 2000);
+    } else {
+      // Normal scrolling behavior
+      container.scrollBy({ top: cardHeight, behavior: "smooth" });
+    }
+  }, 5000); // Adjust timing as needed
 
-    return () => clearInterval(scrollInterval);
-  }, [filteredEvents, isAutoScrolling, isMobile]);
+  return () => clearInterval(scrollInterval);
+}, [filteredEvents, isAutoScrolling, isMobile]);
 
   const handleMouseEnter = () => setIsAutoScrolling(false);
   const handleMouseLeave = () => setIsAutoScrolling(true);
@@ -368,7 +377,7 @@ export default function EventsDisplayPage({ allEvents }) {
           <Heading
             fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
             fontWeight="extrabold"
-            color="#2d3748"
+            color="#dc2626"
           >
             Social Nights in {city}
           </Heading>
@@ -402,11 +411,11 @@ export default function EventsDisplayPage({ allEvents }) {
           width="100%"
           maxWidth="320px"
           mx="auto"
-          height="38vh" // Smaller height for better fit
+          height="auto" // Auto height to accommodate content
           scrollSnapAlign="start"
           onClick={() => handleExploreNow(event)}
           cursor="pointer"
-          mb={3} // Margin between cards
+          mb={4} // Margin between cards
           sx={{
             transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
@@ -414,10 +423,10 @@ export default function EventsDisplayPage({ allEvents }) {
           <Box
             borderRadius="16px"
             overflow="hidden"
-            bg="linear-gradient(145deg, #ffffff, #f0f2f5)"
+            bg="white" // Changed to white background
             height="100%"
             border="2px solid transparent"
-            boxShadow="0 6px 16px rgba(0, 0, 0, 0.12)"
+            boxShadow="0 6px 16px rgba(0, 0, 0, 0.1)" // Lighter shadow
             _hover={{
               transform: "translateY(-6px) scale(1.02)",
               boxShadow: "0 12px 24px rgba(246, 60, 128, 0.35)",
@@ -427,37 +436,17 @@ export default function EventsDisplayPage({ allEvents }) {
             display="flex"
             flexDirection="column"
             position="relative"
-            _before={{
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              borderRadius: "16px",
-              padding: "2px",
-              background:
-                "linear-gradient(135deg, #f63c80, #6366f1, #f63c80)",
-              mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-              maskComposite: "exclude",
-              opacity: 0,
-              transition: "opacity 0.4s ease",
-            }}
-            _hover={{
-              _before: {
-                opacity: 1,
-              },
-            }}
           >
+            {/* Image Section with Overlay Icons */}
             <Box
               width="100%"
-              height="55%"
+              height="200px" // Fixed height for image
               overflow="hidden"
               display="flex"
               justifyContent="center"
               alignItems="center"
-              bg="#f8f9fa"
               position="relative"
+              bg="#000"
             >
               <img
                 src={event.image}
@@ -476,265 +465,190 @@ export default function EventsDisplayPage({ allEvents }) {
                   e.currentTarget.style.transform = "scale(1)";
                 }}
               />
+              
+              {/* Stars and Love Icon Overlay */}
+              <Box
+                position="absolute"
+                top="12px"
+                right="12px"
+                display="flex"
+                alignItems="center"
+                gap={1}
+                zIndex={2}
+              >
+                {/* Stars */}
+                <Box display="flex" alignItems="center">
+                  {[...Array(5)].map((_, i) => (
+                    <Box
+                      key={i}
+                      color="#FFD700"
+                      fontSize="14px"
+                      sx={{
+                        filter: "drop-shadow(0 0 2px rgba(0,0,0,0.5))",
+                      }}
+                    >
+                      ★
+                    </Box>
+                  ))}
+                </Box>
+                
+                {/* Love Icon */}
+                <Box
+                  color="#ff4757"
+                  fontSize="18px"
+                  sx={{
+                    filter: "drop-shadow(0 0 2px rgba(0,0,0,0.5))",
+                    cursor: "pointer",
+                    transition: "transform 0.2s ease",
+                  }}
+                  _hover={{
+                    transform: "scale(1.2)",
+                  }}
+                >
+                  ♥
+                </Box>
+              </Box>
             </Box>
 
+            {/* Content Section */}
             <Box
-              p="10px"
+              p="16px"
               flex="1"
               display="flex"
               flexDirection="column"
-              justifyContent="space-between"
-              gap={1.5}
-              position="relative"
-              bg="linear-gradient(135deg, #fafbfc, #f1f5f9)"
-              _before={{
-                content: '""',
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: "linear-gradient(45deg, rgba(246, 60, 128, 0.03), rgba(99, 102, 241, 0.03), rgba(56, 161, 105, 0.03))",
-                borderRadius: "0 0 16px 16px",
-                zIndex: 0,
-                animation: "gradientShift 4s ease-in-out infinite",
-              }}
-              _after={{
-                content: '""',
-                position: "absolute",
-                top: "10%",
-                left: "5%",
-                width: "90%",
-                height: "2px",
-                background: "linear-gradient(90deg, transparent, rgba(246, 60, 128, 0.2), transparent)",
-                animation: "shimmer 3s ease-in-out infinite",
-                zIndex: 1,
-              }}
-              sx={{
-                "@keyframes gradientShift": {
-                  "0%, 100%": { 
-                    background: "linear-gradient(45deg, rgba(246, 60, 128, 0.03), rgba(99, 102, 241, 0.03))"
-                  },
-                  "50%": { 
-                    background: "linear-gradient(45deg, rgba(99, 102, 241, 0.03), rgba(56, 161, 105, 0.03))"
-                  },
-                },
-                "@keyframes shimmer": {
-                  "0%": { transform: "translateX(-100%)" },
-                  "100%": { transform: "translateX(100%)" },
-                },
-                "@keyframes float": {
-                  "0%, 100%": { transform: "translateY(0px)" },
-                  "50%": { transform: "translateY(-8px)" },
-                },
-                "@keyframes pulse": {
-                  "0%, 100%": { opacity: 0.4 },
-                  "50%": { opacity: 0.8 },
-                },
-                "@keyframes bounce": {
-                  "0%, 100%": { transform: "translateY(0px)" },
-                  "50%": { transform: "translateY(-3px)" },
-                },
-              }}
+              gap={3}
+              bg="white" // Changed to white background
             >
-              {/* Animated floating dots in content area */}
-              <Box
-                position="absolute"
-                top="15%"
-                right="10%"
-                width="8px"
-                height="8px"
-                borderRadius="50%"
-                bg="rgba(246, 60, 128, 0.3)"
-                animation="float 3s ease-in-out infinite"
-               zIndex= {1}
-              />
-              <Box
-                position="absolute"
-                top="40%"
-                left="8%"
-                width="6px"
-                height="6px"
-                borderRadius="50%"
-                bg="rgba(99, 102, 241, 0.3)"
-                animation="pulse 2s ease-in-out infinite"
-                zIndex= {1}
-              />
-              <Box
-                position="absolute"
-                bottom="25%"
-                right="15%"
-                width="5px"
-                height="5px"
-                borderRadius="50%"
-                bg="rgba(56, 161, 105, 0.3)"
-                animation="bounce 4s ease-in-out infinite"
-                  zIndex= {1}
-              />
-              <Box
-                position="absolute"
-                bottom="10%"
-                left="12%"
-                width="7px"
-                height="7px"
-                borderRadius="50%"
-                bg="rgba(221, 107, 32, 0.3)"
-                animation="float 5s ease-in-out infinite reverse"
-                 zIndex= {1}
-              />
-              {/* Title */}
+              {/* Title - Centered */}
               <Text
-                fontSize="16px"
-                fontWeight="800"
-                noOfLines={1}
-                lineHeight="1.2"
-                color="#2d3748"
+                fontSize="18px"
+                fontWeight="700"
+                lineHeight="1.3"
+                color="black" // Changed to black
                 width="100%"
                 textAlign="center"
-                overflow="hidden"
-                textOverflow="ellipsis"
-                whiteSpace="nowrap"
-                position="relative"
-                zIndex={2}
                 sx={{
-                  background: "linear-gradient(135deg, #2d3748, #4a5568)",
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  transition: "all 0.3s ease",
+                  fontFamily: "inherit",
                 }}
-                _hover={{
-                  transform: "scale(1.05)",
-                }}
+                mt={-2.5}
               >
                 {event.title}
               </Text>
 
-              {/* Date, Time, and Price */}
-              <Flex
-                align="center"
-                justify="space-between"
+              {/* Buy Tickets Button */}
+              <Box
+                as="button"
+                bg="#dc2626"
+                color="white"
+                fontSize="14px"
+                fontWeight="600"
+                px={4}
+                py={2}
+                borderRadius="8px"
+                border="none"
+                cursor="pointer"
+                textAlign="center"
                 width="100%"
-                gap={0}
-                position="relative"
-                zIndex={2}
+                mt={-1.5}
                 sx={{
-                  transition: "transform 0.3s ease",
+                  fontFamily: "inherit",
+                  transition: "all 0.3s ease",
                 }}
                 _hover={{
+                  bg: "#b91c1c",
                   transform: "translateY(-2px)",
                 }}
-              >
-                <Flex
-                  align="center"
-                  gap={1}
-                  flex="0 0 auto"
-                  justify="flex-start"
-                >
-                  <Box color="#805ad5" fontSize="12px" flexShrink={0}>
-                    <FaCalendar />
-                  </Box>
-                  <Text
-                    fontSize="11px"
-                    color="#4a5568"
-                    fontWeight="700"
-                  >
-                    {event.formattedDate}
-                  </Text>
-                </Flex>
-
-                <Flex
-                  align="center"
-                  gap={1}
-                  flex="0 0 auto"
-                  justify="center"
-                  mx={1}
-                >
-                  <Box color="#3182ce" fontSize="12px" flexShrink={0}>
-                    <FaClock />
-                  </Box>
-                  <Text
-                    fontSize="11px"
-                    color="#2c5282"
-                    fontWeight="600"
-                    noOfLines={1}
-                  >
-                    {event.startTime}-{event.endTime}hrs
-                  </Text>
-                </Flex>
-
-                <Flex
-                  align="center"
-                  gap={1}
-                  flex="0 0 auto"
-                  justify="flex-end"
-                >
-                  <Text fontSize="14px" color="#38a169" lineHeight="1">
-                    {event.currencySymbols || "₫"}
-                  </Text>
-                  <Text
-                    fontSize="13px"
-                    color="#276749"
-                    fontWeight="600"
-                  >
-                    {event.fees || "Free"}
-                  </Text>
-                </Flex>
-              </Flex>
-
-              {/* Music Ratio */}
-              <Flex
-                align="center"
-                justify="flex-start"
-                width="100%"
-                gap={1}
-                position="relative"
-                zIndex={2}
-                sx={{
-                  transition: "all 0.3s ease",
-                }}
-                _hover={{
-                  transform: "translateX(5px)",
+                _active={{
+                  transform: "translateY(0)",
                 }}
               >
-                <Box color="#dd6b20" fontSize="12px">
-                  <FaMusic />
-                </Box>
-                <Text fontSize="11px" color="#9c4221" fontWeight="600">
-                  {event.musicRatio || "Mixed"}
-                </Text>
-              </Flex>
+                BOOK TICKETS
+              </Box>
 
-              {/* Location */}
-              <Flex
-                align="flex-start"
-                justify="flex-start"
-                width="100%"
-                gap={1}
-                position="relative"
-                zIndex={2}
-                sx={{
-                  transition: "all 0.3s ease",
-                }}
-                _hover={{
-                  transform: "translateX(5px)",
-                }}
-              >
-                <Box color="#e53e3e" fontSize="12px" pt="1px">
-                  <FaLocationDot />
-                </Box>
-                <Text
-                  fontSize="11px"
-                  color="#c53030"
-                  fontWeight="600"
-                  lineHeight="1.3"
-                  textAlign="left"
-                  wordBreak="break-word"
-                  noOfLines={2}
-                >
-                  {event.location}
-                </Text>
-              </Flex>
+              {/* Event Details - New Layout */}
+              <Box display="flex" flexDirection="column" gap={3}>
+                {/* First Line: Date, Time, Fees in one row */}
+                <Flex justify="space-between" align="center" width="100%">
+                  {/* Date */}
+                  <Flex align="center" gap={2}>
+                    <Box color="#dc2626" fontSize="14px">
+                      <FaCalendar />
+                    </Box>
+                    <Text
+                      fontSize="13px"
+                      color="black" // Changed to black
+                      fontWeight="600"
+                      sx={{ fontFamily: "inherit" }}
+                    >
+                      {event.formattedDate}
+                    </Text>
+                  </Flex>
+
+                  {/* Time */}
+                  <Flex align="center" gap={2}>
+                    <Box color="#dc2626" fontSize="14px">
+                      <FaClock />
+                    </Box>
+                    <Text
+                      fontSize="13px"
+                      color="black" // Changed to black
+                      fontWeight="600"
+                      sx={{ fontFamily: "inherit" }}
+                    >
+                      {event.startTime}-{event.endTime}hrs
+                    </Text>
+                  </Flex>
+
+                  {/* Fees */}
+                  <Flex align="center" gap={2}>
+                    <Box color="#dc2626" fontSize="14px">
+                      {event.currencySymbols || "₫"}
+                    </Box>
+                    <Text
+                      fontSize="13px"
+                      color="black" // Changed to black
+                      fontWeight="600"
+                      sx={{ fontFamily: "inherit" }}
+                    >
+                      {event.fees || "Free"}
+                    </Text>
+                  </Flex>
+                </Flex>
+
+                {/* Vertical Aligned Section */}
+                <Flex direction="column" gap={3} pl={1}>
+  {/* Music Ratio */}
+  <Flex align="center" gap={2} ml={-1}>
+    <Box color="#dc2626" fontSize="14px">
+      <FaMusic />
+    </Box>
+    <Text
+      fontSize="13px"
+      color="black"
+      fontWeight="600"
+      sx={{ fontFamily: "inherit" }}
+    >
+      {event.musicRatio || "Mixed"}
+    </Text>
+  </Flex>
+
+  {/* Location */}
+  <Flex align="flex-start" gap={2} ml={-1} mb={-2}>
+    <Box color="#dc2626" fontSize="14px" pt="1px">
+      <FaLocationDot />
+    </Box>
+    <Text
+      fontSize="13px"
+      color="black"
+      fontWeight="600"
+      lineHeight="1.4"
+      sx={{ fontFamily: "inherit" }}
+    >
+      {event.location}
+    </Text>
+  </Flex>
+</Flex>
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -743,223 +657,239 @@ export default function EventsDisplayPage({ allEvents }) {
   </Box>
 </Box>
 
-          {/* Desktop: 3 cards per row */}
-          <Box display={{ base: "none", md: "block" }}>
-            <Box
-              display="grid"
-              gridTemplateColumns="repeat(3, 1fr)"
-              gap={6}
-              pb={4}
-              maxWidth="1200px"
-              mx="auto"
-            >
-              {filteredEvents.map((event, index) => (
-                <Box
-                  key={`${event.id}-${index}`}
-                  width="100%"
-                  onClick={() => handleExploreNow(event)}
-                  cursor="pointer"
-                >
-                  <Box
-                    borderRadius="20px"
-                    overflow="hidden"
-                    bg="linear-gradient(145deg, #ffffff, #f0f2f5)"
-                    height="auto"
-                    minHeight="420px"
-                    border="2px solid transparent"
-                    boxShadow="0 8px 24px rgba(0, 0, 0, 0.15)"
-                    _hover={{
-                      transform: "translateY(-8px) scale(1.02)",
-                      boxShadow: "0 16px 32px rgba(246, 60, 128, 0.4)",
-                      borderColor: "#f63c80",
-                      _before: {
-                        opacity: 1,
-                      },
-                    }}
-                    transition="all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
-                    display="flex"
-                    flexDirection="column"
-                    position="relative"
-                    _before={{
-                      content: '""',
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      borderRadius: "20px",
-                      padding: "2px",
-                      background:
-                        "linear-gradient(135deg, #f63c80, #6366f1, #f63c80)",
-                      mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                      maskComposite: "exclude",
-                      opacity: 0,
-                      transition: "opacity 0.4s ease",
-                    }}
-                  >
-                    <Box
-                      width="100%"
-                      height="280px"
-                      overflow="hidden"
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      bg="#f8f9fa"
-                      position="relative"
-                    >
-                      <img
-                        src={event.image}
-                        alt={event.title}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          transition: "transform 0.4s ease",
-                          transform: "scale(1)",
-                        }}
-                        onMouseOver={(e) => {
-                          e.currentTarget.style.transform = "scale(1.05)";
-                        }}
-                        onMouseOut={(e) => {
-                          e.currentTarget.style.transform = "scale(1)";
-                        }}
-                      />
-                    </Box>
-
-                    <Box
-                      p="16px"
-                      flex="1"
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="flex-start"
-                      gap={4}
-                    >
-                      {/* Title */}
-                      <Text
-                        fontSize="20px"
-                        fontWeight="800"
-                        noOfLines={1}
-                        lineHeight="1.2"
-                        color="#2d3748"
-                        width="100%"
-                        textAlign="center"
-                        overflow="hidden"
-                        textOverflow="ellipsis"
-                        whiteSpace="nowrap"
-                      >
-                        {event.title}
-                      </Text>
-
-                      {/* Date, Time, and Price */}
-                      <Flex
-                        align="center"
-                        justify="space-between"
-                        width="100%"
-                        gap={2}
-                        wrap="wrap"
-                      >
-                        <Flex
-                          align="center"
-                          gap={2}
-                          flex="0 0 auto"
-                          justify="flex-start"
-                        >
-                          <Box color="#805ad5" fontSize="15px" flexShrink={0}>
-                            <FaCalendar />
-                          </Box>
-                          <Text
-                            fontSize="14px"
-                            color="#4a5568"
-                            fontWeight="700"
-                          >
-                            {event.formattedDate}
-                          </Text>
-                        </Flex>
-
-                        <Flex
-                          align="center"
-                          gap={2}
-                          flex="0 0 auto"
-                          justify="center"
-                        >
-                          <Box color="#3182ce" fontSize="15px" flexShrink={0}>
-                            <FaClock />
-                          </Box>
-                          <Text
-                            fontSize="14px"
-                            color="#2c5282"
-                            fontWeight="600"
-                            noOfLines={1}
-                          >
-                            {event.startTime}-{event.endTime}hrs
-                          </Text>
-                        </Flex>
-
-                        <Flex
-                          align="center"
-                          gap={1}
-                          flex="0 0 auto"
-                          justify="flex-end"
-                        >
-                          <Text
-                            fontSize="14px"
-                            color="#276749"
-                            fontWeight="600"
-                            display="flex"
-                            alignItems="center"
-                            gap={1}
-                          >
-                            <Box as="span" color="#38a169">
-                              {event.currencySymbols || "₫"}
-                            </Box>
-                            {event.fees || "Free"}
-                          </Text>
-                        </Flex>
-                      </Flex>
-
-                      {/* Music Ratio */}
-                      <Flex
-                        align="center"
-                        justify="flex-start"
-                        width="100%"
-                        gap={2}
-                      >
-                        <Box color="#dd6b20" fontSize="15px">
-                          <FaMusic />
-                        </Box>
-                        <Text fontSize="14px" color="#9c4221" fontWeight="600">
-                          {event.musicRatio || "Mixed"}
-                        </Text>
-                      </Flex>
-
-                      {/* Location */}
-                      <Flex
-                        align="center"
-                        justify="flex-start"
-                        width="100%"
-                        gap={2}
-                      >
-                        <Box flexShrink={0} color="#e53e3e" fontSize="15px">
-                          <FaLocationDot />
-                        </Box>
-                        <Text
-                          fontSize="14px"
-                          color="#c53030"
-                          fontWeight="600"
-                          noOfLines={1}
-                          lineHeight="1.3"
-                          textAlign="left"
-                          wordBreak="break-word"
-                        >
-                          {event.location}
-                        </Text>
-                      </Flex>
-                    </Box>
-                  </Box>
-                </Box>
-              ))}
-            </Box>
+        {/* Desktop: 3 cards per row */}
+<Box display={{ base: "none", md: "block" }}>
+  <Box
+    display="grid"
+    gridTemplateColumns="repeat(3, 1fr)"
+    gap={6}
+    pb={4}
+    maxWidth="1200px"
+    mx="auto"
+  >
+    {filteredEvents.map((event, index) => (
+      <Box
+        key={`${event.id}-${index}`}
+        width="100%"
+        onClick={() => handleExploreNow(event)}
+        cursor="pointer"
+      >
+        <Box
+          borderRadius="20px"
+          overflow="hidden"
+          bg="linear-gradient(145deg, #ffffff, #f0f2f5)"
+          height="auto"
+          minHeight="420px"
+          border="2px solid transparent"
+          boxShadow="0 8px 24px rgba(0, 0, 0, 0.15)"
+          _hover={{
+            transform: "translateY(-8px) scale(1.02)",
+            boxShadow: "0 16px 32px rgba(246, 60, 128, 0.4)",
+            borderColor: "#f63c80",
+            _before: {
+              opacity: 1,
+            },
+          }}
+          transition="all 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+          display="flex"
+          flexDirection="column"
+          position="relative"
+          _before={{
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            borderRadius: "20px",
+            padding: "2px",
+            background:
+              "linear-gradient(135deg, #f63c80, #6366f1, #f63c80)",
+            mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+            maskComposite: "exclude",
+            opacity: 0,
+            transition: "opacity 0.4s ease",
+          }}
+        >
+          <Box
+            width="100%"
+            height="280px"
+            overflow="hidden"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            bg="#f8f9fa"
+            position="relative"
+          >
+            <img
+              src={event.image}
+              alt={event.title}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                transition: "transform 0.4s ease",
+                transform: "scale(1)",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+              }}
+            />
           </Box>
+
+          <Box
+            p="16px"
+            flex="1"
+            display="flex"
+            flexDirection="column"
+            justifyContent="flex-start"
+            gap={4}
+          >
+            {/* Title */}
+            <Box textAlign="center">
+              <Text
+                fontSize="20px"
+                fontWeight="800"
+                noOfLines={1}
+                lineHeight="1.2"
+                color="#000000"
+                width="100%"
+                overflow="hidden"
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+                mt={-2}
+              >
+                {event.title}
+              </Text>
+              {/* BOOK TICKETS button */}
+              <Button
+                mt={2}
+                size="md"
+                bg="#e53e3e"
+                color="white"
+                _hover={{ bg: "#c53030" }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // Add your booking logic here
+                }}
+              >
+                BOOK TICKETS
+              </Button>
+            </Box>
+
+            {/* Date, Time, and Price */}
+            <Flex
+              align="center"
+              justify="space-between"
+              width="100%"
+              gap={2}
+              wrap="wrap"
+            >
+              <Flex
+                align="center"
+                gap={2}
+                flex="0 0 auto"
+                justify="flex-start"
+              >
+                <Box color="#e53e3e" fontSize="15px" flexShrink={0}>
+                  <FaCalendar />
+                </Box>
+                <Text
+                  fontSize="14px"
+                  color="#000000"
+                  fontWeight="600"
+                >
+                  {event.formattedDate}
+                </Text>
+              </Flex>
+
+              <Flex
+                align="center"
+                gap={2}
+                flex="0 0 auto"
+                justify="center"
+              >
+                <Box color="#e53e3e" fontSize="15px" flexShrink={0}>
+                  <FaClock />
+                </Box>
+                <Text
+                  fontSize="14px"
+                  color="#000000"
+                  fontWeight="600"
+                  noOfLines={1}
+                >
+                  {event.startTime}-{event.endTime}hrs
+                </Text>
+              </Flex>
+
+              <Flex
+                align="center"
+                gap={1}
+                flex="0 0 auto"
+                justify="flex-end"
+              >
+                <Text
+                  fontSize="14px"
+                  color="#000000"
+                  fontWeight="600"
+                  display="flex"
+                  alignItems="center"
+                  gap={1}
+                >
+                  <Box as="span" color="#e53e3e">
+                    {event.currencySymbols || "₫"}
+                  </Box>
+                  {event.fees || "Free"}
+                </Text>
+              </Flex>
+            </Flex>
+
+            {/* Music Ratio */}
+            <Flex
+              align="center"
+              justify="flex-start"
+              width="100%"
+              gap={2}
+            >
+              <Box color="#e53e3e" fontSize="15px">
+                <FaMusic />
+              </Box>
+              <Text fontSize="14px" color="#000000" fontWeight="600">
+                {event.musicRatio || "Mixed"}
+              </Text>
+            </Flex>
+
+            {/* Location */}
+            <Flex
+              align="center"
+              justify="flex-start"
+              width="100%"
+              gap={2}
+            >
+              <Box flexShrink={0} color="#e53e3e" fontSize="15px">
+                <FaLocationDot />
+              </Box>
+              <Text
+                fontSize="14px"
+                color="#000000"
+                fontWeight="600"
+                noOfLines={1}
+                lineHeight="1.3"
+                textAlign="left"
+                wordBreak="break-word"
+              >
+                {event.location}
+              </Text>
+            </Flex>
+          </Box>
+        </Box>
+      </Box>
+    ))}
+  </Box>
+</Box>
 
           {/* No events message */}
           {filteredEvents.length === 0 && (

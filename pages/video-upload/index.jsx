@@ -4,7 +4,7 @@ import Hero from "@components/video_upload/Hero";
 import Testimonials from "@components/video_upload/Testimonials";
 import LayerBlur from "@components/video_upload/LayerBlur";
 import Navbar from "@components/Navbar";
-import MarqueeComponent from "@components/landing_page/Marquee";
+// import MarqueeComponent from "@components/landing_page/Marquee";
 
 export default function VideoUploadPage() {
   const [isToastVisible, setIsToastVisible ] = useState(false);
@@ -24,7 +24,7 @@ export default function VideoUploadPage() {
       <LayerBlur />
       <Hero isToastVisible={isToastVisible} setIsToastVisible={setIsToastVisible}/>
       <Testimonials />
-      <MarqueeComponent />
+      {/* <MarqueeComponent /> */}
     </Box>
   );
 }

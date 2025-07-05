@@ -297,40 +297,70 @@ const Bento = ({isSelectedTileEvent, isToastVisible, setIsToastVisible}) => {
               </SwiperSlide>
             </Swiper>
           </VStack>
-          <VStack
-            width={{ base: "100%", md: "50%", lg: "40%" }}
-            gap={{ base: "0.7rem", md: "0.5rem" }}
-            bgGradient="linear(to-br, #FF4649 , #F63C80)"
-            borderRadius="1rem"
-            padding={{ base: "1rem", md: "1.4rem", lg: "1.5rem" }}
-            color="white"
-            alignItems="flex-start"
-          >
-            <Text
-              fontSize={{ base: "0.85rem", md: "0.8rem", lg: "0.9rem" }}
-              fontFamily={"montserrat"}
-            >
-              Help Us To Know You Better
-            </Text>
-            <Text
-              fontSize={{ base: "1.15rem", md: "1rem", lg: "1.2rem" }}
-              fontWeight="bold"
-              fontFamily={"montserrat"}
-            >
-              Share your journey below!
-            </Text>
-            <Link href="https://docs.google.com/forms/d/1mQ4eEwHwjWzSqsTOWzKhq9jI-y0vE-qiWAPwx2lFROQ/edit#responses">
-              <Button
-                bg="white"
-                color="red.400"
-                _hover={{ opacity: "80%" }}
-                fontFamily={"montserrat"}
-                marginTop={{ md: "0.5rem", lg: "0.8rem", xl: "1rem" }}
-              >
-                Fill Now
-              </Button>
-            </Link>
-          </VStack>
+         <VStack
+  width={{ base: "100%", md: "60%" }} // Same width as Key Findings box
+  minH="200px" // Reduced vertical height
+  gap="0.5rem" // Reduced gap between elements
+  bgGradient="linear(to-br, #FF4649 , #F63C80)"
+  borderRadius="1rem"
+  padding={{ base: "1rem", md: "1.2rem" }} // Reduced padding
+  color="white"
+  alignItems="center"
+  textAlign="center"
+  justifyContent="center"
+>
+  <Text
+    fontSize={{ base: "16px", md: "16px" }}
+    fontWeight="700"
+    fontStyle="italic"
+    color="white"
+    margin={0}
+    fontFamily="montserrat"
+  >
+    Join the movement of
+  </Text>
+
+  <Text
+    fontSize={{ base: "18px", md: "18px" }}
+    fontWeight="600"
+    fontFamily="montserrat"
+    color="white"
+    margin={0}
+  >
+    Global Latin Dance Revolution!
+  </Text>
+
+  <VStack spacing={0} marginY="0.5rem">
+    <Text 
+      fontSize={{ base: "14px", md: "14px" }}
+      fontFamily="montserrat"
+      fontWeight="bold"
+    >
+      📝 Got 1 minute?
+    </Text>
+    <Text 
+      fontSize={{ base: "14px", md: "14px" }}
+      fontStyle="italic"
+      fontFamily="montserrat"
+    >
+      Help Shape the future of our community
+    </Text>
+  </VStack>
+
+  <Link href="https://docs.google.com/forms/d/1mQ4eEwHwjWzSqsTOWzKhq9jI-y0vE-qiWAPwx2lFROQ/viewform">
+    <Button
+      bg="white"
+      color="red.400"
+      _hover={{ opacity: "80%" }}
+      fontFamily="montserrat"
+      fontSize="16px"
+      size="sm" // Smaller button
+      px={6} // Horizontal padding
+    >
+      Share Your Thoughts
+    </Button>
+  </Link>
+</VStack>
         </Stack>
 
         {/* Community Section */}

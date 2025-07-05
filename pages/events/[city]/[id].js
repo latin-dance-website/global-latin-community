@@ -389,9 +389,15 @@ const getDayIndex = (dayName) => {
 <Flex align="center" justify="space-between">
   {/* Date */}
   <Flex align="center" mr={2}>
-    <Box p={1.5} borderRadius="8px" bg="purple.50" mr={2}>
-      <Icon as={FaCalendar} color={colors.accent} boxSize={4} />
-    </Box>
+    <Box 
+          color="#805AD5" 
+          fontSize="14px"
+          display="flex"
+          alignItems="center"
+          mr={2}
+        >
+          <FaCalendar />
+        </Box>
     <Text
       fontSize="sm" // smaller on mobile
       color="gray.800"
@@ -404,9 +410,15 @@ const getDayIndex = (dayName) => {
 
   {/* Time */}
   <Flex align="center">
-    <Box p={1.5} borderRadius="8px" bg="blue.50" mr={2}>
-      <Icon as={FaClock} color="#3182ce" boxSize={4} />
-    </Box>
+   <Box 
+         color="#805AD5" 
+         fontSize="14px"
+         display="flex"
+         alignItems="center"
+         mr={2}
+       >
+         <FaClock />
+       </Box>
     <Text
       fontSize="sm"
       color="gray.800"
@@ -421,9 +433,9 @@ const getDayIndex = (dayName) => {
                 {/* Duration */}
                 {/* Location */}
                 <Flex align="center">
-  <Box p={1.5} borderRadius="8px" bg="green.50" mr={2}>
-    <Icon as={FaLocationDot} color={colors.success} boxSize={4} />
-  </Box>
+ <Box color="#805AD5" fontSize="14px" display="flex" alignItems="center" mr={2}>
+     <FaLocationDot />
+   </Box>
   <Text
     fontSize="sm"
     color="gray.800"
@@ -670,18 +682,28 @@ const getDayIndex = (dayName) => {
            {/* Details with Chakra Icons */}
 <VStack spacing={3} align="flex-start" mb={4}>
   <HStack spacing={3}>
-    <Box p={1.5} borderRadius="8px" bg="purple.50">
-      <Icon as={FaCalendar} color={colors.accent} boxSize={4} />
-    </Box>
+    <Box 
+          color="#805AD5" 
+          fontSize="16px"
+          display="flex"
+          alignItems="center"
+        >
+          <FaCalendar />
+        </Box>
    <Text color={colors.textSecondary} fontWeight="600">
   {formatDateWithDay(event.day)}
 </Text>
   </HStack>
 
   <HStack spacing={3}>
-    <Box p={1.5} borderRadius="8px" bg="blue.50">
-      <Icon as={FaClock} color="#3182ce" boxSize={4} />
-    </Box>
+     <Box 
+          color="#805AD5" 
+          fontSize="16px"
+          display="flex"
+          alignItems="center"
+        >
+          <FaClock />
+        </Box>
     <Text color={colors.textSecondary} fontWeight="600">
       {event.startTime} - {event.endTime} hrs
     </Text>
@@ -689,9 +711,9 @@ const getDayIndex = (dayName) => {
 
   {event.location && (
     <HStack spacing={3}>
-      <Box p={1.5} borderRadius="8px" bg="green.50">
-        <Icon as={FaLocationDot} color={colors.success} boxSize={4} />
-      </Box>
+      <Box color="#805AD5" fontSize="16px" display="flex" alignItems="flex-start">
+          <FaLocationDot />
+        </Box>
       <Text color={colors.textSecondary} fontWeight="600">
         {event.location}{" "}
         {event.googleMapsLink && (
@@ -736,10 +758,11 @@ const getDayIndex = (dayName) => {
         color={colors.success}
         display="inline"
         fontSize="2xl"
+        mr={1.5}
       >
         {currencies[0]}
       </Box>
-      199
+      {event.fees}
     </Text>
   </Box>
 

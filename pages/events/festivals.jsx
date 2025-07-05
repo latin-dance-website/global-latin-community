@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "@components/Navbar";
-import MarqueeComponent from "@components/landing_page/Marquee";
+// import MarqueeComponent from "@components/landing_page/Marquee";
 import HeroComingSoon from "../../src/components/coming_soon/HeroComingSoon";
 import EventCard from "../../src/components/events/EventCard";
 import Map from "react-map-gl/mapbox";

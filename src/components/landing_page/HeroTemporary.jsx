@@ -214,25 +214,25 @@ function HeroTemporary({ isSelectedTileEvent }) {
       {/* CTA Button */}
       <Link href="/video-upload">
   <Button
-    display={{ base: "flex", lg: "none" }} // ✅ Hidden on lg and above
-    bgGradient="linear(to-br, #1a237e, #0d1b4c, #1a237e)"
-    textColor="white"
-    size={{ base: "xl", md: "lg" }}
-    alignSelf="center"
-    fontFamily="montserrat"
-    fontWeight="bold"
-    px="2.5rem"
-    py="1.25rem"
-    border="2px solid rgba(255, 255, 255, 0.3)"
-    borderRadius="xl"
-    className="box-pulse-button"
-    marginTop={{ base: "-0.8rem", md: "0.5rem" }}
-    marginBottom={{ base: "2.6rem", md: "1.5rem" }}
-    _hover={{ transform: "scale(1.08)", borderColor: "white" }}
-    _active={{ transform: "scale(0.96)" }}
-  >
-    Start Here
-  </Button>
+  display={{ base: "flex", lg: "none" }} // ✅ Hidden on lg and above
+  bgGradient="linear(to-br, #1a237e, #0d1b4c, #1a237e)"
+  textColor="white"
+  size={{ base: "xl", md: "lg" }}
+  alignSelf="center"
+  fontFamily="montserrat"
+  fontWeight="bold"
+  px="2.5rem"
+  py="1.25rem"
+  border="2px solid rgba(255, 255, 255, 0.3)"
+  borderRadius="xl"
+  marginTop={{ base: "-0.8rem", md: "0.5rem" }}
+  marginBottom={{ base: "2.6rem", md: "1.5rem" }}
+  _hover={{ borderColor: "white" }} // ❌ Removed scale
+  _active={{}}                     // ❌ Removed scale
+>
+  Start Here
+</Button>
+
 </Link>
 
       
@@ -368,12 +368,13 @@ function HeroTemporary({ isSelectedTileEvent }) {
     maxW="100%"
     transform="perspective(500px)"
     _hover={{
-      transform: "perspective(500px) scale(1.05) translateZ(20px)",
-      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)",
-      bg: "whiteAlpha.200",       // 👈 maintain background
-      color: "white",             // 👈 maintain text color
-      borderColor: "whiteAlpha.300", // 👈 maintain border
-    }}
+  transform: "scale(1.02)", // Optional mild zoom
+  boxShadow: "0 6px 18px rgba(255, 255, 255, 0.2)", // Soft white glow
+  bg: "whiteAlpha.200",
+  color: "white",
+  borderColor: "whiteAlpha.300",
+}}
+
     // _active={{
     //   transform: "perspective(500px)",
     //   boxShadow: "none",
@@ -383,14 +384,14 @@ function HeroTemporary({ isSelectedTileEvent }) {
     // }}
     // transition="all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
   >
-    <Text
-      as="span"
-      display="inline-block"
-      animation="expandText 1.5s ease-in-out infinite"
-      transformOrigin="center"
-    >
-      Explore Events
-    </Text>
+  <Text
+  as="span"
+  display="inline-block"
+>
+  Explore Events
+</Text>
+
+
   </Button>
 </Link>
 

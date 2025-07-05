@@ -19,7 +19,7 @@ const GoogleFormPopup = () => {
         setShowPopup(true);
         setTimeout(() => setIsVisible(true), 100);
         sessionStorage.setItem('hasSeenPopup', 'true');
-      }, 3000);
+      }, 15000);
       return () => {
         clearTimeout(timer);
         window.removeEventListener('resize', checkMobile);
@@ -35,7 +35,7 @@ const GoogleFormPopup = () => {
   };
 
   const handleRedirect = () => {
-    window.open('https://docs.google.com/forms/d/1mQ4eEwHwjWzSqsTOWzKhq9jI-y0vE-qiWAPwx2lFROQ/viewform?edit_requested=true#responses', '_blank');
+    window.open('https://docs.google.com/forms/d/1mQ4eEwHwjWzSqsTOWzKhq9jI-y0vE-qiWAPwx2lFROQ/viewform', '_blank');
   };
 
   if (!showPopup) return null;
@@ -80,16 +80,46 @@ const GoogleFormPopup = () => {
           </button>
           
           {/* Content */}
-          <div style={contentStyle}>
-            <div style={iconStyle}>📝</div>
-            <h3 style={titleStyle}>Help us improve!</h3>
-            <p style={descriptionStyle}>
-              Share your feedback to help us enhance your Latin dance experience
-            </p>
-            <button onClick={handleRedirect} style={formBtnStyle}>
-              Fill Form
-            </button>
-          </div>
+        <div style={contentStyle}>
+  <h3 style={{
+    fontSize: '16px',
+    fontWeight: '700',
+    fontStyle: 'italic',
+    color: '#800080',
+    margin: 0,
+    marginBottom: '4px'
+  }}>
+    Join the movement of
+  </h3>
+
+  <h3 style={{
+    fontSize: '18px',
+    fontWeight: '600',
+    fontFamily: 'sans-serif',
+    color: '#800080',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    margin: 0,
+    marginBottom: '8px'
+  }}>
+    Global Latin Dance Revolution!
+  </h3>
+
+  <p style={{ ...descriptionStyle, margin: '16px 0 4px 0' }}>
+    <span style={{ fontWeight: 'bold' }}>📝 Got 1 minute?</span> 
+  </p>
+
+  <p style={{ ...descriptionStyle, margin: '6px 0', fontStyle: 'italic' }}>
+    Help Shape the future of our community
+  </p>
+
+  <button onClick={handleRedirect} style={{ ...formBtnStyle, fontSize: '16px', marginTop: '12px' }}>
+    Share Your Thoughts
+  </button>
+</div>
+
+
         </div>
       </div>
     </>

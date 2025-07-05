@@ -27,146 +27,146 @@ const generateEventCardHTML = (event, index) => {
 
   return `
     <!--[if (gte mso 9)|(IE)]>
-<table align="center" border="0" cellspacing="0" cellpadding="0" width="260">
-<tr>
-<td width="260" valign="top" style="padding:0 6px 16px 6px;">
-<![endif]-->
-<div class="event-card" style="
-  width: 100%;
-  max-width: 260px;
-  margin: 0 auto 16px auto;
-  box-sizing: border-box;
-  vertical-align: top;
-">
-  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="
-    border-collapse: collapse; 
-    mso-table-lspace: 0pt; 
-    mso-table-rspace: 0pt; 
-    background: #ffffff; 
-    border-radius: 12px; 
-    box-shadow: 0 6px 20px rgba(0,0,0,0.12); 
-    border: 1px solid #e2e8f0;
-  ">
-    <!-- Event Image -->
+    <table align="center" border="0" cellspacing="0" cellpadding="0" width="320">
     <tr>
-      <td style="position: relative;">
-        <img src="${event.image}" width="260" style="
-          width: 100%; 
-          max-width: 260px; 
-          height: 160px; 
-          object-fit: cover; 
-          border: 0; 
-          outline: none; 
-          display: block;
-          border-radius: 12px 12px 0 0;
-        " alt="${event.title}" />
-      </td>
-    </tr>
-
-    <!-- Event Content -->
-    <tr>
-      <td style="padding: 16px 16px 12px 16px;">
-        <!-- Event Title -->
-        <h3 style="
-          margin: 0 0 12px 0; 
-          font-size: 16px; 
-          font-weight: 700; 
-          color: #2d3748; 
-          line-height: 1.3;
-          text-align: center;
-        ">
-          ${event.title || "Event Title"}
-        </h3>
-
-        <!-- Book Tickets Button -->
-        <div style="margin-bottom: 16px;">
-          <a href="${eventLink}" style="
-            display: block;
-            background: linear-gradient(135deg, #8A2BE2 0%, #FF69B4 100%);
-            color: white;
-            text-align: center;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-          " target="_blank">
-            BOOK TICKETS
-          </a>
-        </div>
-
-        <!-- Metadata + Location using Table for Alignment -->
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width: 100%; font-size: 12px; font-family: sans-serif; font-weight: 500; color: #2d3748; margin-bottom: 8px;">
-          <tr>
-            <!-- Date -->
-<td style="padding: 2px 8px 2px 0; white-space: nowrap;">
-  <div style="display: inline-flex; align-items: center; gap: 4px;">
-    <img src="https://www.globallatindancecommunity.com/assets/icons/calendar.png" alt="Calendar" width="14" height="14" style="vertical-align: middle;" />
-    ${formattedDate}
-  </div>
-</td>
-
-<!-- Time -->
-<td style="padding: 2px 8px; white-space: nowrap;">
-  <div style="display: inline-flex; align-items: center; gap: 4px;">
-    <img src="https://www.globallatindancecommunity.com/assets/icons/clock.png" alt="Time" width="14" height="14" style="vertical-align: middle;" />
-    ${formattedTime}
-  </div>
-</td>
-
-<!-- Fees -->
-<td style="padding: 2px 0; white-space: nowrap;">
-  <div style="display: inline-flex; align-items: center; gap: 4px;">
-    <span style="
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      font-size: 14px;
-      color: #805AD5;
-      text-align: center;
-      line-height: 14px;
+    <td width="320" valign="top" style="padding:0 6px 16px 6px;">
+    <![endif]-->
+    <div class="event-card" style="
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto 16px auto;
+      box-sizing: border-box;
+      vertical-align: top;
     ">
-      ${event.currencySymbols || '₫'}
-    </span>
-    <span style="color: #000000;">
-      ${event.fees ? event.fees.toLocaleString() : 'FREE'}
-    </span>
-  </div>
-</td>
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="
+        border-collapse: collapse; 
+        mso-table-lspace: 0pt; 
+        mso-table-rspace: 0pt; 
+        background: #ffffff; 
+        border-radius: 12px; 
+        box-shadow: 0 6px 20px rgba(0,0,0,0.12); 
+        border: 1px solid #e2e8f0;
+        table-layout: fixed;
+      ">
+        <!-- Event Image -->
+        <tr>
+          <td style="position: relative;">
+            <img src="${event.image}" width="320" style="
+              width: 100%; 
+              max-width: 320px; 
+              height: 160px; 
+              object-fit: cover; 
+              border: 0; 
+              outline: none; 
+              display: block;
+              border-radius: 12px 12px 0 0;
+            " alt="${event.title}" />
+          </td>
+        </tr>
 
-          <!-- Location -->
-          <tr>
-            <td colspan="3" style="padding-top: 6px;">
-              <div style="display: inline-flex; align-items: center; gap: 4px;">
-                <img src="https://www.globallatindancecommunity.com/assets/icons/location.png" alt="Location" width="14" height="14" style="vertical-align: middle;" />
-                <a href="${event.googleMapsLink}" target="_blank" style="
-                  text-decoration: underline;
-                  color: #2d3748;
-                  white-space: nowrap;
-                  display: inline-block;
-                  max-width: 90%;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  vertical-align: middle;
-                ">
-                  ${event.location.replace(/,/g, ", ")}
-                </a>
-              </div>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</div>
-<!--[if (gte mso 9)|(IE)]>
-</td>
-<![endif]-->
+        <!-- Event Content -->
+        <tr>
+          <td style="padding: 16px 16px 12px 16px;">
+            <!-- Event Title -->
+            <h3 style="
+              margin: 0 0 12px 0; 
+              font-size: 16px; 
+              font-weight: 700; 
+              color: #2d3748; 
+              line-height: 1.3;
+              text-align: center;
+            ">
+              ${event.title || "Event Title"}
+            </h3>
+
+            <!-- Book Tickets Button -->
+            <div style="margin-bottom: 16px;">
+              <a href="${eventLink}" style="
+                display: block;
+                background: linear-gradient(135deg, #8A2BE2 0%, #FF69B4 100%);
+                color: white;
+                text-align: center;
+                padding: 10px;
+                border-radius: 6px;
+                font-size: 12px;
+                font-weight: 700;
+                text-decoration: none;
+                transition: all 0.3s ease;
+              " target="_blank">
+                BOOK TICKETS
+              </a>
+            </div>
+
+            <!-- Metadata + Location using Table for Alignment -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width: 100%; font-size: 12px; font-family: sans-serif; font-weight: 500; color: #2d3748; margin-bottom: 8px;">
+              <tr>
+                <!-- Date -->
+                <td style="padding: 2px 8px 2px 0; white-space: nowrap; width: 30%;">
+                  <div style="display: inline-flex; align-items: center; gap: 8px;">
+                    <img src="https://www.globallatindancecommunity.com/assets/icons/calendar.png" alt="Calendar" width="14" height="14" style="vertical-align: middle;" />
+                    ${formattedDate}
+                  </div>
+                </td>
+
+                <!-- Time -->
+                <td style="padding: 2px 8px; white-space: nowrap; width: 30%;">
+                  <div style="display: inline-flex; align-items: center; gap: 8px;">
+                    <img src="https://www.globallatindancecommunity.com/assets/icons/clock.png" alt="Time" width="14" height="14" style="vertical-align: middle;" />
+                    ${formattedTime}
+                  </div>
+                </td>
+
+                <!-- Fees -->
+                <td style="padding: 2px 0; white-space: nowrap; width: 40%;">
+                  <div style="display: inline-flex; align-items: center; gap: 8px;">
+                    <span style="
+                      display: inline-block;
+                      width: 14px;
+                      height: 14px;
+                      font-size: 14px;
+                      color: #805AD5;
+                      text-align: center;
+                      line-height: 14px;
+                    ">
+                      ${event.currencySymbols || '₫'}
+                    </span>
+                    <span style="color: #000000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; display: inline-block;">
+                      ${event.fees ? event.fees.toLocaleString() : 'FREE'}
+                    </span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Location -->
+              <tr>
+                <td colspan="3" style="padding-top: 6px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <img src="https://www.globallatindancecommunity.com/assets/icons/location.png" alt="Location" width="14" height="14" style="flex-shrink: 0;" />
+                    <a href="${event.googleMapsLink}" target="_blank" style="
+                      text-decoration: underline;
+                      color: #2d3748;
+                      white-space: nowrap;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      display: inline-block;
+                      width: 80%;
+                      vertical-align: middle;
+                    ">
+                      ${event.location.replace(/,/g, ", ")}
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <!--[if (gte mso 9)|(IE)]>
+    </td>
+    <![endif]-->
   `;
 };
-
-
 
 const generateEmailHTML = (events, city, userDetails, startDate, endDate) => {
   const visibleEvents = events.slice(0, 2);

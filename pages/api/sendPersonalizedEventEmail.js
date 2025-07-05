@@ -17,7 +17,7 @@ function saveEmailPreview(html, filename = "preview.html") {
 
 const generateEventCardHTML = (event, index) => {
   const formattedDate = event.formattedDate || `${event.day}, ${event.shortDate}`;
-  const formattedTime = `${event.startTime}-${event.endTime}`;
+  const formattedTime = `${event.startTime}-${event.endTime}hrs`;
   const formattedPrice = event.fees 
     ? `${event.currencySymbols || "₫"}${event.fees.toLocaleString()}`
     : "FREE";
@@ -33,7 +33,7 @@ const generateEventCardHTML = (event, index) => {
     <![endif]-->
     <div class="event-card" style="
       width: 100%;
-      max-width: 320px;
+      max-width: 400px;
       margin: 0 auto 16px auto;
       box-sizing: border-box;
       vertical-align: top;
@@ -98,66 +98,42 @@ const generateEventCardHTML = (event, index) => {
             </div>
 
             <!-- Metadata + Location using Table for Alignment -->
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width: 100%; font-size: 12px; font-family: sans-serif; font-weight: 500; color: #2d3748; margin-bottom: 8px;">
-              <tr>
-                <!-- Date -->
-                <td style="padding: 2px 8px 2px 0; white-space: nowrap; width: 30%;">
-                  <div style="display: inline-flex; align-items: center; gap: 8px;">
-                    <img src="https://www.globallatindancecommunity.com/assets/icons/calendar.png" alt="Calendar" width="14" height="14" style="vertical-align: middle;" />
-                    ${formattedDate}
-                  </div>
-                </td>
+            <!-- Metadata Row -->
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 8px;">
+  <tr>
+    <!-- Date -->
+    <td valign="middle" style="font-size: 12px; font-weight: 500; color: #2d3748; white-space: nowrap;">
+      <img src="https://www.globallatindancecommunity.com/assets/icons/calendar.png" alt="Date" width="12" height="12" style="vertical-align: middle; margin-right: 4px;" />
+      ${formattedDate}
+    </td>
 
-                <!-- Time -->
-                <td style="padding: 2px 8px; white-space: nowrap; width: 30%;">
-                  <div style="display: inline-flex; align-items: center; gap: 8px;">
-                    <img src="https://www.globallatindancecommunity.com/assets/icons/clock.png" alt="Time" width="14" height="14" style="vertical-align: middle;" />
-                    ${formattedTime}
-                  </div>
-                </td>
+    <!-- Time -->
+    <td valign="middle" style="font-size: 12px; font-weight: 500; color: #2d3748; white-space: nowrap;">
+      <img src="https://www.globallatindancecommunity.com/assets/icons/clock.png" alt="Time" width="12" height="12" style="vertical-align: middle; margin-right: 4px;" />
+      ${formattedTime}
+    </td>
 
-                <!-- Fees -->
-                <td style="padding: 2px 0; white-space: nowrap; width: 40%;">
-                  <div style="display: inline-flex; align-items: center; gap: 8px;">
-                    <span style="
-                      display: inline-block;
-                      width: 14px;
-                      height: 14px;
-                      font-size: 14px;
-                      color: #805AD5;
-                      text-align: center;
-                      line-height: 14px;
-                    ">
-                      ${event.currencySymbols || '₫'}
-                    </span>
-                    <span style="color: #000000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; display: inline-block;">
-                      ${event.fees ? event.fees.toLocaleString() : 'FREE'}
-                    </span>
-                  </div>
-                </td>
-              </tr>
+    <!-- Fees -->
+    <td valign="middle" align="right" style="font-size: 12px; font-weight: 500; color: #2d3748; white-space: nowrap;">
+  <span style="font-size: 14px; color: #805AD5;">${event.currencySymbols || '₫'}</span>
+  <span style="color: #000000;">${event.fees ? event.fees.toLocaleString() : 'FREE'}</span>
+</td>
 
-              <!-- Location -->
-              <tr>
-                <td colspan="3" style="padding-top: 6px;">
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <img src="https://www.globallatindancecommunity.com/assets/icons/location.png" alt="Location" width="14" height="14" style="flex-shrink: 0;" />
-                    <a href="${event.googleMapsLink}" target="_blank" style="
-                      text-decoration: underline;
-                      color: #2d3748;
-                      white-space: nowrap;
-                      overflow: hidden;
-                      text-overflow: ellipsis;
-                      display: inline-block;
-                      width: 80%;
-                      vertical-align: middle;
-                    ">
-                      ${event.location.replace(/,/g, ", ")}
-                    </a>
-                  </div>
-                </td>
-              </tr>
-            </table>
+  </tr>
+</table>
+
+<!-- Location -->
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+  <tr>
+    <td valign="middle" style="font-size: 12px; font-weight: 500; color: #2d3748;">
+      <img src="https://www.globallatindancecommunity.com/assets/icons/location.png" alt="Location" width="12" height="12" style="vertical-align: middle; margin-right: 4px;" />
+      <a href="${event.googleMapsLink}" target="_blank" style="color: inherit; text-decoration: underline;">
+        ${event.location.replace(/,/g, ", ")}
+      </a>
+    </td>
+  </tr>
+</table>
+
           </td>
         </tr>
       </table>

@@ -646,7 +646,7 @@ export default function EventsDisplayPage({ allEvents }) {
                 {/* Vertical Aligned Section */}
                 <Flex direction="column" gap={3} pl={1}>
   {/* Music Ratio */}
-  <Flex align="center" gap={2} ml={-1}>
+  {/* <Flex align="center" gap={2} ml={-1}>
     <Box color="#805AD5" fontSize="14px">
       <FaMusic />
     </Box>
@@ -658,7 +658,7 @@ export default function EventsDisplayPage({ allEvents }) {
     >
       {event.musicRatio || "Mixed"}
     </Text>
-  </Flex>
+  </Flex> */}
 
   {/* Location */}
   <Flex align="flex-start" gap={2} ml={-1} mb={-2}>
@@ -892,7 +892,7 @@ export default function EventsDisplayPage({ allEvents }) {
             </Flex>
 
             {/* Music Ratio */}
-            <Flex
+            {/* <Flex
               align="center"
               justify="flex-start"
               width="100%"
@@ -904,7 +904,7 @@ export default function EventsDisplayPage({ allEvents }) {
               <Text fontSize="14px" color="#000000" fontWeight="600">
                 {event.musicRatio || "Mixed"}
               </Text>
-            </Flex>
+            </Flex> */}
 
             {/* Location */}
             <Flex

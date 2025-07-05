@@ -574,7 +574,7 @@ const getDayIndex = (dayName) => {
     </Text>
     
     {/* Music Ratio */}
-    {event.musicRatio && (
+    {/* {event.musicRatio && (
       <Box mb={4}>
         <Text fontWeight="bold" fontSize="sm" mb={2} color={colors.textPrimary}>
           Music Ratio
@@ -583,7 +583,7 @@ const getDayIndex = (dayName) => {
           {event.musicRatio}
         </Text>
       </Box>
-    )}
+    )} */}
      <HStack spacing={2} mb={4}>
               {event.instagramHandle && (
                 <Button
@@ -788,14 +788,14 @@ const getDayIndex = (dayName) => {
               {event.description || "No description available."}
             </Text>
 
-            {event.musicRatio && (
+            {/* {event.musicRatio && (
               <Box mb={4}>
                 <Text fontWeight="bold" mb={2} color={colors.textPrimary} >
                   Music Ratio
                 </Text>
                 <Text color={colors.textSecondary} fontWeight="600">{event.musicRatio}</Text>
               </Box>
-            )}
+            )} */}
 
             <Button
               variant="link"

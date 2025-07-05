@@ -96,7 +96,7 @@ const generateEventCardHTML = (event, index) => {
               </a>
             </div>
 
-          <!-- Event Metadata -->
+         <!-- Event Metadata -->
 <div style="
   display: flex;
   flex-wrap: nowrap;
@@ -111,26 +111,28 @@ const generateEventCardHTML = (event, index) => {
 ">
   <!-- Date -->
   <div style="display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;">
-    <img src="https://www.globallatindancecommunity.com/assets/icons/calendar.svg" alt="Calendar"
-         width="14" height="14"
-         style="vertical-align: middle; filter: invert(29%) sepia(62%) saturate(5240%) hue-rotate(230deg) brightness(92%) contrast(93%);" />
+    <img src="https://www.globallatindancecommunity.com/assets/icons/calendar.png" alt="Calendar"
+         width="14" height="14" style="vertical-align: middle;" />
     <span>${formattedDate}</span>
   </div>
 
   <!-- Time -->
   <div style="display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;">
-    <img src="https://www.globallatindancecommunity.com/assets/icons/time.svg" alt="Time"
-         width="14" height="14"
-         style="vertical-align: middle; filter: invert(29%) sepia(62%) saturate(5240%) hue-rotate(230deg) brightness(92%) contrast(93%);" />
+    <img src="https://www.globallatindancecommunity.com/assets/icons/clock.png" alt="Time"
+         width="14" height="14" style="vertical-align: middle;" />
     <span>${formattedTime}</span>
   </div>
 
   <!-- Fees -->
-  <div style="display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;">
-    <span style="font-size: 14px; color: #805AD5;">₫</span>
-    <span style="color: ${event.fees ? '#ff6b6b' : '#00b894'};">${formattedPrice.replace(/^₫/, '')}</span>
-  </div>
+<div style="display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;">
+  <span style="font-size: 14px; color: #805AD5;">
+    ${event.currencySymbols || '₫'}
+  </span>
+  <span style="color: ${event.fees ? '#ff6b6b' : '#00b894'};">
+    ${event.fees ? event.fees.toLocaleString() : 'FREE'}
+  </span>
 </div>
+
 
 <!-- Location -->
 <div style="
@@ -143,9 +145,8 @@ const generateEventCardHTML = (event, index) => {
   gap: 6px;
   white-space: nowrap;
 ">
-  <img src="https://www.globallatindancecommunity.com/assets/icons/location.svg" alt="Location"
-       width="14" height="14"
-       style="vertical-align: middle; filter: invert(29%) sepia(62%) saturate(5240%) hue-rotate(230deg) brightness(92%) contrast(93%);" />
+  <img src="https://www.globallatindancecommunity.com/assets/icons/location.png" alt="Location"
+       width="14" height="14" style="vertical-align: middle;" />
   <a href="${event.googleMapsLink}" target="_blank" style="
     text-decoration: underline;
     color: inherit;
@@ -158,6 +159,7 @@ const generateEventCardHTML = (event, index) => {
     ${event.location.replace(/,/g, ", ")}
   </a>
 </div>
+
 
 
 
